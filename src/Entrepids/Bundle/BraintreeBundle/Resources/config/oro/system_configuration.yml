@@ -162,7 +162,71 @@ system_configuration:
             type: text
             priority: 34
             options:
-                label: entrepids.braintree.system_configuration.fields.credit_card.credit_card_title.label                                                                            
+                label: entrepids.braintree.system_configuration.fields.credit_card.credit_card_title.label
+                
+        braintree.braintree_capture_payment_action:
+            data_type: string
+            type: choice
+            priority: 100
+            options:
+                label: oro.paypal.system_configuration.fields.payment_action.label
+                required: true
+                choice_translation_domain: messages
+                choices:
+                    authorize: oro.paypal.system_configuration.fields.payment_action.authorize
+                    charge: oro.paypal.system_configuration.fields.payment_action.charge  
+                    
+        braintree.braintree_capture_capture_action:
+            data_type: string
+            type: choice
+            priority: 39
+            options:
+                label: entrepids.braintree.system_configuration.fields.capture.capture_action.label
+                required: true
+                constraints:
+                    - NotBlank: ~
+                choice_translation_domain: messages
+                multiple: false
+                choices:
+                    invoice: entrepids.braintree.system_configuration.fields.capture.capture_invoice
+                    shipment: entrepids.braintree.system_configuration.fields.capture.capture_shipment
+                    authorized: entrepids.braintree.system_configuration.fields.capture.capture_authorized
+
+        braintree.braintree_capture_new_order_status:
+            data_type: string
+            type: choice
+            priority: 38
+            options:
+                label: entrepids.braintree.system_configuration.fields.capture.capture_neworder.label
+                required: true
+                constraints:
+                    - NotBlank: ~
+                choice_translation_domain: messages
+                multiple: false
+                choices:
+                    processing: entrepids.braintree.system_configuration.fields.capture.capture_neworder_processing
+                    suspected_fraud: entrepids.braintree.system_configuration.fields.capture.capture_neworder_suspected_fraud
+                    
+        braintree.braintree_features_enabled_vault_saved_cards:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 37
+            options:
+                label: entrepids.braintree.system_configuration.fields.features.features_enabled_vs_cards.label                     
+
+        braintree.braintree_features_cvv_verification:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 36
+            options:
+                label: entrepids.braintree.system_configuration.fields.features.features_cvv_verification.label 
+
+        braintree.braintree_features_display_card_types:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 35
+            options:
+                label: entrepids.braintree.system_configuration.fields.features.features_display_cc_types.label                                                                                                                                               
     tree:
         system_configuration:
             commerce:
@@ -197,4 +261,16 @@ system_configuration:
                                         children:
                                             - braintree.braintree_credit_card_enabled
                                             - braintree.braintree_credit_card_title
+                                    braintree_capture:
+                                        priority: 88
+                                        children:
+                                            - braintree.braintree_capture_payment_action
+                                            - braintree.braintree_capture_capture_action
+                                            - braintree.braintree_capture_new_order_status
+                                    braintree_features:
+                                        priority: 87
+                                        children:
+                                            - braintree.braintree_features_enabled_vault_saved_cards
+                                            - braintree.braintree_features_cvv_verification
+                                            - braintree.braintree_features_display_card_types
 

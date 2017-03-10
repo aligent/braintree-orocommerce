@@ -114,4 +114,29 @@ class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigIn
 	public function getSandBoxCreditCardTitle(){
 		return (string)$this->getConfigValue(Configuration::BRAINTREE_CREDIT_CARD_TITLE);
 	}	
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getPurchaseAction(){
+		return (string)$this->getConfigValue(Configuration::BRAINTREE_CAPTURE_PAYMENT_ACTION);
+	}
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isEnabledVaultSavedCards(){
+		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS);
+	}
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isEnabledCvvVerification(){
+		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_CVV_VERIFICATION);
+	}
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isDisplayCreditCard(){
+		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES);
+	}
 }

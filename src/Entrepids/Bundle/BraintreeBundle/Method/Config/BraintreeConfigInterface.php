@@ -40,5 +40,21 @@ CountryConfigAwareInterface
 	/**
 	 * @return string
 	*/
-	public function getSandBoxCreditCardTitle();	
+	public function getSandBoxCreditCardTitle();
+	/**
+	 * @return string
+	 */
+	public function getPurchaseAction();
+	/**
+	 * @return bool
+	 */
+	public function isEnabledVaultSavedCards();
+	/**
+	 * @return bool
+	 */
+	public function isEnabledCvvVerification();	
+	/**
+	 * @return bool
+	 */
+	public function isDisplayCreditCard();
 }

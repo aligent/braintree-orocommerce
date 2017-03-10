@@ -5,6 +5,7 @@ namespace Entrepids\Bundle\BraintreeBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
+use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
 use Oro\Bundle\PaymentBundle\DependencyInjection\Configuration as PaymentConfiguration;
 /**
@@ -33,7 +34,15 @@ class Configuration implements ConfigurationInterface
 	// Seccion de Credit Card
 	const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
 	const BRAINTREE_CREDIT_CARD_TITLE = 'braintree_credit_card_title';
-	// Seccion de 
+	// Seccion de Capture
+	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
+	const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
+	const BRAINTREE_CAPTURE_NEW_ORDER_STATUS = 'braintree_capture_new_order_status';
+	// Seccion de features
+	const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_features_enabled_vault_saved_cards';
+	const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_features_cvv_verification';
+	const BRAINTREE_FEATURES_DISPLAY_CARD_TYPES = 'braintree_features_display_card_types';
+	
 	
 	const CARD_VISA = 'visa';
 	const CARD_MASTERCARD = 'mastercard';
@@ -42,6 +51,13 @@ class Configuration implements ConfigurationInterface
 	
 	const SANDBOX = 'SandBox';
 	const PRODUCTION = 'Production';
+	
+	const CAPTURE_ACTION_INVOICE = 'Invoice';
+	const CAPTURE_ACTION_SHIPMENT = 'Shipment';
+	const CAPTURE_ACTION_AUTHORIZED = 'Authorized';
+	
+	const NEWORDER_ACTION_PROCESSING = 'Processing';
+	const NEWORDER_ACTION_SUSPECTEDFRAUD = 'Suspected Fraud';
     /**
      * {@inheritdoc}
      */
@@ -115,7 +131,31 @@ class Configuration implements ConfigurationInterface
         				self::BRAINTREE_CREDIT_CARD_TITLE => [
         						'type' => 'text',
         						'value' => '',
-        				],        				
+        				],  
+        				self::BRAINTREE_CAPTURE_PAYMENT_ACTION => [
+        						'type' => 'text',
+        						'value' => PaymentMethodInterface::AUTHORIZE
+        				],
+        				self::BRAINTREE_CAPTURE_CAPTURE_ACTION => [
+        						'type' => 'text',
+        						'value' => self::CAPTURE_ACTION_INVOICE
+        				],
+        				self::BRAINTREE_CAPTURE_NEW_ORDER_STATUS => [
+        						'type' => 'text',
+        						'value' => self::NEWORDER_ACTION_PROCESSING
+        				],  
+        				self::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS => [
+      						'type' => 'boolean',
+        						'value' => true,
+        				],
+        				self::BRAINTREE_FEATURES_CVV_VERIFICATION => [
+      						'type' => 'boolean',
+        						'value' => true,
+        				],
+        				self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => [
+      						'type' => 'boolean',
+        						'value' => true,
+        				],
         		]
         );
         return $treeBuilder;

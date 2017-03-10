@@ -108,4 +108,29 @@ class BraintreeView implements PaymentMethodViewInterface
 	public function getSandBoxCreditCardTitle(){
 		return $this->config->getSandBoxCreditCardTitle();
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function getPurchaseAction(){
+		return $this->config->getPurchaseAction();
+	}
+	/**
+	 * @return bool
+	 */
+	public function isEnabledVaultSavedCards(){
+		return $this->config->isEnabledVaultSavedCards();
+	}
+	/**
+	 * @return bool
+	 */
+	public function isEnabledCvvVerification(){
+		return $this->config->isEnabledCvvVerification();
+	}
+	/**
+	 * @return bool
+	 */
+	public function isDisplayCreditCard(){
+		return $this->config->isDisplayCreditCard();
+	}	
 }

@@ -37,7 +37,19 @@ entrepids:
                     sandbox_merch_private_key.label: 'Sandbox Private Key'
                 credit_card:
                     credit_card_enabled.label: 'Enabled'
-                    credit_card_title.label: 'Title'    
+                    credit_card_title.label: 'Title' 
+                capture:
+                    capture_action.label: 'Capture Action'
+                    capture_shipment: 'Shipment'
+                    capture_invoice: 'Invoice'
+                    capture_authorized: 'Authorized'
+                    capture_neworder.label: 'New Order Status'
+                    capture_neworder_processing: 'Processing'
+                    capture_neworder_suspected_fraud: 'Suspected Fraud'
+                features:
+                    features_enabled_vs_cards.label: 'Enabled Vault/Saved Cards'
+                    features_cvv_verification.label: 'CVV Verification'
+                    features_display_cc_types.label: 'Display Card Types'   
 
         credit_card:
             card_number.label: Credit Card Number
