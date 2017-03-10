@@ -1,0 +1,25 @@
+{% extends 'OroConfigBundle::configPage.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% oro_title_set({params : {"%organization%": entity.name }}) %}
+
+{% set pageTitle = [
+        UI.link({
+            'path': path('oro_organizationpro_index'),
+            'label': 'oro.organization.entity_plural_label'|trans
+        }),
+        UI.link({
+            'path': path('oro_organizationpro_view', {id: entity.id}),
+            'label': entity.name
+        }),
+        'oro.organization_config.organization_configuration.label'|trans
+    ]
+%}
+
+{% set formAction    = path(
+        'oro_organization_config',
+        {id:entity.id, activeGroup: activeGroup, activeSubGroup: activeSubGroup}
+    )
+%}
+{% set routeName = 'oro_organization_config' %}
+{% set routeParameters = {id: entity.id} %}

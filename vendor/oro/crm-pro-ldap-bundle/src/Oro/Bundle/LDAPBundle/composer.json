@@ -1,0 +1,28 @@
+{
+    "name": "oro/crm-pro-ldap-bundle",
+    "description": "OroCRM Pro LDAP Bundle",
+    "homepage": "https://github.com/orocrm/OroCRMProLDAPBundle.git",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Oro\\Bundle\\LDAPBundle": "src/"
+        }
+    },
+    "target-dir": "src/Oro/Bundle/LDAPBundle",
+    "require": {
+        "php": ">=5.6",
+        "zendframework/zend-ldap": ">=2.0",
+        "oro/platform": "2.0.*"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

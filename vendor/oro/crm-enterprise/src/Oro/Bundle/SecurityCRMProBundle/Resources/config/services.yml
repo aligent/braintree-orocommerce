@@ -1,0 +1,7 @@
+parameters:
+
+services:
+    oro_security_crm_pro.namespace_migration_provider:
+        class: 'Oro\Bundle\SecurityCRMProBundle\Cache\NamespaceMigrationProvider'
+        tags:
+            - {name: oro_installer.namespace_migration_provider, priority: 30}

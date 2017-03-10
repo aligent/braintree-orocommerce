@@ -1,0 +1,28 @@
+{
+    "name": "oro/crm-abandoned-cart",
+    "description": "Oro Abandoned Cart",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Oro\\Bundle\\AbandonedCartBundle": "src/"
+        }
+    },
+    "target-dir": "src/Oro/Bundle/AbandonedCartBundle",
+    "require": {
+        "php": ">=5.6",
+        "oro/crm": "2.0.*",
+        "oro/crm-mail-chimp": "2.0.*"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+
+}

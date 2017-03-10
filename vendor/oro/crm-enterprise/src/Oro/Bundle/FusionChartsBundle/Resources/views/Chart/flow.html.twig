@@ -1,0 +1,88 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set containerId = "chart-container-" ~ random() %}
+{% set hasData = data|length > 0 %}
+{% set chartData = [] %}
+{% set isMobileVersion = isMobileVersion() %}
+{% set emptyData = true %}
+{% if hasData %}
+    {% for item in data %}
+        {% if item.value is defined and item.value != 0  %}
+            {% set emptyData = false %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if hasData and emptyData == false %}
+    {% set valueFormat = options.data_schema.value.type %}
+    {% for item in data %}
+        {% set itemValue = valueFormat == 'currency' ? item.value|oro_format_currency : item.value %}
+        {% if item.isNozzle is defined and item.isNozzle %}
+            {% if isMobileVersion %}
+                {% set label = item.label ~ ': ' ~ itemValue ~ '{br}(' ~ 'from'|trans ~ ' '
+                ~ options.settings.quarterDate|oro_format_date({timeZone: oro_timezone()}) ~ ')' %}
+            {% else %}
+                {% set label = item.label ~ ' (' ~ 'from'|trans ~ ' ' ~ options.settings.quarterDate|oro_format_date({timeZone: oro_timezone()})
+                ~ '): ' ~ itemValue %}
+            {% endif %}
+
+            {% set chartItem = {label: label, toolText: label, value: item.value, showValue: 0} %}
+        {% else %}
+            {% set label = item.label ~ ': ' ~ itemValue %}
+            {% set chartItem = {label: label, toolText: label, value: item.value} %}
+        {% endif %}
+
+        {% if item.link is defined %}
+            {% set chartItem = chartItem|merge({link: item.link}) %}
+        {% endif %}
+
+        {% set chartData = chartData|merge([chartItem]) %}
+    {% endfor %}
+
+    {% set componentOptions = {
+        view: 'orofusioncharts/js/app/views/funnel-chart-view',
+        autoRender: true,
+        chartOptions: {
+            containerId: containerId,
+            dataSource: {
+                'chart': {
+                    'showLabels': isMobileVersion ? '0' : '1',
+                    'showLegend': isMobileVersion ? '1' : '0',
+                    'isHollow': '0',
+                    'showValues': '0',
+                    'useSameSlantAngle': '1',
+                    'streamlinedData': '0',
+                    'isSliced': '1',
+                    'funnelYScale': '40',
+                    'enableSmartLabels': '1',
+                    'animation': '0',
+                    'bgAlpha': '0',
+                    'legendBorderAlpha': '0',
+                    'legendShadow': '0',
+                    'showBorder': '0',
+                    'paletteColors': options.settings.chartColors
+                },
+                'data': chartData
+            },
+            options: options,
+            isCurrencyPrepend: oro_currency_symbol_prepend()
+        }
+    } %}
+    <div class="chart-container">
+        <div class="clearfix">
+            <div class="flow-chart">
+                <div id="{{ containerId }}-chart" class="chart"
+                    {{ UI.renderPageComponentAttributes({
+                        module: 'oroui/js/app/components/view-component',
+                        options: componentOptions
+                    }) }}></div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="clearfix no-data">
+            <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,4 @@
+assets:
+    css:
+        'oroldap':
+            - 'bundles/oroldap/css/less/style.less'

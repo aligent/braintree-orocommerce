@@ -1,0 +1,75 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set chartData = {} %}
+{% set containerId = "chart-container-" ~ random() %}
+
+{% if data|length > 0 %}
+    {% set isMobileVersion = isMobileVersion() %}
+    {% set json = {
+        'chart': {
+            'canvasPadding': 40,
+            'labelPadding': 10,
+            'yAxisValuesPadding': 10,
+            'xAxisNamePadding': 10,
+            'yAxisNamePadding': 10,
+            'showValues': isMobileVersion ? '0' : '1',
+            'maxColWidth': '50',
+            'showCanvasBg': '0',
+            'showCanvasBase': '0',
+            'animation': '0',
+            'valuePadding': '10',
+            'rotateXAxisName': '0',
+            'bgColor': 'transparent',
+            'showZeroPlane': '0',
+            'canvasBgColor': 'transparent',
+            'canvasBorderThickness ': '0',
+            'borderColor': 'transparent',
+            'xaxisname': options.data_schema.label.label,
+            'yaxisname': options.data_schema.value.label,
+            'showShadow': '0',
+            'formatNumberScale': '0',
+            'decimals': '2',
+            'divLineColor': 'eaeaea',
+            'showVLineLabelBorder': '0',
+            'showAlternateHGridColor': '0',
+            'paletteColors': options.settings.chartColors
+        },
+        'data': data
+    } %}
+
+    {% if options.settings.connect_dots_with_line == false %}
+        {% set json = json|merge({
+            'chart':{
+                'anchorBgColor': options.settings.chartColors,
+                'anchorBorderColor': options.settings.chartColors,
+                'lineColor': 'transparent'
+            }|merge(json.chart)
+        }) %}
+    {% endif %}
+
+    {% set componentOptions = {
+        view: 'orofusioncharts/js/app/views/line-chart-view',
+        autoRender: true,
+        chartOptions: {
+            containerId: containerId,
+            dataSource: json,
+            options: options,
+            isCurrencyPrepend: oro_currency_symbol_prepend()
+        }
+    } %}
+    <div class="chart-container">
+        <div class="clearfix">
+            <div id="{{ containerId }}-chart" class="line-chart chart"
+                {{ UI.renderPageComponentAttributes({
+                    module: 'oroui/js/app/components/view-component',
+                    options: componentOptions
+                }) }}></div>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="clearfix no-data">
+            <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+        </div>
+    </div>
+{% endif %}

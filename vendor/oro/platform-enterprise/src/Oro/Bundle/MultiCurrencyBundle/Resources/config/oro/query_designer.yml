@@ -1,0 +1,6 @@
+query_designer:
+    filters:
+        multicurrency:
+            applicable: [{type: currency}]
+            type: multi_currency
+            query_type: [all]

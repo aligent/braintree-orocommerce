@@ -1,0 +1,9 @@
+oro_multiwebsite_config:
+    resource:     "@OroMultiWebsiteBundle/Controller"
+    type:         annotation
+    prefix:       /config
+
+oro_multiwebsite:
+    resource:     "@OroMultiWebsiteBundle/Controller/WebsiteController.php"
+    type:         annotation
+    prefix:       /website

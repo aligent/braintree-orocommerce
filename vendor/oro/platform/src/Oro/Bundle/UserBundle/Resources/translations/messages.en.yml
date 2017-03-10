@@ -1,0 +1,320 @@
+Add another email: Add another email
+Additional: Additional
+"Opportunity Information": "Opportunity Information"
+"New contact": "New contact"
+"Information": "Information"
+"Contact Details": "Contact Details"
+
+"%groups% and %roles%": "%groups% and %roles%"
+
+oro.user.form.choose_user: Choose a user...
+oro.user.form.choose_gender: Choose a gender...
+oro.user.gender.male: Male
+oro.user.gender.female: Female
+
+Username: Username
+Password: Password
+"Remember me on this computer": Remember me on this computer
+"Forgot your password?": Forgot your password?
+"Log in": Log in
+Login: Login
+Logout: Logout
+Login page: Login page
+"Forgot Password": "Forgot Password"
+"Password Reset": "Password Reset"
+"Reset password": "Reset password"
+"Generate key was successful. New key:": "Generate key was successful. New key&#58;"
+"Generate key": "Generate key"
+"Access Settings": "Access Settings"
+"Organization": "Organization"
+"Business Unit": "Business Unit"
+"User": "User"
+"None": "None"
+"There is no active user with username or email address \"%username%\".": "There is no active user with username or email address \"%username%\"."
+"Username or Email": "Username or Email"
+"Return to Login": "Return to Login"
+"Request": "Request"
+
+User account is locked.: User account is locked
+User account is disabled.: User account is disabled
+User account has expired.: User account has expired
+
+change_password:
+    flash:
+        success: The password has been changed
+resetting:
+    flash:
+        success: The password has been successfully reset
+
+oro:
+    user:
+        form:
+            access_settings.label: Business Units
+            signature.label: Email Signature
+            choose_role: Choose a role...
+            business_units.label: Organization Business Units
+        menu:
+            system_tab.label: System
+            user_list.description: List of system users
+            user_roles.description: List of system roles
+            user_groupes.description: List of system groups
+            users_management.label: User Management
+            user_create.label: Create User
+            shortcut_new_user.label: Create new User
+            shortcut_new_user.description: Create new user instance
+            shortcut_list_users.label: Show Users list
+            shortcut_list_users.description: List of all system users
+            shortcut_new_role.label: Create new Role
+            shortcut_new_role.description: Create new role instance
+            shortcut_new_group.label: Create new Group
+            shortcut_new_group.description: Create new group instance
+            oro_user_profile_view.label: My User
+            oro_user_profile_configuration.label: My Configuration
+        controller:
+            group.message.saved: "Group saved"
+            role.message.saved: "Role saved"
+            user.message.saved: "User saved"
+            status.message.saved: "Status saved"
+            invite.fail.message: An invitation email sending was failed
+        user_configuration:
+            label: Configuration
+            use_default: Use System
+            grid.action.config: Configuration
+        #
+        # Oro/Bundle/UserBundle/Entity/User
+        #
+        api_keys.label:              API keys
+        api.label:                   API key
+        birthday.label:              Birthday
+        business_units.label:        Business Units
+        organizations.label:         Organizations
+        confirmation_token.label:    Confirmation token
+        current_status.label:        Current status
+        groups.label:                Groups
+        email.label:                 Primary Email
+        email:
+            entity_label:            User Email Address
+            entity_plural_label:     User Email Addresses
+            entity_description:      Represent user emails
+            email.label:             Email
+            id.label:                Id
+            user.label:              User
+        phone.label:                 Phone
+        email_origins.label:         Email Origins
+        emails.label:                Emails
+        enabled.label:               Enabled
+        auth_status.label:           Status
+        entity_description:          Represent user profile
+        entity_label:                User
+        entity_plural_label:         Users
+        first_name.label:            First name
+        id.label:                    Id
+        avatar.label:                Avatar
+        imap_configuration.label:    Email synchronization settings
+        imap_configuration.update:   Update settings
+        last_login.label:            Last logged in
+        last_name.label:             Last name
+        login_count.label:           Login count
+        password_expires_at.label:   Password expires at
+        failed_login_count.label:    Failed login count
+        middle_name.label:           Middle name
+        name_prefix.label:           Name prefix
+        name_suffix.label:           Name suffix
+        owner.label:                 Owner
+        password.label:              Password
+        password_re.label:           Re-enter password
+        password_requested_at.label: Password requested at
+        password_changed_at.label:   Password changed at
+        new_password.label:          New password
+        new_password_re.label:       Repeat new password
+        roles.label:                 Roles
+        salt.label:                  Salt
+        statuses.label:              Statuses
+        username.label:              Username
+        organization.label:          Organization
+        business_unit.label:         Business Unit
+
+        datagrid:
+            views:
+                active: Active Users
+                cannot_login: Cannot login
+                disabled: Disabled Users
+
+        impersonation:
+            entity_label: Impersonation
+            entity_plural_label: Impersonations
+            id.label: Id
+            expire_at.label: Expire At
+            login_at.label: Login At
+            token.label: Token
+            user.label: User
+            notify.label: Notify
+            notification_error: Error while sending impersonation notification
+            ip_address.label: IP Address
+
+        # extended field added in migrations
+        title.label:                 Title
+
+        #
+        # Oro/Bundle/UserBundle/Entity/Group
+        #
+        group:
+            entity_label:        Group
+            entity_plural_label: Groups
+            entity_description:  Group of roles
+            id.label:    Id
+            name.label:  Name
+            roles.label: Roles
+            owner.label: Owner
+            organization.label: Organization
+            has_group.label: Has group
+        #
+        # Oro/Bundle/UserBundle/Entity/Role
+        #
+        role:
+            entity_label:        Role
+            entity_plural_label: Roles
+            entity_description:  User's role
+            id.label:     Id
+            role.label:   Role
+            label.label:  Label
+            owner.label:  Owner
+            has_role.label: Has role
+            extend_description.label: Description
+            organization.label: Organization
+            actions:
+              edit: Edit
+
+        invite:
+            label: Send an Email Invitation
+        privileges:
+            entity.label: Entity
+            field.label:  Fields
+            action.label: Capabilities
+        privilege:
+            category:
+                account_management.label: Account Management
+                address.label: Address
+                application.label: Application
+                calendar.label: Calendar
+                entity.label: Entity
+        password:
+            change_dialog.title: Change password
+            reset_dialog.title: Reset password
+            reset_password.label: Reset password
+            change_password.label: Change password
+            new_password.label: New password
+            enter_new_password.label: New password
+            enter_new_password_again.label: Repeat password
+            reset.label: Reset
+            reset:
+                ttl_already_requested.message: The password for this user has already been requested within the last 24 hours
+                popup.message: User {{ user }} will receive reset password by email.
+                popup.question: Are you sure you want to proceed?
+            reset_password:
+                flash:
+                    success: Reset password email has been sent to user
+            force_reset:
+                popup.message: User {{ user }} will receive reset password by email and will be disabled from login.
+                popup.question: Are you sure you want to proceed?
+                popup.button: Reset
+                success.message: Password reset request has been sent to %email%.
+                failure.message: Password reset request to %email% has failed.
+                mass_action.success: Password reset completed successfully. %count% emails sent.
+                mass_action.failure: Mass reset action has failed.
+        # password tooltip for different rules
+        password_complexity:
+            unrestricted: ~
+            min_length: The password must be at least {{ length }} characters long
+            lower_case: The password must include a lower case letter
+            upper_case: The password must include an upper case letter
+            numbers:    The password must include a number
+            special_chars:  The password must include a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_upper_case: The password must be at least {{ length }} characters long and include an upper case letter
+            min_length_numbers: The password must be at least {{ length }} characters long and include a number
+            min_length_special_chars: The password must be at least {{ length }} characters long and include a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_upper_case_numbers: The password must be at least {{ length }} characters long and include an upper case letter and a number
+            min_length_upper_case_special_chars: The password must be at least {{ length }} characters long and include an upper case letter and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_numbers_special_chars: The password must be at least {{ length }} characters long and include a number and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_upper_case_numbers_special_chars: The password must be at least {{ length }} characters long and include an upper case letter, a number, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            upper_case_numbers: The password must include an upper case letter and a number
+            upper_case_special_chars: The password must include an upper case letter and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            numbers_special_chars: The password must include a number and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            upper_case_numbers_special_chars: The password must include an upper case letter, a number and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_lower_case: The password must be at least {{ length }} characters long and include a lower case letter
+            min_length_lower_case_upper_case: The password must be at least {{ length }} characters long and include a lower case letter, and an upper case letter
+            min_length_lower_case_numbers: The password must be at least {{ length }} characters long and include a lower case letter, and a number
+            min_length_lower_case_special_chars: The password must be at least {{ length }} characters long and include a lower case letter, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_lower_case_upper_case_numbers: The password must be at least {{ length }} characters long and include a lower case letter, an upper case letter, and a number
+            min_length_lower_case_upper_case_special_chars: The password must be at least {{ length }} characters long and include a lower case letter, an upper case letter, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_lower_case_numbers_special_chars: The password must be at least {{ length }} characters long and include a lower case letter, a number, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            min_length_lower_case_upper_case_numbers_special_chars: The password must be at least {{ length }} characters long and include a lower case letter, an upper case letter, a number, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            lower_case_upper_case: The password must include a lower case letter and an upper case letter
+            lower_case_numbers:    The password must include a lower case letter and a number
+            lower_case_special_chars:  The password must include a lower case letter and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            lower_case_upper_case_numbers: The password must include a lower case letter, an upper case letter, and a number
+            lower_case_upper_case_special_chars: The password must include a lower case letter, an upper case letter, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            lower_case_numbers_special_chars: The password must include a lower case letter, a number, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+            lower_case_upper_case_numbers_special_chars: The password must include a lower case letter, an upper case letter, a number, and a special character (!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space)
+
+        enabled:
+            enabled: Enabled
+            disabled: Disabled
+
+        action:
+            enable:
+                label: Enable user
+                success: 'User %username% enabled.'
+            disable:
+                label: Disable user
+                success: 'User %username% disabled.'
+            password_management:
+                label: Manage passwords
+                description: Reset or change passwords of other users
+            update_profile:
+                label: Update User Profile
+                description: Allows the user to update their own profile regardless of Edit permissions for User entity.
+            update_configuration:
+                label: Access personal configuration
+                description: Enables access to personal application configurations, such as language, locale, email settings, etc. regardless of Configure permissions for User entity.
+        permission:
+            update_configuration:
+                label: Configure
+            manage_api_key:
+                label: Manage API Key
+
+        security:
+            password_changed.message: Your password was updated by an administrator. New password was sent to you by email.
+            password_reseted.message: Your password was successfully reset. You may log in now.
+        user_bar_settings:
+            title: User bar
+        image.tooltip: The avatar must be in BMP, JPEG or PNG formats, and the file must be less than %file_size% in size
+        invite.tooltip: When this option is selected, an invitation email will be sent.
+        api.tooltip_text: >
+            An API key could be used for authentication in third party software.
+            Please keep your regular password in secret.
+
+        dashboard:
+            role: Role
+            owner: Owner
+            owners: Owners
+            all_owners: All owners
+            business_unit: Business Unit
+            current_user: Current User
+
+        system_configuration:
+            groups:
+                user_settings.title: User Settings
+                password_complexity_rules.title: Password restrictions
+            fields:
+                password_min_length.label: Minimal password length
+                password_numbers.label: Require a number
+                password_lower_case.label: Require a lower case letter
+                password_upper_case.label: Require an upper case letter
+                password_special_chars:
+                    label: Require a special character
+                    tooltip: >
+                        Special chars: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ and space
+
+    scope:
+        user.label: User

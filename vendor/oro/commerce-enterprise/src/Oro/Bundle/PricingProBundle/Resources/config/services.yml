@@ -1,0 +1,43 @@
+services:
+    oro_pricingpro.cpl_id.placeholder:
+        class: 'Oro\Bundle\PricingProBundle\Placeholder\CPLIdPlaceholder'
+        public: false
+        tags:
+            - { name: website_elastic_search.placeholder }
+
+    oro_pricingpro.currency.placeholder:
+        class: 'Oro\Bundle\PricingProBundle\Placeholder\CurrencyPlaceholder'
+        public: false
+        tags:
+            - { name: website_elastic_search.placeholder }
+
+    oro_pricingpro.unit.placeholder:
+        class: 'Oro\Bundle\PricingProBundle\Placeholder\UnitPlaceholder'
+        public: false
+        tags:
+            - { name: website_elastic_search.placeholder }
+
+    oro_pricing_pro.config.displayed_currencies:
+        class: 'Oro\Bundle\PricingProBundle\Manager\DisplayedCurrenciesConfigProvider'
+        public: false
+        arguments:
+            - '@oro_config.manager'
+
+    oro_pricing_pro.user_currency_manager:
+        decorates: oro_pricing.user_currency_manager
+        class: 'Oro\Bundle\PricingBundle\Manager\UserCurrencyManager'
+        arguments:
+            - '@session'
+            - '@security.token_storage'
+            # Currency config was overridden
+            - '@oro_pricing_pro.config.displayed_currencies'
+            - '@oro_website.manager'
+            - '@oro_customer_user.manager'
+
+    oro_pricing_pro.provider.enabled_currencies_dependency:
+            class: Oro\Bundle\PricingProBundle\Provider\EnabledCurrencyDependencyProvider
+            public: false
+            arguments:
+                - '@oro_config.global'
+            tags:
+                - { name: oro_multicurrency.config.dependency }

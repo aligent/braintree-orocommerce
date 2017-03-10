@@ -1,0 +1,12 @@
+layout:
+    imports:
+        -
+            id: oro_sale_quote_grid
+            root: page_content
+            namespace: quotes
+
+    actions:
+        - '@setOption':
+            id: page_title
+            optionName: text
+            optionValue: 'oro.frontend.sale.quote.entity_plural_label'

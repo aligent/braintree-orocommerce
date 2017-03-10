@@ -1,0 +1,7 @@
+parameters:
+
+services:
+    oro_platform_pro.namespace_migration_provider:
+        class: 'Oro\Bundle\PlatformProBundle\Cache\NamespaceMigrationProvider'
+        tags:
+            - {name: oro_installer.namespace_migration_provider, priority: 20}

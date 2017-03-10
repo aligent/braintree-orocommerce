@@ -1,0 +1,39 @@
+oro:
+    multicurrency.rate:
+        entity_label: 'Multi-currency'
+        entity_plural_label: 'Multi-currencies'
+        currency_code.label:  Currency code
+        id.label: Id
+        rate_from.label: Rate from
+        rate_to.label: Rate to
+        scope.label: Scope
+        organization.label: Organization
+
+    multi.currency:
+        system_configuration:
+            fields:
+                allowed_currencies:
+                    label: 'Allowed Currencies'
+            currency_grid:
+                default: Base
+                currency_name: Currency name
+                currency_code: Currency code
+                currency_symbol: Currency symbol
+                rate_from: Rate from
+                rate_to: Rate to
+                sort: Sort
+                actions: Actions
+                tooltip:
+                    rate_from: 'The conversion rate from selected currency to the base currency. Used to calculate transaction amounts (e.g. opportunity budget) in base currency if they were entered in other currencies. Maximum precision is 10 digits.'
+                    rate_to: 'The conversion rate from the base currency to selected currency. Used to calculate new exchange rates when base currency is changed. Maximum precision is 10 digits.'
+        validator:
+            organization_currency:
+                message:
+                    missed_currency: 'Cannot remove "%currencies%" currency because it is used in the following organizations: "%orgNames%". Please change the default currency for these organizations first. Reload this page to keep managing currencies.'
+                    missed_currencies: 'Cannot remove "%currencies%" currencies because they are used in the following organizations: "%orgNames%". Please change the default currency for these organizations first. Reload this page to keep managing currencies.'
+            rates:
+                message:
+                    empty_value: '"%direction%" of "%currency%" currency cannot be empty.'
+                    not_number: '"%direction%" of "%currency%" must be a number.'
+                    less_or_equal_to_zero: '"%direction%" of "%currency%" must have positive value.'
+            currency_not_used_in_entities.message: "\"%currencies%\" can't be removed because it's used in next entities: \"%entities%\". Reload this page to keep managing currencies."

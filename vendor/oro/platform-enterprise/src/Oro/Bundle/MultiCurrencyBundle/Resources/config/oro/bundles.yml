@@ -1,0 +1,3 @@
+bundles:
+     #load after CurrencyBundle
+     - { name: Oro\Bundle\MultiCurrencyBundle\OroMultiCurrencyBundle, priority: 45 }

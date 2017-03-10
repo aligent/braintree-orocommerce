@@ -1,0 +1,14 @@
+oro_securitypro:
+    resource:     "@OroSecurityProBundle/Controller"
+    type:         annotation
+    prefix:       /security
+
+oro_securitypro_share_api:
+    resource: Oro\Bundle\SecurityProBundle\Controller\Api\ShareController
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version:  latest|v1
+        _format:  json|html
+    defaults:
+        version: latest

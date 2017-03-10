@@ -1,0 +1,82 @@
+system_configuration:
+    groups:
+        warehouse:
+            title: oro.warehouse.system_configuration.groups.warehouse.title
+            icon: fa-building-o
+        warehouse_configuration:
+            title: oro.warehouse.system_configuration.groups.warehouse_configuration.title
+
+    fields:
+        oro_warehouse.enabled_warehouses:
+            data_type: array
+            type: oro_warehouse_system_config
+            options:
+                label: oro.warehouse.system_configuration.fields.enabled_warehouses.label
+                resettable: false
+
+    tree:
+        system_configuration:
+            commerce:
+                children:
+                    product_inventory:
+                        children:
+                            warehouse:
+                                priority: 100
+                                children:
+                                    warehouse_configuration:
+                                        children:
+                                            - oro_warehouse.enabled_warehouses
+
+        organization_configuration:
+            commerce:
+                children:
+                    product_inventory:
+                        children:
+                            warehouse:
+                                priority: 100
+                                children:
+                                    warehouse_configuration:
+                                        children:
+                                            - oro_warehouse.enabled_warehouses
+                            product_options:
+                                priority: 90
+                                children:
+                                    product_inventory_options:
+                                        children:
+                                            - oro_inventory.inventory_threshold
+                                            - oro_inventory.backorders
+                                            - oro_inventory.decrement_inventory
+
+                            limitations:
+                                priority: 80
+                                children:
+                                    product_quantity_limitations:
+                                        children:
+                                            - oro_inventory.minimum_quantity_to_order
+                                            - oro_inventory.maximum_quantity_to_order
+        website_configuration:
+            commerce:
+                children:
+                    product_inventory:
+                        children:
+                            warehouse:
+                                priority: 100
+                                children:
+                                    warehouse_configuration:
+                                        children:
+                                            - oro_warehouse.enabled_warehouses
+                            product_options:
+                                priority: 90
+                                children:
+                                    product_inventory_options:
+                                        children:
+                                            - oro_inventory.inventory_threshold
+                                            - oro_inventory.backorders
+                                            - oro_inventory.decrement_inventory
+                            limitations:
+                                priority: 80
+                                children:
+                                    product_quantity_limitations:
+                                        children:
+                                            - oro_inventory.minimum_quantity_to_order
+                                            - oro_inventory.maximum_quantity_to_order

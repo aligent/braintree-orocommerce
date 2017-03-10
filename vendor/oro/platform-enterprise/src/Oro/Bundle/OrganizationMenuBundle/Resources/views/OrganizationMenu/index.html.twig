@@ -1,0 +1,17 @@
+{% extends 'OroNavigationBundle:menuUpdate:index.html.twig' %}
+
+{% oro_title_set({params : {"%organization%": organization.name }}) %}
+
+{% set breadcrumbs = {
+    'indexPath': path('oro_organizationpro_index', {'id': organization.id }),
+    'indexLabel': 'oro.organization.entity_plural_label'|trans,
+    'additional': [
+        {
+            'indexPath': path('oro_organizationpro_view', {'id': organization.id }),
+            'indexLabel': organization.name
+        }
+    ],
+    'entityTitle': 'oro.navigation.menuupdate.roots_plural_label'|trans
+} %}
+{% set gridName = 'menu-organization-grid' %}
+{% set params = {'organization': organization} %}

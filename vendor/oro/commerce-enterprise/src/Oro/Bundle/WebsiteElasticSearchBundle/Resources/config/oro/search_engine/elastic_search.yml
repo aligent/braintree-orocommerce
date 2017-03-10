@@ -1,0 +1,41 @@
+services:
+    oro_website_search.indexer:
+        class: 'Oro\Bundle\WebsiteElasticSearchBundle\Engine\ElasticSearchIndexer'
+        parent: 'oro_website_search.search.indexer'
+        calls:
+            - ['setIndexAgent', ['@oro_website_elastic_search.engine.index_agent']]
+            - ['setLogger', ['@logger']]
+            - ['setPlaceholderHelper', ['@oro_website_elastic_search.helper.placeholder_helper']]
+
+    oro_website_search.engine:
+        class: 'Oro\Bundle\WebsiteElasticSearchBundle\Engine\ElasticSearchEngine'
+        arguments:
+            - '@event_dispatcher'
+            - '@oro_website_search.resolver.query_placeholder'
+            - '@oro_website_search.provider.search_mapping'
+            - '@oro_website_elastic_search.engine.index_agent'
+            - '@oro_elasticsearch.request_builder.registry'
+        calls:
+            - ['setMapper', ['@oro_website_search.engine.mapper']]
+            - ['setPlaceholderHelper', ['@oro_website_elastic_search.helper.placeholder_helper']]
+
+    oro_website_elastic_search.engine.index_agent:
+        class: 'Oro\Bundle\WebsiteElasticSearchBundle\Engine\IndexAgent'
+        public: false
+        arguments:
+            - '@oro_elasticsearch.client.factory'
+            - '@oro_elasticsearch.plugin.verifier'
+            - '@oro_website_elastic_search.mapping.provider'
+            - '%oro_website_search.engine_parameters%'
+            - '@oro_website_elastic_search.placeholder_decorator'
+            - '@oro_website_search.website_id.placeholder'
+        calls:
+            - ['setFieldTypeMapping', ['%oro_elasticsearch.field_type_mapping%']]
+            - ['setLogger', ['@logger']]
+
+    oro_website_elastic_search.mapping.provider:
+        class: 'Oro\Bundle\WebsiteElasticSearchBundle\Provider\WebsiteElasticSearchMappingProvider'
+        public: false
+        arguments:
+            - '@oro_website_search.loader.mapping_configuration_cache_loader'
+            - '@oro_elasticsearch.engine.mapping_validator'

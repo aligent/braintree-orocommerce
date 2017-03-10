@@ -1,0 +1,4 @@
+oro_organization_bundle:
+    resource:     "@OroOrganizationConfigBundle/Controller"
+    type:         annotation
+    prefix:       /config

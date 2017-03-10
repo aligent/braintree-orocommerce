@@ -1,0 +1,5 @@
+{% block _payment_methods_braintree_widget %}
+    <div data-page-component-module="orobpayment/js/app/components/payment-method-component"
+         data-page-component-options="{{ {paymentMethod: name}|json_encode }}">
+    </div>
+{% endblock %}

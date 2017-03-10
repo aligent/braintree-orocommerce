@@ -1,0 +1,10 @@
+placeholders:
+    placeholders:
+        view_navButtons_before:
+            items:
+                organization_config_button: ~
+
+    items:
+        organization_config_button:
+            template: OroOrganizationConfigBundle:Configuration:button.html.twig
+            applicable: "@oro_organization_config.placeholder.filter->isOrganizationPage($entity$)"

@@ -1,0 +1,27 @@
+layout:
+    imports:
+        -
+            id: oro_rfp_request_grid
+            root: page_content
+            namespace: requests
+
+    actions:
+        - '@setBlockTheme':
+            themes: 'OroRFPBundle:layouts:default/oro_rfp_frontend_request_index/layout.html.twig'
+
+        - '@setOption':
+            id: page_title
+            optionName: text
+            optionValue: 'oro.frontend.rfp.request.entity_plural_label'
+
+        - '@setOption':
+            id: datagrid_toolbar_button_container
+            optionName: visible
+            optionValue: true
+
+        - '@add':
+            id: create_request_button
+            parentId: datagrid_toolbar_button_container
+            blockType: combined_buttons
+            options:
+                buttons: '=data["buttons"].getAll()'

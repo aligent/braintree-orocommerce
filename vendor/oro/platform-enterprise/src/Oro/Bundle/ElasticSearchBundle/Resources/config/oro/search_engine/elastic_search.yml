@@ -1,0 +1,156 @@
+parameters:
+    oro_elasticsearch.field_type_mapping:
+        text:
+            type: string
+            store: true
+            index: not_analyzed
+        decimal:
+            type: double
+            store: true
+        integer:
+            type: integer
+            store: true
+        datetime:
+            type: date
+            store: true
+            format: "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd"
+
+services:
+    oro_search.search.engine:
+        class: 'Oro\Bundle\ElasticSearchBundle\Engine\ElasticSearch'
+        arguments:
+            - "@doctrine"
+            - "@event_dispatcher"
+            - "@oro_search.mapper"
+            - "@oro_elasticsearch.engine.index_agent"
+            - '@oro_elasticsearch.request_builder.registry'
+        calls:
+            - [setLogQueries, ['%oro_search.log_queries%']]
+
+    oro_search.search.engine.indexer:
+        class: 'Oro\Bundle\ElasticSearchBundle\Engine\ElasticSearchIndexer'
+        arguments:
+            - '@oro_elasticsearch.engine.index_agent'
+            - '@doctrine'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_search.mapper'
+            - '@oro_entity.entity_name_resolver'
+
+    oro_elasticsearch.plugin.verifier:
+        class: 'Oro\Bundle\ElasticSearchBundle\Engine\ElasticPluginVerifier'
+        public: false
+        arguments:
+          - [ 'delete-by-query' ]
+
+    oro_elasticsearch.engine.index_agent:
+        class: 'Oro\Bundle\ElasticSearchBundle\Engine\IndexAgent'
+        public: false
+        arguments:
+            - "@oro_elasticsearch.client.factory"
+            - "@oro_elasticsearch.plugin.verifier"
+            - "@oro_elasticsearch.mapping.provider"
+            - '%oro_search.engine_parameters%'
+        calls:
+            - ['setFieldTypeMapping', ['%oro_elasticsearch.field_type_mapping%']]
+            - ['setLogger', ['@logger']]
+
+    oro_elasticsearch.engine.mapping_validator:
+        class: 'Oro\Bundle\ElasticSearchBundle\Engine\MappingValidator'
+        public: false
+
+    oro_elasticsearch.mapping.provider:
+        class: 'Oro\Bundle\ElasticSearchBundle\Provider\ElasticSearchMappingProvider'
+        public: false
+        arguments:
+            - '@event_dispatcher'
+            - '@oro_search.cache.mapping_configuration'
+        calls:
+            - [setMappingConfig, ['%oro_search.entities_config%']]
+            - [setMappingValidator, ['@oro_elasticsearch.engine.mapping_validator']]
+
+    oro_elasticsearch.client.builder:
+        public: false
+        class: 'Elasticsearch\ClientBuilder'
+
+    oro_elasticsearch.client.factory:
+        class: 'Oro\Bundle\ElasticSearchBundle\Client\ClientFactory'
+        public: false
+        arguments:
+            - "@oro_elasticsearch.client.builder"
+            - "@property_accessor"
+
+    oro_elasticsearch.request_builder.registry:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\RequestBuilderRegistry'
+        public: false
+
+    oro_elasticsearch.request_builder.select:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\SelectRequestBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder }
+
+    oro_elasticsearch.request_builder.from:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\FromRequestBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder }
+
+    oro_elasticsearch.request_builder.where:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\WhereRequestBuilder'
+        public: false
+        arguments:
+            - '@oro_elasticsearch.request_builder.where.part_builder_registry'
+        tags:
+            - { name: oro_elasticsearch.request_builder }
+
+    oro_elasticsearch.request_builder.order:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\OrderRequestBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder }
+
+    oro_elasticsearch.request_builder.limit:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\LimitRequestBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder }
+
+    oro_elasticsearch.request_builder.where.part_builder_registry:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\WherePartBuilderRegistry'
+        public: false
+
+    oro_elasticsearch.request_builder.where.contains:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\ContainsWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }
+
+    oro_elasticsearch.request_builder.where.equals:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\EqualsWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }
+
+    oro_elasticsearch.request_builder.where.range:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\RangeWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }
+
+    oro_elasticsearch.request_builder.where.starts_with:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\StartsWithWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }
+
+    oro_elasticsearch.request_builder.where.in:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\InWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }
+
+    oro_elasticsearch.request_builder.where.exists:
+        class: 'Oro\Bundle\ElasticSearchBundle\RequestBuilder\Where\ExistsWherePartBuilder'
+        public: false
+        tags:
+            - { name: oro_elasticsearch.request_builder.where }

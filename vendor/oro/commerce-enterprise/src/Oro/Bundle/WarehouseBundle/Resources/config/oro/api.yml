@@ -1,0 +1,12 @@
+api:
+    entities:
+        Oro\Bundle\WarehouseBundle\Entity\Warehouse:
+            actions:
+                delete:
+                    exclude: true
+        Oro\Bundle\InventoryBundle\Entity\InventoryLevel:
+            filters:
+                fields:
+                    warehouse:
+                        data_type: integer
+                        allow_array: true

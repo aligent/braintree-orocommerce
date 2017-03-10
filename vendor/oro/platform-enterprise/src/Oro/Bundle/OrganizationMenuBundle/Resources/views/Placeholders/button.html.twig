@@ -1,0 +1,9 @@
+{% if resource_granted('EDIT', entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {{ UI.button({
+        'path' : path('oro_organization_menu_index', { 'id': entity.id }),
+        'label': 'oro.organization_menu.organization_menu.label'|trans,
+        'title': 'oro.organization_menu.organization_menu.label'|trans,
+        'iCss': 'fa-cog',
+    }) }}
+{% endif %}

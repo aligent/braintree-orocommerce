@@ -1,0 +1,48 @@
+services:
+    oro_warehouse.form.type.warehouse:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseType'
+        arguments:
+            - '@oro_warehouse.warehouse_address.provider'
+            - '@doctrine'
+        calls:
+            - [setDataClass, ['%oro_warehouse.entity.warehouse.class%']]
+        tags:
+            - { name: form.type, alias: oro_warehouse }
+
+    oro_warehouse.form.type.warehouse_select:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseSelectType'
+        tags:
+            - { name: form.type, alias: oro_warehouse_select }
+
+    oro_warehouse.form.type.warehouse_select_with_priority:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseSelectWithPriorityType'
+        tags:
+            - { name: form.type, alias: oro_warehouse_select_with_priority }
+
+    oro_warehouse.form.type.warehouse_system_config:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseSystemConfigType'
+        arguments:
+            - 'Oro\Bundle\WarehouseBundle\SystemConfig\WarehouseConfig'
+        tags:
+            - { name: form.type, alias: oro_warehouse_system_config }
+
+    oro_warehouse.form.warehouse_collection:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseCollectionType'
+        tags:
+            - { name: form.type, alias: oro_warehouse_collection }
+
+    oro_warehouse.form.type.warehouse_address:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Type\WarehouseAddressType'
+        arguments:
+            - '@oro_address.form.listener.address'
+        calls:
+            - [setDataClass, ['%oro_warehouse.entity.warehouse_address.class%']]
+        tags:
+            - { name: form.type, alias: oro_warehouse_address }
+
+    oro_warehouse.form.extension.inventory_level_grid:
+        class: 'Oro\Bundle\WarehouseBundle\Form\Extension\InventoryLevelGridTypeExtension'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: form.type_extension, alias: oro_inventory_level_grid }

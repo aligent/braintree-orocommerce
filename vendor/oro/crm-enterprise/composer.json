@@ -1,0 +1,29 @@
+{
+    "name": "oro/crm-enterprise",
+    "description": "OroCRM Enterprise",
+    "homepage": "https://github.com/orocrm/crm-enterprise.git",
+    "license": "Commercial",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Oro": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.6",
+        "oro/platform-enterprise": "2.0.*",
+        "oro/crm": "2.0.*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

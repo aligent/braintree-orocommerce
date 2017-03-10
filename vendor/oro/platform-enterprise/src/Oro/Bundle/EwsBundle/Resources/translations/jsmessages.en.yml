@@ -1,0 +1,5 @@
+oro:
+    ews:
+        integration_transport:
+            connection:
+                check.error: 'Check connection failed'

@@ -1,0 +1,65 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set max = 0 %}
+{% set containerId = "chart-container-" ~ random() %}
+{% if data|length > 0 %}
+    {% set componentOptions = {
+        view: 'orofusioncharts/js/app/views/bar-chart-view',
+        autoRender: true,
+        chartOptions: {
+            containerId: containerId,
+            dataSource: {
+                'chart': {
+                    'showValues': isMobileVersion() ? '0' : '1',
+                    'maxColWidth': '50',
+                    'showCanvasBg': '0',
+                    'showCanvasBase': '0',
+                    'animation': '0',
+                    'valuePadding': '10',
+                    'rotateXAxisName': '0',
+                    'formatNumberScale': '0',
+                    'labelPadding': 10,
+                    'yAxisValuesPadding': 10,
+                    'xAxisNamePadding': 10,
+                    'yAxisNamePadding': 10,
+                    'drawAnchors': 0,
+                    'divLineColor': 'eaeaea',
+                    'paletteColors': options.settings.chartColors
+                },
+                'data': data,
+                'type': 'Column3D',
+                'trendlines': [{
+                    'line': [
+                        {
+                            'startvalue': '0',
+                            'color': '666666',
+                            'alpha': '10'
+                        },
+                        {
+                            'startvalue': max,
+                            'color': '666666',
+                            'alpha': '10'
+                        }
+                    ]
+                }]
+            },
+            options: options,
+            isCurrencyPrepend: oro_currency_symbol_prepend()
+        }
+    } %}
+    <div class="chart-container">
+        <div class="clearfix">
+            <div id="{{ containerId }}-chart" class="column-chart chart"
+                {{ UI.renderPageComponentAttributes({
+                    module: 'oroui/js/app/components/view-component',
+                    options: componentOptions
+                }) }}></div>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="clearfix no-data">
+            <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+        </div>
+    </div>
+{% endif %}

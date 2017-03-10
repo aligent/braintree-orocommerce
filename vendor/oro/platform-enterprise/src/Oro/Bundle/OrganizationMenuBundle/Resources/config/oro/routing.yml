@@ -1,0 +1,3 @@
+oro_organization_menu_bundle:
+    resource:     "@OroOrganizationMenuBundle/Controller"
+    type:         annotation

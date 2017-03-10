@@ -1,0 +1,34 @@
+services:
+    #Listeners
+    oro_warehouse.event_listener.importexport.inventory_level:
+        class: 'Oro\Bundle\WarehouseBundle\EventListener\InventoryLevelSubscriber'
+        tags:
+            - { name: kernel.event_listener, event: oro.import_export.after_normalize_entity, method: afterNormalize }
+            - { name: kernel.event_listener, event: oro.import_export.after_denormalize_entity, method: afterDenormalize }
+
+    #Strategy Helpers
+    oro_warehouse.importexport.strategy_helper.inventory_level:
+        class: 'Oro\Bundle\WarehouseBundle\ImportExport\Strategy\InventoryLevelStrategyHelper'
+        public: false
+        arguments:
+            - "@oro_importexport.field.database_helper"
+            - "@translator"
+
+    oro_warehouse.importexport.strategy_helper.product_unit:
+        class: 'Oro\Bundle\WarehouseBundle\ImportExport\Strategy\WarehouseProductUnitStrategyHelper'
+        public: false
+        arguments:
+            - "@oro_importexport.field.database_helper"
+            - "@translator"
+            - "@oro_inventory.transformer.inventory_product_unit"
+        calls:
+             - [setSuccessor, ["@oro_warehouse.importexport.strategy_helper.inventory_level"]]
+
+    oro_warehouse.importexport.strategy_helper.warehouse:
+        class: 'Oro\Bundle\WarehouseBundle\ImportExport\Strategy\WarehouseStrategyHelper'
+        public: false
+        arguments:
+            - "@oro_importexport.field.database_helper"
+            - "@translator"
+        calls:
+             - [setSuccessor, ["@oro_warehouse.importexport.strategy_helper.product_unit"]]

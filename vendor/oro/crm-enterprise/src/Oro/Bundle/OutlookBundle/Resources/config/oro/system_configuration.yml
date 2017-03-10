@@ -1,0 +1,223 @@
+system_configuration:
+    groups:
+        outlook_settings:
+            title: oro_outlook.form.outlook_settings
+            icon:  fa-envelope-o
+
+        outlook_addin:
+            title: oro_outlook.form.outlook_addin
+
+        integration_outlook_settings:
+            title: oro_outlook.form.outlook_integration
+
+        synchronization_outlook_settings:
+            title: oro_outlook.form.outlook_synchronization
+
+    fields:
+        oro_outlook.contacts_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 90
+            options:
+                label:          oro_outlook.form.contacts
+                tooltip:        oro_outlook.form.tooltip.enabled
+                required: false
+        oro_outlook.contacts_sync_direction:
+            data_type: string
+            type: choice
+            priority: 80
+            options:
+                label:          oro_outlook.form.sync_direction
+                tooltip:        oro_outlook.form.tooltip.sync_direction
+                choices:
+                    OroCRMToOutlook:  oro_outlook.form.contacts_sync_direction.choices.orocrm_to_outlook
+                    OutlookToOroCRM:  oro_outlook.form.contacts_sync_direction.choices.outlook_to_orocrm
+                    Both:             oro_outlook.form.contacts_sync_direction.choices.both
+                constraints:
+                    - NotBlank: ~
+        oro_outlook.contacts_conflict_resolution:
+            data_type: string
+            type: choice
+            priority: 70
+            options:
+                label:          oro_outlook.form.conflict_resolution
+                tooltip:        oro_outlook.form.tooltip.conflict_resolution
+                choices:
+                    OroCRMAlwaysWins:  oro_outlook.form.contacts_conflict_resolution.choices.orocrm_always_wins
+                    OutlookAlwaysWins: oro_outlook.form.contacts_conflict_resolution.choices.outlook_always_wins
+                constraints:
+                    - NotBlank: ~
+        oro_outlook.contacts_sync_interval_orocrm:
+            data_type: integer
+            type: integer
+            priority: 60
+            options:
+                label:          oro_outlook.form.sync_interval_orocrm
+                tooltip:        oro_outlook.form.tooltip.sync_interval_orocrm
+                constraints:
+                    - NotBlank: ~
+                    - Type:     integer
+                    - Range:
+                        min:    1
+                        max:    86399 # 1 day - 1 sec
+        oro_outlook.contacts_sync_interval_outlook:
+            data_type: integer
+            type: integer
+            priority: 50
+            options:
+                label:          oro_outlook.form.sync_interval_outlook
+                tooltip:        oro_outlook.form.tooltip.sync_interval_outlook
+                constraints:
+                    - NotBlank: ~
+                    - Range:
+                        min:    1
+                        max:    86399 # 1 day - 1 sec
+        oro_outlook.contacts_keys:
+            data_type: array
+        oro_outlook.contacts_mapping:
+            data_type: array
+
+        oro_outlook.side_bar_panel_layout:
+            data_type:        string
+            data_transformer: oro_outlook.data_transformer.layout
+            type: textarea
+            priority: 70
+            options:
+                label:   oro_outlook.form.side_bar_panel_layout
+                tooltip: oro_outlook.form.tooltip.side_bar_panel_layout
+        oro_outlook.create_lead_dialog_layout:
+            data_type:        string
+            data_transformer: oro_outlook.data_transformer.layout
+            type: textarea
+            priority: 60
+            options:
+                label:   oro_outlook.form.create_lead_dialog_layout
+                tooltip: oro_outlook.form.tooltip.create_lead_dialog_layout
+        oro_outlook.create_opportunity_dialog_layout:
+            data_type:        string
+            data_transformer: oro_outlook.data_transformer.layout
+            type: textarea
+            priority: 50
+            options:
+                label:   oro_outlook.form.create_opportunity_dialog_layout
+                tooltip: oro_outlook.form.tooltip.create_opportunity_dialog_layout
+        oro_outlook.create_case_dialog_layout:
+            data_type:        string
+            data_transformer: oro_outlook.data_transformer.layout
+            type: textarea
+            priority: 40
+            options:
+                label:   oro_outlook.form.create_case_dialog_layout
+                tooltip: oro_outlook.form.tooltip.create_case_dialog_layout
+
+        oro_outlook.tasks_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 90
+            options:
+                label:          oro_outlook.form.tasks
+                tooltip:        oro_outlook.form.tooltip.enabled
+                required: false
+
+        oro_outlook.calendar_events_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 90
+            options:
+                label:          oro_outlook.form.calendar_events
+                tooltip:        oro_outlook.form.tooltip.enabled
+                required: false
+
+    tree:
+        system_configuration:
+            platform:
+                children:
+                    integrations:
+                        children:
+                            outlook_settings:
+                                priority: -10
+                                children:
+                                    outlook_addin:
+                                        priority: 80
+                                        children:
+                                            - oro_outlook.side_bar_panel_layout
+                                            - oro_outlook.create_lead_dialog_layout
+                                            - oro_outlook.create_opportunity_dialog_layout
+                                            - oro_outlook.create_case_dialog_layout
+                                    integration_outlook_settings:
+                                        priority: 70
+                                        children:
+                                            - oro_outlook.contacts_sync_direction
+                                            - oro_outlook.contacts_conflict_resolution
+                                            - oro_outlook.contacts_sync_interval_orocrm
+                                            - oro_outlook.contacts_sync_interval_outlook
+                                    synchronization_outlook_settings:
+                                        priority: 60
+                                        children:
+                                            - oro_outlook.contacts_enabled
+                                            - oro_outlook.tasks_enabled
+                                            - oro_outlook.calendar_events_enabled
+        organization_configuration:
+            platform:
+                children:
+                    integrations:
+                        children:
+                            outlook_settings:
+                                priority: -10
+                                children:
+                                    integration_outlook_settings:
+                                        priority: 70
+                                        children:
+                                            - oro_outlook.contacts_sync_direction
+                                            - oro_outlook.contacts_conflict_resolution
+                                            - oro_outlook.contacts_sync_interval_orocrm
+                                            - oro_outlook.contacts_sync_interval_outlook
+                                    synchronization_outlook_settings:
+                                        priority: 60
+                                        children:
+                                            - oro_outlook.contacts_enabled
+                                            - oro_outlook.tasks_enabled
+                                            - oro_outlook.calendar_events_enabled
+        user_configuration:
+            platform:
+                children:
+                    integrations:
+                        children:
+                            outlook_settings:
+                                priority: -10
+                                children:
+                                    integration_outlook_settings:
+                                        priority: 70
+                                        children:
+                                            - oro_outlook.contacts_sync_direction
+                                            - oro_outlook.contacts_conflict_resolution
+                                            - oro_outlook.contacts_sync_interval_orocrm
+                                            - oro_outlook.contacts_sync_interval_outlook
+                                    synchronization_outlook_settings:
+                                        priority: 60
+                                        children:
+                                            - oro_outlook.contacts_enabled
+                                            - oro_outlook.tasks_enabled
+                                            - oro_outlook.calendar_events_enabled
+    api_tree:
+        outlook:
+            contacts:
+                oro_outlook.contacts_enabled: ~
+                oro_outlook.contacts_sync_direction: ~
+                oro_outlook.contacts_conflict_resolution: ~
+                oro_outlook.contacts_sync_interval_orocrm: ~
+                oro_outlook.contacts_sync_interval_outlook: ~
+                oro_outlook.contacts_keys: ~
+                oro_outlook.contacts_mapping: ~
+            tasks:
+                oro_outlook.tasks_enabled: ~
+            calendar_events:
+                oro_outlook.calendar_events_enabled: ~
+            layouts:
+                oro_outlook.side_bar_panel_layout: ~
+                oro_outlook.create_lead_dialog_layout: ~
+                oro_outlook.create_opportunity_dialog_layout: ~
+                oro_outlook.create_case_dialog_layout: ~
+            features:
+                oro_sales.lead_feature_enabled: ~
+                oro_sales.opportunity_feature_enabled: ~

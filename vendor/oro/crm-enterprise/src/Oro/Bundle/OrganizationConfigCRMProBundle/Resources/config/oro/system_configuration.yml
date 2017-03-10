@@ -1,0 +1,37 @@
+system_configuration:
+    groups:
+        organization_probabilities:
+            title: oro.organization_config_crmpro.system_configuration.groups.organization_probabilities.title
+            tooltip: oro.organization_config_crmpro.system_configuration.groups.organization_probabilities.tooltip
+        organization_display_settings:
+            title: oro.organization_config_crmpro.system_configuration.groups.organization_display_settings.title
+
+    tree:
+        organization_configuration:
+            crm:
+                children:
+                    sales_pipeline:
+                        children:
+                            lead:
+                                children:
+                                    general_setup:
+                                        children:
+                                            - oro_sales.lead_feature_enabled
+                            opportunity:
+                                children:
+                                    general_setup:
+                                        priority: 100
+                                        children:
+                                            - oro_sales.opportunity_feature_enabled
+                                    organization_probabilities:
+                                        children:
+                                            - oro_sales.default_opportunity_probabilities
+                                    organization_display_settings:
+                                        children:
+                                            - oro_sales.display_relevant_opportunities
+
+                            salesfunnel:
+                                children:
+                                    general_setup:
+                                        children:
+                                            - oro_sales.salesfunnel_feature_enabled

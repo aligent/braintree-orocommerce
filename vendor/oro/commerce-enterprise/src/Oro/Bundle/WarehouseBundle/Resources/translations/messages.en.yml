@@ -1,0 +1,74 @@
+oro:
+    warehouse:
+        entity_label: Warehouse
+        entity_plural_label: Warehouses
+        organization.label: Organization
+        owner.label: Owner
+        id.label: Id
+        name.label: Name
+        priority.label: Priority
+
+        controller:
+            warehouse.saved.message: Warehouse has been saved
+
+        widgets:
+            warehouse_information: Warehouse Information
+
+        sections:
+            address: Warehouse Address
+            general: General
+
+        form:
+            order:
+                label: Warehouse
+            choose_warehouse: Choose a Warehouse
+            add_warehouse: Add Warehouse
+
+        system_configuration:
+            groups:
+                warehouse.title: Warehouses
+                warehouse_configuration.title: Warehouse Configuration
+            fields:
+                enabled_warehouses.label: Enabled Warehouses
+            label: '(system configuration)'
+
+        use_system_configuration: Use Shipping Origin
+        section:
+            shipping_origin: Shipping Origin
+
+        sections:
+            general: General
+
+        import:
+            error:
+                unit_required: The Unit must be specified
+                warehouse_inexistent: Expecting at least one warehouse in the system and found none
+                warehouse_required: The Warehouse field is required when Quantity is specified and the system contains multiple warehouses
+        error:
+            warehouses: "There are no warehouses configured in the system."
+    order:
+        orderlineitem:
+            warehouse:
+                label: Warehouse
+        warehouse:
+            label: Warehouse
+
+    inventory:
+        inventorylevel:
+            warehouse.label: Warehouse
+    warehouse_address:
+        form:
+            country:
+                label: Country
+            region:
+                label: Region/State
+            region_text:
+                label: State
+            postal_code:
+                label: Zip/Postal Code
+            city:
+                label: City
+            street:
+                label: Street Address 1
+            street2:
+                label: Street Address 2

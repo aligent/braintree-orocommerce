@@ -1,0 +1,216 @@
+parameters:
+    #licence
+    oro_securitypro.licence.server_agent.class: Oro\Bundle\SecurityProBundle\Licence\ServerAgent
+    oro_securitypro.licence.sender.class:       Oro\Bundle\SecurityProBundle\Licence\Sender
+    #
+    # Override Oro\Bundle\SecurityBundle\Acl\Extension\EntityAclExtension
+    # in enterprise edition user should be able to set Organization as Access level in "Default permission on entities"
+    #
+    oro_security.acl.extension.entity.class:     Oro\Bundle\SecurityProBundle\Acl\Extension\EntityAclProExtension
+
+    #acl
+    oro_securitypro.acl.security_identity_retrieval_strategy.class: Oro\Bundle\SecurityProBundle\Acl\Domain\SecurityIdentityRetrievalStrategy
+    oro_security.acl.privilege_repository.class: Oro\Bundle\SecurityProBundle\Acl\Persistence\AclPrivilegeProRepository
+    oro_security.acl.base_manager.class:         Oro\Bundle\SecurityProBundle\Acl\Persistence\BaseAclManager
+
+    #providers
+    oro_securitypro.provider.share_grid_provider.class:  Oro\Bundle\SecurityProBundle\Provider\ShareGridProvider
+    oro_securitypro.provider.share_provider.class:       Oro\Bundle\SecurityProBundle\Provider\ShareProvider
+    oro_securitypro.provider.share_scope_provider.class: Oro\Bundle\SecurityProBundle\Provider\ShareScopeProvider
+
+    #forms, handlers, extensions
+    oro_securitypro.form.type.share_scope.class:  Oro\Bundle\SecurityProBundle\Form\Type\ShareScopeType
+    oro_securitypro.form.type.share_select.class: Oro\Bundle\SecurityProBundle\Form\Type\ShareSelectType
+    oro_securitypro.form.type.share.class:        Oro\Bundle\SecurityProBundle\Form\Type\ShareType
+    oro_securitypro.form.handler.share.class:     Oro\Bundle\SecurityProBundle\Form\Handler\ShareHandler
+    oro_securitypro.form.model.factory.class:     Oro\Bundle\SecurityProBundle\Form\Model\Factory
+
+    #placeholders
+    oro_securitypro.placeholder.filter.class: Oro\Bundle\SecurityProBundle\Placeholder\PlaceholderFilter
+
+    #datagrid
+    oro_securitypro.datasource.share.class:                   Oro\Bundle\SecurityProBundle\Extension\ShareDatasource
+    oro_securitypro.event_listener.share_grid_listener.class: Oro\Bundle\SecurityProBundle\EventListener\Datagrid\ShareGridListener
+
+    #twig
+    oro_securitypro.twig.security_share_extension.class: Oro\Bundle\SecurityProBundle\Twig\OroProSecurityShareExtension
+    oro_security.twig.security_organization_extension:   Oro\Bundle\SecurityProBundle\Twig\OroProSecurityOrganizationExtension
+    oro_securitypro.formatter.share_formatter.class:     Oro\Bundle\SecurityProBundle\Formatter\ShareFormatter
+
+    #search
+    oro_security.listener.search_listener.class: Oro\Bundle\SecurityProBundle\EventListener\SearchProListener
+    oro_security.search.acl_helper.class:        Oro\Bundle\SecurityProBundle\Search\AclHelper
+    oro_securitypro_search.index.class:          Oro\Bundle\SecurityProBundle\Search\SecurityIndexer
+
+    #orm
+    oro_securitypro.orm.share_condition_data_builder.class: Oro\Bundle\SecurityProBundle\ORM\Walker\ShareConditionDataBuilder
+    oro_security.orm.acl_conditional_factor_builder.class:  Oro\Bundle\SecurityProBundle\ORM\Walker\AclConditionalFactorBuilder
+
+    #listeners
+    oro_securitypro.listener.entity_config.class: Oro\Bundle\SecurityProBundle\EventListener\EntityConfigListener
+    oro_securitypro.ace.query.manager.class:      Oro\Bundle\SecurityProBundle\Model\Action\AceQueryManager
+
+services:
+    #licence
+    oro_securitypro.licence.server_agent:
+        class: %oro_securitypro.licence.server_agent.class%
+        arguments:
+            - %enterprise_licence%
+            - "@oro_securitypro.licence.sender"
+            - "@doctrine"
+
+    oro_securitypro.licence.sender:
+        class: %oro_securitypro.licence.sender.class%
+
+    #providers
+    oro_securitypro.provider.share_grid_provider:
+        class: %oro_securitypro.provider.share_grid_provider.class%
+        arguments:
+            - "@oro_security.security_facade"
+            - "@oro_entity.entity_class_name_helper"
+            - "@oro_entity_config.config_manager"
+            - "@oro_securitypro.provider.share_scope_provider"
+            - "@translator"
+
+    oro_securitypro.provider.share_provider:
+        class: %oro_securitypro.provider.share_provider.class%
+        arguments:
+            - "@doctrine"
+            - "@security.acl.provider"
+            - "@security.acl.security_identity_retrieval_strategy"
+
+    oro_securitypro.provider.share_scope_provider:
+        class: %oro_securitypro.provider.share_scope_provider.class%
+        arguments:
+            - "@oro_entity_config.config_manager"
+
+    #forms, handlers, extensions
+    oro_securitypro.form.type.share_scope:
+        class: %oro_securitypro.form.type.share_scope.class%
+        arguments:
+            - "@oro_entity_config.config_manager"
+        tags:
+            - { name: form.type, alias: oropro_share_scope }
+
+    oro_securitypro.form.type.share_select:
+        class: %oro_securitypro.form.type.share_select.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: form.type, alias: oropro_share_select }
+
+    oro_securitypro.form.type.share:
+        class: %oro_securitypro.form.type.share.class%
+        arguments:
+            - "@oro_entity.entity_class_name_helper"
+        tags:
+            - { name: form.type, alias: oropro_share }
+
+    oro_securitypro.form.handler.share:
+        class: %oro_securitypro.form.handler.share.class%
+        scope: request
+        arguments:
+            - "@oro_securitypro.form.share"
+            - "@request"
+            - "@security.acl.provider"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_entity_config.provider.security"
+            - "@oro_security.acl.extension_selector"
+
+    oro_securitypro.form.model.factory:
+        class: %oro_securitypro.form.model.factory.class%
+
+    oro_securitypro.form.share:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'oropro_share_form'
+            - 'oropro_share'
+
+    #placeholders
+    oro_securitypro.placeholder.filter:
+        class: %oro_securitypro.placeholder.filter.class%
+        arguments:
+            - "@oro_security.security_facade"
+            - "@oro_entity_config.provider.security"
+
+    #datagrid
+    oro_securitypro.datasource.share:
+        class: %oro_securitypro.datasource.share.class%
+        arguments:
+            - "@security.acl.provider"
+            - "@oro_entity.routing_helper"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_securitypro.formatter.share_formatter"
+        tags:
+            - { name: oro_datagrid.datasource, type: share }
+
+    oro_securitypro.event_listener.share_grid_listener:
+        class: %oro_securitypro.event_listener.share_grid_listener.class%
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.shared-datagrid, method: onBuildBefore }
+
+    #twig
+    oro_securitypro.twig.security_share_extension:
+        class: %oro_securitypro.twig.security_share_extension.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.acl.cache.doctrine"
+            - "@oro_security.security_facade"
+            - "@oro_locale.formatter.name"
+            - "@translator"
+            - "@oro_entity_config.provider.security"
+        tags:
+            - { name: twig.extension }
+
+    oro_securitypro.formatter.share_formatter:
+        class: %oro_securitypro.formatter.share_formatter.class%
+        arguments:
+            - "@translator"
+            - "@oro_attachment.manager"
+
+    #search
+    oro_securitypro_search.index:
+        class: %oro_securitypro_search.index.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@twig"
+            - "@oro_entity_config.config_manager"
+            - "@oro_search.index"
+            - "@oro_securitypro.formatter.share_formatter"
+            - "@oro_securitypro.provider.share_scope_provider"
+
+    #orm
+    oro_securitypro.orm.share_condition_data_builder:
+        class: %oro_securitypro.orm.share_condition_data_builder.class%
+        arguments:
+            - "@security.token_storage"
+            - "@doctrine"
+            - "@oro_entity_config.provider.security"
+            - "@security.acl.security_identity_retrieval_strategy"
+
+    #listeners
+    oro_securitypro.ace.query.manager:
+        class: %oro_securitypro.ace.query.manager.class%
+        arguments:
+            - "@oro_entity.doctrine_helper"
+
+    oro_securitypro.listener.entity_config:
+        class: %oro_securitypro.listener.entity_config.class%
+        arguments:
+            - "@oro_securitypro.ace.query.manager"
+            - "@doctrine"
+            - "@security.acl.cache.doctrine"
+        tags:
+            - { name: kernel.event_listener, event: oro.entity_config.post_flush, method: postFlushConfig }
+
+    oro_securitypro.widget_provider.actions:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oropro_share_button
+            - oropro_share_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity}

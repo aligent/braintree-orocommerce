@@ -1,0 +1,7 @@
+oro.pricing_pro:
+    system_configuration:
+        groups:
+            display_currencies.title: 'Display Currencies'
+        fields:
+            enabled_currencies.label: 'Enabled Currencies'
+            default_currency.label: 'Default Currency'

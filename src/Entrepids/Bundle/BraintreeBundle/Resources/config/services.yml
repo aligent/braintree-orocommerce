@@ -1,0 +1,23 @@
+parameters:
+services:
+    entrepids_braintree.method:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Braintree'
+        public: false
+        arguments:
+            - '@entrepids_braintree.method.config'
+        tags:
+            - { name: oro_payment.payment_method }
+
+    entrepids_braintree.method.view:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\View\BraintreeView'
+        public: false
+        arguments:
+            - '@entrepids_braintree.method.config'
+        tags:
+            - { name: oro_payment.payment_method_view }
+
+    entrepids_braintree.method.config:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig'
+        public: false
+        arguments:
+            - '@oro_config.manager'

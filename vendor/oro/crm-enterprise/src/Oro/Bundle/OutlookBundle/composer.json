@@ -1,0 +1,21 @@
+{
+    "name": "orocrmpro/outlook-bundle",
+    "type": "symfony-bundle",
+    "description": "OroCRM Pro Outlook Bundle",
+    "keywords": ["OroCRM", "Pro"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6",
+        "symfony/symfony": "2.8.*, !=2.8.10",
+        "oro/config-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "OroCRMPro\\Bundle\\OutlookBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/OutlookBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

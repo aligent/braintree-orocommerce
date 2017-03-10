@@ -1,0 +1,4 @@
+assets:
+    css:
+        'orosecuritypro':
+            - 'bundles/orosecuritypro/css/share.less'

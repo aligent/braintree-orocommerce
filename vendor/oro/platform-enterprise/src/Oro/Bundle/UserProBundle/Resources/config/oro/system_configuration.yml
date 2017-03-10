@@ -1,0 +1,125 @@
+system_configuration:
+    groups:
+        failed_login_limit:
+           icon: fa-sign-in
+           title: oro.userpro.system_configuration.groups.failed_login_limit.title
+        mandatory_password_change:
+            icon:  fa-repeat
+            title: oro.userpro.system_configuration.groups.mandatory_password_change.title
+        two_factor_authentication:
+            icon:  fa-lock
+            title: oro.userpro.system_configuration.groups.two_factor_authentication.title
+
+    fields:
+        oro_user_pro.failed_login_limit_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 80
+            options:
+                required: false
+                label: oro.userpro.system_configuration.fields.failed_login_limit_enabled.label
+        oro_user_pro.failed_login_limit:
+            data_type: integer
+            type: integer
+            priority: 70
+            options:
+                label: oro.userpro.system_configuration.fields.failed_login_limit.label
+                constraints:
+                    - GreaterThan:
+                        value: 0
+        oro_user_pro.password_change_period_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 99
+            options:
+                required: false
+                label: oro.userpro.system_configuration.fields.password_change_period_enabled.label
+                tooltip: oro.userpro.system_configuration.fields.password_change_period_enabled.tooltip
+        oro_user_pro.password_change_period:
+            data_type: integer
+            type: integer
+            priority: 89
+            options:
+                label: oro.userpro.system_configuration.fields.password_change_period.label
+                tooltip: oro.userpro.system_configuration.fields.password_change_period.tooltip
+                constraints:
+                    - GreaterThan:
+                        value: 0
+        oro_user_pro.used_password_check_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 79
+            options:
+                required: false
+                label: oro.userpro.system_configuration.fields.used_password_check_enabled.label
+                tooltip: oro.userpro.system_configuration.fields.used_password_check_enabled.tooltip
+        oro_user_pro.used_password_check_number:
+            data_type: integer
+            type: integer
+            priority: 69
+            options:
+                label: oro.userpro.system_configuration.fields.used_password_check_number.label
+                tooltip: oro.userpro.system_configuration.fields.used_password_check_number.tooltip
+                constraints:
+                    - GreaterThan:
+                        value: 0
+        oro_user_pro.two_factor_authentication_strength:
+            data_type: string
+            type: choice
+            priority: 120
+            options:
+                label: oro.userpro.system_configuration.fields.two_factor_authentication_strength.label
+                tooltip: oro.userpro.system_configuration.fields.two_factor_authentication_strength.tooltip
+                required: true
+                constraints:
+                    - NotBlank: ~
+                choices:
+                    disabled:        oro.userpro.system_configuration.fields.two_factor_authentication_strength.choices.disabled
+                    once_per_device: oro.userpro.system_configuration.fields.two_factor_authentication_strength.choices.once_per_device
+                    always_require:  oro.userpro.system_configuration.fields.two_factor_authentication_strength.choices.always_require
+        oro_user_pro.authentication_code_validity_period:
+            data_type: text
+            type: oro_duration
+            priority: 110
+            options:
+                label: oro.userpro.system_configuration.fields.authentication_code_validity_period.label
+                tooltip: oro.userpro.system_configuration.fields.authentication_code_validity_period.tooltip
+                required: true
+                constraints:
+                    - NotBlank: ~
+        oro_user_pro.authentication_code_length:
+            data_type: integer
+            type: integer
+            priority: 105
+            options:
+                label: oro.userpro.system_configuration.fields.authentication_code_length.label
+                tooltip: oro.userpro.system_configuration.fields.authentication_code_length.tooltip
+                constraints:
+                    - GreaterThan:
+                        value: 3
+                    - LessThanOrEqual:
+                        value: 50
+
+    tree:
+        system_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            user_settings:
+                                children:
+                                    failed_login_limit:
+                                        children:
+                                            - oro_user_pro.failed_login_limit_enabled
+                                            - oro_user_pro.failed_login_limit
+                                    mandatory_password_change:
+                                        children:
+                                            - oro_user_pro.password_change_period_enabled
+                                            - oro_user_pro.password_change_period
+                                            - oro_user_pro.used_password_check_enabled
+                                            - oro_user_pro.used_password_check_number
+                                    two_factor_authentication:
+                                        children:
+                                            - oro_user_pro.two_factor_authentication_strength
+                                            - oro_user_pro.authentication_code_validity_period
+                                            - oro_user_pro.authentication_code_length

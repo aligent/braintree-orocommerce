@@ -1,0 +1,6 @@
+oro:
+    userpro:
+      invalid_credentials_with_no_remaining: "Invalid credentials. The account was locked. Contact a system administrator."
+      invalid_credentials_with_remaining: "Invalid credentials. You have {{ remainingAttempts }} login attempts remaining."
+      two_factor:
+        expired_token: Authentication code has expired.

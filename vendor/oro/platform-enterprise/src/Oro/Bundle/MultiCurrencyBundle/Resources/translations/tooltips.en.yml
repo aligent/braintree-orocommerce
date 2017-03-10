@@ -1,0 +1,4 @@
+oro.multi.currency:
+    form:
+        tooltip:
+            allowed_currencies: 'This setting controls how the currencies will be identified in the system: by three-letter ISO code or by currency symbol. Please note that not all currencies might have symbols; ISO codes will be used for them instead.'

@@ -1,0 +1,10 @@
+placeholders:
+    placeholders:
+        view_user_api_block_after:
+            items:
+                oro_outlook_addin_download: ~
+
+    items:
+        oro_outlook_addin_download:
+            action: OroOutlookBundle:Outlook:downloadAddin
+            applicable: "@oro_ui.placeholder.filter->isTrue($viewProfile$)"

@@ -1,0 +1,3 @@
+config:
+    paths:
+        'oromultiwebsite/js/app/views/website-select-view': 'bundles/oromultiwebsite/js/app/views/website-select-view.js'

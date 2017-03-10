@@ -1,0 +1,4 @@
+oro.multicurrency:
+    message:
+        pricing_enabled_currencies.website: You can't delete currency because it is used in WEBSITE > COMMERCE > Catalog > Pricing > Display Currencies > Available Currencies
+

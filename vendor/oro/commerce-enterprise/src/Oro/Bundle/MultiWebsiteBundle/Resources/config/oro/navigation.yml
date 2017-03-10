@@ -1,0 +1,33 @@
+navigation:
+    menu_config:
+        items:
+            websitepro_list:
+                label:           'oro.website.entity_plural_label'
+                route:           'oro_multiwebsite_index'
+                extras:
+                    position:    1000
+                    routes:      ['/^oro_multiwebsite/']
+                    description: 'oro.multiwebsite.menu.websites_list.description'
+
+            shortcut_websitepro_list:
+                label:           'oro.website.entity_plural_label'
+                route:           'oro_multiwebsite_index'
+                extras:
+                    description: 'oro.multiwebsite.menu.shortcut_websites_list.description'
+
+        tree:
+            application_menu:
+                children:
+                    system_tab:
+                        children:
+                            websitepro_list: ~
+            shortcuts:
+                children:
+                    shortcut_websitepro_list: ~
+
+    titles:
+        oro_multiwebsite_index: ~
+        oro_multiwebsite_view:   '%%name%%'
+        oro_multiwebsite_update: '%%name%% - Edit'
+        oro_multiwebsite_create: 'Create Website'
+        oro_multiwebsite_config: '%%website%% - Configuration'

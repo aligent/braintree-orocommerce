@@ -1,0 +1,4 @@
+oro:
+    userpro:
+        message:
+            password_already_used: You have recently used this password. Please choose a different one.

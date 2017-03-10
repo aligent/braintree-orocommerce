@@ -1,0 +1,8 @@
+services:
+    oro_website_search.driver.customer_partial_update_driver:
+        class: 'Oro\Bundle\CustomerProBundle\Driver\ElasticSearchCustomerPartialUpdateDriver'
+        arguments:
+            - '@oro_website_search.provider.placeholder_provider'
+            - '@oro_visibility.visibility.provider.product_visibility_provider'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_website_elastic_search.partial_update.manager'

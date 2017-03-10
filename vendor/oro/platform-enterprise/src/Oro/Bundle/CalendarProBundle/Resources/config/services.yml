@@ -1,0 +1,9 @@
+services:
+    oro_calendarpro.twig.daterange_format_organization:
+        class: Oro\Bundle\CalendarProBundle\Twig\DateRangeFormatOrganizationExtension
+        parent: oro_calendar.twig.dateformat
+        decorates: oro_calendar.twig.dateformat
+        calls:
+            - [setHelper, ['@oro_localepro.helper.organization_config']]
+        tags:
+            - { name: twig.extension }

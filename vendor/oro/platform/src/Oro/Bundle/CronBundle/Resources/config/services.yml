@@ -1,0 +1,69 @@
+parameters:
+    oro_cron.entity.schedule.class:   Oro\Bundle\CronBundle\Entity\Schedule
+    oro_cron.schedule_manager.class:  Oro\Bundle\CronBundle\Entity\Manager\ScheduleManager
+
+services:
+    oro_cron.schedule_manager:
+        class: '%oro_cron.schedule_manager.class%'
+        arguments:
+            - '@doctrine'
+            - '%oro_cron.entity.schedule.class%'
+
+    oro_cron.deferred_scheduler:
+        class: Oro\Bundle\CronBundle\Entity\Manager\DeferredScheduler
+        arguments:
+            - '@oro_cron.schedule_manager'
+            - '@doctrine'
+            - '%oro_cron.entity.schedule.class%'
+
+    oro_cron.command_args_tokenizer:
+        class: 'Oro\Bundle\CronBundle\ORM\CommandArgsTokenizer'
+        public: false
+        calls:
+            - [ addNormalizer, [ '@oro_cron.command_args_normalizer.default' ] ]
+            - [ addNormalizer, [ '@oro_cron.command_args_normalizer.pgsql92' ] ]
+
+    oro_cron.command_args_normalizer.default:
+        class: 'Oro\Bundle\CronBundle\ORM\CommandArgsNormalizer'
+        public: false
+
+    oro_cron.command_args_normalizer.pgsql92:
+        class: 'Oro\Bundle\CronBundle\ORM\Pgsql92CommandArgsNormalizer'
+        public: false
+
+    oro_cron.command_with_args_string_filter:
+        class: Oro\Bundle\CronBundle\Filter\CommandWithArgsFilter
+        arguments:
+            - '@form.factory'
+            - '@oro_filter.filter_utility'
+            - '@oro_cron.command_args_tokenizer'
+        tags:
+            - { name: oro_filter.extension.orm_filter.filter, type: command_with_args }
+
+    oro_cron.helper.cron:
+        class: 'Oro\Bundle\CronBundle\Helper\CronHelper'
+
+
+    oro_cron.engine.command_runner:
+        class: Oro\Bundle\CronBundle\Engine\CommandRunner
+        arguments:
+            - '@kernel'
+
+    oro_cron.async.command_runner_message_processor:
+        class: Oro\Bundle\CronBundle\Async\CommandRunnerMessageProcessor
+        arguments:
+            - '@oro_cron.engine.command_runner'
+            - '@oro_message_queue.job.runner'
+            - '@logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_cron.async.command_runner:
+        class: Oro\Bundle\CronBundle\Async\CommandRunner
+        arguments:
+            - '@oro_message_queue.client.message_producer'
+
+    oro_cron.listener.schema_column_definition:
+        class: Oro\Bundle\CronBundle\Migrations\Schema\v2_0\SchemaColumnDefinitionListener
+        tags:
+            - {name: doctrine.event_listener, event: onSchemaColumnDefinition, method: onSchemaColumnDefinition}

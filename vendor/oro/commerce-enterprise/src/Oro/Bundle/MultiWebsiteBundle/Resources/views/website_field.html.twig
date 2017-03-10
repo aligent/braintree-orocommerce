@@ -1,0 +1,5 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% if entity.website %}
+    {{ UI.renderHtmlProperty(label|trans, entity.website.name) }}
+{% endif %}

@@ -1,0 +1,6 @@
+navigation:
+    titles:
+        oro_organization_menu_index: '%%organization%% - Menus'
+        oro_organization_menu_view: '%%title%% - Menus - %%organization%%'
+        oro_organization_menu_create: 'Create Menu Item - Menus - %%organization%%'
+        oro_organization_menu_update: '%%title%% - Edit - Menus - %%organization%%'

@@ -1,0 +1,18 @@
+Oro\Bundle\ReminderBundle\Entity\Reminder:
+    properties:
+        method:
+            - NotBlank: ~
+        interval:
+            - Valid: ~
+            - NotBlank: ~
+
+Oro\Bundle\ReminderBundle\Model\ReminderInterval:
+    properties:
+        number:
+            - NotBlank: ~
+            - Type:
+                type: integer
+            - Range:
+                min: 1
+        unit:
+            - NotBlank: ~

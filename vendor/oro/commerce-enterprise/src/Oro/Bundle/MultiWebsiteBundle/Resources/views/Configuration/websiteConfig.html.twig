@@ -1,0 +1,26 @@
+{% extends 'OroConfigBundle::configPage.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% oro_title_set({params : {"%website%": entity.name }}) %}
+
+{% set pageTitle = [
+        UI.link({
+            'path': path('oro_multiwebsite_index'),
+            'label': 'oro.website.entity_plural_label'|trans
+        }),
+        UI.link({
+            'path': path('oro_multiwebsite_view', {id: entity.id}),
+            'label': entity.name
+        }),
+        'oro.multiwebsite.website_configuration.label'|trans
+    ]
+%}
+
+{% set formAction    = path(
+        'oro_multiwebsite_config',
+        {id:entity.id, activeGroup: activeGroup, activeSubGroup: activeSubGroup}
+    )
+%}
+{% set routeName = 'oro_multiwebsite_config' %}
+{% set routeParameters = {id: entity.id} %}
+

@@ -1,0 +1,44 @@
+parameters:
+  oro_organization_config.placeholder.filter.class: Oro\Bundle\OrganizationConfigBundle\Placeholder\PlaceholderFilter
+  oro_organization_config.event_listener.organization_grid_listener.class: Oro\Bundle\OrganizationConfigBundle\EventListener\OrganizationGridListener
+  oro_organization_config.provider.organization_configuration.form_provider.class: Oro\Bundle\OrganizationConfigBundle\Provider\OrganizationConfigurationFormProvider
+  oro_organization_config.organization.class: Oro\Bundle\OrganizationConfigBundle\Config\OrganizationScopeManager
+  oro_organization_config.user.class: Oro\Bundle\OrganizationConfigBundle\Config\UserOrganizationScopeManager
+services:
+  oro_organization_config.placeholder.filter:
+      class: %oro_organization_config.placeholder.filter.class%
+
+  oro_organization_config.event_listener.organization_grid_listener:
+      class: %oro_organization_config.event_listener.organization_grid_listener.class%
+      tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.organization-grid, method: onBuildBefore }
+
+  oro_organization_config.provider.form_provider:
+      class: %oro_organization_config.provider.organization_configuration.form_provider.class%
+      arguments:
+          - "@oro_config.config_bag"
+          - "@form.factory"
+          - "@oro_security.security_facade"
+      calls:
+          - [setFeatureChecker, ['@oro_featuretoggle.checker.feature_checker']]
+      tags:
+          -  { name: oro_config.configuration_provider }
+      lazy: true
+
+  oro_organization_config.scope.organization:
+      class: %oro_organization_config.organization.class%
+      public: false
+      parent: oro_config.scope_manager.abstract
+      calls:
+          - [setSecurityContext, [ '@security.token_storage' ]]
+      tags:
+          - { name: oro_config.scope, scope: organization, priority: 0 }
+
+  oro_organization_config.scope.user:
+      class: %oro_organization_config.user.class%
+      public: false
+      parent: oro_config.scope_manager.abstract
+      calls:
+          - [setSecurityContext, [ '@security.token_storage' ]]
+      tags:
+          - { name: oro_config.scope, scope: user, priority: 256 }

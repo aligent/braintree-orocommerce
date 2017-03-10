@@ -1,0 +1,19 @@
+system_configuration:
+    tree:
+        organization_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            email_configuration:
+                                children:
+                                    smtp_settings:
+                                        children:
+                                            - oro_email.smtp_settings_host
+                                            - oro_email.smtp_settings_port
+                                            - oro_email.smtp_settings_encryption
+                                            - oro_email.smtp_settings_username
+                                            - oro_email.smtp_settings_password
+                                    email_threads:
+                                        children:
+                                            - oro_email.threads_grouping

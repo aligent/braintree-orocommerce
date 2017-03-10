@@ -1,0 +1,73 @@
+services:
+    oro_multiwebsite.form.extension.pricelist_website_type:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\PriceListFormExtension'
+        arguments:
+            - '%oro_pricing.entity.price_list_to_website.class%'
+            - "@oro_multiwebsite.entity_listener.pricelist_website"
+        tags:
+            - { name: form.type_extension, alias: oro_multiwebsite_type }
+
+    oro_multiwebsite.form.type.website_select:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Type\WebsiteSelectType'
+        tags:
+            - { name: form.type, alias: oro_multiwebsite_website_select }
+
+    oro_multiwebsite.form.extension.website_scope:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\WebsiteScopeExtension'
+        tags:
+            - { name: form.type_extension, extended_type: Oro\Bundle\ScopeBundle\Form\Type\ScopeType }
+
+    oro_multiwebsite.form.extension.customer:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\WebsiteSelectExtension'
+        public: true
+        tags:
+            - { name: form.type_extension, alias: 'Oro\Bundle\CustomerBundle\Form\Type\CustomerUserType' }
+        calls:
+            - [setExtendedType, ['Oro\Bundle\CustomerBundle\Form\Type\CustomerUserType']]
+            - [setLabel, ['oro.customer.customeruser.website.label']]
+
+    oro_multiwebsite.form.extension.invoice:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\WebsiteSelectExtension'
+        public: true
+        tags:
+            - { name: form.type_extension, alias: oro_invoice_type }
+        calls:
+            - [setExtendedType, ['oro_invoice_type']]
+            - [setLabel, ['oro.invoice.website.label']]
+
+    oro_multiwebsite.form.extension.order:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\WebsiteSelectExtension'
+        public: true
+        tags:
+            - { name: form.type_extension, alias: oro_order_type }
+        calls:
+            - [setExtendedType, ['oro_order_type']]
+            - [setLabel, ['oro.order.website.label']]
+
+    oro_multiwebsite.form.extension.quote:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Extension\WebsiteSelectExtension'
+        public: true
+        tags:
+            - { name: form.type_extension, alias: oro_sale_quote }
+        calls:
+            - [setExtendedType, ['oro_sale_quote']]
+            - [setLabel, ['oro.sale.quote.website.label']]
+
+    oro_multiwebsite.form.type.website:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Type\WebsiteType'
+        calls:
+            - [setDataClass, ['%oro_website.entity.website.class%']]
+        tags:
+            - { name: form.type, alias: oro_multiwebsite_type }
+
+    oro_multiwebsite.form.type.website_matcher_settings:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Type\WebsiteMatcherSettingsType'
+        tags:
+            - { name: form.type }
+
+    oro_multiwebsite.form.type.website_matcher_settings_collection:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Form\Type\WebsiteMatcherSettingsCollectionType'
+        arguments:
+            - '@oro_multiwebsite.matcher.website_matcher_registry'
+        tags:
+            - { name: form.type }

@@ -1,0 +1,4 @@
+layout:
+    actions:
+        - @setBlockTheme:
+            themes: 'BraintreeBundle:layouts:default/braintree_block.html.twig'

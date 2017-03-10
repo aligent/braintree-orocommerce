@@ -1,0 +1,57 @@
+config:
+    shim:
+        'orofusioncharts/lib/FusionCharts.HC.Charts':
+            deps:
+                - 'orofusioncharts/lib/FusionCharts'
+                - 'orofusioncharts/lib/FusionCharts.HC'
+        'orofusioncharts/lib/FusionCharts.HC':
+            deps:
+                - 'jquery'
+                - 'orofusioncharts/lib/FusionCharts'
+        'orofusioncharts/lib/FusionCharts.HC.Widgets':
+            deps:
+                - 'jquery'
+                - 'orofusioncharts/lib/FusionCharts'
+        'orofusioncharts/lib/FusionCharts':
+            deps:
+                - 'jquery'
+            exports: 'FusionCharts'
+        'orofusioncharts/lib/FusionChartsExportComponent':
+            deps:
+                - 'orofusioncharts/lib/FusionCharts'
+    map:
+        '*':
+            'orofusioncharts/lib/FusionCharts': 'orofusioncharts/lib/FusionCharts.extend'
+        'orofusioncharts/lib/FusionCharts.extend':
+            'orofusioncharts/lib/FusionCharts': 'orofusioncharts/lib/FusionCharts'
+        'orofusioncharts/lib/FusionCharts.HC':
+            'orofusioncharts/lib/FusionCharts': 'orofusioncharts/lib/FusionCharts'
+    paths:
+        'orofusioncharts/lib/FusionCharts.extend': 'bundles/orofusioncharts/lib/FusionCharts.extend.js'
+        'orofusioncharts/lib/FusionCharts.HC.Charts': 'bundles/orofusioncharts/lib/FusionCharts.HC.Charts.js'
+        'orofusioncharts/lib/FusionCharts.HC.Widgets': 'bundles/orofusioncharts/lib/FusionCharts.HC.Widgets.js'
+        'orofusioncharts/lib/FusionCharts.HC': 'bundles/orofusioncharts/lib/FusionCharts.HC.js'
+        'orofusioncharts/lib/FusionCharts': 'bundles/orofusioncharts/lib/FusionCharts.js'
+        'orofusioncharts/lib/FusionChartsExportComponent': 'bundles/orofusioncharts/lib/FusionChartsExportComponent.js'
+
+        'orofusioncharts/js/fusion-data-handler': 'bundles/orofusioncharts/js/fusion-data-handler.js'
+        'orofusioncharts/js/multiple-data-handler': 'bundles/orofusioncharts/js/multiple-data-handler.js'
+
+        'orofusioncharts/js/app/views/bar-chart-view': 'bundles/orofusioncharts/js/app/views/bar-chart-view.js'
+        'orofusioncharts/js/app/views/funnel-chart-view': 'bundles/orofusioncharts/js/app/views/funnel-chart-view.js'
+        'orofusioncharts/js/app/views/line-chart-view': 'bundles/orofusioncharts/js/app/views/line-chart-view.js'
+        'orofusioncharts/js/app/views/multiline-chart-view': 'bundles/orofusioncharts/js/app/views/multiline-chart-view.js'
+        'orofusioncharts/js/app/views/pie-chart-view': 'bundles/orofusioncharts/js/app/views/pie-chart-view.js'
+        'orofusioncharts/js/app/views/stackedbar-chart-view': 'bundles/orofusioncharts/js/app/views/stackedbar-chart-view.js'
+
+build:
+    paths:
+        # FusionCharts lib is excluded from the build,
+        # because it conflicts with fullcalendar and breaks scroll on mobile version.
+        # In addition this resources are already minified
+        'orofusioncharts/lib/FusionCharts.extend': 'empty:'
+        'orofusioncharts/lib/FusionCharts.HC.Charts': 'empty:'
+        'orofusioncharts/lib/FusionCharts.HC': 'empty:'
+        'orofusioncharts/lib/FusionCharts.HC.Widgets': 'empty:'
+        'orofusioncharts/lib/FusionCharts': 'empty:'
+        'orofusioncharts/lib/FusionChartsExportComponent': 'empty:'

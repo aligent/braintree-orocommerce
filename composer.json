@@ -1,1 +1,119 @@
-xxx
+{
+  "name": "oro/commerce-crm-enterprise-application",
+  "description": "OroCommerce + OroCrm Enterprise Application.",
+  "license": "Commercial",
+  "authors": [
+    {
+      "name": "Oro, Inc",
+      "homepage": "https://www.orocommerce.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  },
+  "repositories": {
+    "ldap-bundle": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/OroCRMProLDAPBundle.git"
+    },
+    "platform-enterprise": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/platform-enterprise.git"
+    },
+    "crm-enterprise": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/crm-enterprise.git"
+    },
+    "crm": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/crm-er.git"
+    },
+    "platform": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/platform-er.git"
+    },
+    "commerce-enterprise": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/commerce-enterprise.git"
+    },
+    "commerce": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/commerce-er.git"
+    },
+    "commerce-crm": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/commerce-crm-er.git"
+    },
+    "composer": {
+      "type": "composer",
+      "url": "https://packagist.orocrm.com"
+    }
+  },
+  "require": {
+    "oro/commerce-enterprise": "1.0.*",
+    "oro/crm-enterprise": "2.0.*",
+    "oro/commerce-crm": "1.0.*",
+    "oro/platform-serialised-fields": "2.0.*",
+    "oro/crm-hangouts-call-bundle": "2.0.*",
+    "oro/crm-abandoned-cart": "2.0.*",
+    "oro/crm-magento-embedded-contact-us": "2.0.*",
+    "oro/crm-mail-chimp": "2.0.*",
+    "oro/crm-dotmailer": "2.0.*",
+    "oro/crm-zendesk": "2.0.*",
+    "oro/crm-pro-ldap-bundle": "2.0.*"
+  },
+  "require-dev": {
+    "sensio/generator-bundle": "3.1.2",
+    "behat/behat": "3.2.2",
+    "behat/mink-extension": "2.2.*",
+    "behat/mink-selenium2-driver": "1.*",
+    "behat/symfony2-extension": "2.1.1",
+    "nelmio/alice": "2.2.*",
+    "phpunit/phpunit": "5.7.*",
+    "phpunit/phpunit-selenium": "3.0.*",
+    "johnkary/phpunit-speedtrap": "1.0.*",
+    "mybuilder/phpunit-accelerator": "1.2.*",
+    "squizlabs/php_codesniffer": "2.7.*",
+    "phpmd/phpmd": "2.5.*",
+    "sebastian/phpcpd": "2.0.*"
+  },
+  "config": {
+    "component-dir": "web/bundles/components",
+    "bin-dir": "bin"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::checkComposerPlugin",
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setPermissions",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::installAssets",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setAssetsVersion"
+    ],
+    "post-update-cmd": [
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::checkComposerPlugin",
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setPermissions",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::installAssets",
+      "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setAssetsVersion"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "symfony-app-dir": "app",
+    "symfony-web-dir": "web",
+    "incenteev-parameters": {
+      "file": "app/config/parameters.yml"
+    },
+    "asset-installer-paths": {
+      "npm-asset-library": "web/bundles/npmassets",
+      "bower-asset-library": "web/bundles/bowerassets"
+    }
+  }
+}

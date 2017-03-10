@@ -1,0 +1,2 @@
+bundles:
+    - { name: Oro\Bundle\WebsiteMenuBundle\OroWebsiteMenuBundle, priority: 20 }

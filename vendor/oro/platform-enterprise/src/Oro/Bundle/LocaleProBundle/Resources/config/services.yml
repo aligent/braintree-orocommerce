@@ -1,0 +1,14 @@
+services:
+    oro_localepro.twig.date_time_organization:
+        class: Oro\Bundle\LocaleProBundle\Twig\DateTimeOrganizationExtension
+        parent: oro_locale.twig.date_time_organization
+        decorates: oro_locale.twig.date_time_organization
+        calls:
+            - [setHelper, ['@oro_localepro.helper.organization_config']]
+        tags:
+            - { name: twig.extension }
+
+    oro_localepro.helper.organization_config:
+        class: Oro\Bundle\LocaleProBundle\Helper\OrganizationConfigHelper
+        arguments:
+            - '@oro_config.organization'

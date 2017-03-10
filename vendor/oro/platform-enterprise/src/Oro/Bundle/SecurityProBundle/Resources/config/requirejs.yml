@@ -1,0 +1,10 @@
+config:
+    paths:
+        'orosecuritypro/js/app/models/share-with-datagrid-model': 'bundles/orosecuritypro/js/app/models/share-with-datagrid-model.js'
+        'orosecuritypro/js/app/models/share-with-datagrid-collection': 'bundles/orosecuritypro/js/app/models/share-with-datagrid-collection.js'
+        'orosecuritypro/js/app/views/share-with-datagrid-view': 'bundles/orosecuritypro/js/app/views/share-with-datagrid-view.js'
+        'orosecuritypro/js/app/components/share-with-datagrid-component': 'bundles/orosecuritypro/js/app/components/share-with-datagrid-component.js'
+        'orosecuritypro/js/app/components/shared-datagrid-component': 'bundles/orosecuritypro/js/app/components/shared-datagrid-component.js'
+        'oro/select2-share-component': 'bundles/orosecuritypro/js/app/components/select2-share-component.js'
+        'orosecuritypro/js/app/views/select2-share-view': 'bundles/orosecuritypro/js/app/views/select2-share-view.js'
+        'orosecuritypro/js/app/helper/component-helper': 'bundles/orosecuritypro/js/app/helper/component-helper.js'

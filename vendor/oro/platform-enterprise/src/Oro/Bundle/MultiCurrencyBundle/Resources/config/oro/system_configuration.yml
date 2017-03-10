@@ -1,0 +1,97 @@
+system_configuration:
+    groups:
+        currency:
+            handler: '@oro_multi_currency.handler.currency_rates_handler::process'
+            configurator: '@oro_multi_currency.configurator.currency_configurator::configure'
+
+    fields:
+        # in enterprise edition we don't need this field visible
+        # because we used grid with radio button with the same functionality
+        oro_currency.default_currency:
+            data_type: string
+            type: oro_currency
+            priority: 5
+            options:
+                required: false
+                multiple: false
+                restrict: false
+                resettable: false
+
+        # this element will be part of 'oro_multi_currency.allowed_currencies'
+        oro_multi_currency.currency_rates:
+            data_type: array
+            type: oro_currency_rates
+            priority: 6
+            options:
+                required: false
+                resettable: false
+
+        oro_multi_currency.allowed_currencies:
+            data_type: array
+            type: oro_currency_grid
+            priority: 20
+            options:
+                label: oro.multi.currency.system_configuration.fields.allowed_currencies.label
+                tooltip: oro.multi.currency.form.tooltip.allowed_currencies
+                required: false
+                resettable: false
+
+        oro_currency.default_currency_organization:
+            data_type: string
+            property_path: oro_currency.default_currency
+            type: oro_currency
+            priority: 5
+            options:
+                required: false
+                multiple: false
+                restrict: false
+                resettable: true
+
+        # this element will be part of 'oro_multi_currency.allowed_currencies'
+        oro_multi_currency.currency_rates_organization:
+            data_type: array
+            property_path: oro_multi_currency.currency_rates
+            type: oro_currency_rates
+            priority: 6
+            options:
+                required: false
+                resettable: true
+
+        oro_multi_currency.allowed_currencies_organization:
+            data_type: array
+            property_path: oro_multi_currency.allowed_currencies
+            type: oro_currency_grid
+            priority: 20
+            options:
+                label: oro.multi.currency.system_configuration.fields.allowed_currencies.label
+                tooltip: oro.multi.currency.form.tooltip.allowed_currencies
+                restrict: true
+                required: false
+                resettable: true
+
+    tree:
+        system_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            currency:
+                                children:
+                                    currency_settings:
+                                        children:
+                                            - oro_multi_currency.allowed_currencies
+                                            - oro_multi_currency.currency_rates
+
+        organization_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            currency:
+                                children:
+                                    currency_settings:
+                                        children:
+                                            - oro_currency.default_currency_organization
+                                            - oro_multi_currency.allowed_currencies_organization
+                                            - oro_currency.currency_display
+                                            - oro_multi_currency.currency_rates_organization

@@ -1,0 +1,28 @@
+Oro\Bundle\WarehouseBundle\Entity\Warehouse:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 255
+
+Oro\Bundle\WarehouseBundle\Entity\WarehouseAddress:
+    properties:
+        country:
+            - NotBlank: ~
+            - Valid: ~
+        region:
+            - NotBlank: ~
+            - Valid: ~
+        postalCode:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        street:
+            - NotBlank: ~
+        warehouse:
+            - NotBlank: ~
+
+Oro\Bundle\InventoryBundle\Entity\InventoryLevel:
+    properties:
+        warehouse:
+            - NotBlank: ~

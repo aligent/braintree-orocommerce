@@ -1,0 +1,259 @@
+services:
+    oro_multiwebsite.entity_listener.pricelist_website:
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\PriceListListener'
+        arguments:
+            - '@oro_pricing.price_list_with_priority_collection.handler'
+            - '@oro_api.doctrine_helper'
+            - '@oro_pricing.price_list_relation_trigger_handler'
+        tags:
+            - { name: kernel.event_listener, event: oro.form.update_handler.before_entity_flush.oro_multiwebsite_type, method: beforeFlush }
+
+    oro_multiwebsite.event_listener.pricelist_website_form_view:
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\PriceListWebsiteFormViewListener'
+        arguments:
+            - '@request_stack'
+            - '@oro_entity.doctrine_helper'
+            - '@translator'
+            - '%oro_website.entity.website.class%'
+            - '%oro_pricing.entity.price_list_to_website.class%'
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.website-edit, method: onWebsiteEdit }
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.website-view, method: onWebsiteView }
+
+    oro_multiwebsite.event_listener.price_list_form_view:
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\PriceListFormViewListener'
+        arguments:
+            - '@request_stack'
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.price-list-view, method: onPriceListView }
+
+    oro_multiwebsite.event_listener.customer_form_view:
+        parent: oro_multiwebsite.event_listener.form_view.abstract
+        calls:
+             - [setWebsiteLabel, ['oro.customer.customeruser.website.label']]
+             - [setDataClass, [%oro_customer.entity.customer_user.class%]]
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.customer-user-edit, method: onEntityEdit }
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.customer-user-view, method: onEntityView }
+
+    oro_multiwebsite.event_listener.invoice_form_view:
+        parent: oro_multiwebsite.event_listener.form_view.abstract
+        calls:
+             - [setWebsiteLabel, ['oro.invoice.website.label']]
+             - [setDataClass, [%oro_invoice.entity.invoice.class%]]
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.invoice-edit, method: onEntityEdit }
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.invoice-view, method: onEntityView }
+
+    oro_multiwebsite.event_listener.order_form_view:
+        parent: oro_multiwebsite.event_listener.form_view.abstract
+        calls:
+             - [setWebsiteLabel, ['oro.order.website.label']]
+             - [setDataClass, [%oro_order.entity.order.class%]]
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.order-edit, method: onEntityEdit }
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.order-view, method: onEntityView }
+
+    oro_multiwebsite.event_listener.sale_form_view:
+        parent: oro_multiwebsite.event_listener.form_view.abstract
+        calls:
+             - [setWebsiteLabel, ['oro.sale.quote.website.label']]
+             - [setDataClass, [%oro_sale.entity.quote.class%]]
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.quote-edit, method: onEntityEdit }
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.quote-view, method: onEntityView }
+
+    oro_multiwebsite.placeholder.filter:
+        class: Oro\Bundle\MultiWebsiteBundle\Placeholder\PlaceholderFilter
+
+    oro_multiwebsite.event_listener.organization_grid_listener:
+        class: Oro\Bundle\MultiWebsiteBundle\EventListener\GridListener
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.base-websites-grid, method: onBuildBefore }
+
+    oro_multiwebsite.provider.form_provider:
+        class: Oro\Bundle\MultiWebsiteBundle\Provider\WebsiteConfigurationFormProvider
+        arguments:
+            - "@oro_config.config_bag"
+            - "@form.factory"
+            - "@oro_security.security_facade"
+        calls:
+            - [setFeatureChecker, ['@oro_featuretoggle.checker.feature_checker']]
+        tags:
+            -  { name: oro_config.configuration_provider }
+        lazy: true
+
+    oro_multiwebsite.scope.website:
+        class: Oro\Bundle\MultiWebsiteBundle\Config\WebsiteScopeManager
+        public: false
+        parent: oro_config.scope_manager.abstract
+        calls:
+            - [setWebsiteManager, [ '@oro_website.manager' ]]
+        tags:
+            - { name: oro_config.scope, scope: website, priority: 270 }
+
+    oro_multiwebsite.event_listener.form_view.abstract:
+        abstract: true
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\FormViewListener'
+        arguments:
+            - "@request_stack"
+            - "@doctrine"
+
+    oro_multiwebsite.event_listener.busines_unit_view:
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\BusinessUnitViewListener'
+        arguments:
+            - '@translator'
+            - "@oro_entity.doctrine_helper"
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.businessUnitView, method: onBusinessUnitView }
+
+    oro_multiwebsite.event_listener.webcatalog_config:
+        class: Oro\Bundle\MultiWebsiteBundle\EventListener\MultiWebsiteScopeChangeListener
+        arguments: ['@event_dispatcher']
+        decorates: oro_web_catalog.event_listener.webcatalog_config
+        tags:
+            - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigurationUpdate }
+
+    oro_multiwebsite.provider.website_localization:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Provider\WebsiteLocalizationProvider'
+        decorates: 'oro_website.provider.website_localization'
+        arguments:
+            - '@oro_config.manager'
+            - "@oro_locale.manager.localization"
+            - '@oro_entity.doctrine_helper'
+
+    oro_multiwebsite.event_listener.routing:
+        class: 'Oro\Bundle\MultiWebsiteBundle\EventListener\RoutingListener'
+        arguments:
+            - '@oro_config.manager'
+            - '@oro_website.manager'
+            - '@oro_website.resolver.website_url_resolver'
+            - '@oro_frontend.request.frontend_helper'
+            - '@oro_multiwebsite.matcher.path'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onRequest, priority: -60 }
+
+    oro_multiwebsite.matcher.abstract_website_matcher:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Matcher\AbstractWebsiteMatcher'
+        abstract: true
+        arguments:
+            - '@oro_config.manager'
+            - '@doctrine'
+            - '@request_stack'
+
+    oro_multiwebsite.matcher.path:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Matcher\PathWebsiteMatcher'
+        public: false
+        parent: oro_multiwebsite.matcher.abstract_website_matcher
+        tags:
+            - { name: oro_website_matcher, alias: 'path', priority: 100 }
+            - { name: doctrine.event_listener, event: onClear }
+
+    oro_multiwebsite.matcher.cookie:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Matcher\CookieWebsiteMatcher'
+        public: false
+        parent: oro_multiwebsite.matcher.abstract_website_matcher
+        tags:
+            - { name: oro_website_matcher, alias: 'cookie', priority: 200 }
+
+    oro_multiwebsite.matcher.env:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Matcher\EnvWebsiteMatcher'
+        public: false
+        parent: oro_multiwebsite.matcher.abstract_website_matcher
+        tags:
+            - { name: oro_website_matcher, alias: 'env', priority: 300 }
+
+    oro_multiwebsite.matcher.website_matcher_registry:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Matcher\WebsiteMatcherRegistry'
+        public: true
+        arguments:
+            - '@oro_config.global'
+
+    oro_multiwebsite.website_manager:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Manager\WebsiteManager'
+        decorates: oro_website.manager
+        public: false
+        arguments:
+            - '@doctrine'
+            - '@oro_frontend.request.frontend_helper'
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: doctrine.event_listener, event: onClear }
+
+    oro_multiwebsite.acl.voter.default_website:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Acl\Voter\DefaultWebsiteVoter'
+        public: false
+        tags:
+            - { name: security.voter }
+
+    oro_multiwebsite.entity_listener.product_visibility_website_added:
+       class: 'Oro\Bundle\MultiWebsiteBundle\Entity\EntityListener\WebsiteVisibilityListener'
+       public: false
+       parent: 'oro_visibility.entity_listener.abstract_visibility_listener'
+       calls:
+           - [setTopic, ['oro_multiwebsite.visibility.build_website_cache']]
+       tags:
+           - { name: doctrine.orm.entity_listener, entity: '%oro_website.entity.website.class%', event: postPersist }
+
+    oro_multiwebsite.async.website_visibility_processor:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Async\Visibility\WebsiteProcessor'
+        arguments:
+            - '@doctrine'
+            - '@oro_visibility.visibility_message_factory'
+            - '@logger'
+            - '@oro_visibility.visibility.cache.product.category.cache_builder'
+            - '@oro_entity.database_exception_helper'
+        calls:
+            - [setResolvedVisibilityClassName, ['%oro_visibility.entity.product_visibility_resolved.class%']]
+        tags:
+            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_multiwebsite.visibility.build_website_cache' }
+
+    oro_multiwebsite.visibility_root_scopes_provider:
+        class: 'Oro\Bundle\MultiWebsiteBundle\Provider\VisibilityRootScopesProvider'
+        decorates: 'oro_visibility.root_scopes_provider'
+        public: false
+        arguments:
+            - '@oro_scope.scope_manager'
+
+    oro_multiwebsite.website_scope_criteria_provider:
+        class: 'Oro\Bundle\WebsiteBundle\Provider\ScopeCriteriaProvider'
+        public: false
+        arguments:
+            - "@oro_website.manager"
+        tags:
+            - {name: oro_scope.provider, scopeType: category_visibility, priority: 30}
+            - {name: oro_scope.provider, scopeType: product_visibility, priority: 30}
+            - {name: oro_scope.provider, scopeType: customer_group_product_visibility, priority: 30}
+            - {name: oro_scope.provider, scopeType: customer_product_visibility, priority: 30}
+            - {name: oro_scope.provider, scopeType: workflow_definition, priority: 10}
+            - {name: oro_scope.provider, scopeType: web_content, priority: 10}
+
+    oro_multiwebsite.form.autocomplete.website.search_handler:
+        public: false
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - '%oro_website.entity.website.class%'
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: oro_website, acl_resource: oro_multiwebsite_view }
+
+    oro_multiwebsite.event_listener.multi_website_localization_config:
+        class: Oro\Bundle\MultiWebsiteBundle\EventListener\MultiWebsiteLocalizationConfigListener
+        decorates: oro_website_search.event_listener.website_localization_config
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - { name: kernel.event_listener, event: oro_config.update_after, method: onLocalizationSettingsChange }
+
+    oro_multiwebsite.provider.enabled_currencies_dependency:
+        class: Oro\Bundle\MultiWebsiteBundle\Provider\WebsiteEnabledCurrenciesDependencyProvider
+        public: false
+        arguments:
+            - '@oro_config.website'
+            - '@doctrine'
+        tags:
+            - { name: oro_multicurrency.config.dependency }

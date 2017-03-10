@@ -1,0 +1,118 @@
+parameters:
+    oro_ews.connector.class:                         Oro\Bundle\EwsBundle\Connector\EwsConnector
+    oro_ews.services.class:                          Oro\Bundle\EwsBundle\Ews\ExchangeWebServices
+    oro_ews.search_query.builder.class:              Oro\Bundle\EwsBundle\Connector\Search\SearchQueryBuilder
+    oro_ews.search_query.state.class:                Oro\Bundle\EwsBundle\Connector\Search\SearchQuery
+    oro_ews.search_query.query_string.builder.class: Oro\Bundle\EwsBundle\Connector\Search\QueryStringBuilder
+    oro_ews.search_query.restriction.builder.class:  Oro\Bundle\EwsBundle\Connector\Search\RestrictionBuilder
+    oro_ews.service_configurator.class:              Oro\Bundle\EwsBundle\Provider\EwsServiceConfigurator
+    oro_ews.email_synchronizer.class:                Oro\Bundle\EwsBundle\Sync\EwsEmailSynchronizer
+    oro_ews.email_sync_processor_factory.class:      Oro\Bundle\EwsBundle\Sync\EwsEmailSynchronizationProcessorFactory
+    oro_ews.email_body_loader.class:                 Oro\Bundle\EwsBundle\Provider\EwsEmailBodyLoader
+    oro_ews.email_origin_listener.class:             Oro\Bundle\EwsBundle\EventListener\EmailOriginListener
+    oro_ews.form.type.ews_transport_check.class:     Oro\Bundle\EwsBundle\Form\Type\EwsCheckButtonType
+
+    oro_ews.transport_check.service_configurator.class: Oro\Bundle\EwsBundle\Provider\EwsTransportCheckServiceConfigurator
+
+services:
+    oro_ews.connector:
+        class: %oro_ews.connector.class%
+        arguments:
+            - "@oro_ews.services"
+
+    oro_ews.services:
+        public: false
+        class: %oro_ews.services.class%
+        arguments:
+            - "@oro_ews.service_configurator"
+
+    oro_ews.search_query.builder:
+        scope: prototype
+        class: %oro_ews.search_query.builder.class%
+        arguments:
+            - "@oro_ews.search_query.state"
+
+    oro_ews.search_query.state:
+        public: false
+        scope: prototype
+        class: %oro_ews.search_query.state.class%
+        arguments:
+            - "@oro_ews.search_query.query_string.builder"
+            - "@oro_ews.search_query.restriction.builder"
+
+    oro_ews.search_query.query_string.builder:
+        public: false
+        class: %oro_ews.search_query.query_string.builder.class%
+
+    oro_ews.search_query.restriction.builder:
+        public: false
+        class: %oro_ews.search_query.restriction.builder.class%
+
+    oro_ews.service_configurator:
+        class: %oro_ews.service_configurator.class%
+        arguments:
+            - "@oro_config.user"
+            - "@oro_security.encoder.mcrypt"
+            - %oro_ews.wsdl_endpoint%
+            - false                         # ignoreFailedResponseMessages
+
+    oro_ews.email_synchronizer:
+        scope: prototype
+        class: %oro_ews.email_synchronizer.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_email.known_email_address_checker_factory"
+            - "@oro_ews.email_sync_processor_factory"
+            - "@oro_email.email.address.manager"
+            - "@oro_email.email.owner.provider.storage"
+            - "@oro_ews.connector"
+            - "@oro_ews.service_configurator"
+            - %oro_user.entity.class%
+        tags:
+            - { name: oro_email.email_synchronizer }
+
+    oro_ews.email_sync_processor_factory:
+        class: %oro_ews.email_sync_processor_factory.class%
+        public: false
+        scope: prototype
+        arguments:
+            - "@doctrine"
+            - "@oro_email.email.entity.builder"
+
+    oro_ews.email_body_loader:
+        public: false
+        class: %oro_ews.email_body_loader.class%
+        arguments:
+            - "@oro_ews.connector"
+            - "@oro_config.global"
+        tags:
+            - { name: oro_email.email_body_loader }
+
+    oro_ews.email_origin_listener:
+        class: %oro_ews.email_origin_listener.class%
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+    oro_ews.form.type.ews_transport_check:
+        class: %oro_ews.form.type.ews_transport_check.class%
+        tags:
+            - { name: form.type, alias: oro_ews_check_button }
+
+    oro_ews.transport_check.connector:
+        class: %oro_ews.connector.class%
+        arguments:
+            - "@oro_ews.transport_check.services"
+
+    oro_ews.transport_check.services:
+        public: false
+        class: %oro_ews.services.class%
+        arguments:
+            - "@oro_ews.transport_check.service_configurator"
+
+    oro_ews.transport_check.service_configurator:
+        class: %oro_ews.transport_check.service_configurator.class%
+        arguments:
+            - "@oro_config.user"
+            - "@oro_security.encoder.mcrypt"
+            - %oro_ews.wsdl_endpoint%
+            - false                         # ignoreFailedResponseMessages

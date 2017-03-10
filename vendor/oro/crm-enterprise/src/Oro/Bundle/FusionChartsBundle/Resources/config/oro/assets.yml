@@ -1,0 +1,4 @@
+assets:
+    css:
+      'orofusioncharts':
+          - 'bundles/orofusioncharts/css/less/charts.less'

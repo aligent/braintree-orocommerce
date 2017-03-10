@@ -1,0 +1,24 @@
+oro:
+    shipping:
+        delete_shipping_rule_window:
+            content: "Warning: Removing the shipping rule will delete all related data"
+            button_ok: Yes, Delete
+            title: Delete Confirmation
+            success: Shipping rule and all related data were deleted
+
+        method:
+            flat_rate:
+                label: Flat Rate
+                type.label: Flat Rate
+                price.label: Price
+                handling_fee.label: Handling Fee
+                processing_type:
+                    label: Type
+                    per_item.label: Per Item
+                    per_order.label: Per Order
+        method_type:
+            backend:
+                method_with_type_and_price:
+                    label: '{{ translatedMethod }}, {{ translatedMethodType }}: {{ price }}'
+                method_type_and_price:
+                    label: '{{ translatedMethodType }}: {{ price }}'

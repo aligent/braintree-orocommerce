@@ -1,0 +1,70 @@
+operations:
+    DELETE:
+        exclude_entities:
+            - Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition
+    clone_workflow:
+        extends: CLONE
+        entities:
+            - Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition
+        datagrids:
+            - workflow-definitions-grid
+        acl_resource: [CREATE, entity:Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition]
+        replace: [preactions]
+        preactions:
+            - '@call_service_method':
+                service: oro_action.helper.default_operation_request
+                method: getRequestRoute
+                attribute: $.requestRoute
+            - '@call_service_method':
+                  service: oro_entity_config.helper.entity_config
+                  method: getRoutes
+                  method_parameters: [$.data, ['name']]
+                  attribute: $.routes
+            - '@tree':
+                conditions:
+                    '@and':
+                        - '@not_blank': $.data
+                        - '@eq': [$.requestRoute, 'oro_action_widget_form'] # display a form template
+                actions:
+                    - '@call_service_method':
+                        service: oro_workflow.translation.processor
+                        method: translateWorkflowDefinitionFields
+                        method_parameters: [$.data]
+                    - '@clone_object':
+                        target: $.data
+                        attribute: $.clone
+                    - '@call_service_method':
+                        service: oro_entity.entity_provider
+                        method: getEntities
+                        attribute: $.systemEntities
+                    - '@trans':
+                        id: oro.action.clone.label
+                        attribute: $.clone.label
+                        params:
+                            '{label}': $.clone.label
+                    - '@call_service_method':
+                        attribute: $.form
+                        service: form.factory
+                        method: createNamed
+                        method_parameters: ["oro_workflow_definition_form", "oro_workflow_definition", null]
+                    - '@call_method':
+                        object: $.form
+                        method: setData
+                        method_parameters: [$.clone]
+                    - '@call_method':
+                        attribute: $.formView
+                        object: $.form
+                        method: createView
+        frontend_options:
+            show_dialog: false
+            template: 'OroWorkflowBundle:WorkflowDefinition:clone.html.twig'
+        attributes:
+            entity:
+                label: ' '
+                type: entity
+                options:
+                  class: 'Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition'
+        form_options:
+            attribute_fields:
+                entity:
+                    form_type: form

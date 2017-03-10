@@ -1,0 +1,51 @@
+{% block oro_multiwebsite_matcher_settings_collection_widget %}
+    <div class="website-matcher-list">
+    <table class="grid table-hover table table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <span>{{ 'oro.multiwebsite.system_configuration.fields.enabled.label'|trans }}</span>
+            </th>
+            <th class="matcher-name">
+                <span>{{ 'oro.multiwebsite.system_configuration.fields.matcher.label'|trans }}</span>
+            </th>
+            <th>
+                <span>{{ 'oro.multiwebsite.system_configuration.fields.sort_order.label'|trans }}</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if form.children|length %}
+            {% for child in form.children %}
+                <tr>
+                {{ form_widget(child) }}
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
+
+{% block oro_multiwebsite_matcher_settings_widget %}
+    <td>
+        {{ form_widget(form.enabled) }}
+        {{ form_errors(form.enabled) }}
+    </td>
+    <td>
+        {{ form_widget(form.matcher_alias) }}
+
+        {% set tooltip = form.vars.value.tooltip %}
+        {% if tooltip is not empty %}
+            {% import 'OroUIBundle::macros.html.twig' as UI %}
+            {{ UI.tooltip(form.vars.value.tooltip) }}
+        {% endif %}
+        <span>{{ form.vars.value.label|trans }}</span>
+
+        {{ form_errors(form.matcher_alias) }}
+    </td>
+    <td>
+        {{ form_widget(form.priority, { 'attr': {'class': 'priority'} }) }}
+        {{ form_errors(form.priority) }}
+    </td>
+{% endblock %}

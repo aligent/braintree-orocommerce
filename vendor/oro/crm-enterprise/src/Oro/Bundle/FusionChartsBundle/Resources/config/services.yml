@@ -1,0 +1,10 @@
+parameters:
+    oro_fusionchart.data_transformer.multi_set.class: Oro\Bundle\FusionChartsBundle\Model\Data\Transformer\MultiSetDataTransformer
+    oro_fusionchart.data_transformer.campaign_multi_line.class: Oro\Bundle\FusionChartsBundle\Model\Data\Transformer\CampaignMultiLineDataTransformer
+
+services:
+    oro_fusionchart.data_transformer.campaign_multi_line:
+        class: %oro_fusionchart.data_transformer.campaign_multi_line.class%
+
+    oro_fusionchart.data_transformer.multi_set:
+        class: %oro_fusionchart.data_transformer.multi_set.class%

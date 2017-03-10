@@ -1,0 +1,41 @@
+Oro\Bundle\ContactBundle\Entity\Contact:
+    constraints:
+        - Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation: ~
+    properties:
+        firstName:
+            - Length:
+                max: 100
+        lastName:
+            - Length:
+                max: 100
+        gender:
+            - Choice:
+                choices: [male, female]
+        birthday:
+            - Date: ~
+        addresses:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: One of the addresses must be set as primary.
+            - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
+        emails:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: One of the emails must be set as primary.
+        phones:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: One of the phones must be set as primary.
+
+Oro\Bundle\ContactBundle\Entity\Group:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
+    properties:
+        label:
+            - NotBlank: ~
+            - Length:
+                min: 3
+                max: 255
+
+# Prevent required values for all child of AbstractAddress
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+
