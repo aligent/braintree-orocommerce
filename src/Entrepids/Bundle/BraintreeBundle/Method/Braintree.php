@@ -6,6 +6,7 @@ use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class Braintree implements PaymentMethodInterface
 {
@@ -13,13 +14,18 @@ class Braintree implements PaymentMethodInterface
 
 	/** @var BraintreeConfigInterface */
 	private $config;
-
+	
+	/** @var RouterInterface */
+	protected $router;
+	
 	/**
 	 * @param BraintreeConfigInterface $config
+	 * @param RouterInterface $router
 	 */
-	public function __construct(BraintreeConfigInterface $config)
+	public function __construct(BraintreeConfigInterface $config, RouterInterface $router)
 	{
 		$this->config = $config;
+		$this->router = $router;
 	}
 
 	/** {@inheritdoc} */

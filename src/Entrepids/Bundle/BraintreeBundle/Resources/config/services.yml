@@ -5,6 +5,7 @@ services:
         public: false
         arguments:
             - '@entrepids_braintree.method.config'
+            - '@router'
         tags:
             - { name: oro_payment.payment_method }
 
@@ -12,7 +13,10 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\View\BraintreeView'
         public: false
         arguments:
+            - '@form.factory'
             - '@entrepids_braintree.method.config'
+            - '@oro_payment.provider.payment_transaction'
+            
         tags:
             - { name: oro_payment.payment_method_view }
 
@@ -20,4 +24,14 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig'
         public: false
         arguments:
-            - '@oro_config.manager'
+            - '@oro_config.global'
+            
+    entrepids_braintree.provider.credit_form_provider:
+        class: 'Entrepids\Bundle\BraintreeBundle\Layout\DataProvider\CreditCardFormProvider'
+        arguments:
+            - '@form.factory'
+            - '@router'
+        tags:
+            - { name: layout.data_provider, alias: entrepids_braintree_credit_card_form_provider }
+ 
+ 

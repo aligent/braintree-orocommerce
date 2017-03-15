@@ -42,8 +42,8 @@ class Configuration implements ConfigurationInterface
 	const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_features_enabled_vault_saved_cards';
 	const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_features_cvv_verification';
 	const BRAINTREE_FEATURES_DISPLAY_CARD_TYPES = 'braintree_features_display_card_types';
-	
-	
+
+
 	const CARD_VISA = 'visa';
 	const CARD_MASTERCARD = 'mastercard';
 	const CARD_DISCOVER = 'discover';
@@ -156,6 +156,7 @@ class Configuration implements ConfigurationInterface
       						'type' => 'boolean',
         						'value' => true,
         				],
+     				
         		]
         );
         return $treeBuilder;

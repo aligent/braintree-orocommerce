@@ -204,7 +204,7 @@ system_configuration:
                 choice_translation_domain: messages
                 multiple: false
                 choices:
-                    processing: entrepids.braintree.system_configuration.fields.capture.capture_neworder_processing
+                    processing: entrepids.braintree.system_configuration.fields.capture.capture_neworder_processing 
                     suspected_fraud: entrepids.braintree.system_configuration.fields.capture.capture_neworder_suspected_fraud
                     
         braintree.braintree_features_enabled_vault_saved_cards:

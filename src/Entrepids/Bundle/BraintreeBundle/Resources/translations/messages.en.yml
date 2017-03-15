@@ -2,7 +2,14 @@ entrepids:
     braintree:
         menu:
             braintree.label: 'Braintree'
-
+        methods:
+            credit_card.label: 'Credit Card'
+            whats_this: "What's this?"
+            tooltip: |
+                The verification number is a 3-digit
+                number printed on the back of your card.
+                The American Express security code is a 4-digit
+                number printed on the front of your card.
         system_configuration:
             groups:
                 braintree.title: 'Braintree'
@@ -31,10 +38,10 @@ entrepids:
                     sandbox: 'SandBox'
                     production: 'Production'
                 account_details:
-                    sandbox_merch_id.label: 'Sandbox Merchant ID'
-                    sandbox_merch_account_id.label: 'Sandbox Merchant Account ID'
-                    sandbox_merch_public_key.label: 'Sandbox Public Key'
-                    sandbox_merch_private_key.label: 'Sandbox Private Key'
+                    sandbox_merch_id.label: 'Merchant ID'
+                    sandbox_merch_account_id.label: 'Merchant Account ID'
+                    sandbox_merch_public_key.label: 'Public Key'
+                    sandbox_merch_private_key.label: 'Private Key'
                 credit_card:
                     credit_card_enabled.label: 'Enabled'
                     credit_card_title.label: 'Title' 
@@ -52,11 +59,19 @@ entrepids:
                     features_display_cc_types.label: 'Display Card Types'   
 
         credit_card:
-            card_number.label: Credit Card Number
-            expiration_date.label: Expiration Date
-            cvv2.label: CVV
-            save_for_later.label: Save this card for later use
-            
+            card_number.label: 'Credit Card Number'
+            expiration_date.label: 'Expiration Date'
+            cvv2.label: 'CVV'
+            save_for_later.label: 'Save this card for later use'
+ 
+        braintreeflow:
+            authorized_card: 'Credit Card  **** **** **** {{ last4 }}'
+            use_different_card: 'Use a different card >'
+            use_authorized_card: '< Use an existing card'
+             
+        braintreeflow_checkout:
+            redirect_to_braintree: 'You will be redirected to Braintree website to complete your purchase after the order review step.'                      
+
     payment:
         admin:
             braintree.label: 'Braintree'

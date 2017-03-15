@@ -6,26 +6,74 @@ use Entrepids\Bundle\BraintreeBundle\Method\Braintree;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
+use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
+use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
+use Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class BraintreeView implements PaymentMethodViewInterface
 {
+	/** @var FormFactoryInterface */
+	protected $formFactory;
 	/** @var BraintreeConfigInterface */
-	private $config;
-
+	protected $config;
+	/** @var PaymentTransactionProvider */
+	protected $paymentTransactionProvider;
+	
 	/**
+	 * @param FormFactoryInterface $formFactory
 	 * @param BraintreeConfigInterface $config
+	 * @param PaymentTransactionProvider $paymentTransactionProvider
 	 */
-	public function __construct(BraintreeConfigInterface $config)
+	public function __construct(FormFactoryInterface $formFactory, BraintreeConfigInterface $config, PaymentTransactionProvider $paymentTransactionProvider)
 	{
+		$this->formFactory = $formFactory;
 		$this->config = $config;
+		$this->paymentTransactionProvider = $paymentTransactionProvider;
 	}
 
 	/** {@inheritdoc} */
 	public function getOptions(PaymentContextInterface $context)
 	{
-		return [];
-	}
+        //$isZeroAmountAuthorizationEnabled = $this->config->isZeroAmountAuthorizationEnabled();
 
+        $formOptions = [
+          //  'zeroAmountAuthorizationEnabled' => $isZeroAmountAuthorizationEnabled,
+            'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
+        ];
+
+        $formView = $this->formFactory->create(CreditCardType::NAME, null, $formOptions)->createView();
+
+        $viewOptions = [
+            'formView' => $formView,
+            'creditCardComponentOptions' => [
+                'allowedCreditCards' => $this->getAllowedCreditCards(),
+            ],
+        ];
+
+        /*if (!$isZeroAmountAuthorizationEnabled) {
+            return $viewOptions;
+        }*/
+
+        $validateTransaction = $this->paymentTransactionProvider
+            ->getActiveValidatePaymentTransaction($this->getPaymentMethodType());
+
+        if (!$validateTransaction) {
+            return $viewOptions;
+        }
+
+        $transactionOptions = $validateTransaction->getTransactionOptions();
+
+        $viewOptions['creditCardComponent'] = 'braintree/js/app/components/authorized-credit-card-component';
+
+        $viewOptions['creditCardComponentOptions'] = array_merge($viewOptions['creditCardComponentOptions'], [
+            //'acct' => $this->getLast4($validateTransaction),
+            'saveForLaterUse' => !empty($transactionOptions['saveForLaterUse']),
+        ]);
+
+        return $viewOptions;
+    }
+    
 	/** {@inheritdoc} */
 	public function getBlock()
 	{
