@@ -7,6 +7,7 @@ use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 
 class Braintree implements PaymentMethodInterface
 {

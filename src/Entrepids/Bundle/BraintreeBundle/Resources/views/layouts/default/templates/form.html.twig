@@ -53,12 +53,23 @@
                 {% endfor %}
             </ul>
             <div class="{{ class_prefix }}__form__payment-methods__form" data-credit-card-form="data-credit-card-form">
-                {% for child in form.children %}
-                    <div class="{{ class_prefix }}__form__row">
-                        {{ form_row(child, {class_prefix: class_prefix}) }}
-                    </div>
-                {% endfor %}
+				 <form id="my-sample-form" method="post" action="/purchase">
+				  <label for="card-number">Card Number</label>
+				  <div id="card-number" placeholder="4111 1111 1111 1111"></div>
+
+				  <label for="expiration-date">Expiration Date</label>
+				  <div id="expiration-date"></div>
+				  				
+				  <label for="cvv">CVV</label>
+				  <div id="cvv"></div>
+	
+				</form> 
             </div>
+     
+			    {% block javascripts %}
+			        <script src="{{ asset('bundles/braintree/js/app/components/braintree.js') }}" type="text/javascript"></script>
+			    {% endblock %}			
+		    
         </div>
     </div>
 {% endblock %}

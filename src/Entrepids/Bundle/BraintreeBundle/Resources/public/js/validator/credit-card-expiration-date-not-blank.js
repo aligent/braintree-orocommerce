@@ -3,7 +3,7 @@ define(['underscore', 'orotranslation/js/translator', 'jquery', 'jquery.validate
     'use strict';
 
     var defaultParam = {
-        message: 'oro.paypal.validation.expiration_date',
+        message: 'entrepids.braintree.validation.expiration_date',
         monthSelector: '[data-expiration-date-month]',
         yearSelector: '[data-expiration-date-year]'
     };

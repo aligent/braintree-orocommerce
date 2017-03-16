@@ -23,6 +23,7 @@ define(function(require) {
                 expirationDate: '[data-expiration-date]',
                 cvv: '[data-card-cvv]',
                 cardNumber: '[data-card-number]',
+                card_number: '[card-number]',
                 validation: '[data-validation]',
                 saveForLater: '[data-save-for-later]'
             }
@@ -78,8 +79,8 @@ define(function(require) {
                 .on('change', this.options.selectors.year, $.proxy(this.collectYearDate, this))
                 .on(
                     'focusout',
-                    this.options.selectors.cardNumber,
-                    $.proxy(this.validate, this, this.options.selectors.cardNumber)
+                    this.options.selectors.card_number,
+                    $.proxy(this.validate, this, this.options.selectors.card_number)
                 )
                 .on('focusout', this.options.selectors.cvv, $.proxy(this.validate, this, this.options.selectors.cvv))
                 .on('change', this.options.selectors.saveForLater, $.proxy(this.onSaveForLaterChange, this));
@@ -248,13 +249,13 @@ define(function(require) {
             $.data(virtualForm, 'validator', validator);
 
             // Add CC type validation rule
-            var cardNumberField = this.$form.find(this.options.selectors.cardNumber);
+            var cardNumberField = this.$form.find(this.options.selectors.card_number);
             var cardNumberValidation = cardNumberField.data('validation');
-            var creditCardTypeValidator = cardNumberField.data('credit-card-type-validator');
+           /* var creditCardTypeValidator = cardNumberField.data('credit-card-type-validator');
 
             _.extend(cardNumberValidation[creditCardTypeValidator],
                 {allowedCreditCards: this.options.allowedCreditCards}
-            );
+            );*/
 
             var errors;
 

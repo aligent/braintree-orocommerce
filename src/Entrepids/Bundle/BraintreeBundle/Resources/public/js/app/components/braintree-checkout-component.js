@@ -1,12 +1,12 @@
 define(function(require) {
     'use strict';
 
-    var PayflowExpressCheckoutComponent;
+    var BraintreeCheckoutComponent;
     var _ = require('underscore');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
 
-    PayflowExpressCheckoutComponent = BaseComponent.extend({
+    BraintreeCheckoutComponent = BaseComponent.extend({
         /**
          * @property {Object}
          */
@@ -45,9 +45,9 @@ define(function(require) {
 
             mediator.off('checkout:place-order:response', this.handleSubmit, this);
 
-            PayflowExpressCheckoutComponent.__super__.dispose.call(this);
+            BraintreeCheckoutComponent.__super__.dispose.call(this);
         }
     });
 
-    return PayflowExpressCheckoutComponent;
+    return BraintreeCheckoutComponent;
 });

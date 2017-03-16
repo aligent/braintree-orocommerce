@@ -7,7 +7,7 @@ define([
     'use strict';
 
     var defaultParam = {
-        message: 'oro.paypal.validation.credit_card'
+        message: 'entrepids.braintree.validation.credit_card'
     };
 
     /**
