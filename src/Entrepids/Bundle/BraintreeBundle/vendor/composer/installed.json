@@ -1,17 +1,17 @@
 [
     {
         "name": "braintree/braintree_php",
-        "version": "3.6.1",
-        "version_normalized": "3.6.1.0",
+        "version": "3.7.0",
+        "version_normalized": "3.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/braintree/braintree_php.git",
-            "reference": "7befca6edadfec2f5fad3f38966bdf8123ae085f"
+            "reference": "36c2b9de6793a28e25f5f9e265f60aaffef2cfe2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/braintree/braintree_php/zipball/7befca6edadfec2f5fad3f38966bdf8123ae085f",
-            "reference": "7befca6edadfec2f5fad3f38966bdf8123ae085f",
+            "url": "https://api.github.com/repos/braintree/braintree_php/zipball/36c2b9de6793a28e25f5f9e265f60aaffef2cfe2",
+            "reference": "36c2b9de6793a28e25f5f9e265f60aaffef2cfe2",
             "shasum": ""
         },
         "require": {
@@ -25,7 +25,7 @@
         "require-dev": {
             "phpunit/phpunit": "3.7.*"
         },
-        "time": "2015-10-27T19:08:54+00:00",
+        "time": "2015-11-19T19:14:47+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

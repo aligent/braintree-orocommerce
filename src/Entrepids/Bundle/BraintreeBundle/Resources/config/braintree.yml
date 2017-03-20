@@ -1,0 +1,19 @@
+services:
+
+    entrepids_braintree.braintree.model.adapter.badapter:
+        class: 'Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter'
+        public: false
+        arguments:
+            - '@entrepids_braintree.method.config'
+            
+    entrepids_braintree.braintree.payflow.client.http:
+        class: 'Guzzle\Http\Client'
+        public: false
+        lazy: true
+        
+    entrepids_braintree.braintree.payflow.client.transactionsale:
+        class: 'Entrepids\Bundle\BraintreeBundle\Braintree\Client\TransactionSale'
+        public: false
+        arguments:
+            - '@entrepids_braintree.braintree.payflow.client.http'
+            - '@entrepids_braintree.braintree.model.adapter.badapter'        

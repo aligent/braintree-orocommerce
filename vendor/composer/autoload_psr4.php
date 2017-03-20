@@ -85,6 +85,7 @@ return array(
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'Brick\\Math\\Tests\\' => array($vendorDir . '/brick/math/tests'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
+    'Braintree\\' => array($vendorDir . '/braintree/braintree_php/lib/Braintree'),
     'Box\\Spout\\' => array($vendorDir . '/box/spout/src/Spout'),
     'Behat\\Mink\\Driver\\' => array($vendorDir . '/behat/mink-selenium2-driver/src'),
     'Behat\\Mink\\' => array($vendorDir . '/behat/mink/src'),

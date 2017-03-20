@@ -1,5 +1,5 @@
 {
   "require" : {
-    "braintree/braintree_php" : "3.6.1"
+    "braintree/braintree_php" : "3.7.0"
   }
 }

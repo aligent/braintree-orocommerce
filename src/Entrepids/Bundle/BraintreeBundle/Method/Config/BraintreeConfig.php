@@ -78,7 +78,15 @@ class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigIn
 	public function getAllowedEnvironmentTypes()
 	{
 		return (array)$this->getConfigValue(Configuration::BRAINTREE_ENVIRONMENT_TYPES);
-	}	
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */	
+	public function getEnvironmentSelected()
+	{
+		return (string)$this->getConfigValue(Configuration::BRAINTREE_ENVIRONMENT_TYPES);
+	}
 	/**
 	 * {@inheritdoc}
 	 */

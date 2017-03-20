@@ -71,6 +71,7 @@ return array(
     'ComponentInstaller' => array($vendorDir . '/robloach/component-installer/src'),
     'CG\\' => array($vendorDir . '/jms/cg/src'),
     'Buzz' => array($vendorDir . '/kriswallsmith/buzz/lib'),
+    'Braintree' => array($vendorDir . '/braintree/braintree_php/lib'),
     'Behat\\Transliterator' => array($vendorDir . '/behat/transliterator/src'),
     'Behat\\Testwork' => array($vendorDir . '/behat/behat/src'),
     'Behat\\Symfony2Extension' => array($vendorDir . '/behat/symfony2-extension/src'),

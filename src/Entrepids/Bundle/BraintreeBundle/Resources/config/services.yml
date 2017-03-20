@@ -6,6 +6,7 @@ services:
         arguments:
             - '@entrepids_braintree.method.config'
             - '@router'
+            - '@entrepids_braintree.braintree.model.adapter.badapter' 
         tags:
             - { name: oro_payment.payment_method }
 

@@ -20,6 +20,10 @@ CountryConfigAwareInterface
 	/**
 	 * @return string
 	 */
+	public function getEnvironmentSelected();	
+	/**
+	 * @return string
+	 */
 	public function getSandBoxMerchId();	
 	/**
 	 * @return string

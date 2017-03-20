@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5b109e1030d2e7a4207d834f83074187
+class ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0
 {
     public static $files = array (
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
@@ -159,6 +159,7 @@ class ComposerStaticInit5b109e1030d2e7a4207d834f83074187
         array (
             'Brick\\Math\\Tests\\' => 17,
             'Brick\\Math\\' => 11,
+            'Braintree\\' => 10,
             'Box\\Spout\\' => 10,
             'Behat\\Mink\\Driver\\' => 18,
             'Behat\\Mink\\' => 11,
@@ -483,6 +484,10 @@ class ComposerStaticInit5b109e1030d2e7a4207d834f83074187
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
+        'Braintree\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/braintree/braintree_php/lib/Braintree',
         ),
         'Box\\Spout\\' => 
         array (
@@ -821,6 +826,10 @@ class ComposerStaticInit5b109e1030d2e7a4207d834f83074187
             'Buzz' => 
             array (
                 0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
+            ),
+            'Braintree' => 
+            array (
+                0 => __DIR__ . '/..' . '/braintree/braintree_php/lib',
             ),
             'Behat\\Transliterator' => 
             array (
@@ -1777,11 +1786,11 @@ class ComposerStaticInit5b109e1030d2e7a4207d834f83074187
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5b109e1030d2e7a4207d834f83074187::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5b109e1030d2e7a4207d834f83074187::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit5b109e1030d2e7a4207d834f83074187::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit5b109e1030d2e7a4207d834f83074187::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit5b109e1030d2e7a4207d834f83074187::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit2bd82a8c39999690c46887c442c9f8e0::$classMap;
 
         }, null, ClassLoader::class);
     }

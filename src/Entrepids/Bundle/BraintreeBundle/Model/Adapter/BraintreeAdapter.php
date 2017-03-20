@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 
 use Braintree\ClientToken;
@@ -36,15 +37,15 @@ class BraintreeAdapter
      */
     protected function initCredentials()
     {
-    	$environmentSelected = $this->config->get('braintree.braintree_environment_types');
-        if (strcmp($environmentSelected, Configruation::ENVIRONMENT_PRODUCTION) == 0) {
-            $this->environment(Configruation::PRODUCTION);
+    	$environmentSelected = $this->config->getEnvironmentSelected();
+        if (strcmp($environmentSelected, 'Production') == 0) {
+            $this->environment('production');
         } else {
-            $this->environment(Configruation::SANDBOX);
+            $this->environment('sandbox');
         }
-        $this->merchantId($this->config->getValue(Config::KEY_MERCHANT_ID));
-        $this->publicKey($this->config->getValue(Config::KEY_PUBLIC_KEY));
-        $this->privateKey($this->config->getValue(Config::KEY_PRIVATE_KEY));
+        $this->merchantId($this->config->getSandBoxMerchId());
+        $this->publicKey($this->config->getSandBoxPublickKey());
+        $this->privateKey($this->config->getSandBoxPrivateKey());
     }
 
     /**
