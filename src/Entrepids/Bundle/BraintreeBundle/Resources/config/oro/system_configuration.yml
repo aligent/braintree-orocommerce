@@ -2,6 +2,7 @@ system_configuration:
     groups:
         braintree:
             title: entrepids.braintree.system_configuration.groups.braintree.title
+            icon: fa-credit-card
         braintree_display:
             title: entrepids.braintree.system_configuration.groups.display_options.title
         braintree_account_details:
