@@ -72,6 +72,10 @@ class CreditCardType extends AbstractType
                     'data-gateway' => true,
                 ],
             ]
+        )
+        ->add(
+        		'paymethod_nonce',
+        		'hidden'
         );
 
         if ($options['requireCvvEntryEnabled']) {

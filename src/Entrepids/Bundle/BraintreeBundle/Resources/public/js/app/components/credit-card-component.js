@@ -6,6 +6,8 @@ define(function(require) {
     var $ = require('jquery');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
+    var client = require('braintree/js/braintree/braintree-client');
+    var hostedFields = require('braintree/js/braintree/braintree-hosted-fields');
     require('jquery.validate');
 
     CreditCardComponent = BaseComponent.extend({
@@ -19,6 +21,7 @@ define(function(require) {
                 month: '[data-expiration-date-month]',
                 year: '[data-expiration-date-year]',
                 hiddenDate: 'input[name="EXPDATE"]',
+                paymethod_nonce: 'input[name="paymethod_nonce"]',
                 form: '[data-credit-card-form]',
                 expirationDate: '[data-expiration-date]',
                 cvv: '[data-card-cvv]',
@@ -59,6 +62,8 @@ define(function(require) {
          */
         disposable: true,
 
+        hostedFieldsInstance: null,
+        
         /**
          * @inheritDoc
          */
@@ -92,7 +97,41 @@ define(function(require) {
             mediator.on('checkout:payment:before-restore-filled-form', this.beforeRestoreFilledForm, this);
             mediator.on('checkout:payment:remove-filled-form', this.removeFilledForm, this);
             mediator.on('checkout-content:initialized', this.refreshPaymentMethod, this);
+            
+            var component = this;
+            
+        	client.create({
+        		authorization: 'sandbox_xbhxzdjx_n2w2d522qmdbjjv9'
+        		}, function (err, clientInstance) {
+        			if (err) {
+        				console.error(err);
+        				return;
+        			}
 
+        		hostedFields.create({
+        			client: clientInstance,
+        		    fields: {
+        		    	number: {
+        		    		selector: '#card-number',
+        		    		placeholder: '1111 1111 1111 1111'
+        		    	},
+        		    	cvv: {
+        		    		selector: '#cvv',
+        		    		placeholder: '123'
+        		    	},
+        		    	expirationDate: {
+        		    		selector: '#expiration-date',
+        		    		placeholder: '10 / 2019'
+        		    	}
+        		    }
+        		  	}, function (err, hostedFieldsInst) {
+        		  		component.hostedFieldsInstance = hostedFieldsInst;
+        		  		if (err) {
+        		  			console.error(err);
+        		  			return;
+        		  		}
+        		  	});
+            });
         },
 
         refreshPaymentMethod: function() {
@@ -103,9 +142,9 @@ define(function(require) {
          * @param {Object} eventData
          */
         handleSubmit: function(eventData) {
+        	alert('Hola handleSubmit');
             if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
                 eventData.stopped = true;
-
                 var resolvedEventData = _.extend(
                     {
                         'SECURETOKEN': false,
@@ -128,6 +167,7 @@ define(function(require) {
                 data.push({name: 'SECURETOKENID', value: resolvedEventData.SECURETOKENID});
                 data.push({name: 'SECURETOKEN', value: resolvedEventData.SECURETOKEN});
 
+                alert('Nonce '+this.options.selectors.paymethod_nonce);
                 if (resolvedEventData.formAction && resolvedEventData.SECURETOKEN) {
                     this.postUrl(resolvedEventData.formAction, data);
 
@@ -211,7 +251,6 @@ define(function(require) {
          */
         validate: function(elementSelector) {
             var virtualForm = $('<form>');
-
             var appendElement;
             if (elementSelector) {
                 appendElement = this.$form.find(elementSelector).clone();
@@ -336,9 +375,23 @@ define(function(require) {
          * @param {Object} eventData
          */
         beforeTransit: function(eventData) {
+        	var component = this;
+        	this.hostedFieldsInstance.tokenize(function (err, payload) {
+	            if (err) {
+	            	console.error(err);
+	                return;
+	            }
+	            var $el = $(eventData.target);
+	            component.options.selectors.paymethod_nonce = payload.nonce;
+	            //payload.nonce!!!!!!!!
+            });
+        	
+        	
+            eventData.stopped = false;
             if (eventData.data.paymentMethod === this.options.paymentMethod) {
-                eventData.stopped = !this.validate();
+                //eventData.stopped = !this.validate();
             }
+            
         },
 
         beforeHideFilledForm: function() {

@@ -123,7 +123,8 @@ class Braintree implements PaymentMethodInterface
 
         $this->authorize($paymentTransaction);
 
-        return $this->secureTokenResponse($paymentTransaction);
+        return [];
+        //return $this->secureTokenResponse($paymentTransaction);
 	}
 
 	/**
@@ -140,10 +141,10 @@ class Braintree implements PaymentMethodInterface
 	
 		// Aca cambiar por El Adapter o como lo hace Magento
 		//$nonce = $this->adapter->createNonce('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
-		$this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
+		//$this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
 		$data = [ 
 				'amount' => 145,
-				'paymentMethodNonce' => 'nonce_from_the_client',
+				'paymentMethodNonce' => $nonce,
 				'options' => [ 
 						'submitForSettlement' => true 
 				] 

@@ -10,3 +10,5 @@ config:
         'braintree/js/validator/credit-card-number': 'bundles/braintree/js/validator/credit-card-number.js'
         'braintree/js/validator/credit-card-type': 'bundles/braintree/js/validator/credit-card-type.js'
         'braintree/js/adapter/credit-card-validator-adapter': 'bundles/braintree/js/adapter/credit-card-validator-adapter.js'
+        'braintree/js/braintree/braintree-client': 'bundles/braintree/js/braintree/braintree-client.js'
+        'braintree/js/braintree/braintree-hosted-fields': 'bundles/braintree/js/braintree/braintree-hosted-fields.js'

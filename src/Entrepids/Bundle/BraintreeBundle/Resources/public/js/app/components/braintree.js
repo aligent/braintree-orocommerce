@@ -6,6 +6,10 @@ require.config({
 
 require(['braintree'], function (braintree) {
     braintree.setup("sandbox_xbhxzdjx_n2w2d522qmdbjjv9", "custom", {
+    	onPaymentMethodReceived: function (obj) {
+    		alert(obj.nonce);
+    		document.querySelector('input[name="payment_method_nonce"]').value = obj.nonce;
+    		},
         id: "my-sample-form",
         hostedFields: {
           number: {
