@@ -47,6 +47,9 @@ class Braintree implements PaymentMethodInterface
 			throw new \InvalidArgumentException(sprintf('Unsupported action "%s"', $action));
 		}
 		
+		$purchaseAction = $this->config->getPurchaseAction();
+		
+		
 /*		switch ($action) {
 			case self::PURCHASE:
 				$paymentTransaction
@@ -105,6 +108,90 @@ class Braintree implements PaymentMethodInterface
 	 * @param PaymentTransaction $paymentTransaction
 	 * @return array
 	 */
+	public function capture(PaymentTransaction $paymentTransaction)
+	{
+		$options = $this->getPaymentOptions($paymentTransaction);
+		$paymentTransaction->setRequest($options);
+		
+		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
+		if (!$sourcePaymentTransaction) {
+			$paymentTransaction
+			->setSuccessful(false)
+			->setActive(false);
+		
+			return ['successful' => false];
+		}
+		
+		if ($sourcePaymentTransaction->isClone()) {
+			return $this->charge($paymentTransaction);
+		}
+		
+		unset($options[Option\Currency::CURRENCY]);
+		
+		
+		$paymentTransaction
+		->setRequest($options)
+		->setSuccessful($response->isSuccessful())
+		->setActive(false)
+		->setReference($response->getReference())
+		->setResponse($response->getData());
+		
+		$sourcePaymentTransaction->setActive(!$paymentTransaction->isSuccessful());
+		
+		return [
+				'message' => $response->getMessage(),
+				'successful' => $response->isSuccessful(),
+		];		
+	}
+	/**
+	 * @param PaymentTransaction $paymentTransaction
+	 * @return array
+	 */
+	public function purchase(PaymentTransaction $paymentTransaction)
+	{
+		// Aca cambiar por El Adapter o como lo hace Magento
+		//$nonce = $this->adapter->createNonce('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
+		//$this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
+		$transactionOptions = $paymentTransaction->getTransactionOptions();
+		
+		$nonce = $transactionOptions['nonce'];
+		$responseTransaction = $paymentTransaction->getResponse();
+		$request = (array)$paymentTransaction->getRequest();
+		$data = [
+				'amount' => $paymentTransaction->getAmount(),
+				'paymentMethodNonce' => $nonce,
+				'options' => [
+						'submitForSettlement' => true
+				]
+		];
+		$response = $this->adapter->sale($data);
+		
+		if ($response->success || !is_null($response->transaction)) {
+			$transaction = $response->transaction;
+			$paymentTransaction
+			->setAction(self::PURCHASE)
+			->setActive($response->success)
+			->setSuccessful($response->success);
+		} else {
+			$errorString = "";
+		
+			foreach($response->errors->deepAll() as $error) {
+				$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+			}
+			$paymentTransaction
+			->setAction(self::VALIDATE)
+			->setActive(false)
+			->setSuccessful(false);
+		
+		}
+		
+
+
+	}
+	/**
+	 * @param PaymentTransaction $paymentTransaction
+	 * @return array
+	 */
 	public function validate(PaymentTransaction $paymentTransaction)
 	{
         $paymentTransaction
@@ -142,6 +229,13 @@ class Braintree implements PaymentMethodInterface
 		// Aca cambiar por El Adapter o como lo hace Magento
 		//$nonce = $this->adapter->createNonce('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
 		//$this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
+		$nonce = $_POST["payment_method_nonce"];
+		$transactionOptions = $paymentTransaction->getTransactionOptions();
+		$transactionOptions['nonce'] = $nonce;
+		$paymentTransaction->setTransactionOptions($transactionOptions);
+		/*$nonce = $_POST["payment_method_nonce"];
+		$responseTransaction = $paymentTransaction->getResponse();
+		$request = (array)$paymentTransaction->getRequest();
 		$data = [ 
 				'amount' => 145,
 				'paymentMethodNonce' => $nonce,
@@ -161,10 +255,11 @@ class Braintree implements PaymentMethodInterface
 			}
 		
 		}
-
+*/
 		$paymentTransaction
-		->setSuccessful($response->success)
-		->setActive($response->success);
+		->setSuccessful(true)
+		->setAction(self::VALIDATE)
+		->setActive(true);
 		//->setReference($response->getReference())
 		//->setResponse($response->getData());
 	}

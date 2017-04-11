@@ -17,3 +17,15 @@ services:
         arguments:
             - '@entrepids_braintree.braintree.payflow.client.http'
             - '@entrepids_braintree.braintree.model.adapter.badapter'        
+       
+    entrepids_braintree.event_listener.callback.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\EventListener\Callback\BraintreeCheckoutListener'
+        lazy: true
+        arguments:
+            - '@oro_payment.payment_method.registry'
+        calls:
+            - ['setLogger', ['@logger']]
+        tags:
+            - { name: kernel.event_listener, event: oro_payment.callback.error.braintree, method: onError }
+            - { name: kernel.event_listener, event: oro_payment.callback.return.braintree, method: onReturn }
+           

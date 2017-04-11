@@ -53,7 +53,12 @@
                 {% endfor %}
             </ul>
             <div class="{{ class_prefix }}__form__payment-methods__form" data-credit-card-form="data-credit-card-form">
-				 <form id="my-sample-form" method="post">
+				{% for child in form.children %}
+                    <div class="{{ class_prefix }}__form__row">
+                        {{ form_row(child, {class_prefix: class_prefix}) }}
+                    </div>
+                {% endfor %}
+            	<form id="my-sample-form" method="post">
 				  <label for="card-number">Card Number</label>
 				  <div id="card-number"></div>
 
@@ -62,10 +67,8 @@
 				  				
 				  <label for="cvv">CVV</label>
 				  <div id="cvv"></div>
-				  <input type="hidden" name="paymethod_nonce">
-				</form> 
-            </div>	
-		    
+				</form>
+            </div>
         </div>
     </div>
 {% endblock %}

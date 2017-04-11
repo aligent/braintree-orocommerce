@@ -21,7 +21,7 @@ define(function(require) {
                 month: '[data-expiration-date-month]',
                 year: '[data-expiration-date-year]',
                 hiddenDate: 'input[name="EXPDATE"]',
-                paymethod_nonce: 'input[name="paymethod_nonce"]',
+                payment_method_nonce: 'input[name="payment_method_nonce"]',
                 form: '[data-credit-card-form]',
                 expirationDate: '[data-expiration-date]',
                 cvv: '[data-card-cvv]',
@@ -63,6 +63,12 @@ define(function(require) {
         disposable: true,
 
         hostedFieldsInstance: null,
+        
+        tokenizationPayload: null,
+        
+        tokenizationError: null,
+        
+        isTokenized: false,
         
         /**
          * @inheritDoc
@@ -142,8 +148,7 @@ define(function(require) {
          * @param {Object} eventData
          */
         handleSubmit: function(eventData) {
-        	alert('Hola handleSubmit');
-            if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
+        	if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
                 eventData.stopped = true;
                 var resolvedEventData = _.extend(
                     {
@@ -167,7 +172,6 @@ define(function(require) {
                 data.push({name: 'SECURETOKENID', value: resolvedEventData.SECURETOKENID});
                 data.push({name: 'SECURETOKEN', value: resolvedEventData.SECURETOKEN});
 
-                alert('Nonce '+this.options.selectors.paymethod_nonce);
                 if (resolvedEventData.formAction && resolvedEventData.SECURETOKEN) {
                     this.postUrl(resolvedEventData.formAction, data);
 
@@ -370,24 +374,62 @@ define(function(require) {
             var $el = $(e.target);
             mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },
-
+        
         /**
          * @param {Object} eventData
          */
         beforeTransit: function(eventData) {
-        	var component = this;
-        	this.hostedFieldsInstance.tokenize(function (err, payload) {
-	            if (err) {
-	            	console.error(err);
-	                return;
-	            }
-	            var $el = $(eventData.target);
-	            component.options.selectors.paymethod_nonce = payload.nonce;
-	            //payload.nonce!!!!!!!!
-            });
+        	//
+        	if (this.isTokenized) {
+        		this.isTokenized = false;
+        		var component = this;
+        		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
+        		payment_method_nonce.val(this.tokenizationPayload.nonce);
+        		
+    	    	//var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+    	    	//$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
+    	    	
+        		eventData.stopped = false;
+        	} else {
+        		eventData.stopped = true;
+        		
+        		var component = this;
+            	this.tokenizationPayload = null;
+            	this.tokenizationError = null;
+            	
+            	var deferred = $.Deferred();
+            	var tokenizationCallback = function (error, payload) {
+            	    if (error) {
+            			deferred.reject({error});
+            		} else {
+    	        		deferred.resolve({payload});
+            		}
+            	};
+
+            	var getPaymentNonce = function () {
+            		component.hostedFieldsInstance.tokenize(tokenizationCallback);
+            	    return deferred.promise();
+            	};
+
+            	getPaymentNonce().then(
+            	    function (payload) {
+            	    	component.tokenizationPayload = payload.payload;
+            	    	
+            	    	component.isTokenized = true;
+            	    	
+            	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+            	    	payment_method_nonce.val(component.tokenizationPayload.nonce);
+            	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);          	    	
+            	    	
+            	    	$("[name='oro_workflow_transition']").submit();
+            	    }, 
+            	    function (error) {
+            	    	//TODO: Mostrar algun error por pantalla
+            	    	component.tokenizationError = error.error;
+            	    }
+            	);
+        	}
         	
-        	
-            eventData.stopped = false;
             if (eventData.data.paymentMethod === this.options.paymentMethod) {
                 //eventData.stopped = !this.validate();
             }
