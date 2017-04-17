@@ -72,6 +72,7 @@ entrepids:
         braintreeflow_checkout:
             redirect_to_braintree: 'You will be redirected to Braintree website to complete your purchase after the order review step.'                      
 
+oro:
     payment:
         admin:
             braintree.label: 'Braintree'
