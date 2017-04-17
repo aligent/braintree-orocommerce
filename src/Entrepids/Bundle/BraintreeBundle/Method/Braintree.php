@@ -112,7 +112,7 @@ class Braintree implements PaymentMethodInterface
 	{
 		$options = $this->getPaymentOptions($paymentTransaction);
 		$paymentTransaction->setRequest($options);
-		
+		//Aca tengo que obtener el transactionID y realizar la llamada a Braintree mediante el adapter
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
 		if (!$sourcePaymentTransaction) {
 			$paymentTransaction
@@ -152,38 +152,81 @@ class Braintree implements PaymentMethodInterface
 		// Aca cambiar por El Adapter o como lo hace Magento
 		//$nonce = $this->adapter->createNonce('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
 		//$this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
-		$transactionOptions = $paymentTransaction->getTransactionOptions();
-		
-		$nonce = $transactionOptions['nonce'];
-		$responseTransaction = $paymentTransaction->getResponse();
-		$request = (array)$paymentTransaction->getRequest();
-		$data = [
-				'amount' => $paymentTransaction->getAmount(),
-				'paymentMethodNonce' => $nonce,
-				'options' => [
-						'submitForSettlement' => true
-				]
-		];
-		$response = $this->adapter->sale($data);
-		
-		if ($response->success || !is_null($response->transaction)) {
-			$transaction = $response->transaction;
-			$paymentTransaction
-			->setAction(self::PURCHASE)
-			->setActive($response->success)
-			->setSuccessful($response->success);
-		} else {
-			$errorString = "";
-		
-			foreach($response->errors->deepAll() as $error) {
-				$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
+		if ($sourcepaymenttransaction != null){
+			$transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
+			$nonce = $transactionOptions['nonce'];
+			$responseTransaction = $paymentTransaction->getResponse();
+			$request = (array)$paymentTransaction->getRequest();
+			
+			$purchaseAction = $this->config->getPurchaseAction();
+			// authorize or charge
+			// si charge mando true
+			// si authorize mando false
+			$submitForSettlement = true;
+			$isAuthorize=false;
+			$isCharge=false;
+			if (strcmp("authorize", $purchaseAction) == 0){
+				$submitForSettlement = false;
+				$isAuthorize=true;
 			}
-			$paymentTransaction
-			->setAction(self::VALIDATE)
-			->setActive(false)
-			->setSuccessful(false);
-		
+			if (strcmp("charge", $purchaseAction) == 0){
+				$submitForSettlement = true;
+				$isCharge=true;
+			}			
+			
+			$data = [
+					'amount' => $paymentTransaction->getAmount(),
+					'paymentMethodNonce' => $nonce,
+					'options' => [
+							'submitForSettlement' => $submitForSettlement
+					]
+			];
+			$response = $this->adapter->sale($data);
+			
+			if ($response->success || !is_null($response->transaction)) {
+				// Esto es si chage
+				$transaction = $response->transaction;
+				
+				if ($isCharge){
+					$paymentTransaction
+					->setAction(self::PURCHASE)
+					->setActive(false)
+					->setSuccessful($response->success);
+				}
+				
+				//Esto es si authorizr
+				if ($isAuthorize){
+					$transactionID = $transaction->id;
+					$paymentTransaction
+					->setAction(self::AUTHORIZE)
+					->setActive(true)
+					->setSuccessful($response->success);
+					
+					$transactionOptions = $paymentTransaction->getTransactionOptions();
+					$transactionOptions['transactionId'] = $transactionID;
+					$paymentTransaction->setTransactionOptions($transactionOptions);
+					
+				}
+				
+				$sourcepaymenttransaction
+				->setActive(false);
+
+			} else {
+				$errorString = "";
+			
+				foreach($response->errors->deepAll() as $error) {
+					$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+				}
+				$paymentTransaction
+				->setAction(self::VALIDATE)
+				->setActive(false)
+				->setSuccessful(false);
+			
+			}
 		}
+		
+
 		
 
 
@@ -198,7 +241,7 @@ class Braintree implements PaymentMethodInterface
             ->setAmount(self::ZERO_AMOUNT)
             ->setCurrency('USD');
 
-        $options = array_merge(
+/*        $options = array_merge(
             $this->getPaymentOptions($paymentTransaction),
         	[]
             //$this->getSecureTokenOptions($paymentTransaction)
@@ -208,12 +251,32 @@ class Braintree implements PaymentMethodInterface
             ->setRequest($options)
             ->setAction(PaymentMethodInterface::VALIDATE);
 
-        $this->authorize($paymentTransaction);
+        $this->authorize($paymentTransaction);*/
 
+        $nonce = $_POST["payment_method_nonce"];
+        $transactionOptions = $paymentTransaction->getTransactionOptions();
+        $transactionOptions['nonce'] = $nonce;
+        $paymentTransaction->setTransactionOptions($transactionOptions);
+        
+        $paymentTransaction
+        ->setSuccessful(true)
+        ->setAction(self::VALIDATE)
+        ->setActive(true);
+        
         return [];
         //return $this->secureTokenResponse($paymentTransaction);
 	}
 
+	/**
+	 * @param PaymentTransaction $paymentTransaction
+	 */
+	public function complete(PaymentTransaction $paymentTransaction)
+	{
+		if ($paymentTransaction->getAction() === PaymentMethodInterface::CHARGE) {
+			$paymentTransaction->setActive(false);
+		}
+	}	
+	
 	/**
 	 * @param PaymentTransaction $paymentTransaction
 	 */

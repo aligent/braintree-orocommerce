@@ -157,16 +157,16 @@ define(function(require) {
                         'returnUrl': '',
                         'errorUrl': '',
                         'formAction': '',
-                        'paymentMethodSupportsValidation': false
+                        'paymentMethodSupportsValidation': true
                     },
                     eventData.responseData
                 );
 
-                if (resolvedEventData.paymentMethodSupportsValidation) {
+        //        if (resolvedEventData.paymentMethodSupportsValidation) {
                     mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
 
                     return;
-                }
+          //      }
 
                 var data = this.$el.find('[data-gateway]').serializeArray();
                 data.push({name: 'SECURETOKENID', value: resolvedEventData.SECURETOKENID});
