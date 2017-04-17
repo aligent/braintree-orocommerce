@@ -113,8 +113,19 @@ class Braintree implements PaymentMethodInterface
 		$options = $this->getPaymentOptions($paymentTransaction);
 		$paymentTransaction->setRequest($options);
 		//Aca tengo que obtener el transactionID y realizar la llamada a Braintree mediante el adapter
+		$purchaseAction = $this->config->getPurchaseAction();
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
-		if (!$sourcePaymentTransaction) {
+		// me fijo por las dudas si esta en modo authorize, aunque no se bien...
+		$isAuthorize=false;
+		if (strcmp("authorize", $purchaseAction) == 0){
+			$isAuthorize=true;
+			// hacer lo que tenga que hacer si esta en modo authorize
+		}
+		
+		// aca hacer la llamada a Braintree con el id que supuestamente se genero,
+		// sino hay ID entonces preguntar que hacer
+		
+		if (!$sourcePaymentTransaction) { // esto estaba original de la copia de PAYPAL
 			$paymentTransaction
 			->setSuccessful(false)
 			->setActive(false);
@@ -122,9 +133,14 @@ class Braintree implements PaymentMethodInterface
 			return ['successful' => false];
 		}
 		
-		if ($sourcePaymentTransaction->isClone()) {
+		if ($sourcePaymentTransaction->isClone()) { // esto es original de la copia de PAYPAL
 			return $this->charge($paymentTransaction);
 		}
+
+		// aca va si no es un clone???
+		$response = $this->gateway
+		->request(Option\Transaction::DELAYED_CAPTURE, $this->combineOptions($options)); // esto es original y tengo que ver 
+		// que va en la respuesta o es lo que devuelve el metodo charge
 		
 		unset($options[Option\Currency::CURRENCY]);
 		
@@ -143,6 +159,95 @@ class Braintree implements PaymentMethodInterface
 				'successful' => $response->isSuccessful(),
 		];		
 	}
+	
+	/**
+	 * @param PaymentTransaction $paymentTransaction
+	 * @return array
+	 */
+	public function charge(PaymentTransaction $paymentTransaction)
+	{
+		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
+		
+		$transactionOptions = $sourcePaymentTransaction->getTransactionOptions();
+
+		if (array_key_exists('transactionId', $transactionOptions)) {
+			$id = $transactionOptions['transactionId'];
+		}
+		else {
+			$id = null;
+		}
+		
+
+		
+		if ($id != null){ // si existe el id de la transaccion entonces
+			return $this->setPaymentCaptureChargeData ( $paymentTransaction, $sourcePaymentTransaction, $id );
+			
+		}
+		else{ // no existe el id de la transaccion
+			// dejo la transaccion y la orden como estaba??
+			return [
+					'message' => 'No transaction Id',
+					'successful' => false,
+			];			
+		}
+
+	}
+	/**
+	 * @param paymentTransaction
+	 * @param sourcePaymentTransaction
+	 * @param transactionData
+	 * @param status
+	 */private function setPaymentCaptureChargeData($paymentTransaction, $sourcePaymentTransaction, $id) {
+		$response = $this->adapter->submitForSettlement($id);
+		
+		if (!$response->success){
+			$errors = $response->message;
+			$transactionData = $response->transaction;
+			$status = $transactionData->__get('status');
+			
+			if (strcmp($status, Braintree\Transaction::AUTHORIZED)==0){ //esto es lo que dice la clase Transaction del modulo Braintree
+				// es estado authorizado y fallo
+				$paymentTransaction
+				->setSuccessful($response->success)
+				->setActive(true);
+				//->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
+				//->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
+
+			}
+			else{
+				// es otro estado y fallo, aca tengo que poner la transaccion que ya fue capturada previamente
+				$paymentTransaction
+				->setSuccessful(true) // lo pongo en true porque no es estado authorized
+				->setActive(false);
+				//->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
+				//->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
+			}
+		
+		}
+		else{
+			$errors = 'No errors';
+			$paymentTransaction
+			->setSuccessful($response->success)
+			->setActive(false);
+			//->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
+			//->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
+
+				
+		}
+		
+		if ($sourcePaymentTransaction) {
+			$paymentTransaction->setActive(false);
+		}
+		if ($sourcePaymentTransaction && $sourcePaymentTransaction->getAction() !== self::VALIDATE) {
+			$sourcePaymentTransaction->setActive(!$paymentTransaction->isSuccessful());
+		}
+		
+		return [
+				'message' => $response->success,
+				'successful' => $response->success,
+		];
+	}
+	
 	/**
 	 * @param PaymentTransaction $paymentTransaction
 	 * @return array
@@ -175,6 +280,7 @@ class Braintree implements PaymentMethodInterface
 				$isCharge=true;
 			}			
 			
+			// revisar de enviar los datos de Customer, 
 			$data = [
 					'amount' => $paymentTransaction->getAmount(),
 					'paymentMethodNonce' => $nonce,
@@ -203,11 +309,13 @@ class Braintree implements PaymentMethodInterface
 					->setActive(true)
 					->setSuccessful($response->success);
 					
-					$transactionOptions = $paymentTransaction->getTransactionOptions();
-					$transactionOptions['transactionId'] = $transactionID;
-					$paymentTransaction->setTransactionOptions($transactionOptions);
+
 					
 				}
+				
+				$transactionOptions = $paymentTransaction->getTransactionOptions();
+				$transactionOptions['transactionId'] = $transactionID;
+				$paymentTransaction->setTransactionOptions($transactionOptions);
 				
 				$sourcepaymenttransaction
 				->setActive(false);
