@@ -8,6 +8,11 @@ use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
+use Oro\Bundle\PaymentBundle\Provider\ExtractOptionsProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\PaymentBundle\Provider\SurchargeProvider;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class Braintree implements PaymentMethodInterface
 {
@@ -28,16 +33,44 @@ class Braintree implements PaymentMethodInterface
 	 */
 	protected $adapter;	
 	
+	/** @var DoctrineHelper */
+	protected $doctrineHelper;
+	
+	/** @var ExtractOptionsProvider */
+	protected $optionsProvider;
+	
+	/** @var PropertyAccessor */
+	protected $propertyAccessor;
+	
+	/** @var SurchargeProvider */
+	protected $surchargeProvider;
+	
 	/**
+	 * 
 	 * @param BraintreeConfigInterface $config
 	 * @param RouterInterface $router
 	 * @param BraintreeAdapter $adapter
+	 * @param DoctrineHelper $doctrineHelper
+	 * @param ExtractOptionsProvider $optionsProvider
+	 * @param SurchargeProvider $surchargeProvider
+	 * @param PropertyAccessor $propertyAccessor
 	 */
-	public function __construct(BraintreeConfigInterface $config, RouterInterface $router, BraintreeAdapter $adapter)
+	public function __construct(BraintreeConfigInterface $config,
+			RouterInterface $router, 
+			BraintreeAdapter $adapter, 
+        DoctrineHelper $doctrineHelper,
+        ExtractOptionsProvider $optionsProvider,
+        SurchargeProvider $surchargeProvider,
+        PropertyAccessor $propertyAccessor
+        )
 	{
 		$this->config = $config;
 		$this->router = $router;
 		$this->adapter = $adapter;
+        $this->doctrineHelper = $doctrineHelper;
+        $this->optionsProvider = $optionsProvider;
+        $this->surchargeProvider = $surchargeProvider;
+        $this->propertyAccessor = $propertyAccessor;
 	}
 
 	/** {@inheritdoc} */
@@ -115,6 +148,8 @@ class Braintree implements PaymentMethodInterface
 		//Aca tengo que obtener el transactionID y realizar la llamada a Braintree mediante el adapter
 		$purchaseAction = $this->config->getPurchaseAction();
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
+
+		$this->setExtraDataPurchase ( $sourcePaymentTransaction);
 		// me fijo por las dudas si esta en modo authorize, aunque no se bien...
 		$isAuthorize=false;
 		if (strcmp("authorize", $purchaseAction) == 0){
@@ -280,7 +315,43 @@ class Braintree implements PaymentMethodInterface
 				$isCharge=true;
 			}			
 			
-			// revisar de enviar los datos de Customer, 
+			$this->setExtraDataPurchase ( $sourcepaymenttransaction);
+
+			
+			/*
+			 * esta es la maner a de enviar los datos hacia Braintree
+			   'customer' => [
+			    'firstName' => 'Drew',
+			    'lastName' => 'Smith',
+			    'company' => 'Braintree',
+			    'phone' => '312-555-1234',
+			    'fax' => '312-555-1235',
+			    'website' => 'http://www.example.com',
+			    'email' => 'drew@example.com'
+			  ],
+			  'billing' => [
+			    'firstName' => 'Paul',
+			    'lastName' => 'Smith',
+			    'company' => 'Braintree',
+			    'streetAddress' => '1 E Main St',
+			    'extendedAddress' => 'Suite 403',
+			    'locality' => 'Chicago',
+			    'region' => 'IL',
+			    'postalCode' => '60622',
+			    'countryCodeAlpha2' => 'US'
+			  ],
+			  'shipping' => [
+			    'firstName' => 'Jen',
+			    'lastName' => 'Smith',
+			    'company' => 'Braintree',
+			    'streetAddress' => '1 E 1st St',
+			    'extendedAddress' => 'Suite 403',
+			    'locality' => 'Bartlett',
+			    'region' => 'IL',
+			    'postalCode' => '60103',
+			    'countryCodeAlpha2' => 'US'
+			  ],
+			 */
 			$data = [
 					'amount' => $paymentTransaction->getAmount(),
 					'paymentMethodNonce' => $nonce,
@@ -339,6 +410,35 @@ class Braintree implements PaymentMethodInterface
 
 
 	}
+	
+	/**
+	 * @param sourcepaymenttransaction
+	 */private function setExtraDataPurchase($sourcepaymenttransaction) {
+		// revisar de enviar los datos de Customer, Billing, Shipping
+		// primero como los obtengo de Oro via backend
+		$owner = $sourcepaymenttransaction->getOwner();
+		$organization =  $sourcepaymenttransaction->getOrganization();
+		$entityID = $sourcepaymenttransaction->getEntityIdentifier();
+		$entity = $this->doctrineHelper->getEntityReference(
+				$sourcepaymenttransaction->getEntityClass(),
+				$sourcepaymenttransaction->getEntityIdentifier()
+		);
+		$propertyAccessor = $this->getPropertyAccessor();
+
+		try {
+		    $shippingAddress = $propertyAccessor->getValue($entity, 'shippingAddress');
+		} catch (NoSuchPropertyException $e) {
+		    
+		}
+
+		if (!$shippingAddress instanceof AbstractAddress) {
+		   
+		}
+
+		$class = $this->doctrineHelper->getEntityClass($shippingAddress);
+		$addressOption = $this->optionsProvider->getShippingAddressOptions($class, $shippingAddress);
+	}
+
 	/**
 	 * @param PaymentTransaction $paymentTransaction
 	 * @return array
@@ -469,5 +569,13 @@ class Braintree implements PaymentMethodInterface
 		->setActive($sourcePaymentTransaction->isActive())
 		->setRequest()
 		->setResponse();
+	}
+	
+	/**
+	 * @return PropertyAccessor
+	 */
+	protected function getPropertyAccessor()
+	{
+		return $this->propertyAccessor;
 	}
 }
