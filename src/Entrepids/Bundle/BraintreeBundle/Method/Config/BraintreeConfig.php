@@ -147,4 +147,10 @@ class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigIn
 	public function isDisplayCreditCard(){
 		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES);
 	}
+	/**
+	 * {@inheritdoc}
+	 */	
+	public function isEnableSafeForLater(){
+		return (bool)$this->getConfigValue(Configuration::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER);
+	}
 }

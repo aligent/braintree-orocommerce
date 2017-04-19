@@ -341,20 +341,7 @@ class Braintree implements PaymentMethodInterface {
 	public function validate(PaymentTransaction $paymentTransaction) {
 		$paymentTransaction->setAmount ( self::ZERO_AMOUNT )->setCurrency ( 'USD' );
 		
-		/*
-		 * $options = array_merge(
-		 * $this->getPaymentOptions($paymentTransaction),
-		 * []
-		 * //$this->getSecureTokenOptions($paymentTransaction)
-		 * );
-		 *
-		 * $paymentTransaction
-		 * ->setRequest($options)
-		 * ->setAction(PaymentMethodInterface::VALIDATE);
-		 *
-		 * $this->authorize($paymentTransaction);
-		 */
-		
+	
 		$nonce = $_POST ["payment_method_nonce"];
 		$transactionOptions = $paymentTransaction->getTransactionOptions ();
 		$transactionOptions ['nonce'] = $nonce;
@@ -363,7 +350,7 @@ class Braintree implements PaymentMethodInterface {
 		$paymentTransaction->setSuccessful ( true )->setAction ( self::VALIDATE )->setActive ( true );
 		
 		return [ ];
-		// return $this->secureTokenResponse($paymentTransaction);
+
 	}
 	
 	/**
@@ -388,37 +375,10 @@ class Braintree implements PaymentMethodInterface {
 			return;
 		}
 		
-		// Aca cambiar por El Adapter o como lo hace Magento
-		// $nonce = $this->adapter->createNonce('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
-		// $this->adapter->find('sandbox_xbhxzdjx_n2w2d522qmdbjjv9');
 		$nonce = $_POST ["payment_method_nonce"];
 		$transactionOptions = $paymentTransaction->getTransactionOptions ();
 		$transactionOptions ['nonce'] = $nonce;
 		$paymentTransaction->setTransactionOptions ( $transactionOptions );
-		/*
-		 * $nonce = $_POST["payment_method_nonce"];
-		 * $responseTransaction = $paymentTransaction->getResponse();
-		 * $request = (array)$paymentTransaction->getRequest();
-		 * $data = [
-		 * 'amount' => 145,
-		 * 'paymentMethodNonce' => $nonce,
-		 * 'options' => [
-		 * 'submitForSettlement' => true
-		 * ]
-		 * ];
-		 * $response = $this->adapter->sale($data);
-		 *
-		 * if ($response->success || !is_null($response->transaction)) {
-		 * $transaction = $response->transaction;
-		 * } else {
-		 * $errorString = "";
-		 *
-		 * foreach($response->errors->deepAll() as $error) {
-		 * $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
-		 * }
-		 *
-		 * }
-		 */
 		$paymentTransaction->setSuccessful ( true )->setAction ( self::VALIDATE )->setActive ( true );
 		// ->setReference($response->getReference())
 		// ->setResponse($response->getData());

@@ -165,6 +165,13 @@ system_configuration:
             options:
                 label: entrepids.braintree.system_configuration.fields.credit_card.credit_card_title.label
                 
+        braintree.braintree_credit_card_safe_for_later:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 33
+            options:
+                label: entrepids.braintree.system_configuration.fields.credit_card.credit_card_safe_for_later.label
+                
         braintree.braintree_capture_payment_action:
             data_type: string
             type: choice
@@ -262,6 +269,7 @@ system_configuration:
                                         children:
                                             - braintree.braintree_credit_card_enabled
                                             - braintree.braintree_credit_card_title
+                                            - braintree.braintree_credit_card_safe_for_later
                                     braintree_capture:
                                         priority: 88
                                         children:

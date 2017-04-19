@@ -61,4 +61,8 @@ CountryConfigAwareInterface
 	 * @return bool
 	 */
 	public function isDisplayCreditCard();
+	/**
+	 * @return bool
+	 */	
+	public function isEnableSafeForLater();
 }

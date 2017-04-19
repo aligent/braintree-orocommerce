@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
 	// Seccion de Credit Card
 	const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
 	const BRAINTREE_CREDIT_CARD_TITLE = 'braintree_credit_card_title';
+	const BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER = "braintree_credit_card_safe_for_later";
 	// agregar si quiere mostrar el checkbox de saveForLater
 	
 	
@@ -157,6 +158,10 @@ class Configuration implements ConfigurationInterface
         				],
         				self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => [
       						'type' => 'boolean',
+        						'value' => true,
+        				],
+        				self::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER => [
+        						'type' => 'boolean',
         						'value' => true,
         				],
      				

@@ -45,6 +45,7 @@ entrepids:
                 credit_card:
                     credit_card_enabled.label: 'Enabled'
                     credit_card_title.label: 'Title' 
+                    credit_card_safe_for_later.label: 'Safe for Later'
                 capture:
                     capture_action.label: 'Capture Action'
                     capture_shipment: 'Shipment'
