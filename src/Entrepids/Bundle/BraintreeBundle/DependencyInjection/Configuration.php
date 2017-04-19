@@ -34,6 +34,9 @@ class Configuration implements ConfigurationInterface
 	// Seccion de Credit Card
 	const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
 	const BRAINTREE_CREDIT_CARD_TITLE = 'braintree_credit_card_title';
+	// agregar si quiere mostrar el checkbox de saveForLater
+	
+	
 	// Seccion de Capture
 	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
 	const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
