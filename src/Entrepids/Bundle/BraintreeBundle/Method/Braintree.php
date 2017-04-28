@@ -15,6 +15,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Oro\Bundle\OrderBundle\Entity\OrderAddress;	
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Braintree\Exception\NotFound;
 
 class Braintree implements PaymentMethodInterface {
 	const TYPE = 'braintree';
@@ -268,6 +269,15 @@ class Braintree implements PaymentMethodInterface {
 		if ($sourcepaymenttransaction != null) {
 			$transactionOptions = $sourcepaymenttransaction->getTransactionOptions ();
 			$nonce = $transactionOptions ['nonce'];
+			
+			if (array_key_exists ( 'saveForLaterUse', $transactionOptions )) {
+				$saveForLater = $transactionOptions['saveForLaterUse'];
+			}
+			else{
+				$saveForLater = false;
+			}
+			
+			
 			$responseTransaction = $paymentTransaction->getResponse ();
 			$request = ( array ) $paymentTransaction->getRequest ();
 			
@@ -287,26 +297,60 @@ class Braintree implements PaymentMethodInterface {
 				$isCharge = true;
 			}
 			
+
+			
 			$customerData = $this->getCustomerDataPayment($sourcepaymenttransaction);
 			$shipingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'shippingAddress');
 			$billingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'billingAddress');
+
 			
-			$data = [ 
-					'amount' => $paymentTransaction->getAmount (),
-					'paymentMethodNonce' => $nonce,
-					'customer' => $customerData,
-					'billing' => $billingData,
-					'shipping' => $shipingData,
-					'options' => [ 
-							'submitForSettlement' => $submitForSettlement 
-					] 
-			];
+			$storeInVaultOnSuccess = false;
+			if ($saveForLater){
+				$storeInVaultOnSuccess =true; // aca esta el caso que tengo que guardar los datos de la tarjeta
+			}
+			else{
+				$storeInVaultOnSuccess = false; // o el usuario no selecciono el checkbox o por configuracion no esta habilitado
+			}
+			
+			// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+			try {
+				$customer = $this->adapter->findCustomer ($customerData['id']);
+				$data = [
+						'amount' => $paymentTransaction->getAmount (),
+						'paymentMethodNonce' => $nonce,
+						'customerId' => $customerData['id'], // esto cuando ya existe el cliente y tengo que dar de alta
+						// una nueva tarjeta
+						'billing' => $billingData,
+						'shipping' => $shipingData,
+						'options' => [
+								'submitForSettlement' => $submitForSettlement,
+								'storeInVaultOnSuccess' => $storeInVaultOnSuccess
+						]
+				];
+			} catch ( NotFound $e ) {
+				$data = [
+						'amount' => $paymentTransaction->getAmount (),
+						'paymentMethodNonce' => $nonce,
+						'customer' => $customerData, // esto si es nuevo lo tengo que enviar
+						// 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
+						// una nueva tarjeta
+						'billing' => $billingData,
+						'shipping' => $shipingData,
+						'options' => [
+								'submitForSettlement' => $submitForSettlement,
+								'storeInVaultOnSuccess' => $storeInVaultOnSuccess
+						]
+				];
+
+			}
+
 			$response = $this->adapter->sale ( $data );
 			
 			if ($response->success || ! is_null ( $response->transaction )) {
 				// Esto es si chage
 				$transaction = $response->transaction;
 				
+
 				if ($isCharge) {
 					$paymentTransaction->setAction ( self::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
 				}
@@ -320,7 +364,14 @@ class Braintree implements PaymentMethodInterface {
 				$transactionOptions = $paymentTransaction->getTransactionOptions ();
 				$transactionOptions ['transactionId'] = $transactionID;
 				$paymentTransaction->setTransactionOptions ( $transactionOptions );
-				
+				//$paymentTransaction->setReference($reference);
+				// Para la parte del token id de la tarjeta de credito
+				if ($saveForLater){
+					$creditCardValuesResponse = $transaction->creditCard;
+					$token = $creditCardValuesResponse['token'];
+					$paymentTransaction->setReference($token);
+					$paymentTransaction->setResponse($creditCardValuesResponse);
+				}
 				$sourcepaymenttransaction->setActive ( false );
 			} else {
 				$errorString = "";

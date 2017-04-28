@@ -8,6 +8,7 @@ use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\PaymentMethodNonce;
 use Braintree\Transaction;
+use Braintree\Customer;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 /**
@@ -136,6 +137,17 @@ class BraintreeAdapter
     {
         return Transaction::sale($attributes);
     }
+    
+    /**
+     * 
+     * @param string $token
+     * @param array $attributes
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     */
+    public function creditCardsale($token, array $attributes){
+    	
+    	return CreditCard::sale($token, $attributes);
+    }
 
     /**
      * @param string $transactionId
@@ -176,4 +188,9 @@ class BraintreeAdapter
     {
         return Transaction::cloneTransaction($transactionId, $attributes);
     }
+    
+    public function findCustomer($customerId){
+    	 
+    	return Customer::find($customerId);
+    }    
 }

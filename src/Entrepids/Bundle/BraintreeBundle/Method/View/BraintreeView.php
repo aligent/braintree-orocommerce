@@ -38,7 +38,7 @@ class BraintreeView implements PaymentMethodViewInterface
         //$isZeroAmountAuthorizationEnabled = $this->config->isZeroAmountAuthorizationEnabled();
 
         $formOptions = [
-          //  'zeroAmountAuthorizationEnabled' => $isZeroAmountAuthorizationEnabled,
+            'zeroAmountAuthorizationEnabled' => $this->config->isEnableSafeForLater(),
             'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
         ];
 
