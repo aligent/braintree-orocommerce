@@ -69,6 +69,7 @@ entrepids:
             authorized_card: 'Credit Card  **** **** **** {{ last4 }}'
             use_different_card: 'Use a different card >'
             use_authorized_card: '< Use an existing card'
+            new_credit_card: 'New Credit Card'
              
         braintreeflow_checkout:
             redirect_to_braintree: 'You will be redirected to Braintree website to complete your purchase after the order review step.'                      

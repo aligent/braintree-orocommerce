@@ -7,13 +7,69 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CreditCardType extends AbstractType
 {
     const NAME = 'entrepids_braintree_credit_card';
 
+    /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
+    
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
+    
+    protected $paymentsTransactions;
+    
+	/**
+	 * 
+	 * @param DoctrineHelper $doctrineHelper
+	 * @param TokenStorageInterface $tokenStorage
+	 */
+    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage){
+    	$this->doctrineHelper = $doctrineHelper; 
+    	$this->tokenStorage = $tokenStorage;
+    	$this->getTransactionCustomerORM();
+    }
+    
+    
+    private function getTransactionCustomerORM (){
+    	$a = 'hola';
+    
+    	$qb = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->createQueryBuilder('pt');
+    	$res =  $qb->select('response')
+    	->where(
+    			$qb->expr()->isNotNull('reference')
+    	)
+    	->orderBy('id');
+    	
+    	$customerUser = $this->getLoggedCustomerUser();
+
+    	$criteria = Criteria::create()
+    	->where(Criteria::expr()->isNull('reference'));
+    	
+    	$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
+    			'frontendOwner' => $customerUser,
+    	]);
+    
+		$this->paymentsTransactions = $paymentTransactionEntity;
+
+    	
+    	$query = $qb->getQuery();
+
+    	$result = new BufferedQueryResultIterator($qb);
+    	
+    	$a = 'hola';
+    }
+    
     /** {@inheritdoc} */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,6 +84,47 @@ class CreditCardType extends AbstractType
             ]
         );
 		
+        $builder->add(
+        		'credit_card_value',
+        		'hidden',
+        		[
+        				'mapped' => true,
+        				'attr' => [
+        						'data-gateway' => true,
+        				],
+        		]
+        );
+        $creditsCards = [];
+        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.new_credit_card';
+        foreach ($this->paymentsTransactions as $paymentTransaction){
+        	$reference = $paymentTransaction->getReference ();
+        	$paymentID = $paymentTransaction->getId ();
+        	if (trim($reference)) {
+        		// Significa que tiene un reference que no esta vacio
+        		$response = $paymentTransaction->getResponse ();
+        		$token = $response['token'];
+        		$last4 = $response['last4'];
+        		$cardType = $response['cardType'];
+        		$expirationMonth = $response['expirationMonth'];
+        		$expirationYear = $response['expirationYear'];
+        		$expiresXXX = $cardType . ' xxxx xxxx xxxx ' . $last4 . ' (Expires ' .$expirationMonth . '/' . $expirationYear . ')';
+        		$creditsCards [$paymentID] = $expiresXXX;
+        	}
+        	 
+        }
+        
+
+        // xxxx xxxx xxxx 1111 (Expires 10/2019)
+        $builder->add('credit_cards_saved', ChoiceType::class, [
+        		'required' => true,
+        		'choices' => $creditsCards,
+        		'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+        		'attr' => [
+        				'data-credit-cards-saved' => true,
+        		],        		
+        		
+        ]);        
+        
         if ($options['zeroAmountAuthorizationEnabled']) {
             $builder->add(
                 'save_for_later',
@@ -83,5 +180,24 @@ class CreditCardType extends AbstractType
     public function getBlockPrefix()
     {
         return self::NAME;
+    }
+    
+    /**
+     * @return CustomerUser|null
+     */
+    protected function getLoggedCustomerUser()
+    {
+    	$token = $this->tokenStorage->getToken();
+    	if (!$token) {
+    		return null;
+    	}
+    
+    	$user = $token->getUser();
+    
+    	if ($user instanceof CustomerUser) {
+    		return $user;
+    	}
+    
+    	return null;
     }
 }

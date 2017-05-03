@@ -17,6 +17,7 @@ use Oro\Bundle\OrderBundle\Entity\OrderAddress;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Braintree\Exception\NotFound;
 
+
 class Braintree implements PaymentMethodInterface {
 	const TYPE = 'braintree';
 	const COMPLETE = 'complete';
@@ -78,6 +79,7 @@ class Braintree implements PaymentMethodInterface {
 		$this->propertyAccessor = $propertyAccessor;
 	}
 	
+
 	/**
 	 * {@inheritdoc}
 	 */

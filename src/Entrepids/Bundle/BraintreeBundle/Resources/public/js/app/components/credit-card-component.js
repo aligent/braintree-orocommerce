@@ -28,7 +28,9 @@ define(function(require) {
                 cardNumber: '[data-card-number]',
                 card_number: '[card-number]',
                 validation: '[data-validation]',
-                saveForLater: '[data-save-for-later]'
+                saveForLater: '[data-save-for-later]',
+                creditCardsSaved: '[data-credit-cards-saved]',
+                credit_card_value: 'input[name="credit_card_value"]',
             }
         },
 
@@ -70,6 +72,8 @@ define(function(require) {
         
         isTokenized: false,
         
+        valueCreditCard: null,
+        
         /**
          * @inheritDoc
          */
@@ -94,7 +98,8 @@ define(function(require) {
                     $.proxy(this.validate, this, this.options.selectors.card_number)
                 )
                 .on('focusout', this.options.selectors.cvv, $.proxy(this.validate, this, this.options.selectors.cvv))
-                .on('change', this.options.selectors.saveForLater, $.proxy(this.onSaveForLaterChange, this));
+                .on('change', this.options.selectors.saveForLater, $.proxy(this.onSaveForLaterChange, this))
+            	.on('change', this.options.selectors.creditCardsSaved, $.proxy(this.onCreditCardsSavedChange, this));
 
             mediator.on('checkout:place-order:response', this.handleSubmit, this);
             mediator.on('checkout:payment:method:changed', this.onPaymentMethodChanged, this);
@@ -162,23 +167,8 @@ define(function(require) {
                     eventData.responseData
                 );
 
-        //        if (resolvedEventData.paymentMethodSupportsValidation) {
                     mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
-
                     return;
-          //      }
-
-                var data = this.$el.find('[data-gateway]').serializeArray();
-                data.push({name: 'SECURETOKENID', value: resolvedEventData.SECURETOKENID});
-                data.push({name: 'SECURETOKEN', value: resolvedEventData.SECURETOKEN});
-
-                if (resolvedEventData.formAction && resolvedEventData.SECURETOKEN) {
-                    this.postUrl(resolvedEventData.formAction, data);
-
-                    return;
-                }
-
-                mediator.execute('redirectTo', {url: resolvedEventData.errorUrl}, {redirect: true});
             }
         },
 
@@ -374,6 +364,36 @@ define(function(require) {
             var $el = $(e.target);
             mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },
+        
+        /**
+         * @param {Object} e
+         */
+        onCreditCardsSavedChange: function(e) {
+            var $el = $(e.target);
+            var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
+            var mySampleForm = document.getElementById('my-sample-form');
+            var saveFLater = this.$form.find(this.options.selectors.saveForLater);
+            if ($value == "newCreditCard"){
+            	mySampleForm.hidden = false;
+            }
+            else{
+            	mySampleForm.hidden = true;
+
+            }
+            
+           /* var component = this;
+	    	var creditsCardsSaved1 = component.$el.find(component.options.selectors.creditCardsSaved);
+	    	creditsCardsSaved1.val($value);
+	    	$("[name='oro_workflow_transition']").append(creditsCardsSaved1[0]);  
+            $("[name='oro_workflow_transition']").submit();
+            */
+    		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
+    		credit_card_value.val($value);
+    		$("[name='oro_workflow_transition']").append(credit_card_value[0]);  
+            this.valueCreditCard = $value;
+
+            //mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
+        },       
         
         /**
          * @param {Object} eventData
