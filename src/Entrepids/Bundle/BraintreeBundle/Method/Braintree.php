@@ -271,19 +271,24 @@ class Braintree implements PaymentMethodInterface {
 		if ($sourcepaymenttransaction != null) {
 			$transactionOptions = $sourcepaymenttransaction->getTransactionOptions ();
 			$nonce = $transactionOptions ['nonce'];
-			
-			if (array_key_exists ( 'saveForLaterUse', $transactionOptions )) {
-				$saveForLater = $transactionOptions['saveForLaterUse'];
-			}
-			else{
-				$saveForLater = false;
+			if (array_key_exists ( 'credit_card_value', $transactionOptions )) {
+				$creditCardValue = $transactionOptions ['credit_card_value'];
+			} else {
+				$creditCardValue = "newCreditCard";
 			}
 			
-			
+			// bueno si el valor de $creditCardValue es newCreditCard es nueva y tengo que hacer todo lo que estaba hasta ahora
+			// en cambio sino es asi, eso significa que tiene que existir y es un numero, el cual es el número de transacción
+			// que tiene guardado el token
+			$customerData = $this->getCustomerDataPayment ( $sourcepaymenttransaction );
+			$shipingData = $this->getOrderAddressPayment ( $sourcepaymenttransaction, 'shippingAddress' );
+			$billingData = $this->getOrderAddressPayment ( $sourcepaymenttransaction, 'billingAddress' );
+
 			$responseTransaction = $paymentTransaction->getResponse ();
 			$request = ( array ) $paymentTransaction->getRequest ();
 			
 			$purchaseAction = $this->config->getPurchaseAction ();
+
 			// authorize or charge
 			// si charge mando true
 			// si authorize mando false
@@ -299,90 +304,152 @@ class Braintree implements PaymentMethodInterface {
 				$isCharge = true;
 			}
 			
+			if ( ( !empty($creditCardValue)) && ( strcmp ( $creditCardValue, "newCreditCard" ) != 0) ) {
 
-			
-			$customerData = $this->getCustomerDataPayment($sourcepaymenttransaction);
-			$shipingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'shippingAddress');
-			$billingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'billingAddress');
-
-			
-			$storeInVaultOnSuccess = false;
-			if ($saveForLater){
-				$storeInVaultOnSuccess =true; // aca esta el caso que tengo que guardar los datos de la tarjeta
-			}
-			else{
-				$storeInVaultOnSuccess = false; // o el usuario no selecciono el checkbox o por configuracion no esta habilitado
-			}
-			
-			// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
-			try {
-				$customer = $this->adapter->findCustomer ($customerData['id']);
-				$data = [
-						'amount' => $paymentTransaction->getAmount (),
-						'paymentMethodNonce' => $nonce,
-						'customerId' => $customerData['id'], // esto cuando ya existe el cliente y tengo que dar de alta
-						// una nueva tarjeta
-						'billing' => $billingData,
-						'shipping' => $shipingData,
-						'options' => [
-								'submitForSettlement' => $submitForSettlement,
-								'storeInVaultOnSuccess' => $storeInVaultOnSuccess
-						]
-				];
-			} catch ( NotFound $e ) {
-				$data = [
-						'amount' => $paymentTransaction->getAmount (),
-						'paymentMethodNonce' => $nonce,
-						'customer' => $customerData, // esto si es nuevo lo tengo que enviar
-						// 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
-						// una nueva tarjeta
-						'billing' => $billingData,
-						'shipping' => $shipingData,
-						'options' => [
-								'submitForSettlement' => $submitForSettlement,
-								'storeInVaultOnSuccess' => $storeInVaultOnSuccess
-						]
-				];
-
-			}
-
-			$response = $this->adapter->sale ( $data );
-			
-			if ($response->success || ! is_null ( $response->transaction )) {
-				// Esto es si chage
-				$transaction = $response->transaction;
+				$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
+						'id' => $creditCardValue,
+				]);
 				
 
-				if ($isCharge) {
-					$paymentTransaction->setAction ( self::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
+				$token = $paymentTransactionEntity->getReference();
+				// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+				try {
+					$customer = $this->adapter->findCustomer ( $customerData ['id'] );
+					$data = [
+							'amount' => $paymentTransaction->getAmount (),
+							'customerId' => $customerData ['id'], // esto cuando ya existe el cliente y tengo que dar de alta
+							// una nueva tarjeta
+							'billing' => $billingData,
+							'shipping' => $shipingData,
+					];
+				} catch ( NotFound $e ) {
+					$data = [
+							'amount' => $paymentTransaction->getAmount (),
+							'customer' => $customerData, // esto si es nuevo lo tengo que enviar
+							// 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
+							// una nueva tarjeta
+							'billing' => $billingData,
+							'shipping' => $shipingData,
+
+					];
 				}
 				
-				// Esto es si authorizr
-				if ($isAuthorize) {
-					$transactionID = $transaction->id;
-					$paymentTransaction->setAction ( self::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
+				$response = $this->adapter->creditCardsale ($token, $data );
+				if ($response->success || ! is_null ( $response->transaction )) {
+					// Esto es si chage
+					$transaction = $response->transaction;
+						
+					if ($isCharge) {
+						$paymentTransaction->setAction ( self::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
+					}
+						
+					// Esto es si authorizr
+					if ($isAuthorize) {
+						$transactionID = $transaction->id;
+						$paymentTransaction->setAction ( self::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
+					}
+						
+					$transactionOptions = $paymentTransaction->getTransactionOptions ();
+					$transactionOptions ['transactionId'] = $transactionID;
+					$paymentTransaction->setTransactionOptions ( $transactionOptions );
+					$sourcepaymenttransaction->setActive ( false );
+				} else {
+					$errorString = "";
+						
+					foreach ( $response->errors->deepAll () as $error ) {
+						$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+					}
+					$paymentTransaction->setAction ( self::VALIDATE )->setActive ( false )->setSuccessful ( false );
+					$sourcepaymenttransaction->setActive ( false )->setSuccessful ( false );
+				}				
+				
+			} else { // Esto siginifica que es una nueva tarjeta
+				
+				$saveForLater = false;
+				if (array_key_exists ( 'saveForLaterUse', $transactionOptions )) {
+					$saveForLater = $transactionOptions ['saveForLaterUse'];
 				}
 				
-				$transactionOptions = $paymentTransaction->getTransactionOptions ();
-				$transactionOptions ['transactionId'] = $transactionID;
-				$paymentTransaction->setTransactionOptions ( $transactionOptions );
-				//$paymentTransaction->setReference($reference);
-				// Para la parte del token id de la tarjeta de credito
-				if ($saveForLater){
-					$creditCardValuesResponse = $transaction->creditCard;
-					$token = $creditCardValuesResponse['token'];
-					$paymentTransaction->setReference($token);
-					$paymentTransaction->setResponse($creditCardValuesResponse);
-				}
-				$sourcepaymenttransaction->setActive ( false );
-			} else {
-				$errorString = "";
+
+
 				
-				foreach ( $response->errors->deepAll () as $error ) {
-					$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+			
+				$storeInVaultOnSuccess = false;
+				if ($saveForLater) {
+					$storeInVaultOnSuccess = true; // aca esta el caso que tengo que guardar los datos de la tarjeta
+				} else {
+					$storeInVaultOnSuccess = false; // o el usuario no selecciono el checkbox o por configuracion no esta habilitado
 				}
-				$paymentTransaction->setAction ( self::VALIDATE )->setActive ( false )->setSuccessful ( false );
-			}
+				
+				// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+				try {
+					$customer = $this->adapter->findCustomer ( $customerData ['id'] );
+					$data = [ 
+							'amount' => $paymentTransaction->getAmount (),
+							'paymentMethodNonce' => $nonce,
+							'customerId' => $customerData ['id'], // esto cuando ya existe el cliente y tengo que dar de alta
+							                                      // una nueva tarjeta
+							'billing' => $billingData,
+							'shipping' => $shipingData,
+							'options' => [ 
+									'submitForSettlement' => $submitForSettlement,
+									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
+							] 
+					];
+				} catch ( NotFound $e ) {
+					$data = [ 
+							'amount' => $paymentTransaction->getAmount (),
+							'paymentMethodNonce' => $nonce,
+							'customer' => $customerData, // esto si es nuevo lo tengo que enviar
+							                             // 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
+							                             // una nueva tarjeta
+							'billing' => $billingData,
+							'shipping' => $shipingData,
+							'options' => [ 
+									'submitForSettlement' => $submitForSettlement,
+									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
+							] 
+					];
+				}
+				
+				$response = $this->adapter->sale ( $data );
+				
+				if ($response->success || ! is_null ( $response->transaction )) {
+					// Esto es si chage
+					$transaction = $response->transaction;
+					
+					if ($isCharge) {
+						$paymentTransaction->setAction ( self::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
+					}
+					
+					// Esto es si authorizr
+					if ($isAuthorize) {
+						$transactionID = $transaction->id;
+						$paymentTransaction->setAction ( self::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
+					}
+					
+					$transactionOptions = $paymentTransaction->getTransactionOptions ();
+					$transactionOptions ['transactionId'] = $transactionID;
+					$paymentTransaction->setTransactionOptions ( $transactionOptions );
+					// $paymentTransaction->setReference($reference);
+					// Para la parte del token id de la tarjeta de credito
+					if ($saveForLater) {
+						$creditCardValuesResponse = $transaction->creditCard;
+						$token = $creditCardValuesResponse ['token'];
+						$paymentTransaction->setReference ( $token );
+						$paymentTransaction->setResponse ( $creditCardValuesResponse );
+					}
+					$sourcepaymenttransaction->setActive ( false );
+				} else {
+					$errorString = "";
+					
+					foreach ( $response->errors->deepAll () as $error ) {
+						$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+					}
+					$paymentTransaction->setAction ( self::VALIDATE )->setActive ( false )->setSuccessful ( false );
+					$sourcepaymenttransaction->setActive ( false )->setSuccessful ( false );
+				}
+			} // else de nuevaTarjeta de Credito
 		}
 	}
 	
@@ -395,9 +462,27 @@ class Braintree implements PaymentMethodInterface {
 		$paymentTransaction->setAmount ( self::ZERO_AMOUNT )->setCurrency ( 'USD' );
 		
 	
-		$nonce = $_POST ["payment_method_nonce"];
+		// sino esta la tarjeta temporalmete poner en false
 		$transactionOptions = $paymentTransaction->getTransactionOptions ();
+		if (array_key_exists ( 'credit_card_value', $_POST )) {
+			$credit_card_value = $_POST ['credit_card_value'];
+		} else {
+			$paymentTransaction->setSuccessful(false)
+			->setActive(false);
+			return [];
+		}		
+		
+		if (array_key_exists ( 'payment_method_nonce', $_POST )) {
+			$nonce = $_POST ["payment_method_nonce"];
+		}
+		else{
+			$nonce = null;
+		}
+		
+		
+
 		$transactionOptions ['nonce'] = $nonce;
+		$transactionOptions['credit_card_value'] = $credit_card_value;
 		$paymentTransaction->setTransactionOptions ( $transactionOptions );
 		
 		$paymentTransaction->setSuccessful ( true )->setAction ( self::VALIDATE )->setActive ( true );

@@ -72,8 +72,9 @@ define(function(require) {
         
         isTokenized: false,
         
-        valueCreditCard: null,
+        valueCreditCard: "newCreditCard",
         
+        isCreditCardSaved: false,
         /**
          * @inheritDoc
          */
@@ -167,6 +168,7 @@ define(function(require) {
                     eventData.responseData
                 );
 
+         
                     mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
                     return;
             }
@@ -387,10 +389,22 @@ define(function(require) {
 	    	$("[name='oro_workflow_transition']").append(creditsCardsSaved1[0]);  
             $("[name='oro_workflow_transition']").submit();
             */
+            //alert('Hey');
     		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
+    		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
     		credit_card_value.val($value);
-    		$("[name='oro_workflow_transition']").append(credit_card_value[0]);  
+    		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
+    		//document.querySelector('input[name="credit_card_value"]').value = $value;
             this.valueCreditCard = $value;
+            if (this.valueCreditCard != "newCreditCard"){
+            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isCreditCardSaved = true;
+            }
+            else{
+            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isCreditCardSaved = false;            	
+            }
+            //$("[name='oro_workflow_transition']").submit();
 
             //mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },       
@@ -401,15 +415,19 @@ define(function(require) {
         beforeTransit: function(eventData) {
         	//
         	if (this.isTokenized) {
-        		this.isTokenized = false;
+           		this.isTokenized = false;        		
         		var component = this;
-        		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
-        		payment_method_nonce.val(this.tokenizationPayload.nonce);
         		
-    	    	//var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-    	    	//$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
-    	    	
-        		eventData.stopped = false;
+           		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
+           		if (!this.isCreditCardSaved){
+           			payment_method_nonce.val(this.tokenizationPayload.nonce); 
+        		}
+           		else{
+           			payment_method_nonce.val("noValue"); 
+           		}
+
+           		eventData.stopped = false;
+        		
         	} else {
         		eventData.stopped = true;
         		
@@ -419,7 +437,7 @@ define(function(require) {
             	
             	var deferred = $.Deferred();
             	var tokenizationCallback = function (error, payload) {
-            	    if (error) {
+            	    if (error && !component.isCreditCardSaved) {
             			deferred.reject({error});
             		} else {
     	        		deferred.resolve({payload});
@@ -436,11 +454,22 @@ define(function(require) {
             	    	component.tokenizationPayload = payload.payload;
             	    	
             	    	component.isTokenized = true;
+            	    	if (!component.isCreditCardSaved){
+                	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+                	    	payment_method_nonce.val(component.tokenizationPayload.nonce);
+                	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);               	    		
+            	    	}
+            	    	else{
+                	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+                	    	payment_method_nonce.val("noValue");
+                	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]); 
+            	    		
+            	    	}
             	    	
-            	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-            	    	payment_method_nonce.val(component.tokenizationPayload.nonce);
-            	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);          	    	
-            	    	
+                        document.querySelector('input[name="credit_card_value"]').value = component.valueCreditCard;
+                		var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
+                		credit_card_value.val(component.valueCreditCard);
+                		$("[name='oro_workflow_transition']").append(credit_card_value[0]);
             	    	$("[name='oro_workflow_transition']").submit();
             	    }, 
             	    function (error) {
