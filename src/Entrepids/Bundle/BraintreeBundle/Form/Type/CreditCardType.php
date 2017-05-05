@@ -42,8 +42,7 @@ class CreditCardType extends AbstractType
     
     
     private function getTransactionCustomerORM (){
-    	$a = 'hola';
-    
+   
     	$qb = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->createQueryBuilder('pt');
     	$res =  $qb->select('response')
     	->where(
@@ -67,7 +66,7 @@ class CreditCardType extends AbstractType
 
     	$result = new BufferedQueryResultIterator($qb);
     	
-    	$a = 'hola';
+
     }
     
     /** {@inheritdoc} */
@@ -84,6 +83,22 @@ class CreditCardType extends AbstractType
             ]
         );
 		
+        if ($options['zeroAmountAuthorizationEnabled']) {
+        	$builder->add(
+        			'save_for_later',
+        			'checkbox',
+        			[
+        					'required' => false,
+        					'label' => 'oro.paypal.credit_card.save_for_later.label',
+        					'mapped' => false,
+        					'data' => false,
+        					'attr' => [
+        							'data-save-for-later' => true,
+        					],
+        			]
+        	);
+        }
+        
         $builder->add(
         		'credit_card_value',
         		'hidden',
@@ -99,7 +114,7 @@ class CreditCardType extends AbstractType
         foreach ($this->paymentsTransactions as $paymentTransaction){
         	$reference = $paymentTransaction->getReference ();
         	$paymentID = $paymentTransaction->getId ();
-        	if (trim($reference)) {
+        	if (trim($reference)) { // esto porque más arriba tengo que obtener los pagos en donde reference no sea null
         		// Significa que tiene un reference que no esta vacio
         		$response = $paymentTransaction->getResponse ();
         		$token = $response['token'];
@@ -113,33 +128,23 @@ class CreditCardType extends AbstractType
         	 
         }
         
-
-        // xxxx xxxx xxxx 1111 (Expires 10/2019)
-        $builder->add('credit_cards_saved', ChoiceType::class, [
-        		'required' => true,
-        		'choices' => $creditsCards,
-        		'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
-        		'attr' => [
-        				'data-credit-cards-saved' => true,
-        		],        		
-        		
-        ]);        
+		$creditsCardsCount = count($creditsCards);
         
-        if ($options['zeroAmountAuthorizationEnabled']) {
-            $builder->add(
-                'save_for_later',
-                'checkbox',
-                [
-                    'required' => false,
-                    'label' => 'oro.paypal.credit_card.save_for_later.label',
-                    'mapped' => false,
-                    'data' => true,
-                    'attr' => [
-                        'data-save-for-later' => true,
-                    ],
-                ]
-            );
-        }
+		if ($creditsCardsCount > 1){
+			$builder->add('credit_cards_saved', ChoiceType::class, [
+					'required' => true,
+					'choices' => $creditsCards,
+					'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+					'attr' => [
+							'data-credit-cards-saved' => true,
+					],
+			
+			]);			
+		}
+		
+        
+        
+
         
     }
 

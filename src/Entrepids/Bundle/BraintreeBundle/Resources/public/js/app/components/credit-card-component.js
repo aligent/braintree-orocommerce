@@ -373,7 +373,7 @@ define(function(require) {
         onCreditCardsSavedChange: function(e) {
             var $el = $(e.target);
             var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
-            var mySampleForm = document.getElementById('my-sample-form');
+            var mySampleForm = document.getElementById('braintree-custom-cc-form');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
             if ($value == "newCreditCard"){
             	mySampleForm.hidden = false;

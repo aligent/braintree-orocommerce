@@ -10,7 +10,7 @@ require(['braintree'], function (braintree) {
     		alert(obj.nonce);
     		document.querySelector('input[name="payment_method_nonce"]').value = obj.nonce;
     		},
-        id: "my-sample-form",
+        id: "braintree-custom-cc-form",
         hostedFields: {
           number: {
             selector: "#card-number",
