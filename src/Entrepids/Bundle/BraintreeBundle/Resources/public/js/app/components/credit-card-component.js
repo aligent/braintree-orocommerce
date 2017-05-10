@@ -31,6 +31,7 @@ define(function(require) {
                 saveForLater: '[data-save-for-later]',
                 creditCardsSaved: '[data-credit-cards-saved]',
                 credit_card_value: 'input[name="credit_card_value"]',
+                braintree_client_token: 'input[name="braintree_client_token"]',
             }
         },
 
@@ -113,7 +114,7 @@ define(function(require) {
             var component = this;
             
         	client.create({
-        		authorization: 'sandbox_xbhxzdjx_n2w2d522qmdbjjv9'
+        		authorization: component.$el.find(component.options.selectors.braintree_client_token).val()
         		}, function (err, clientInstance) {
         			if (err) {
         				console.error(err);

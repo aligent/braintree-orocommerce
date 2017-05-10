@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 
 class CreditCardType extends AbstractType
 {
@@ -29,14 +30,17 @@ class CreditCardType extends AbstractType
     
     protected $paymentsTransactions;
     
+    protected $adapter;
+    
 	/**
 	 * 
 	 * @param DoctrineHelper $doctrineHelper
 	 * @param TokenStorageInterface $tokenStorage
 	 */
-    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage){
+    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, BraintreeAdapter $adapter){
     	$this->doctrineHelper = $doctrineHelper; 
     	$this->tokenStorage = $tokenStorage;
+    	$this->adapter = $adapter;
     	$this->getTransactionCustomerORM();
     }
     
@@ -98,6 +102,17 @@ class CreditCardType extends AbstractType
         			]
         	);
         }
+        
+        $braintreeClientToken = $this->adapter->generate();
+        
+        $builder->add(
+        		'braintree_client_token',
+        		'hidden',
+        		[
+        				'mapped' => true,
+        				'data' => $braintreeClientToken,
+        		]
+        );
         
         $builder->add(
         		'credit_card_value',
