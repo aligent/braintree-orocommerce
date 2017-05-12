@@ -374,14 +374,13 @@ define(function(require) {
         onCreditCardsSavedChange: function(e) {
             var $el = $(e.target);
             var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
-            var mySampleForm = document.getElementById('braintree-custom-cc-form');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
             if ($value == "newCreditCard"){
-            	mySampleForm.hidden = false;
-            }
-            else{
-            	mySampleForm.hidden = true;
-
+            	$('#braintree-custom-cc-form').show();
+            	$('#save_for_later_field_row').show();
+            } else {
+            	$('#braintree-custom-cc-form').hide();
+            	$('#save_for_later_field_row').hide();
             }
             
            /* var component = this;

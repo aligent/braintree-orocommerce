@@ -6,17 +6,10 @@
 {%- endblock form_label -%}
 
 {% block _entrepids_braintree_credit_card_payment_credit_card_cvv_widget %}
-    {% set attr = layout_attr_defaults(attr, {
-        '~class': ' input input--short',
-        'autocomplete': 'off'
-    }) %}
-
-    {%- set type = type|default('password') -%}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-    <span class="ttip__wrap">
+	<span class="ttip__wrap">
         <a href="javascript: void(0);" class="ttip__toggle">{{ 'entrepids.braintree.methods.whats_this'|trans }}</a>
         <span class="ttip">
-            <span class="ttip__content">{{ 'oro.paypal.methods.tooltip'|trans|nl2br }}</span>
+            <span class="ttip__content">{{ 'entrepids.braintree.methods.tooltip'|trans|nl2br }}</span>
         </span>
     </span>
 {% endblock %}
@@ -53,22 +46,52 @@
                 {% endfor %}
             </ul>
             <div class="{{ class_prefix }}__form__payment-methods__form" data-credit-card-form="data-credit-card-form">
-
-            	<form id="braintree-custom-cc-form" method="post">
-				  <label for="card-number">Card Number</label>
-				  <div id="card-number"></div>
-
-				  <label for="expiration-date">Expiration Date</label>
-				  <div id="expiration-date"></div>
-				  				
-				  <label for="cvv">CVV</label>
-				  <div id="cvv"></div>
+				{% if form.credit_cards_saved is defined %}
+                <div class="{{ class_prefix }}__form__row">
+                    {{ form_row(form.credit_cards_saved, {class_prefix: class_prefix}) }}
+                </div>
+                {% endif %}
+                
+            	<form id="braintree-custom-cc-form" method="post" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
+	            	<div class="{{ class_prefix }}__form__row">
+	            		<fieldset class="checkout__form__row">
+        					<div class="checkout__form__col form__col form__col_x12">    
+        						<label for="card-number" class="label label--full required">Card Number</label>
+            				  	<div id="card-number" class="input input--full braintree-input" style="height: 40px"></div>
+				  			</div>
+    					</fieldset>
+					</div>
+					<div class="{{ class_prefix }}__form__row">
+	            		<fieldset class="checkout__form__row">
+        					<div class="checkout__form__col form__col form__col_x12">
+				  				<label for="expiration-date" class="label label--full required">Expiration Date</label>
+				  				<div id="expiration-date" class="input input--short braintree-input" style="height: 40px"></div>
+				  			</div>
+    					</fieldset>
+					</div>
+					<div class="{{ class_prefix }}__form__row">
+	            		<fieldset class="checkout__form__row">
+        					<div class="checkout__form__col form__col form__col_x12">	
+				  				<label for="cvv" class="label label--full required">CVV</label>
+				  				<div id="cvv" class="input input--short braintree-input" style="height: 40px"></div>{{ block('_entrepids_braintree_credit_card_payment_credit_card_cvv_widget') }}
+				  			</div>
+    					</fieldset>
+					</div>	
 				</form>
-				{% for child in form.children %}
-                    <div class="{{ class_prefix }}__form__row">
-                        {{ form_row(child, {class_prefix: class_prefix}) }}
-                    </div>
-                {% endfor %}
+				{% if form.save_for_later is defined %}
+                <div class="{{ class_prefix }}__form__row" id="{{ form.save_for_later.vars.name }}_field_row" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
+                    {{ form_row(form.save_for_later, {class_prefix: class_prefix}) }}
+                </div>
+                {% endif %}
+                <div class="{{ class_prefix }}__form__row">
+                    {{ form_row(form.payment_method_nonce, {class_prefix: class_prefix}) }}
+                </div>
+                <div class="{{ class_prefix }}__form__row">
+                    {{ form_row(form.braintree_client_token, {class_prefix: class_prefix}) }}
+                </div>
+                <div class="{{ class_prefix }}__form__row">
+                    {{ form_row(form.credit_card_value, {class_prefix: class_prefix}) }}
+                </div>
             </div>
         </div>
     </div>

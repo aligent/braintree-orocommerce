@@ -86,6 +86,39 @@ class CreditCardType extends AbstractType
                 ],
             ]
         );
+        
+        $creditsCards = [];
+        foreach ($this->paymentsTransactions as $paymentTransaction){
+        	$reference = $paymentTransaction->getReference ();
+        	$paymentID = $paymentTransaction->getId ();
+        	if (trim($reference)) { // esto porque más arriba tengo que obtener los pagos en donde reference no sea null
+        		// Significa que tiene un reference que no esta vacio
+        		$response = $paymentTransaction->getResponse ();
+        		$token = $response['token'];
+        		$last4 = $response['last4'];
+        		$cardType = $response['cardType'];
+        		$expirationMonth = $response['expirationMonth'];
+        		$expirationYear = $response['expirationYear'];
+        		$expiresXXX = $cardType . ' | xxxxxxxxxxxx' . $last4 . ' | Expires ' .$expirationMonth . '/' . $expirationYear;
+        		$creditsCards [$paymentID] = $expiresXXX;
+        	}
+        
+        }
+        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.new_credit_card';
+        
+        $creditsCardsCount = count($creditsCards);
+        
+        if ($creditsCardsCount > 1){
+        	$builder->add('credit_cards_saved', ChoiceType::class, [
+        			'required' => true,
+        			'choices' => $creditsCards,
+        			'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+        			'attr' => [
+        					'data-credit-cards-saved' => true,
+        			],
+        				
+        	]);
+        }
 		
         if ($options['zeroAmountAuthorizationEnabled']) {
         	$builder->add(
@@ -124,43 +157,7 @@ class CreditCardType extends AbstractType
         				],
         		]
         );
-        $creditsCards = [];
-        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.new_credit_card';
-        foreach ($this->paymentsTransactions as $paymentTransaction){
-        	$reference = $paymentTransaction->getReference ();
-        	$paymentID = $paymentTransaction->getId ();
-        	if (trim($reference)) { // esto porque más arriba tengo que obtener los pagos en donde reference no sea null
-        		// Significa que tiene un reference que no esta vacio
-        		$response = $paymentTransaction->getResponse ();
-        		$token = $response['token'];
-        		$last4 = $response['last4'];
-        		$cardType = $response['cardType'];
-        		$expirationMonth = $response['expirationMonth'];
-        		$expirationYear = $response['expirationYear'];
-        		$expiresXXX = $cardType . ' xxxx xxxx xxxx ' . $last4 . ' (Expires ' .$expirationMonth . '/' . $expirationYear . ')';
-        		$creditsCards [$paymentID] = $expiresXXX;
-        	}
-        	 
-        }
-        
-		$creditsCardsCount = count($creditsCards);
-        
-		if ($creditsCardsCount > 1){
-			$builder->add('credit_cards_saved', ChoiceType::class, [
-					'required' => true,
-					'choices' => $creditsCards,
-					'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
-					'attr' => [
-							'data-credit-cards-saved' => true,
-					],
-			
-			]);			
-		}
-		
-        
-        
-
-        
+                
     }
 
     /**
