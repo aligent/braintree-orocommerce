@@ -2,19 +2,20 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
+use Doctrine\Common\Collections\Criteria;
+use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
-use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CreditCardType extends AbstractType
 {
@@ -31,16 +32,19 @@ class CreditCardType extends AbstractType
     protected $paymentsTransactions;
     
     protected $adapter;
+
+    protected $translator;
     
 	/**
 	 * 
 	 * @param DoctrineHelper $doctrineHelper
 	 * @param TokenStorageInterface $tokenStorage
 	 */
-    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, BraintreeAdapter $adapter){
+    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, BraintreeAdapter $adapter, TranslatorInterface $translator){
     	$this->doctrineHelper = $doctrineHelper; 
     	$this->tokenStorage = $tokenStorage;
     	$this->adapter = $adapter;
+    	$this->translator = $translator;
     	$this->getTransactionCustomerORM();
     }
     
@@ -94,17 +98,11 @@ class CreditCardType extends AbstractType
         	if (trim($reference)) { // esto porque más arriba tengo que obtener los pagos en donde reference no sea null
         		// Significa que tiene un reference que no esta vacio
         		$response = $paymentTransaction->getResponse ();
-        		$token = $response['token'];
-        		$last4 = $response['last4'];
-        		$cardType = $response['cardType'];
-        		$expirationMonth = $response['expirationMonth'];
-        		$expirationYear = $response['expirationYear'];
-        		$expiresXXX = $cardType . ' | xxxxxxxxxxxx' . $last4 . ' | Expires ' .$expirationMonth . '/' . $expirationYear;
-        		$creditsCards [$paymentID] = $expiresXXX;
+        		$creditsCards [$paymentID] = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
         	}
         
         }
-        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.new_credit_card';
+        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
         
         $creditsCardsCount = count($creditsCards);
         

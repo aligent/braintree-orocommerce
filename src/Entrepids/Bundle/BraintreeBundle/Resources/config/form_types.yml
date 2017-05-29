@@ -5,6 +5,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@security.token_storage'
             - '@entrepids_braintree.braintree.model.adapter.badapter'
+            - '@translator'
         tags:
             - { name: form.type, alias: entrepids_braintree_credit_card }
 

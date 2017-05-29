@@ -22,16 +22,7 @@
     <div class="{{ class_prefix }}__form__payment-methods"
         data-page-component-module="{{ creditCardComponent }}"
         data-page-component-options="{{ creditCardComponentOptions|json_encode }}">
-        {% if isAuthorizedCard %}
-            <div class="{{ class_prefix }}__form__payment-methods-authorized-card" data-authorized-card>
-                <p>
-                    {{ 'entrepids.braintree.braintreeflow.authorized_card'|trans({'{{ last4 }}': creditCardComponentOptions.acct}) }}
-                </p>
-                <a href="javascript: void(0);" class="{{ class_prefix }}__form__payment-methods-different-card-handle" data-different-card-handle>
-                    {{ 'entrepids.braintree.braintreeflow.use_different_card'|trans }}
-                </a>
-            </div>
-        {% endif %}
+        
         <div {% if isAuthorizedCard %} style="display: none;" data-different-card{% endif %}>
             {% if isAuthorizedCard %}
                 <div class="{{ class_prefix }}__form__payment-methods-different-card">
@@ -56,7 +47,7 @@
 	            	<div class="{{ class_prefix }}__form__row">
 	            		<fieldset class="checkout__form__row">
         					<div class="checkout__form__col form__col form__col_x12">    
-        						<label for="card-number" class="label label--full required">Card Number</label>
+        						<label for="card-number" class="label label--full required">{{ 'entrepids.braintree.credit_card.card_number.label'|trans }}</label>
             				  	<div id="card-number" class="input input--full braintree-input" style="height: 40px"></div>
 				  			</div>
     					</fieldset>
@@ -64,7 +55,7 @@
 					<div class="{{ class_prefix }}__form__row">
 	            		<fieldset class="checkout__form__row">
         					<div class="checkout__form__col form__col form__col_x12">
-				  				<label for="expiration-date" class="label label--full required">Expiration Date</label>
+				  				<label for="expiration-date" class="label label--full required">{{ 'entrepids.braintree.credit_card.expiration_date.label'|trans }}</label>
 				  				<div id="expiration-date" class="input input--short braintree-input" style="height: 40px"></div>
 				  			</div>
     					</fieldset>
@@ -72,7 +63,7 @@
 					<div class="{{ class_prefix }}__form__row">
 	            		<fieldset class="checkout__form__row">
         					<div class="checkout__form__col form__col form__col_x12">	
-				  				<label for="cvv" class="label label--full required">CVV</label>
+				  				<label for="cvv" class="label label--full required">{{ 'entrepids.braintree.credit_card.cvv2.label'|trans }}</label>
 				  				<div id="cvv" class="input input--short braintree-input" style="height: 40px"></div>{{ block('_entrepids_braintree_credit_card_payment_credit_card_cvv_widget') }}
 				  			</div>
     					</fieldset>

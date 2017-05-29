@@ -60,20 +60,16 @@ entrepids:
                     features_display_cc_types.label: 'Display Card Types'   
 
         credit_card:
-            card_number.label: 'Credit Card Number'
+            card_number.label: 'Card Number'
             expiration_date.label: 'Expiration Date'
             cvv2.label: 'CVV'
             save_for_later.label: 'Save this card for later use'
  
         braintreeflow:
-            authorized_card: 'Credit Card  **** **** **** {{ last4 }}'
-            use_different_card: 'Use a different card >'
-            use_authorized_card: '< Use an existing card'
-            new_credit_card: 'New Credit Card'
+            existing_card: '{{brand}} | xxxxxxxxxxxx{{last4}} | Expires {{month}}/{{year}}'
+            use_different_card: 'Use a different card'
+            use_authorized_card: 'Use an existing card'
              
-        braintreeflow_checkout:
-            redirect_to_braintree: 'You will be redirected to Braintree website to complete your purchase after the order review step.'                      
-
 oro:
     payment:
         admin:
