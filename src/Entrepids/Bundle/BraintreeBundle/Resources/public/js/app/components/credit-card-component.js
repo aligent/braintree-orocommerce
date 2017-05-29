@@ -8,7 +8,6 @@ define(function(require) {
     var BaseComponent = require('oroui/js/app/components/base/component');
     var client = require('braintree/js/braintree/braintree-client');
     var hostedFields = require('braintree/js/braintree/braintree-hosted-fields');
-    require('jquery.validate');
 
     CreditCardComponent = BaseComponent.extend({
         /**
@@ -18,16 +17,8 @@ define(function(require) {
             paymentMethod: null,
             allowedCreditCards: [],
             selectors: {
-                month: '[data-expiration-date-month]',
-                year: '[data-expiration-date-year]',
-                hiddenDate: 'input[name="EXPDATE"]',
                 payment_method_nonce: 'input[name="payment_method_nonce"]',
                 form: '[data-credit-card-form]',
-                expirationDate: '[data-expiration-date]',
-                cvv: '[data-card-cvv]',
-                cardNumber: '[data-card-number]',
-                card_number: '[card-number]',
-                validation: '[data-validation]',
                 saveForLater: '[data-save-for-later]',
                 creditCardsSaved: '[data-credit-cards-saved]',
                 credit_card_value: 'input[name="credit_card_value"]',
@@ -44,16 +35,6 @@ define(function(require) {
          * @property {jQuery}
          */
         $el: null,
-
-        /**
-         * @property string
-         */
-        month: null,
-
-        /**
-         * @property string
-         */
-        year: null,
 
         /**
          * @property {jQuery}
@@ -73,6 +54,8 @@ define(function(require) {
         
         isTokenized: false,
         
+        isFormValid: false,
+        
         valueCreditCard: "newCreditCard",
         
         isCreditCardSaved: false,
@@ -82,24 +65,11 @@ define(function(require) {
         initialize: function(options) {
             this.options = _.extend({}, this.options, options);
 
-            $.validator.loadMethod('braintree/js/validator/credit-card-number');
-            $.validator.loadMethod('braintree/js/validator/credit-card-type');
-            $.validator.loadMethod('braintree/js/validator/credit-card-expiration-date');
-            $.validator.loadMethod('braintree/js/validator/credit-card-expiration-date-not-blank');
-
             this.$el = this.options._sourceElement;
 
             this.$form = this.$el.find(this.options.selectors.form);
 
             this.$el
-                .on('change', this.options.selectors.month, $.proxy(this.collectMonthDate, this))
-                .on('change', this.options.selectors.year, $.proxy(this.collectYearDate, this))
-                .on(
-                    'focusout',
-                    this.options.selectors.card_number,
-                    $.proxy(this.validate, this, this.options.selectors.card_number)
-                )
-                .on('focusout', this.options.selectors.cvv, $.proxy(this.validate, this, this.options.selectors.cvv))
                 .on('change', this.options.selectors.saveForLater, $.proxy(this.onSaveForLaterChange, this))
             	.on('change', this.options.selectors.creditCardsSaved, $.proxy(this.onCreditCardsSavedChange, this));
 
@@ -117,13 +87,13 @@ define(function(require) {
         		authorization: component.$el.find(component.options.selectors.braintree_client_token).val()
         		}, function (err, clientInstance) {
         			if (err) {
-        				console.error(err);
+        				console.log(err);
         				return;
         			}
 
         		hostedFields.create({
         			client: clientInstance,
-        		    fields: {
+        			fields: {
         		    	number: {
         		    		selector: '#card-number',
         		    		placeholder: '1111 1111 1111 1111'
@@ -134,15 +104,38 @@ define(function(require) {
         		    	},
         		    	expirationDate: {
         		    		selector: '#expiration-date',
-        		    		placeholder: '10 / 2019'
+        		    		placeholder: '10 / ' + ((new Date).getFullYear() + 2)
         		    	}
         		    }
         		  	}, function (err, hostedFieldsInst) {
         		  		component.hostedFieldsInstance = hostedFieldsInst;
         		  		if (err) {
-        		  			console.error(err);
+        		  			console.log(err);
         		  			return;
         		  		}
+        		  		
+        		  		component.hostedFieldsInstance.on('validityChange', function (event) {
+        		  			  
+	        		  	    var field = event.fields[event.emittedBy];
+	
+	        		        if (field.isValid) {
+	        		        	$(field.container).removeClass('error');
+	        		        	if (event.emittedBy === 'expirationDate') {
+	        		        		if (!event.fields.expirationDate.isValid ) {
+	        		        			return;
+	        		        		}
+	        		        	}
+	        		        } else if (field.isPotentiallyValid) {
+	        		        	$(field.container).removeClass('error');
+	        		        } else {
+	        		        	$(field.container).addClass('error');
+	        		        }
+	        		        
+	        		        var formValid = Object.keys(event.fields).every(function (key) {
+	        		  	        return event.fields[key].isValid;
+	        		  	    });
+	        		        component.isFormValid = formValid;
+        		  	    });
         		  	});
             });
         },
@@ -175,56 +168,6 @@ define(function(require) {
             }
         },
 
-        /**
-         * @param {String} formAction
-         * @param {Object} data
-         */
-        postUrl: function(formAction, data) {
-            var $form = $('<form action="' + formAction + '" method="POST">');
-            _.each(data, function(field) {
-                var $field = $('<input>')
-                    .prop('type', 'hidden')
-                    .prop('name', field.name)
-                    .val(field.value);
-
-                $form.append($field);
-            });
-
-            $form.submit();
-        },
-
-        /**
-         * @param {jQuery.Event} e
-         */
-        collectMonthDate: function(e) {
-            this.month = e.target.value;
-
-            this.setExpirationDate();
-            this.validateIfMonthAndYearNotBlank();
-        },
-
-        /**
-         * @param {jQuery.Event} e
-         */
-        collectYearDate: function(e) {
-            this.year = e.target.value;
-            this.setExpirationDate();
-            this.validateIfMonthAndYearNotBlank();
-        },
-
-        validateIfMonthAndYearNotBlank: function () {
-            this.validate(this.options.selectors.expirationDate);
-        },
-
-        setExpirationDate: function() {
-            var hiddenExpirationDate = this.$el.find(this.options.selectors.hiddenDate);
-            if (this.month && this.year) {
-                hiddenExpirationDate.val(this.month + this.year);
-            } else {
-                hiddenExpirationDate.val('');
-            }
-        },
-
         dispose: function() {
             if (this.disposed || !this.disposable) {
                 return;
@@ -246,82 +189,8 @@ define(function(require) {
         /**
          * @param {String} elementSelector
          */
-        validate: function(elementSelector) {
-            var virtualForm = $('<form>');
-            var appendElement;
-            if (elementSelector) {
-                appendElement = this.$form.find(elementSelector).clone();
-            } else {
-                appendElement = this.$form.clone();
-            }
-
-            virtualForm.append(appendElement);
-
-            var self = this;
-            var validator = virtualForm.validate({
-                ignore: '', // required to validate all fields in virtual form
-                errorPlacement: function(error, element) {
-                    var $el = self.$form.find('#' + $(element).attr('id'));
-                    var parentWithValidation = $el.parents(self.options.selectors.validation);
-
-                    $el.addClass('error');
-                    
-                    if (parentWithValidation.length) {
-                        error.appendTo(parentWithValidation.first());
-                    } else {
-                        error.appendTo($el.parent());
-                    }
-                }
-            });
-
-            virtualForm.find('select').each(function(index, item) {
-                //set new select to value of old select
-                //http://stackoverflow.com/questions/742810/clone-isnt-cloning-select-values
-                $(item).val(self.$form.find('select').eq(index).val());
-            });
-
-
-            // Add validator to form
-            $.data(virtualForm, 'validator', validator);
-
-            // Add CC type validation rule
-            var cardNumberField = this.$form.find(this.options.selectors.card_number);
-            var cardNumberValidation = cardNumberField.data('validation');
-           /* var creditCardTypeValidator = cardNumberField.data('credit-card-type-validator');
-
-            _.extend(cardNumberValidation[creditCardTypeValidator],
-                {allowedCreditCards: this.options.allowedCreditCards}
-            );*/
-
-            var errors;
-
-            if (elementSelector) {
-                errors = this.$form.find(elementSelector).parent();
-            } else {
-                errors = this.$form;
-            }
-
-            errors.find(validator.settings.errorElement + '.' + validator.settings.errorClass).remove();
-            errors.parent().find('.error').removeClass('error');
-
-            return validator.form();
-        },
-
-        /**
-         * @param {Boolean} state
-         */
-        setGlobalPaymentValidate: function(state) {
-            this.paymentValidationRequiredComponentState = state;
-            mediator.trigger('checkout:payment:validate:change', state);
-        },
-
-        /**
-         * @returns {Boolean}
-         */
-        getGlobalPaymentValidate: function() {
-            var validateValueObject = {};
-            mediator.trigger('checkout:payment:validate:get-value', validateValueObject);
-            return validateValueObject.value;
+        validate: function() {
+            return this.isFormValid;
         },
 
         /**
@@ -356,7 +225,6 @@ define(function(require) {
         },
 
         onCurrentPaymentMethodSelected: function() {
-            this.setGlobalPaymentValidate(this.paymentValidationRequiredComponentState);
             this.setSaveForLaterBasedOnForm();
         },
 
@@ -473,7 +341,6 @@ define(function(require) {
             	    	$("[name='oro_workflow_transition']").submit();
             	    }, 
             	    function (error) {
-            	    	//TODO: Mostrar algun error por pantalla
             	    	component.tokenizationError = error.error;
             	    }
             	);
