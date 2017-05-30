@@ -2,20 +2,18 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method;
 
+use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
+use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\OrderBundle\Entity\OrderAddress;
+use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Oro\Bundle\PaymentBundle\Provider\ExtractOptionsProvider;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\PaymentBundle\Provider\SurchargeProvider;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Oro\Bundle\OrderBundle\Entity\OrderAddress;	
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
-use Braintree\Exception\NotFound;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 class Braintree implements PaymentMethodInterface {
@@ -29,11 +27,6 @@ class Braintree implements PaymentMethodInterface {
 	private $config;
 	
 	/**
-	 * @var RouterInterface
-	 */
-	protected $router;
-	
-	/**
 	 *
 	 * @var BraintreeAdapter
 	 */
@@ -45,11 +38,6 @@ class Braintree implements PaymentMethodInterface {
 	protected $doctrineHelper;
 	
 	/**
-	 * @var ExtractOptionsProvider
-	 */
-	protected $optionsProvider;
-	
-	/**
 	 * @var PropertyAccessor
 	 */
 	protected $propertyAccessor;
@@ -59,24 +47,26 @@ class Braintree implements PaymentMethodInterface {
 	 */
 	protected $surchargeProvider;
 	
+	/** @var Session */
+	protected $session;
+	
+	protected $translator;
+	
 	/**
 	 *
-	 * @param BraintreeConfigInterface $config        	
-	 * @param RouterInterface $router        	
+	 * @param BraintreeConfigInterface $config        	    	
 	 * @param BraintreeAdapter $adapter        	
-	 * @param DoctrineHelper $doctrineHelper        	
-	 * @param ExtractOptionsProvider $optionsProvider        	
-	 * @param SurchargeProvider $surchargeProvider        	
+	 * @param DoctrineHelper $doctrineHelper        	   	
 	 * @param PropertyAccessor $propertyAccessor        	
 	 */
-	public function __construct(BraintreeConfigInterface $config, RouterInterface $router, BraintreeAdapter $adapter, DoctrineHelper $doctrineHelper, ExtractOptionsProvider $optionsProvider, SurchargeProvider $surchargeProvider, PropertyAccessor $propertyAccessor) {
+	public function __construct(BraintreeConfigInterface $config, BraintreeAdapter $adapter, DoctrineHelper $doctrineHelper, 
+			PropertyAccessor $propertyAccessor, Session $session, TranslatorInterface $translator) {
 		$this->config = $config;
-		$this->router = $router;
 		$this->adapter = $adapter;
 		$this->doctrineHelper = $doctrineHelper;
-		$this->optionsProvider = $optionsProvider;
-		$this->surchargeProvider = $surchargeProvider;
 		$this->propertyAccessor = $propertyAccessor;
+		$this->session = $session;
+		$this->translator = $translator;
 	}
 	
 
@@ -355,12 +345,19 @@ class Braintree implements PaymentMethodInterface {
 					$sourcepaymenttransaction->setActive ( false );
 				} else {
 					$errorString = "";
-						
 					foreach ( $response->errors->deepAll () as $error ) {
-						$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+						$errorString .= $error->message . " [" . $error->code .  "]\n";
 					}
+					
 					$paymentTransaction->setAction ( self::VALIDATE )->setActive ( false )->setSuccessful ( false );
 					$sourcepaymenttransaction->setActive ( false )->setSuccessful ( false );
+					
+					$this->setErrorMessage($errorString);
+					
+					return [
+						'message' => $errorString,
+						'successful' => false
+					];
 				}				
 				
 			} else { // Esto siginifica que es una nueva tarjeta
@@ -442,12 +439,19 @@ class Braintree implements PaymentMethodInterface {
 					$sourcepaymenttransaction->setActive ( false );
 				} else {
 					$errorString = "";
-					
 					foreach ( $response->errors->deepAll () as $error ) {
-						$errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+						$errorString .= $error->message . " [" . $error->code .  "]\n";
 					}
+					
 					$paymentTransaction->setAction ( self::VALIDATE )->setActive ( false )->setSuccessful ( false );
 					$sourcepaymenttransaction->setActive ( false )->setSuccessful ( false );
+					
+					$this->setErrorMessage($errorString);
+					
+					return [
+						'message' => $errorString,
+						'successful' => false 
+					];
 				}
 			} // else de nuevaTarjeta de Credito
 		}
@@ -690,5 +694,14 @@ class Braintree implements PaymentMethodInterface {
 		}
 		else
 			return false;
+	}
+	
+	private function setErrorMessage($errorMessage)
+	{
+		$flashBag = $this->session->getFlashBag();
+	
+		if (!$flashBag->has('error')) {
+			$flashBag->add('error', $this->translator->trans('entrepids.braintree.result.error', ['{{errorMessage}}' => $errorMessage]));
+		}
 	}
 }

@@ -69,6 +69,9 @@ entrepids:
             existing_card: '{{brand}} | xxxxxxxxxxxx{{last4}} | Expires {{month}}/{{year}}'
             use_different_card: 'Use a different card'
             use_authorized_card: 'Use an existing card'
+            
+        result:
+            error: 'Payment failed. {{errorMessage}}'    
              
 oro:
     payment:

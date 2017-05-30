@@ -5,12 +5,11 @@ services:
         public: false
         arguments:
             - '@entrepids_braintree.method.config'
-            - '@router'
             - '@entrepids_braintree.braintree.model.adapter.badapter' 
             - '@oro_entity.doctrine_helper'
-            - '@oro_payment.provider.extract_options'
-            - '@oro_payment.provider.surcharge'
-            - '@property_accessor'            
+            - '@property_accessor'
+            - '@session'
+            - '@translator'
         tags:
             - { name: oro_payment.payment_method }
 
