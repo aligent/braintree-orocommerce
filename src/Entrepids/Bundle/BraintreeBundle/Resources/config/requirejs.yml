@@ -1,14 +1,7 @@
 config:
     paths:
-        'braintree/js/lib/jquery-credit-card-validator': 'bundles/bowerassets/jquery-creditcardvalidator/jquery.creditCardValidator.js'
         'braintree/js/app/components/credit-card-component': 'bundles/braintree/js/app/components/credit-card-component.js'
         'braintree/js/app/components/braintree': 'bundles/braintree/js/app/components/braintree.js'
-        'braintree/js/app/components/authorized-credit-card-component': 'bundles/braintree/js/app/components/authorized-credit-card-component.js'
         'braintree/js/app/components/braintree-checkout-component': 'bundles/braintree/js/app/components/braintree-checkout-component.js'
-        'braintree/js/validator/credit-card-expiration-date': 'bundles/braintree/js/validator/credit-card-expiration-date.js'
-        'braintree/js/validator/credit-card-expiration-date-not-blank': 'bundles/braintree/js/validator/credit-card-expiration-date-not-blank.js'
-        'braintree/js/validator/credit-card-number': 'bundles/braintree/js/validator/credit-card-number.js'
-        'braintree/js/validator/credit-card-type': 'bundles/braintree/js/validator/credit-card-type.js'
-        'braintree/js/adapter/credit-card-validator-adapter': 'bundles/braintree/js/adapter/credit-card-validator-adapter.js'
         'braintree/js/braintree/braintree-client': 'bundles/braintree/js/braintree/braintree-client.js'
         'braintree/js/braintree/braintree-hosted-fields': 'bundles/braintree/js/braintree/braintree-hosted-fields.js'

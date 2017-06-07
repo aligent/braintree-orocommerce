@@ -15,22 +15,14 @@
 {% endblock %}
 
 {% block _entrepids_braintree_credit_card_widget %}
-    {% set creditCardComponent = options.creditCardComponent|default('braintree/js/app/components/credit-card-component') %}
+    {% set creditCardComponent = 'braintree/js/app/components/credit-card-component' %}
     {% set creditCardComponentOptions = options.creditCardComponentOptions|default({})|merge({paymentMethod: paymentMethod}) %}
-    {% set isAuthorizedCard = creditCardComponentOptions.acct is defined %}
 
     <div class="{{ class_prefix }}__form__payment-methods"
         data-page-component-module="{{ creditCardComponent }}"
         data-page-component-options="{{ creditCardComponentOptions|json_encode }}">
         
-        <div {% if isAuthorizedCard %} style="display: none;" data-different-card{% endif %}>
-            {% if isAuthorizedCard %}
-                <div class="{{ class_prefix }}__form__payment-methods-different-card">
-                    <a href="javascript: void(0);" class="{{ class_prefix }}__form__payment-methods-authorized-card-handle" data-authorized-card-handle>
-                        {{ 'entrepids.braintree.braintreeflow.use_authorized_card'|trans }}
-                    </a>
-                </div>
-            {% endif %}
+        <div>
             <ul class="{{ class_prefix }}__form__payment-methods__list">
                 {% for cc_name in options.creditCardComponentOptions.allowedCreditCards %}
                     <li><i class="credit-card-icon credit-card-icon_{{ cc_name }}"></i></li>
@@ -43,7 +35,7 @@
                 </div>
                 {% endif %}
                 
-            	<form id="braintree-custom-cc-form" method="post" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
+            	<form id="braintree-custom-cc-form" method="post" autocomplete="off" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
 	            	<div class="{{ class_prefix }}__form__row">
 	            		<fieldset class="checkout__form__row">
         					<div class="checkout__form__col form__col form__col_x12">    

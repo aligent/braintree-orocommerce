@@ -31,14 +31,18 @@ class CreditCardType extends AbstractType
     
     protected $paymentsTransactions;
     
+    /** @var BraintreeAdapter */
     protected $adapter;
 
+    /** @var TranslatorInterface */
     protected $translator;
     
 	/**
 	 * 
 	 * @param DoctrineHelper $doctrineHelper
 	 * @param TokenStorageInterface $tokenStorage
+	 * @param BraintreeAdapter $adapter
+	 * @param TranslatorInterface $translator
 	 */
     public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, BraintreeAdapter $adapter, TranslatorInterface $translator){
     	$this->doctrineHelper = $doctrineHelper; 

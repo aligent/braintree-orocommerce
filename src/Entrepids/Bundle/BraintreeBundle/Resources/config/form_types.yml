@@ -8,18 +8,3 @@ services:
             - '@translator'
         tags:
             - { name: form.type, alias: entrepids_braintree_credit_card }
-
-    entrepids_braintree.form.type.credit_card_expiration_date:
-        class: Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardExpirationDateType
-        tags:
-            - { name: form.type, alias: entrepids_braintree_credit_card_expiration_date }
-
-    entrepids_braintree.form.type.currency_selection:
-        class: Entrepids\Bundle\BraintreeBundle\Form\Type\CurrencySelectionType
-        public: true
-        arguments:
-            - '@oro_currency.config.currency'
-            - '@oro_locale.settings'
-            - '@oro_currency.helper.currency_name'
-        tags:
-            - { name: form.type, alias: entrepids_braintree_currency_selection }
