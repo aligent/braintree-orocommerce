@@ -1,4 +1,0 @@
-Oro\Bundle\UserBundle\Entity\User:
-    constraints:
-        - Oro\Bundle\UserProBundle\Validator\Constraints\UsedPassword:
-            groups: [security, Default]

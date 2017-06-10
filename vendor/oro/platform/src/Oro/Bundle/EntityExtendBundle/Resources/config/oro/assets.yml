@@ -1,5 +1,0 @@
-assets:
-    css:
-      'oroentityextend':
-          - 'bundles/oroentityextend/css/extend.css'
-          - 'bundles/oroentityextend/css/less/main.less'

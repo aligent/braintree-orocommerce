@@ -1,4 +1,0 @@
-oro_userpro:
-    resource:     "@OroUserProBundle/Controller"
-    type:         annotation
-    prefix:       /user

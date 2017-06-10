@@ -1,6 +1,0 @@
-datagrids:
-    menu-organization-grid:
-        extends: menu-global-grid
-        properties:
-            view_link:
-                route: oro_organization_menu_view

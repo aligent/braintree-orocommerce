@@ -1,6 +1,0 @@
-Oro\Bundle\AccountBundle\Entity\Account:
-    properties:
-        name:
-            - NotBlank:     ~
-            - Length:
-                max:        255

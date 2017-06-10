@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\Bundle\MessageQueueBundle\OroMessageQueueBundle, priority: -86 }

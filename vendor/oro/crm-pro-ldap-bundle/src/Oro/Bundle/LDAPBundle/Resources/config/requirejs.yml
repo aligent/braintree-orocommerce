@@ -1,3 +1,0 @@
-config:
-    paths:
-        'oroldap/js/ldap-checker': 'bundles/oroldap/js/ldap-checker.js'

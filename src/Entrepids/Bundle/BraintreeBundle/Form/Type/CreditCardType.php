@@ -41,13 +41,12 @@ class CreditCardType extends AbstractType
 	 * 
 	 * @param DoctrineHelper $doctrineHelper
 	 * @param TokenStorageInterface $tokenStorage
-	 * @param BraintreeAdapter $adapter
 	 * @param TranslatorInterface $translator
 	 */
-    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, BraintreeAdapter $adapter, TranslatorInterface $translator){
+    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, TranslatorInterface $translator){
     	$this->doctrineHelper = $doctrineHelper; 
     	$this->tokenStorage = $tokenStorage;
-    	$this->adapter = $adapter;
+    	//$this->adapter = $adapter;
     	$this->translator = $translator;
     	$this->getTransactionCustomerORM();
     }
@@ -136,6 +135,14 @@ class CreditCardType extends AbstractType
         					],
         			]
         	);
+        }
+        
+        if ($options['data'] !== null){
+        	$config = $options['data'];
+        	$this->adapter = new BraintreeAdapter($config);
+        }
+        else{
+        	
         }
         
         $braintreeClientToken = $this->adapter->generate();

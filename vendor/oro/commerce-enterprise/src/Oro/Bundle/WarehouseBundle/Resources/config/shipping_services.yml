@@ -1,5 +1,0 @@
-services:
-    oro_warehouse.form.extension.warehouse_address:
-        class: Oro\Bundle\WarehouseBundle\Form\Extension\WarehouseAddressExtension
-        tags:
-            - { name: form.type_extension, alias: oro_warehouse_address }

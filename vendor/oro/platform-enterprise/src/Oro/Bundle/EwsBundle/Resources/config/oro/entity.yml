@@ -1,5 +1,0 @@
-oro_entity:
-    entity_alias_exclusions:
-        - Oro\Bundle\EwsBundle\Entity\EwsEmail
-        - Oro\Bundle\EwsBundle\Entity\EwsEmailFolder
-        - Oro\Bundle\EwsBundle\Entity\EwsEmailOrigin

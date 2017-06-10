@@ -1,9 +1,0 @@
-{% if resource_granted('EDIT', entity) %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
-    {{ UI.button({
-        'path' : path('oro_multiwebsite_config', { 'id': entity.id }),
-        'label': 'oro.config.menu.system_configuration.label'|trans,
-        'title': 'oro.multiwebsite.menu.website_configuration.label'|trans,
-        'iCss': 'fa-cog',
-    }) }}
-{% endif %}

@@ -1,4 +1,0 @@
-assets:
-    css:
-        'oroemail':
-          - 'bundles/oroemail/css/less/main.less'

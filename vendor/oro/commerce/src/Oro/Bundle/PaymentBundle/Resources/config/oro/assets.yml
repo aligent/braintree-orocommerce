@@ -1,4 +1,0 @@
-assets:
-    css:
-        'oropayment':
-            - 'bundles/oropayment/less/style.less'

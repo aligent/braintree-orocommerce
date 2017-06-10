@@ -1,4 +1,0 @@
-assets:
-    css:
-        'orotax':
-            - 'bundles/orotax/less/style.less'

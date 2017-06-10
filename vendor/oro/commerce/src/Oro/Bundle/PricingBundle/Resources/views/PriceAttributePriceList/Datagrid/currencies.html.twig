@@ -1,5 +1,0 @@
-{% set currencies = [] %}
-{% for currency in value %}
-    {% set currencies = currencies|merge([currency|oro_localized_currency_name]) %}
-{% endfor %}
-{{ currencies|join(', ') }}

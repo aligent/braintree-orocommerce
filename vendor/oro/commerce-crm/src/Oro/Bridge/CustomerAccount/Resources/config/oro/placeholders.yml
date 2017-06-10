@@ -1,9 +1,0 @@
-placeholders:
-    placeholders:
-        oro_account_channel_info_commerce:
-            items:
-                oro_account_customers_info: ~
-
-    items:
-        oro_account_customers_info:
-            action: OroCustomerAccountBridgeBundle:Customer:accountCustomersInfo

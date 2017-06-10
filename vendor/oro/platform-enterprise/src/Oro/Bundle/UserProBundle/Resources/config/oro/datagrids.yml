@@ -1,3 +1,0 @@
-datagrids:
-    users-grid:
-        views_list: "@oro_userpro.user.datagrid_view_list"

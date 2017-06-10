@@ -1,8 +1,0 @@
-security:
-    firewalls:
-        main:
-            two-factor:
-                login_path: oropro_user_two_factor_auth
-                check_path: oropro_user_two_factor_check
-                failure_path: oro_user_security_login
-                auth_parameter: _auth_code

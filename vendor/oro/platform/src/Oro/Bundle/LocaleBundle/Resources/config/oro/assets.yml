@@ -1,4 +1,0 @@
-assets:
-    css:
-        'orolocale':
-            - 'bundles/orolocale/css/less/style.less'

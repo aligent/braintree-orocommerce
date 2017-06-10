@@ -1,6 +1,0 @@
-doctrine:
-    orm:
-        entity_managers:
-            search:
-                mappings:
-                    OroWebsiteSearchBundle: ~

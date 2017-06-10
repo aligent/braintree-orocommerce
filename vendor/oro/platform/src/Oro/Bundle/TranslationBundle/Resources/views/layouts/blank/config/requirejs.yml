@@ -1,6 +1,0 @@
-config:
-    shim:
-        'translator':
-            exports: 'Translator'
-    paths:
-        'translator': 'bundles/orotranslation/lib/translator.js'

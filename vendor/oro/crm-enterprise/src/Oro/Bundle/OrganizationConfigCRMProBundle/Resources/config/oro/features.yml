@@ -1,4 +1,0 @@
-features:
-    sales_opportunity:
-        configuration:
-            - organization_probabilities

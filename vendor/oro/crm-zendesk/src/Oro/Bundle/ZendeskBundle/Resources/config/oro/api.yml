@@ -1,6 +1,0 @@
-api:
-    entities:
-        Oro\Bundle\ZendeskBundle\Entity\Ticket: ~
-        Oro\Bundle\ZendeskBundle\Entity\TicketComment: ~
-        Oro\Bundle\ZendeskBundle\Entity\User: ~
-#        Oro\Bundle\ZendeskBundle\Entity\ZendeskRestTransport: ~

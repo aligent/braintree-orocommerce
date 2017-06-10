@@ -1,3 +1,0 @@
-bundles:
-    # needs to be loaded after Oro WorcflowBundle
-    - { name: Oro\Bundle\CRMBundle\OroCRMBundle, priority: 1 }

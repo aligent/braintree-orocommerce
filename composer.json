@@ -9,9 +9,8 @@
     }
   ],
   "autoload": {
-    "psr-0": {
-      "": "src/"
-    }
+    "psr-4": {"": "src/"},
+    "exclude-from-classmap": ["**/Tests/"]
   },
   "repositories": {
     "ldap-bundle": {
@@ -38,6 +37,10 @@
       "type": "vcs",
       "url": "https://github.com/orocrm/commerce-enterprise.git"
     },
+    "customer-portal": {
+      "type": "vcs",
+      "url": "https://github.com/orocrm/customer-portal-er.git"
+    },
     "commerce": {
       "type": "vcs",
       "url": "https://github.com/orocrm/commerce-er.git"
@@ -52,19 +55,22 @@
     }
   },
   "require": {
-    "oro/commerce-enterprise": "1.0.*",
-    "oro/crm-enterprise": "2.0.*",
-    "oro/commerce-crm": "1.0.*",
-    "oro/platform-serialised-fields": "2.0.*",
-    "oro/crm-hangouts-call-bundle": "2.0.*",
-    "oro/crm-abandoned-cart": "2.0.*",
-    "oro/crm-magento-embedded-contact-us": "2.0.*",
-    "oro/crm-mail-chimp": "2.0.*",
-    "oro/crm-dotmailer": "2.0.*",
-    "oro/crm-zendesk": "2.0.*",
-    "oro/crm-pro-ldap-bundle": "2.0.*"
+  	"braintree/braintree_php": "3.22.0",
+    "oro/commerce-enterprise": "1.2.*",
+    "oro/crm-enterprise": "2.2.*",
+    "oro/commerce-crm": "1.2.*",
+    "oro/platform-serialised-fields": "2.2.*",
+    "oro/crm-hangouts-call-bundle": "2.2.*",
+    "oro/crm-abandoned-cart": "2.2.*",
+    "oro/crm-magento-embedded-contact-us": "2.2.*",
+    "oro/crm-mail-chimp": "2.2.*",
+    "oro/crm-dotmailer": "2.2.*",
+    "oro/crm-zendesk": "2.2.*",
+    "oro/crm-pro-ldap-bundle": "2.2.*",
+    "oro/customer-portal": "2.2.*"
   },
   "require-dev": {
+  	"braintree/braintree_php": "3.22.0", 
     "sensio/generator-bundle": "3.1.2",
     "behat/behat": "3.2.2",
     "behat/mink-extension": "2.2.*",
@@ -75,13 +81,20 @@
     "phpunit/phpunit-selenium": "3.0.*",
     "johnkary/phpunit-speedtrap": "1.0.*",
     "mybuilder/phpunit-accelerator": "1.2.*",
-    "squizlabs/php_codesniffer": "2.7.*",
-    "phpmd/phpmd": "2.5.*",
-    "sebastian/phpcpd": "2.0.*"
+    "squizlabs/php_codesniffer": "2.8.*",
+    "phpmd/phpmd": "2.6.*",
+    "sebastian/phpcpd": "2.0.*",
+    "symfony/phpunit-bridge": "3.2.*"
   },
   "config": {
     "component-dir": "web/bundles/components",
-    "bin-dir": "bin"
+    "bin-dir": "bin",
+    "fxp-asset": {
+      "asset-installer-paths": {
+        "npm-asset-library": "web/bundles/npmassets",
+        "bower-asset-library": "web/bundles/bowerassets"
+      }
+    }
   },
   "scripts": {
     "post-install-cmd": [

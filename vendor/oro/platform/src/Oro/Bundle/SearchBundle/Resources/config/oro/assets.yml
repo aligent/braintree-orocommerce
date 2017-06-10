@@ -1,4 +1,0 @@
-assets:
-    css:
-      'orosearch':
-          - 'bundles/orosearch/css/search.less'

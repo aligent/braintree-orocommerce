@@ -6,21 +6,23 @@ use Psr\Log\LoggerAwareTrait;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Braintree;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodRegistry;
+use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 
 class BraintreeCheckoutListener {
 	use LoggerAwareTrait;
 	
-	/** @var PaymentMethodRegistry */
-	protected $paymentMethodRegistry;
+    /**
+     * @var PaymentMethodProviderInterface
+     */
+    protected $paymentMethodProvider;
 	
-	/**
-	 * @param PaymentMethodRegistry $paymentMethodRegistry
-	 */
-	public function __construct(PaymentMethodRegistry $paymentMethodRegistry)
-	{
-		$this->paymentMethodRegistry = $paymentMethodRegistry;
-	}
+    /**
+     * @param PaymentMethodProviderInterface $paymentMethodProvider
+     */
+    public function __construct(PaymentMethodProviderInterface $paymentMethodProvider)
+    {
+        $this->paymentMethodProvider = $paymentMethodProvider;
+    }
 	
 	/**
 	 * @param AbstractCallbackEvent $event
@@ -44,22 +46,33 @@ class BraintreeCheckoutListener {
 	public function onReturn(AbstractCallbackEvent $event)
 	{
 		$paymentTransaction = $event->getPaymentTransaction();
-		$data = $event->getData();
-	
+		
+		if (!$paymentTransaction) {
+			return;
+		}
+		
+		$paymentMethodId = $paymentTransaction->getPaymentMethod();
+		
+		if (false === $this->paymentMethodProvider->hasPaymentMethod($paymentMethodId)) {
+			return;
+		}
+		
+		$eventData = $event->getData();
+		
 		// TODO: BB-3693 Will use typed Response
-		if (!$paymentTransaction || !isset($data['PayerID']) ||
-				!isset($data['token']) || $data['token'] !== $paymentTransaction->getReference()
+		if (!$paymentTransaction || !isset($eventData['PayerID'], $eventData['token']) ||
+				$eventData['token'] !== $paymentTransaction->getReference()
 		) {
 			return;
 		}
-	
-		$paymentTransaction
-		->setResponse(array_replace($paymentTransaction->getResponse(), $data));
-	
+		
+		$responseDataFilledWithEventData = array_replace($paymentTransaction->getResponse(), $eventData);
+		$paymentTransaction->setResponse($responseDataFilledWithEventData);
+		
 		try {
-			$this->paymentMethodRegistry
-			->getPaymentMethod($paymentTransaction->getPaymentMethod())
-			->execute(Braintree::COMPLETE, $paymentTransaction);
+			$paymentMethod = $this->paymentMethodProvider->getPaymentMethod($paymentMethodId);
+			$paymentMethod->execute(Braintree::COMPLETE, $paymentTransaction);
+		
 			$event->markSuccessful();
 		} catch (\InvalidArgumentException $e) {
 			if ($this->logger) {
@@ -67,5 +80,6 @@ class BraintreeCheckoutListener {
 				$this->logger->error($e->getMessage(), []);
 			}
 		}
+		
 	}	
 }

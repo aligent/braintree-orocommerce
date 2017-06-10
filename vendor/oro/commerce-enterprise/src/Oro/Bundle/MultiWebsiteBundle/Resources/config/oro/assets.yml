@@ -1,4 +1,0 @@
-assets:
-    css:
-        'oromultiwebsite':
-            - 'bundles/oromultiwebsite/css/style.less'

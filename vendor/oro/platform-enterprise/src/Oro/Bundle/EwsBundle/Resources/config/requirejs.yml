@@ -1,3 +1,0 @@
-config:
-    paths:
-        'oroews/js/app/components/ews-resource-component': 'bundles/oroews/js/app/components/ews-resource-component.js'

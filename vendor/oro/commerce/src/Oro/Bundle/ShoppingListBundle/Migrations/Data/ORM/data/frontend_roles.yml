@@ -1,3 +1,0 @@
-BUYER:
-    permissions:
-        entity|Oro\Bundle\ShoppingListBundle\Entity\ShoppingList: [VIEW_BASIC, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC]

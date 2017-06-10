@@ -1,7 +1,0 @@
-acls:
-    oro_outlook_integration:
-        label:      oro_outlook.integration.label
-        type:       action
-        group_name: ""
-        bindings:   ~
-        category: "application"

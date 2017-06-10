@@ -1,4 +1,0 @@
-config:
-    paths:
-        'oromulticurrency/js/app/views/currency-grid-view': 'oromulticurrency/js/app/views/currency-grid-view.js'
-        'oromulticurrency/js/app/models/currency-model': 'oromulticurrency/js/app/models/currency-model.js'

@@ -3,11 +3,10 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
 use Oro\Bundle\PaymentBundle\Method\Config\PaymentConfigInterface;
-use Oro\Bundle\PaymentBundle\Method\Config\CountryConfigAwareInterface;
+//use Oro\Bundle\PaymentBundle\Method\Config\CountryConfigAwareInterface;
 
 interface BraintreeConfigInterface extends
-PaymentConfigInterface,
-CountryConfigAwareInterface
+PaymentConfigInterface
 {
 	/**
 	 * @return array
@@ -17,10 +16,6 @@ CountryConfigAwareInterface
 	 * @return array
 	 */
 	public function getAllowedEnvironmentTypes();	
-	/**
-	 * @return string
-	 */
-	public function getEnvironmentSelected();	
 	/**
 	 * @return string
 	 */
@@ -43,12 +38,12 @@ CountryConfigAwareInterface
 	public function isCreditCardEnabled();
 	/**
 	 * @return string
-	*/
-	public function getSandBoxCreditCardTitle();
+	 */
+	public function getPurchaseAction();
 	/**
 	 * @return string
 	 */
-	public function getPurchaseAction();
+	public function getCapturePaymentAction();	
 	/**
 	 * @return bool
 	 */
@@ -64,5 +59,25 @@ CountryConfigAwareInterface
 	/**
 	 * @return bool
 	 */	
-	public function isEnableSafeForLater();
+	public function isEnableSaveForLater();
+	/**
+	 * @return bool
+	 */
+	public function isZeroAmountAuthorizationEnabled();	
+	
+	/**
+	 * @return string
+	 */
+	public function getPaymentMethodNonce();
+
+	/**
+	 * @return string
+	 */
+	public function getBraintreeClientToken();
+
+	/**
+	 * @return string
+	 */
+	public function getCreditCardValue();	
+
 }

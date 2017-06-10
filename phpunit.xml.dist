@@ -32,8 +32,9 @@
             <group>commerce</group>
             <group>crm</group>
             <group>soap</group>
-            <group>segfault</group>
             <group>dist</group>
+            <group>segfault</group>
+            <group>DuplicateQueries</group>
         </exclude>
     </groups>
     <testsuites>
@@ -49,6 +50,7 @@
             <directory suffix="Test.php">vendor/oro/crm*/src/*/Component/*/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/platform*/src/*/Bundle/*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/platform*/src/*/Component/*/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/customer-portal/src/*/Bundle/*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce*/src/*/Bundle/*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce*/src/*/Component/*/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/calendar-bundle/Oro/Bundle/*Bundle/Tests/Functional</directory>
@@ -83,6 +85,7 @@
             <directory suffix="Test.php">vendor/oro/platform/src/*/Bundle/X*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/platform/src/*/Bundle/Y*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/platform/src/*/Bundle/Z*Bundle/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/customer-portal/src/*/Bundle/*Bundle/Tests/Functional</directory>
         </testsuite>
         <testsuite name="functional-3-of-4">
             <directory suffix="Test.php">vendor/oro/platform-*/src/*/Bundle/*Bundle/Tests/Functional</directory>
@@ -98,10 +101,12 @@
         <testsuite name="functional-1-of-6">
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/A*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/B*Bundle/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/customer-portal/src/*/Bundle/C*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/C*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/D*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/E*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/F*Bundle/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/customer-portal/src/*/Bundle/F*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/G*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/H*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/I*Bundle/Tests/Functional</directory>
@@ -116,6 +121,7 @@
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/N*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/P*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/W*Bundle/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/customer-portal/src/*/Bundle/W*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/X*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/Y*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/Z*Bundle/Tests/Functional</directory>
@@ -207,8 +213,8 @@
         </testsuite>
         <testsuite name="functional-5-of-10">
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/B*Bundle/Tests/Functional</directory>
-            <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/C*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/D*Bundle/Tests/Functional</directory>
+            <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/C*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/E*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/F*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/commerce/src/*/Bundle/G*Bundle/Tests/Functional</directory>
@@ -294,8 +300,13 @@
             <directory suffix="Test.php">vendor/oro/crm/src/*/Bundle/Z*Bundle/Tests/Functional</directory>
             <directory suffix="Test.php">vendor/oro/crm-*/src/*/Bundle/*Bundle/Tests/Functional</directory>
         </testsuite>
+        <testsuite name="duplicate-queries">
+            <directory suffix="Test.php">vendor/oro/commerce-crm-ee/src/*/Bundle/*/Tests/Functional</directory>
+        </testsuite>
     </testsuites>
     <php>
+        <env name="SYMFONY_DEBUG" value="0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
         <ini name="error_reporting" value="-1"/>
         <server name="KERNEL_DIR" value="app/"/>
         <const name="PHPUNIT_LOAD_LIMIT" value="1.2"/>
@@ -330,5 +341,6 @@
             </arguments>
         </listener>
         <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener"/>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
 </phpunit>

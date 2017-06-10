@@ -1,6 +1,0 @@
-services:
-    oro_customerpro.visibility.provider.visibility_scope_provider:
-        class: 'Oro\Bundle\CustomerProBundle\Visibility\Provider\MultiWebsiteVisibilityScopeProvider'
-        decorates: 'oro_visibility.provider.visibility_scope_provider'
-        arguments:
-            - '@oro_scope.scope_manager'

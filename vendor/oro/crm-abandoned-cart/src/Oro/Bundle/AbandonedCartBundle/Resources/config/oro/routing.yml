@@ -1,9 +1,0 @@
-oro_abandoned_cart_bundle:
-    resource:     "@OroAbandonedCartBundle/Controller/AbandonedCartController.php"
-    type:         annotation
-    prefix:       /
-
-oro_abandoned_cart_conversion:
-    resource:     "@OroAbandonedCartBundle/Controller/AbandonedCartConversionController.php"
-    type:         annotation
-    prefix:       /

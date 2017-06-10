@@ -1,0 +1,23 @@
+services:
+    entrepids_braintree.factory.braintree_config:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory'
+        public: false
+        arguments:
+            - '@oro_locale.helper.localization'
+            - '@entrepids_braintree.generator.braintree_config_identifier'
+
+    entrepids_braintree.factory.method.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Factory\BraintreePaymentMethodFactory'
+        public: false
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@property_accessor' 
+            - '@session'
+            - '@translator'                   
+
+    entrepids_braintree.factory.method_view.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\View\Factory\BraintreePaymentMethodViewFactory'
+        public: false
+        arguments:
+            - '@form.factory'
+            - '@oro_payment.provider.payment_transaction'

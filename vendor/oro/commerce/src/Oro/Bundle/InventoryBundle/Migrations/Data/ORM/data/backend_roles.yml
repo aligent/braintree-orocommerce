@@ -1,3 +1,0 @@
-ROLE_CATALOG_MANAGER:
-    permissions:
-        entity|Oro\Bundle\InventoryBundle\Entity\InventoryLevel: [VIEW_SYSTEM, EDIT_SYSTEM]

@@ -38,11 +38,12 @@ class BraintreeView implements PaymentMethodViewInterface
         //$isZeroAmountAuthorizationEnabled = $this->config->isZeroAmountAuthorizationEnabled();
 
         $formOptions = [
-            'zeroAmountAuthorizationEnabled' => $this->config->isEnableSafeForLater(),
+            'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
             'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
         ];
 
-        $formView = $this->formFactory->create(CreditCardType::NAME, null, $formOptions)->createView();
+        $config = $this->config;
+        $formView = $this->formFactory->create(CreditCardType::NAME, $config, $formOptions)->createView();
 
         $viewOptions = [
             'formView' => $formView,
@@ -98,10 +99,23 @@ class BraintreeView implements PaymentMethodViewInterface
 		return $this->config->getShortLabel();
 	}
 
-	/** {@inheritdoc} */
 	public function getPaymentMethodType()
 	{
 		return Braintree::TYPE;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAdminLabel()
+	{
+		return $this->config->getAdminLabel();
+	}
+	
+	/** {@inheritdoc} */
+	public function getPaymentMethodIdentifier()
+	{
+		return $this->config->getPaymentMethodIdentifier();
 	}
 
 	/**

@@ -1,7 +1,0 @@
-oro.pricing_pro:
-    validators:
-        is_not_enabled: "Currency %currency% is not enabled"
-
-oro.multicurrency:
-    message:
-        pricing_enabled_currencies.global: You can't delete currency because it is used in COMMERCE > Catalog > Pricing > Display Currencies > Available Currencies

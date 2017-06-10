@@ -1,4 +1,0 @@
-oro_permissions:
-    SHARE:
-        exclude_entities:
-            - Oro\Bundle\InventoryBundle\Entity\InventoryLevel

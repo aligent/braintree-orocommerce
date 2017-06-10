@@ -1,5 +1,0 @@
-Oro\Bundle\InventoryBundle\Entity\InventoryLevel:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields:     [ warehouse, productUnitPrecision ]
-            ignoreNull: false

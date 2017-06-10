@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\Bundle\EntityConfigProBundle\OroEntityConfigProBundle, priority: 100}

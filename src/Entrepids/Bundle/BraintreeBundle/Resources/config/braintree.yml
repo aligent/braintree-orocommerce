@@ -1,28 +1,15 @@
 services:
 
-    entrepids_braintree.braintree.model.adapter.badapter:
-        class: 'Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter'
-        public: false
-        arguments:
-            - '@entrepids_braintree.method.config'
-            
     entrepids_braintree.braintree.payflow.client.http:
         class: 'Guzzle\Http\Client'
         public: false
         lazy: true
         
-    entrepids_braintree.braintree.payflow.client.transactionsale:
-        class: 'Entrepids\Bundle\BraintreeBundle\Braintree\Client\TransactionSale'
-        public: false
-        arguments:
-            - '@entrepids_braintree.braintree.payflow.client.http'
-            - '@entrepids_braintree.braintree.model.adapter.badapter'        
-       
     entrepids_braintree.event_listener.callback.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\EventListener\Callback\BraintreeCheckoutListener'
         lazy: true
         arguments:
-            - '@oro_payment.payment_method.registry'
+            - '@entrepids_braintree.payment_method_provider.braintree'
         calls:
             - ['setLogger', ['@logger']]
         tags:

@@ -1,0 +1,29 @@
+parameters:
+    entrepids_braintree.method.braintree: 'braintree'
+
+services:
+    entrepids_braintree.payment_method.config.provider.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\Provider\BraintreeConfigProvider'
+        public: false
+        arguments:
+            - '@doctrine'
+            - '@logger'
+            - '@entrepids_braintree.factory.braintree_config'
+
+    entrepids_braintree.payment_method_provider.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider'
+        public: false
+        arguments:
+            - '@entrepids_braintree.payment_method.config.provider.braintree'
+            - '@entrepids_braintree.factory.method.braintree'
+        tags:
+            - { name: oro_payment.payment_method_provider }
+
+    entrepids_braintree.payment_method_view_provider.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\Method\View\Provider\BraintreeMethodViewProvider'
+        arguments:
+            - '@entrepids_braintree.payment_method.config.provider.braintree'
+            - '@entrepids_braintree.factory.method_view.braintree'
+        tags:
+            - { name: oro_payment.payment_method_view_provider }
+

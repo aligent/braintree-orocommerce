@@ -2,16 +2,51 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
-use Entrepids\Bundle\BraintreeBundle\DependencyInjection\Configuration;
 use Entrepids\Bundle\BraintreeBundle\Method\Braintree;
-use Oro\Bundle\PaymentBundle\DependencyInjection\Configuration as PaymentConfiguration;
 use Oro\Bundle\PaymentBundle\Method\Config\AbstractPaymentConfig;
 use Oro\Bundle\PaymentBundle\Method\Config\CountryAwarePaymentConfigTrait;
+use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
-class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigInterface
+class BraintreeConfig extends AbstractParameterBagPaymentConfig implements BraintreeConfigInterface
 {
-	use CountryAwarePaymentConfigTrait;
 
+	const LABEL_KEY = 'label';
+	const SHORT_LABEL_KEY = 'short_label';
+	const ADMIN_LABEL_KEY = 'admin_label';
+	const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
+	const PAYMENT_ACTION_KEY  = 'payment_action';
+	const CAPTURE_PAYMENT_ACTION_KEY = "capture_action";
+	const ENVIRONMENT_TYPE = "environment_type";
+	const TYPE = 'braintree';
+	const MERCH_ID_KEY = "merch_id";
+	const MERCH_ACCOUNT_ID_KEY = "merch_account_id";
+	const PUBLIC_KEY_KEY = "public_key";
+	const PRIVATE_KEY_KEY = "private_key";
+	const CREDIT_CARD_ENABLED_KEY = "credit_card_enabled";
+	const SAVE_FOR_LATER_KEY = "save_for_later";
+	const NEW_ORDER_STATUS_KEY = "new_order_status";
+	const SAVED_CARDS_KEY = "saved_cards";
+	const CVV_VERIFICATION_KEY = "cvv_verification";
+	const DISPLAY_CARDS_TYPE_KEY = "display_cards_type";
+	
+	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
+	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';
+	const ALLOWED_CREDIT_CARD_TYPES_KEY = 'allowed_credit_card_types';
+	const ENABLE_SSL_VERIFICATION_KEY = 'enable_ssl_verification';
+	const REQUIRE_CVV_ENTRY_KEY = 'require_cvv_entry';
+	
+	const PAYMETHOD_NONCE = 'payment_method_nonce';
+	const CLIENT_TOKEN = 'braintree_client_token';
+	const CREDIT_CARD_VALUE = 'credit_card_value';
+	/**
+	 * {@inheritDoc}
+	 */
+	public function __construct(array $parameters)
+	{
+		parent::__construct($parameters);
+	}
+
+	
 	/** {@inheritdoc} */
 	protected function getPaymentExtensionAlias()
 	{
@@ -21,48 +56,7 @@ class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigIn
 	/** {@inheritdoc} */
 	public function isEnabled()
 	{
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_ENABLED_KEY);
-	}
-
-	/** {@inheritdoc} */
-	public function getOrder()
-	{
-		return (int)$this->getConfigValue(Configuration::BRAINTREE_SORT_ORDER_KEY);
-	}
-
-	/** {@inheritdoc} */
-	public function getLabel()
-	{
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_LABEL_KEY);
-	}
-
-	/** {@inheritdoc} */
-	public function getShortLabel()
-	{
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_SHORT_LABEL_KEY);
-	}
-
-	/** {@inheritdoc} */
-	public function isAllCountriesAllowed()
-	{
-		return $this->getConfigValue(Configuration::BRAINTREE_ALLOWED_COUNTRIES_KEY)
-		=== PaymentConfiguration::ALLOWED_COUNTRIES_ALL;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getAllowedCountries()
-	{
-		return (array)$this->getConfigValue(Configuration::BRAINTREE_SELECTED_COUNTRIES_KEY);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getAllowedCurrencies()
-	{
-		return (array)$this->getConfigValue(Configuration::BRAINTREE_ALLOWED_CURRENCIES);
+		return (string)$this->get(self::CREDIT_CARD_ENABLED_KEY);
 	}
 
 	/**
@@ -70,87 +64,110 @@ class BraintreeConfig extends AbstractPaymentConfig implements BraintreeConfigIn
 	 */
 	public function getAllowedCreditCards()
 	{
-		return (array)$this->getConfigValue(Configuration::BRAINTREE_PRO_ALLOWED_CC_TYPES_KEY);
+		return (string)$this->get(self::ALLOWED_CREDIT_CARD_TYPES_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getAllowedEnvironmentTypes()
 	{
-		return (array)$this->getConfigValue(Configuration::BRAINTREE_ENVIRONMENT_TYPES);
+		return (string)$this->get(self::ENVIRONMENT_TYPE);
 	}
 	
 	/**
 	 * {@inheritdoc}
-	 */	
-	public function getEnvironmentSelected()
-	{
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_ENVIRONMENT_TYPES);
-	}
-	/**
-	 * {@inheritdoc}
 	 */
 	public function getSandBoxMerchId(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_SANDBOX_MERCH_ID);
+		return (string)$this->get(self::MERCH_ID_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getSandBoxMerchAccountId(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_SANDBOX_ACCOUNT_ID);
+		return (string)$this->get(self::MERCH_ACCOUNT_ID_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getSandBoxPublickKey(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_SANDBOX_PUBLIC_KEY);
+		return (string)$this->get(self::PUBLIC_KEY_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getSandBoxPrivateKey(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_SANDBOX_PRIVATE_KEY);
+		return (string)$this->get(self::PRIVATE_KEY_KEY);
 	}
 	/** {@inheritdoc} */
 	public function isCreditCardEnabled()
 	{
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_CREDIT_CARD_ENABLED);
+		return (string)$this->get(self::CREDIT_CARD_ENABLED_KEY);
 	}
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSandBoxCreditCardTitle(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_CREDIT_CARD_TITLE);
-	}	
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getPurchaseAction(){
-		return (string)$this->getConfigValue(Configuration::BRAINTREE_CAPTURE_PAYMENT_ACTION);
+		return (string)$this->get(self::PAYMENT_ACTION_KEY);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getCapturePaymentAction(){
+		return (string)$this->get(self::CAPTURE_PAYMENT_ACTION_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function isEnabledVaultSavedCards(){
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS);
+		return (string)$this->get(self::SAVED_CARDS_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function isEnabledCvvVerification(){
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_CVV_VERIFICATION);
+		return (string)$this->get(self::CVV_VERIFICATION_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function isDisplayCreditCard(){
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES);
+		return (string)$this->get(self::DISPLAY_CARDS_TYPE_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */	
-	public function isEnableSafeForLater(){
-		return (bool)$this->getConfigValue(Configuration::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER);
+	public function isEnableSaveForLater(){
+		return (string)$this->get(self::SAVE_FOR_LATER_KEY);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isZeroAmountAuthorizationEnabled()
+	{
+		return (bool)$this->get(self::ZERO_AMOUNT_AUTHORIZATION_KEY);
+	}	
+	
+	/**
+	 * {@inheritdoc}
+	 */	
+	public function getPaymentMethodNonce(){
+		return (string)$this->get(self::PAYMETHOD_NONCE);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */	
+	public function getBraintreeClientToken(){
+		return (string)$this->get(self::CLIENT_TOKEN);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */	
+	public function getCreditCardValue(){
+		return (string)$this->get(self::CREDIT_CARD_VALUE);
 	}
 }

@@ -1,6 +1,0 @@
-oro:
-    visibility:
-          category:
-              visibility:
-                  message:
-                      invalid_data: "Data is not valid"

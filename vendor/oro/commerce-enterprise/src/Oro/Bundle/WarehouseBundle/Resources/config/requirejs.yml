@@ -1,3 +1,0 @@
-config:
-    paths:
-        'orowarehouse/js/app/views/warehouse-address-view': 'bundles/orowarehouse/js/app/views/warehouse-address-view.js'

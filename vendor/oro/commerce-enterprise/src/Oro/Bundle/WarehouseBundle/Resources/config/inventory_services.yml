@@ -1,6 +1,0 @@
-services:
-    # Event listener
-    oro_warehouse.event_listener.inventory_grid_listener:
-        class: 'Oro\Bundle\WarehouseBundle\EventListener\InventoryLevelGridListener'
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.inventory-level-grid, method: onBuildBeforeWidget }

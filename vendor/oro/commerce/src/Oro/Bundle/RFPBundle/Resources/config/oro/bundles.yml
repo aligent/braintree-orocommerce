@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\Bundle\RFPBundle\OroRFPBundle, priority: 40 }

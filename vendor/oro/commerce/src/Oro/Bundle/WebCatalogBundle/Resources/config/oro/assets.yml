@@ -1,5 +1,0 @@
-assets:
-    css:
-        'orocms':
-            - 'bundles/orowebcatalog/css/less/styles.less'
-            - 'bundles/orowebcatalog/css/less/tree.less'

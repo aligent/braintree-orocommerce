@@ -1,9 +1,0 @@
-oro:
-    organization_config_crmpro:
-        system_configuration:
-            groups:
-                organization_probabilities.title:   Default probabilities for opportunity statuses
-                organization_probabilities.tooltip: >
-                    Change default probabilities for opportunity statuses in scope of the current organization.
-                    To manage statuses themselves, go to the system configuration or entity configuration.
-                organization_display_settings.title: Display settings

@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\Bundle\TaxBundle\OroTaxBundle, priority: 50 }

@@ -1,5 +1,0 @@
-assets:
-    css:
-        'oroproduct':
-            - 'bundles/oroproduct/css/style.less'
-            - 'bundles/oroproduct/css/grid-sidebar.less'

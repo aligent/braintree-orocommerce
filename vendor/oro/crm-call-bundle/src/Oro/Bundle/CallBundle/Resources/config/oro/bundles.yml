@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\Bundle\CallBundle\OroCallBundle, priority: 30 }

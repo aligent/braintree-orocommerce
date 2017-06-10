@@ -4,7 +4,16 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@security.token_storage'
-            - '@entrepids_braintree.braintree.model.adapter.badapter'
             - '@translator'
         tags:
             - { name: form.type, alias: entrepids_braintree_credit_card }
+
+    entrepids_braintree.form.type.settings:
+        class: Entrepids\Bundle\BraintreeBundle\Form\Type\BraintreeSettingsType
+        arguments:
+            - '@translator.default'
+            - '@oro_security.encoder.mcrypt'
+            - '@entrepids_braintree.settings.card_type.provider'
+            - '@entrepids_braintree.settings.payment_action.provider'
+        tags:
+            - { name: form.type }

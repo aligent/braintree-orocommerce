@@ -1,4 +1,0 @@
-assets:
-   css:
-       'oromulticurrency':
-           - 'bundles/oromulticurrency/css/less/multicurrency.less'

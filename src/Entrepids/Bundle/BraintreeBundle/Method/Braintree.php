@@ -59,10 +59,10 @@ class Braintree implements PaymentMethodInterface {
 	 * @param DoctrineHelper $doctrineHelper        	   	
 	 * @param PropertyAccessor $propertyAccessor        	
 	 */
-	public function __construct(BraintreeConfigInterface $config, BraintreeAdapter $adapter, DoctrineHelper $doctrineHelper, 
+	public function __construct(BraintreeConfigInterface $config, DoctrineHelper $doctrineHelper, 
 			PropertyAccessor $propertyAccessor, Session $session, TranslatorInterface $translator) {
 		$this->config = $config;
-		$this->adapter = $adapter;
+		$this->adapter = new BraintreeAdapter($this->config);
 		$this->doctrineHelper = $doctrineHelper;
 		$this->propertyAccessor = $propertyAccessor;
 		$this->session = $session;
@@ -525,6 +525,15 @@ class Braintree implements PaymentMethodInterface {
 		// ->setReference($response->getReference())
 		// ->setResponse($response->getData());
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getIdentifier()
+	{
+		return $this->config->getPaymentMethodIdentifier();
+	}
+	
 	/**
 	 *
 	 * @param PaymentTransaction $paymentTransaction        	

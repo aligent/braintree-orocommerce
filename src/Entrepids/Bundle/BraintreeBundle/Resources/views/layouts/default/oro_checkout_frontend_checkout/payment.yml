@@ -1,9 +1,0 @@
-layout:
-    actions:
-        - '@setBlockTheme':
-            themes:
-                - 'BraintreeBundle:layouts:default/templates/payment.html.twig'
-        - '@setFormTheme':
-            themes:
-                - 'BraintreeBundle:layouts:default/templates/form.html.twig'
-    conditions: 'context["workflowStepName"]=="enter_payment"'

@@ -1,3 +1,0 @@
-bundles:
-    # Load after MigrationBundle for overriding "oro:migration:data:load" command
-    - { name: Oro\Bundle\DemoDataCommerceCRMBundle\OroDemoDataCommerceCRMBundle, priority: 10 }

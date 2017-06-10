@@ -1,4 +1,0 @@
-oro:
-    multicurrency:
-        message:
-            currency_not_used_in_config: "This currency has dependencies and can't be removed"

@@ -1,35 +1,6 @@
 parameters:
+    entrepids_braintree.method.identifier_prefix.braintree: 'braintree'
 services:
-    entrepids_braintree.method:
-        class: 'Entrepids\Bundle\BraintreeBundle\Method\Braintree'
-        public: false
-        arguments:
-            - '@entrepids_braintree.method.config'
-            - '@entrepids_braintree.braintree.model.adapter.badapter' 
-            - '@oro_entity.doctrine_helper'
-            - '@property_accessor'
-            - '@session'
-            - '@translator'
-        tags:
-            - { name: oro_payment.payment_method }
-
-    entrepids_braintree.method.view:
-        class: 'Entrepids\Bundle\BraintreeBundle\Method\View\BraintreeView'
-        public: false
-        arguments:
-            - '@form.factory'
-            - '@entrepids_braintree.method.config'
-            - '@oro_payment.provider.payment_transaction'
-            
-        tags:
-            - { name: oro_payment.payment_method_view }
-
-    entrepids_braintree.method.config:
-        class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig'
-        public: false
-        arguments:
-            - '@oro_config.global'
-            
     entrepids_braintree.provider.credit_form_provider:
         class: 'Entrepids\Bundle\BraintreeBundle\Layout\DataProvider\CreditCardFormProvider'
         arguments:
@@ -38,4 +9,21 @@ services:
         tags:
             - { name: layout.data_provider, alias: entrepids_braintree_credit_card_form_provider }
  
+    entrepids_braintree.settings.payment_action.provider:
+        class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicPaymentActionsDataProvider
+
+    entrepids_braintree.settings.card_type.provider:
+        class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicCardTypesDataProvider
+        
+    entrepids_braintree.generator.braintree_config_identifier:
+        parent: oro_integration.generator.prefixed_identifier_generator
+        public: true
+        arguments:
+            - '%entrepids_braintree.method.identifier_prefix.braintree%'
  
+    entrepids_braintree.repository.braintree_settings:
+        class: 'Entrepids\Bundle\BraintreeBundle\Entity\Repository\BraintreeSettingsRepository'
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings'
+            

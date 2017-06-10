@@ -1,2 +1,0 @@
-OroCRM OroCommerce integration
-==============================

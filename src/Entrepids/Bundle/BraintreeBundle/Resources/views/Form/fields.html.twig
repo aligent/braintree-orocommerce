@@ -1,19 +1,60 @@
-{% block entrepids_braintree_credit_card_expiration_date_widget -%}
-    {% set
-    validation = {
-    'credit-card-expiration-date-not-blank': {'message': 'entrepids_braintree.validation.expiration_date', 'payload': null},
-    'credit-card-expiration-date': {'message': 'entrepids_braintree.validation.month', 'payload': null}
-    }
-    %}
+{% block _entrepids_braintree_credit_card_save_for_later_row %}
+    {{ form_widget(form) }}
+{% endblock %}
 
-    <div {{ block('widget_attributes') }} data-validation="{{ validation|json_encode }}">
-        <div class="{{ class_prefix }}__form__select {{ class_prefix }}__form__select--exp-month">
-            {{ form_widget(form.month, {'attr': {'data-expiration-date-month': true}}) }}
+{% block entrepids_braintree_settings_widget %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    <fieldset class="form-horizontal">
+        <h5 class="user-fieldset">
+            <span>{{ 'entrepids.braintree.settings.form.groups.display_options.title'|trans }}</span>
+        </h5>
+        <div class="control-group control-group-choice">
+            <div class="control-label wrap">
+                {{ UI.tooltip('entrepids.braintree.settings.label.tooltip', {}, 'right') }}
+                {{ form_label(form.braintreeLabel) }}
+            </div>
+            <div class="controls">
+                {{ form_widget(form.braintreeLabel) }}
+            </div>
         </div>
-        <div class="{{ class_prefix }}__form__select {{ class_prefix }}__form__select--exp-year">
-            {{ form_widget(form.year, {'attr': {'data-expiration-date-year': true}}) }}
+        <div class="control-group control-group-choice">
+            <div class="control-label wrap">
+                {{ UI.tooltip('entrepids.braintree.settings.short_label.tooltip', {}, 'right') }}
+                {{ form_label(form.braintreeShortLabel) }}
+            </div>
+            <div class="controls">
+                {{ form_widget(form.braintreeShortLabel) }}
+            </div>
         </div>
-    </div>
-{%- endblock %}
-
-
+        {{ form_row(form.allowedCreditCardTypes) }}
+    </fieldset>
+    <fieldset class="form-horizontal">
+        <h5 class="user-fieldset">
+            <span>{{ 'entrepids.braintree.settings.form.groups.advanced_settings.title'|trans }}</span>
+        </h5>
+        {{ form_row(form.braintreePaymentAction) }}
+        {{ form_row(form.braintreeCaptureAction) }}
+        {{ form_row(form.braintreeEnvironmentType) }}
+    </fieldset>
+    <fieldset class="form-horizontal">
+        <h5 class="user-fieldset">
+            <span>{{ 'entrepids.braintree.settings.form.groups.connection.title'|trans }}</span>
+        </h5>
+        {{ form_row(form.braintreeMerchId) }}
+        {{ form_row(form.braintreeMerchAccountId) }}
+        {{ form_row(form.braintreeMerchPublicKey) }}
+        {{ form_row(form.braintreeMerchPrivateKey) }}
+        {{ form_row(form.creditCardEnabled) }}
+        {{ form_row(form.saveForLater) }}
+        {{ form_row(form.newOrderStatus) }}
+        {{ form_row(form.savedCards) }}
+        {{ form_row(form.cvvVerification) }}
+        {{ form_row(form.displayCardTypes) }}        
+    </fieldset>
+    <fieldset class="form-horizontal">
+        <h5 class="user-fieldset">
+            <span>{{ 'entrepids.braintree.settings.form.groups.other.title'|trans }}</span>
+        </h5>
+        {{ form_rest(form) }}
+    </fieldset>
+{% endblock %}

@@ -1,4 +1,0 @@
-assets:
-    css:
-        'oroimportexport':
-            - 'bundles/oroimportexport/css/import.css'
