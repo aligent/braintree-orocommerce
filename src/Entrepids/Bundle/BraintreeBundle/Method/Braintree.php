@@ -286,6 +286,7 @@ class Braintree implements PaymentMethodInterface {
 			);		
 			
 			$orderID = $entity->getId();
+			$identifier = $entity->getIdentifier();
 			
 			// authorize or charge
 			// si charge mando true
@@ -320,7 +321,7 @@ class Braintree implements PaymentMethodInterface {
 							// una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
-							'orderId' => $orderID,
+							'orderId' => $identifier,
 					];
 				} catch ( NotFound $e ) {
 					$data = [
@@ -330,7 +331,7 @@ class Braintree implements PaymentMethodInterface {
 							// una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
-							'orderId' => $orderID,
+							'orderId' => $identifier,
 								
 					];
 				}
@@ -399,7 +400,7 @@ class Braintree implements PaymentMethodInterface {
 							                                      // una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
-							'orderId' => $orderID,
+							'orderId' => $identifier,
 							'options' => [ 
 									'submitForSettlement' => $submitForSettlement,
 									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
@@ -414,7 +415,7 @@ class Braintree implements PaymentMethodInterface {
 							                             // una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
-							'orderId' => $orderID,
+							'orderId' => $identifier,
 							'options' => [ 
 									'submitForSettlement' => $submitForSettlement,
 									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
