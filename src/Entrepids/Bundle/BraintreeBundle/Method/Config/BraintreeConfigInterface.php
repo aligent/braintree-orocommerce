@@ -80,4 +80,8 @@ PaymentConfigInterface
 	 */
 	public function getCreditCardValue();	
 
+	/**
+	 * @return string
+	 */
+	public function getCreditCardsSaved();
 }
