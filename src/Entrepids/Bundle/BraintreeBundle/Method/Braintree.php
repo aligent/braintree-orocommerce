@@ -279,6 +279,14 @@ class Braintree implements PaymentMethodInterface {
 			
 			$purchaseAction = $this->config->getPurchaseAction ();
 
+			// Para ver si aca ya esta la orden creada
+			$entity = $this->doctrineHelper->getEntityReference(
+					$paymentTransaction->getEntityClass(),
+					$paymentTransaction->getEntityIdentifier()
+			);		
+			
+			$orderID = $entity->getId();
+			
 			// authorize or charge
 			// si charge mando true
 			// si authorize mando false
@@ -302,6 +310,7 @@ class Braintree implements PaymentMethodInterface {
 				
 
 				$token = $paymentTransactionEntity->getReference();
+				
 				// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
 				try {
 					$customer = $this->adapter->findCustomer ( $customerData ['id'] );
@@ -311,6 +320,7 @@ class Braintree implements PaymentMethodInterface {
 							// una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
+							'orderId' => $orderID,
 					];
 				} catch ( NotFound $e ) {
 					$data = [
@@ -320,7 +330,8 @@ class Braintree implements PaymentMethodInterface {
 							// una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
-
+							'orderId' => $orderID,
+								
 					];
 				}
 				
@@ -388,6 +399,7 @@ class Braintree implements PaymentMethodInterface {
 							                                      // una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
+							'orderId' => $orderID,
 							'options' => [ 
 									'submitForSettlement' => $submitForSettlement,
 									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
@@ -402,6 +414,7 @@ class Braintree implements PaymentMethodInterface {
 							                             // una nueva tarjeta
 							'billing' => $billingData,
 							'shipping' => $shipingData,
+							'orderId' => $orderID,
 							'options' => [ 
 									'submitForSettlement' => $submitForSettlement,
 									'storeInVaultOnSuccess' => $storeInVaultOnSuccess 
