@@ -55,7 +55,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
         $params[BraintreeConfig::PRIVATE_KEY_KEY] = $settings->getBraintreeMerchPrivateKey();
         $params[BraintreeConfig::CREDIT_CARD_ENABLED_KEY] = $settings->getCreditCardEnabled();
         $params[BraintreeConfig::SAVE_FOR_LATER_KEY] = $settings->getSaveForLater();
-        $params[BraintreeConfig::NEW_ORDER_STATUS_KEY] = $settings->getNewOrderStatus();
+        //$params[BraintreeConfig::NEW_ORDER_STATUS_KEY] = $settings->getNewOrderStatus();
         $params[BraintreeConfig::SAVED_CARDS_KEY] = $settings->getSavedCards();
         $params[BraintreeConfig::CVV_VERIFICATION_KEY] = $settings->getCvvVerification();
         $params[BraintreeConfig::DISPLAY_CARDS_TYPE_KEY] = $settings->getDisplayCardTypes();

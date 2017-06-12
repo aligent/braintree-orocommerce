@@ -24,7 +24,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	const PRIVATE_KEY_KEY = "private_key";
 	const CREDIT_CARD_ENABLED_KEY = "credit_card_enabled";
 	const SAVE_FOR_LATER_KEY = "save_for_later";
-	const NEW_ORDER_STATUS_KEY = "new_order_status";
+	//const NEW_ORDER_STATUS_KEY = "new_order_status";
 	const SAVED_CARDS_KEY = "saved_cards";
 	const CVV_VERIFICATION_KEY = "cvv_verification";
 	const DISPLAY_CARDS_TYPE_KEY = "display_cards_type";

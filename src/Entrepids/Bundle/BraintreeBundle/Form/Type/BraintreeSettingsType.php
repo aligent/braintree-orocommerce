@@ -161,10 +161,10 @@ class BraintreeSettingsType extends AbstractType
                 'label' => 'entrepids.braintree.settings.save_for_later.label',
                 'required' => false,
             ])
-            ->add('newOrderStatus', TextType::class, [
+            /*->add('newOrderStatus', TextType::class, [
             		'label' => 'entrepids.braintree.settings.new_order_status.label',
             		'required' => true,
-            ])
+            ])*/
             ->add('savedCards', CheckboxType::class, [
                 'label' => 'entrepids.braintree.settings.saved_cards.label',
                 'required' => false,

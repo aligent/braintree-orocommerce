@@ -45,7 +45,7 @@ class BraintreeSettings extends Transport
 	// Seccion de Capture
 	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
 	const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
-	const BRAINTREE_CAPTURE_NEW_ORDER_STATUS = 'braintree_new_order_status';
+	//const BRAINTREE_CAPTURE_NEW_ORDER_STATUS = 'braintree_new_order_status';
 	// Seccion de features
 	const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_vault_saved_cards';
 	const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_cvv_verification';
@@ -239,7 +239,7 @@ class BraintreeSettings extends Transport
 							self::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER => $this->getSaveForLater(),
 							self::BRAINTREE_CAPTURE_PAYMENT_ACTION => $this->getBraintreePaymentAction(),
 							self::BRAINTREE_CAPTURE_CAPTURE_ACTION => $this->getBraintreeCaptureAction(),
-							self::BRAINTREE_CAPTURE_NEW_ORDER_STATUS => $this->getNewOrderStatus(),
+							//self::BRAINTREE_CAPTURE_NEW_ORDER_STATUS => $this->getNewOrderStatus(),
 							self::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS => $this->getSavedCards(),
 							self::BRAINTREE_FEATURES_CVV_VERIFICATION => $this->getCvvVerification(),
 							self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => $this->getDisplayCardTypes(),
