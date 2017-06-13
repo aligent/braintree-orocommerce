@@ -4,8 +4,6 @@ Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings:
             - NotBlank: ~
         braintreeShortLabel:
             - NotBlank: ~
-        newOrderStatus:
-            - NotBlank: ~
         braintreePaymentAction:
             - NotBlank: ~
             - Valid: ~
