@@ -65,14 +65,14 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	 */
 	public function getAllowedCreditCards()
 	{
-		return (string)$this->get(self::ALLOWED_CREDIT_CARD_TYPES_KEY);
+		return (array)$this->get(self::ALLOWED_CREDIT_CARD_TYPES_KEY);
 	}
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getAllowedEnvironmentTypes()
 	{
-		return (string)$this->get(self::ENVIRONMENT_TYPE);
+		return (array)$this->get(self::ENVIRONMENT_TYPE);
 	}
 	
 	/**
