@@ -13,7 +13,7 @@ PaymentConfigInterface
 	 */
 	public function getAllowedCreditCards();
 	/**
-	 * @return array
+	 * @return string
 	 */
 	public function getAllowedEnvironmentTypes();	
 	/**

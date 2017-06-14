@@ -72,7 +72,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	 */
 	public function getAllowedEnvironmentTypes()
 	{
-		return (array)$this->get(self::ENVIRONMENT_TYPE);
+		return (string)$this->get(self::ENVIRONMENT_TYPE);
 	}
 	
 	/**
