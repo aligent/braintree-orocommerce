@@ -23,12 +23,12 @@ class MoveConfigValuesToSettings extends AbstractMoveConfigValuesToSettings
 	protected $channelFactory;
 
 	/**
-	 * @var MoneyOrderConfigFactory
+	 * @var BraintreeConfigFactory
 	 */
 	protected $configFactory;
 
 	/**
-	 * @var MoneyOrderConfigToSettingsConverter
+	 * @var BraintreeConfigToSettingsConverter
 	 */
 	protected $configToSettingsConverter;
 
@@ -47,7 +47,7 @@ class MoveConfigValuesToSettings extends AbstractMoveConfigValuesToSettings
 		$this->methodIdentifierGenerator = $container->get('entrepids_braintree.generator.braintree_config_identifier');
 		$this->channelFactory = $this->createChannelFactory($container);
 		$this->configFactory = $this->createConfigFactory($container);
-		$this->configToSettingsConverter = new MoneyOrderConfigToSettingsConverter();
+		$this->configToSettingsConverter = new BraintreeConfigToSettingsConverter();
 	}
 
 	/**

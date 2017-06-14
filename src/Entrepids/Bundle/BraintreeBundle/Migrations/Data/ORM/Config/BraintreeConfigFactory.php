@@ -22,7 +22,7 @@ class BraintreeConfigFactory
     /**
      * @return BraintreeConfig
      */
-    public function createMoneyOrderConfig()
+    public function createBraintreeConfig()
     {
         return new BraintreeConfig($this->configManager);
     }
