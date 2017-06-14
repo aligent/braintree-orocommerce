@@ -42,8 +42,8 @@ class BraintreeConfig
     public function getLabel()
     {
         return $this->getLocalizedFallbackValueFromConfig(
-            self::MONEY_ORDER_LABEL_KEY,
-            self::MONEY_ORDER_LABEL
+            self::BRAINTREE_LABEL_KEY,
+            self::BRAINTREE_LABEL
         );
     }
 
