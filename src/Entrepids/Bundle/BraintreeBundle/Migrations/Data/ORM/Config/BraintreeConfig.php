@@ -10,8 +10,6 @@ class BraintreeConfig
 {
     const BRAINTREE_LABEL_KEY = 'braintree_label';
     const BRAINTREE_SHORT_LABEL_KEY = 'braintree_short_label';
-    //const MONEY_ORDER_PAY_TO_KEY = 'money_order_pay_to';
-    //const MONEY_ORDER_SEND_TO_KEY = 'money_order_send_to';
 
     const BRAINTREE_LABEL = 'Braintree';
 
