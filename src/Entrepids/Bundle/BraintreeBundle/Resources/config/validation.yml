@@ -13,9 +13,6 @@ Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings:
         allowedCreditCardTypes:
             - NotBlank: ~
             - Valid: ~
-        braintreePaymentAction:
-            - NotBlank: ~
-            - Valid: ~
         braintreeEnvironmentType:
             - NotBlank: ~
             - Valid: ~
