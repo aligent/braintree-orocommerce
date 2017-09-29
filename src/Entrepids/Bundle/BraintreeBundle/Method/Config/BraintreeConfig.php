@@ -15,25 +15,23 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	const ADMIN_LABEL_KEY = 'admin_label';
 	const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
 	const PAYMENT_ACTION_KEY  = 'payment_action';
-	const CAPTURE_PAYMENT_ACTION_KEY = "capture_action";
+	//const CAPTURE_PAYMENT_ACTION_KEY = "capture_action";
 	const ENVIRONMENT_TYPE = "environment_type";
 	const TYPE = 'braintree';
 	const MERCH_ID_KEY = "merch_id";
 	const MERCH_ACCOUNT_ID_KEY = "merch_account_id";
 	const PUBLIC_KEY_KEY = "public_key";
 	const PRIVATE_KEY_KEY = "private_key";
-	const CREDIT_CARD_ENABLED_KEY = "credit_card_enabled";
+	//const CREDIT_CARD_ENABLED_KEY = "credit_card_enabled";
 	const SAVE_FOR_LATER_KEY = "save_for_later";
 	//const NEW_ORDER_STATUS_KEY = "new_order_status";
-	const SAVED_CARDS_KEY = "saved_cards";
-	const CVV_VERIFICATION_KEY = "cvv_verification";
-	const DISPLAY_CARDS_TYPE_KEY = "display_cards_type";
+	//const SAVED_CARDS_KEY = "saved_cards";
+	//const CVV_VERIFICATION_KEY = "cvv_verification";
+	//const DISPLAY_CARDS_TYPE_KEY = "display_cards_type";
 	
 	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
 	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';
 	const ALLOWED_CREDIT_CARD_TYPES_KEY = 'allowed_credit_card_types';
-	const ENABLE_SSL_VERIFICATION_KEY = 'enable_ssl_verification';
-	const REQUIRE_CVV_ENTRY_KEY = 'require_cvv_entry';
 	
 	const PAYMETHOD_NONCE = 'payment_method_nonce';
 	const CLIENT_TOKEN = 'braintree_client_token';
@@ -99,11 +97,6 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	public function getSandBoxPrivateKey(){
 		return (string)$this->get(self::PRIVATE_KEY_KEY);
 	}
-	/** {@inheritdoc} */
-	public function isCreditCardEnabled()
-	{
-		return (string)$this->get(self::CREDIT_CARD_ENABLED_KEY);
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -114,35 +107,12 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 
 	/**
 	 * {@inheritdoc}
-	 */
-	public function getCapturePaymentAction(){
-		return (string)$this->get(self::CAPTURE_PAYMENT_ACTION_KEY);
-	}
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isEnabledVaultSavedCards(){
-		return (string)$this->get(self::SAVED_CARDS_KEY);
-	}
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isEnabledCvvVerification(){
-		return (string)$this->get(self::CVV_VERIFICATION_KEY);
-	}
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isDisplayCreditCard(){
-		return (string)$this->get(self::DISPLAY_CARDS_TYPE_KEY);
-	}
-	/**
-	 * {@inheritdoc}
 	 */	
 	public function isEnableSaveForLater(){
 		return (string)$this->get(self::SAVE_FOR_LATER_KEY);
 	}
 	
+
 	/**
 	 * {@inheritdoc}
 	 */

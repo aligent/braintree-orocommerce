@@ -39,7 +39,7 @@ class BraintreeView implements PaymentMethodViewInterface
 
         $formOptions = [
             'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
-            'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
+            //'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
         ];
 
         $config = $this->config;
@@ -182,12 +182,6 @@ class BraintreeView implements PaymentMethodViewInterface
 	 */
 	public function isEnabledVaultSavedCards(){
 		return $this->config->isEnabledVaultSavedCards();
-	}
-	/**
-	 * @return bool
-	 */
-	public function isEnabledCvvVerification(){
-		return $this->config->isEnabledCvvVerification();
 	}
 	/**
 	 * @return bool

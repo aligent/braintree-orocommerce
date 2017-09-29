@@ -107,9 +107,11 @@ class CreditCardType extends AbstractType
         }
         $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
         
+        //$creditsCards['newCreditCard1'] = 'entrepids.braintree.braintreeflow.use_different_card';
+        
         $creditsCardsCount = count($creditsCards);
         
-        if ($creditsCardsCount > 1){
+        //if ($creditsCardsCount > 1){
         	$builder->add('credit_cards_saved', ChoiceType::class, [
         			'required' => true,
         			'choices' => $creditsCards,
@@ -119,7 +121,7 @@ class CreditCardType extends AbstractType
         			],
         				
         	]);
-        }
+        //}
 		
         if ($options['zeroAmountAuthorizationEnabled']) {
         	$builder->add(
@@ -142,7 +144,7 @@ class CreditCardType extends AbstractType
         	$this->adapter = new BraintreeAdapter($config);
         }
         else{
-        	
+        	// Revisar que hacer en este caso
         }
         
         $braintreeClientToken = $this->adapter->generate();
@@ -178,7 +180,7 @@ class CreditCardType extends AbstractType
             'label' => 'entrepids.braintree.methods.credit_card.label',
             'csrf_protection' => false,
             'zeroAmountAuthorizationEnabled' => false,
-            'requireCvvEntryEnabled' => true,
+            //'requireCvvEntryEnabled' => true,
         ]);
     }
 

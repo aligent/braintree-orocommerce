@@ -39,7 +39,7 @@ class BraintreeAdapter
     protected function initCredentials()
     {
     	$environmentSelected = $this->config->getAllowedEnvironmentTypes();
-        if (strcmp($environmentSelected, 'Production') == 0) {
+        if (strcmp($environmentSelected, 'Production') == 0 || strcmp($environmentSelected, 'production') == 0) {
             $this->environment('production');
         } else {
             $this->environment('sandbox');

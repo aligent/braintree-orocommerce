@@ -146,7 +146,7 @@ define(function(require) {
             var $el = form;
             var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
-            if ($value == "newCreditCard"){
+            if ($value == null || $value == "newCreditCard"){
             	$('#braintree-custom-cc-form').show();
             	$('#save_for_later_field_row').show();
             } else {
@@ -167,7 +167,7 @@ define(function(require) {
     		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
     		//document.querySelector('input[name="credit_card_value"]').value = $value;
             this.valueCreditCard = $value;
-            if (this.valueCreditCard != "newCreditCard"){
+            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
             	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
             	this.isCreditCardSaved = true;
             }
@@ -294,7 +294,7 @@ define(function(require) {
             var $el = $(e.target);
             var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
-            if ($value == "newCreditCard"){
+            if ($value == null || $value == "newCreditCard"){
             	$('#braintree-custom-cc-form').show();
             	$('#save_for_later_field_row').show();
             } else {
@@ -315,7 +315,7 @@ define(function(require) {
     		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
     		//document.querySelector('input[name="credit_card_value"]').value = $value;
             this.valueCreditCard = $value;
-            if (this.valueCreditCard != "newCreditCard"){
+            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
             	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
             	this.isCreditCardSaved = true;
             }

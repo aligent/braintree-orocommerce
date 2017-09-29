@@ -7,9 +7,6 @@ Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings:
         braintreePaymentAction:
             - NotBlank: ~
             - Valid: ~
-        braintreeCaptureAction:
-            - NotBlank: ~
-            - Valid: ~
         allowedCreditCardTypes:
             - NotBlank: ~
             - Valid: ~

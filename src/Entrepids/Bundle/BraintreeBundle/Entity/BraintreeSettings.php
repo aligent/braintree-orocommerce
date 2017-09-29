@@ -36,7 +36,7 @@ class BraintreeSettings extends Transport
 	const BRAINTREE_SANDBOX_PUBLIC_KEY = 'braintree_sandbox_merch_public_key';
 	const BRAINTREE_SANDBOX_PRIVATE_KEY = 'braintree_sandbox_merch_private_key';
 	// Seccion de Credit Card
-	const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
+	//const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
 	//const BRAINTREE_CREDIT_CARD_TITLE = 'braintree_credit_card_title';
 	const BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER = "braintree_safe_for_later";
 	// agregar si quiere mostrar el checkbox de saveForLater
@@ -44,12 +44,12 @@ class BraintreeSettings extends Transport
 	
 	// Seccion de Capture
 	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
-	const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
+	//const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
 	//const BRAINTREE_CAPTURE_NEW_ORDER_STATUS = 'braintree_new_order_status';
 	// Seccion de features
-	const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_vault_saved_cards';
-	const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_cvv_verification';
-	const BRAINTREE_FEATURES_DISPLAY_CARD_TYPES = 'braintree_display_card_types';	
+	//const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_vault_saved_cards';
+	//const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_cvv_verification';
+	//const BRAINTREE_FEATURES_DISPLAY_CARD_TYPES = 'braintree_display_card_types';	
 	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
 	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';	
 	/**
@@ -111,13 +111,7 @@ class BraintreeSettings extends Transport
 	 */
 	protected $braintreePaymentAction;	
 	
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="braintree_capture_action", type="string", length=255, nullable=false)
-	 */
-	protected $braintreeCaptureAction;	
-	
+
 	/**
 	 * @var string
 	 *
@@ -169,45 +163,11 @@ class BraintreeSettings extends Transport
 	/**
 	 * @var boolean
 	 *
-	 * @ORM\Column(name="braintree_credit_card_enabled", type="boolean", options={"default"=false})
-	 */
-	protected $creditCardEnabled = false;
-	
-	/**
-	 * @var boolean
-	 *
 	 * @ORM\Column(name="braintree_safe_for_later", type="boolean", options={"default"=false})
 	 */
 	protected $saveForLater = false;	
 	
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="braintree_new_order_status", type="string", length=255, nullable=false)
-	 */
-	protected $newOrderStatus;	
-	
-	/**
-	 * @var boolean
-	 *
-	 * @ORM\Column(name="braintree_cvv_verification", type="boolean", options={"default"=true})
-	 */
-	protected $cvvVerification = true;	
-	
-	/**
-	 * @var boolean
-	 *
-	 * @ORM\Column(name="braintree_vault_saved_cards", type="boolean", options={"default"=false})
-	 */
-	protected $savedCards = false;	
-	
-	/**
-	 * @var boolean
-	 *
-	 * @ORM\Column(name="braintree_display_card_types", type="boolean", options={"default"=true})
-	 */
-	protected $displayCardTypes = true;	
-	
+
 	/**
 	 * Constructor
 	 */
@@ -235,14 +195,14 @@ class BraintreeSettings extends Transport
 							self::BRAINTREE_SANDBOX_ACCOUNT_ID => $this->getBraintreeMerchAccountId(),
 							self::BRAINTREE_SANDBOX_PUBLIC_KEY => $this->getBraintreeMerchPublicKey(),
 							self::BRAINTREE_SANDBOX_PRIVATE_KEY => $this->getBraintreeMerchPrivateKey(),
-							self::BRAINTREE_CREDIT_CARD_ENABLED => $this->getCreditCardEnabled(),
+							//self::BRAINTREE_CREDIT_CARD_ENABLED => $this->getCreditCardEnabled(),
 							self::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER => $this->getSaveForLater(),
 							self::BRAINTREE_CAPTURE_PAYMENT_ACTION => $this->getBraintreePaymentAction(),
-							self::BRAINTREE_CAPTURE_CAPTURE_ACTION => $this->getBraintreeCaptureAction(),
+							//self::BRAINTREE_CAPTURE_CAPTURE_ACTION => $this->getBraintreeCaptureAction(),
 							//self::BRAINTREE_CAPTURE_NEW_ORDER_STATUS => $this->getNewOrderStatus(),
-							self::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS => $this->getSavedCards(),
-							self::BRAINTREE_FEATURES_CVV_VERIFICATION => $this->getCvvVerification(),
-							self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => $this->getDisplayCardTypes(),
+							//self::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS => $this->getSavedCards(),
+							//self::BRAINTREE_FEATURES_CVV_VERIFICATION => $this->getCvvVerification(),
+							//self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => $this->getDisplayCardTypes(),
 							self::ZERO_AMOUNT_AUTHORIZATION_KEY => $this->getZeroAmountAuthorization(),
 							self::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY => $this->getAuthorizationForRequiredAmount(),
 					]
@@ -481,30 +441,6 @@ class BraintreeSettings extends Transport
 	}	
 	
 	/**
-	 * Set creditCardEnabled
-	 *
-	 * @param boolean $creditCardEnabled
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setCreditCardEnabled($creditCardEnabled)
-	{
-		$this->creditCardEnabled = $creditCardEnabled;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get creditCardEnabled
-	 *
-	 * @return boolean
-	 */
-	public function getCreditCardEnabled()
-	{
-		return $this->creditCardEnabled;
-	}	
-	
-	/**
 	 * Set saveForLater
 	 *
 	 * @param boolean $saveForLater
@@ -527,82 +463,6 @@ class BraintreeSettings extends Transport
 	{
 		return $this->saveForLater;
 	}
-	
-	
-	/**
-	 * Set savedCards
-	 *
-	 * @param boolean $savedCards
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setSavedCards($savedCards)
-	{
-		$this->savedCards = $savedCards;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get savedCards
-	 *
-	 * @return boolean
-	 */
-	public function getSavedCards()
-	{
-		return $this->savedCards;
-	}
-	
-	
-	/**
-	 * Set cvvVerification
-	 *
-	 * @param boolean $cvvVerification
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setCvvVerification($cvvVerification)
-	{
-		$this->cvvVerification = $cvvVerification;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get cvvVerification
-	 *
-	 * @return boolean
-	 */
-	public function getCvvVerification()
-	{
-		return $this->cvvVerification;
-	}	
-	
-	
-	/**
-	 * Set displayCardTypes
-	 *
-	 * @param boolean $displayCardTypes
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setDisplayCardTypes($displayCardTypes)
-	{
-		$this->displayCardTypes = $displayCardTypes;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get displayCardTypes
-	 *
-	 * @return boolean
-	 */
-	public function getDisplayCardTypes()
-	{
-		return $this->displayCardTypes;
-	}	
-	
 	
 	/**
 	 * Set braintreePaymentAction
@@ -628,55 +488,6 @@ class BraintreeSettings extends Transport
 		return $this->braintreePaymentAction;
 	}	
 
-	
-	/**
-	 * Set braintreeCaptureAction
-	 *
-	 * @param string $braintreeCaptureAction
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setBraintreeCaptureAction($braintreeCaptureAction)
-	{
-		$this->braintreeCaptureAction = $braintreeCaptureAction;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get braintreeCaptureAction
-	 *
-	 * @return string
-	 */
-	public function getBraintreeCaptureAction()
-	{
-		return $this->braintreeCaptureAction;
-	}
-	
-	
-	/**
-	 * Set newOrderStatus
-	 *
-	 * @param string $newOrderStatus
-	 *
-	 * @return BraintreeSettings
-	 */
-	public function setNewOrderStatus($newOrderStatus)
-	{
-		$this->newOrderStatus = $newOrderStatus;
-	
-		return $this;
-	}
-	
-	/**
-	 * Get newOrderStatus
-	 *
-	 * @return string
-	 */
-	public function getNewOrderStatus()
-	{
-		return $this->newOrderStatus;
-	}
 	
 	/**
 	 * Get zeroAmountAuthorization

@@ -33,29 +33,9 @@ PaymentConfigInterface
 	 */
 	public function getSandBoxPrivateKey();	
 	/**
-	 * @return bool
-	 */
-	public function isCreditCardEnabled();
-	/**
 	 * @return string
 	 */
 	public function getPurchaseAction();
-	/**
-	 * @return string
-	 */
-	public function getCapturePaymentAction();	
-	/**
-	 * @return bool
-	 */
-	public function isEnabledVaultSavedCards();
-	/**
-	 * @return bool
-	 */
-	public function isEnabledCvvVerification();	
-	/**
-	 * @return bool
-	 */
-	public function isDisplayCreditCard();
 	/**
 	 * @return bool
 	 */	

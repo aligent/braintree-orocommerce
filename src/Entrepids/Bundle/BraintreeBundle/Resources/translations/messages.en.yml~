@@ -25,7 +25,6 @@ entrepids.braintree.settings.allowed_cc_types.american_express: 'American Expres
 entrepids.braintree.settings.environment_types.label: Environment
 entrepids.braintree.settings.environment_types.sandbox: SandBox
 entrepids.braintree.settings.environment_types.production: Production
-entrepids.braintree.settings.capture.capture_action.label: 'Capture Action'
 entrepids.braintree.settings.capture.capture_action.shipment: Shipment
 entrepids.braintree.settings.capture.capture_action.invoice: Invoice
 entrepids.braintree.settings.capture.capture_action.authorized: Authorized
@@ -84,7 +83,6 @@ entrepids.braintree.system_configuration.fields.account_details.sandbox_merch_pr
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_enabled.label: Enabled
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_title.label: Title
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_safe_for_later.label: 'Safe for Later'
-entrepids.braintree.system_configuration.fields.capture.capture_action.label: 'Capture Action'
 entrepids.braintree.system_configuration.fields.capture.capture_shipment: Shipment
 entrepids.braintree.system_configuration.fields.capture.capture_invoice: Invoice
 entrepids.braintree.system_configuration.fields.capture.capture_authorized: Authorized

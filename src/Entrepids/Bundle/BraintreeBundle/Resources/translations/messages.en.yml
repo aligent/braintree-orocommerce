@@ -5,6 +5,7 @@ entrepids.braintree.methods.tooltip: "The verification number is a 3-digit\nnumb
 entrepids.braintree.settings.label.tooltip: 'This label is used on the checkout screens'
 entrepids.braintree.settings.short_label.tooltip: 'This label is used in order history'
 entrepids.braintree.settings.credit_card_payment_action.label: 'Payment Action'
+entrepids.braintree.settings.credit_card_payment_action.label.tooltip: "Authorize - Will only authorize the payment.\n The transaction will not be settled, unless manually Captured from Admin Console.\nAuthorize and Charge - Will instantly settle the transaction within the checkout."
 entrepids.braintree.settings.credit_card_labels.label: Label
 entrepids.braintree.settings.credit_card_short_labels.label: 'Short Label'
 entrepids.braintree.settings.express_checkout_labels.label: Label
@@ -14,7 +15,7 @@ entrepids.braintree.settings.partner.label: Partner
 entrepids.braintree.settings.user.label: User
 entrepids.braintree.settings.vendor.label: Vendor
 entrepids.braintree.settings.password.label: Password
-entrepids.braintree.settings.payment_action.label: 'Payment Action'
+entrepids.braintree.settings.payment_action.label: 'Payment Action pitazo'
 entrepids.braintree.settings.payment_action.authorize: Authorize
 entrepids.braintree.settings.payment_action.charge: 'Authorize and Charge'
 entrepids.braintree.settings.allowed_cc_types.label: 'Allowed Credit Card Types'
@@ -23,9 +24,9 @@ entrepids.braintree.settings.allowed_cc_types.mastercard: Mastercard
 entrepids.braintree.settings.allowed_cc_types.discover: Discover
 entrepids.braintree.settings.allowed_cc_types.american_express: 'American Express'
 entrepids.braintree.settings.environment_types.label: Environment
+entrepids.braintree.settings.environment_types.label.tooltip: "Use 'Sandbox' for testing purposes only.\n API Credentials below need to reflect your Sandbox or Production account."
 entrepids.braintree.settings.environment_types.sandbox: SandBox
 entrepids.braintree.settings.environment_types.production: Production
-entrepids.braintree.settings.capture.capture_action.label: 'Capture Action'
 entrepids.braintree.settings.capture.capture_action.shipment: Shipment
 entrepids.braintree.settings.capture.capture_action.invoice: Invoice
 entrepids.braintree.settings.capture.capture_action.authorized: Authorized
@@ -33,22 +34,21 @@ entrepids.braintree.settings.capture.capture_action.capture_neworder.label: 'New
 entrepids.braintree.settings.capture.capture_action.capture_neworder_processing: Processing
 entrepids.braintree.settings.capture.capture_action.capture_neworder_suspected_fraud: 'Suspected Fraud'
 entrepids.braintree.settings.merch_id.label: 'Merchant ID'
+entrepids.braintree.settings.merch_id.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account."
 entrepids.braintree.settings.merch_account_id.label: 'Merchant Account ID'
+entrepids.braintree.settings.merch_account_id.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account.\n If accepting different currencies across multiple websites, you will need to adjust this Merchant Account ID for each scope."
 entrepids.braintree.settings.public_key.label: 'Public Key'
+entrepids.braintree.settings.public_key.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account."
 entrepids.braintree.settings.credit_card_enabled.label: Enabled
 entrepids.braintree.settings.private_key.label: 'Private Key'
+entrepids.braintree.settings.private_key.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account."
 entrepids.braintree.settings.save_for_later.label: 'Save for Later'
-entrepids.braintree.settings.new_order_status.label: 'New Order Status'
-entrepids.braintree.settings.saved_cards.label: 'Enabled Vault/Saved Cards'
-entrepids.braintree.settings.features_cvv_verification.label: 'CVV Verification'
+entrepids.braintree.settings.save_for_later.label.tooltip: "Enable/disable offering customers the possibility of storing card details for a later use."
 entrepids.braintree.settings.test_mode.label: 'Test Mode'
 entrepids.braintree.settings.use_proxy.label: 'Use Proxy'
 entrepids.braintree.settings.proxy_host.label: 'Proxy Host'
 entrepids.braintree.settings.proxy_port.label: 'Proxy Port'
 entrepids.braintree.settings.debug_mode.label: 'Debug Mode'
-entrepids.braintree.settings.cvv_verification.label: 'Enable SSL Verification'
-entrepids.braintree.settings.display_card_types.label: 'Display Card Types'
-entrepids.braintree.settings.require_cvv.label: 'Require CVV Entry'
 entrepids.braintree.settings.zero_amount_authorization.label: 'Zero Amount Authorization'
 entrepids.braintree.settings.zero_amount_authorization.tooltip: "If enabled it provides additional convenience to your customers, so that they do not need to re-enter credit card details every time they return back to checkout.\nPlease note that zero amount authorizations are subject to the transaction fees."
 entrepids.braintree.settings.authorization_for_required_amount.label: 'Authorization For Required Amount'
@@ -67,7 +67,7 @@ entrepids.braintree.system_configuration.groups.features.title: Features
 entrepids.braintree.system_configuration.fields.enabled.label: Enabled
 entrepids.braintree.system_configuration.fields.sort_order.label: 'Sort Order'
 entrepids.braintree.system_configuration.fields.payment_action.label: 'Payment Action'
-entrepids.braintree.system_configuration.fields.payment_action.authorize: Authorize
+entrepids.braintree.system_configuration.fields.payment_action.authorize: Authorize putazo
 entrepids.braintree.system_configuration.fields.payment_action.charge: 'Authorize and Charge'
 entrepids.braintree.system_configuration.fields.allowed_cc_types.label: 'Allowed Credit Card Types'
 entrepids.braintree.system_configuration.fields.allowed_cc_types.visa: Visa
@@ -84,16 +84,12 @@ entrepids.braintree.system_configuration.fields.account_details.sandbox_merch_pr
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_enabled.label: Enabled
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_title.label: Title
 entrepids.braintree.system_configuration.fields.credit_card.credit_card_safe_for_later.label: 'Safe for Later'
-entrepids.braintree.system_configuration.fields.capture.capture_action.label: 'Capture Action'
 entrepids.braintree.system_configuration.fields.capture.capture_shipment: Shipment
 entrepids.braintree.system_configuration.fields.capture.capture_invoice: Invoice
 entrepids.braintree.system_configuration.fields.capture.capture_authorized: Authorized
 entrepids.braintree.system_configuration.fields.capture.capture_neworder.label: 'New Order Status'
 entrepids.braintree.system_configuration.fields.capture.capture_neworder_processing: Processing
 entrepids.braintree.system_configuration.fields.capture.capture_neworder_suspected_fraud: 'Suspected Fraud'
-entrepids.braintree.system_configuration.fields.features.features_enabled_vs_cards.label: 'Enabled Vault/Saved Cards'
-entrepids.braintree.system_configuration.fields.features.features_cvv_verification.label: 'CVV Verification'
-entrepids.braintree.system_configuration.fields.features.features_display_cc_types.label: 'Display Card Types'
 entrepids.braintree.credit_card.card_number.label: 'Credit Card Number'
 entrepids.braintree.credit_card.expiration_date.label: 'Expiration Date'
 entrepids.braintree.credit_card.cvv2.label: CVV
@@ -111,3 +107,4 @@ entrepids.braintree.settings.capture.capture_action.%s: __entrepids.braintree.se
 entrepids.braintree.settings.allowed_cc_types.%s: __entrepids.braintree.settings.allowed_cc_types.%s
 entrepids.braintree.settings.environment_types.%s: __entrepids.braintree.settings.environment_types.%s
 entrepids.braintree.settings.label: __entrepids.braintree.settings.label
+entrepids.braintree.settings.capture.capture_action.label: __entrepids.braintree.settings.capture.capture_action.label

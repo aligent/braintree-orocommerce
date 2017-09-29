@@ -33,7 +33,6 @@
             <span>{{ 'entrepids.braintree.settings.form.groups.advanced_settings.title'|trans }}</span>
         </h5>
         {{ form_row(form.braintreePaymentAction) }}
-        {{ form_row(form.braintreeCaptureAction) }}
         {{ form_row(form.braintreeEnvironmentType) }}
     </fieldset>
     <fieldset class="form-horizontal">
@@ -44,11 +43,7 @@
         {{ form_row(form.braintreeMerchAccountId) }}
         {{ form_row(form.braintreeMerchPublicKey) }}
         {{ form_row(form.braintreeMerchPrivateKey) }}
-        {{ form_row(form.creditCardEnabled) }}
         {{ form_row(form.saveForLater) }}
-        {{ form_row(form.savedCards) }}
-        {{ form_row(form.cvvVerification) }}
-        {{ form_row(form.displayCardTypes) }}        
     </fieldset>
     <fieldset class="form-horizontal">
         <h5 class="user-fieldset">
