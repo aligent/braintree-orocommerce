@@ -34,7 +34,7 @@ entrepids.braintree.settings.capture.capture_action.capture_neworder.label: 'New
 entrepids.braintree.settings.capture.capture_action.capture_neworder_processing: Processing
 entrepids.braintree.settings.capture.capture_action.capture_neworder_suspected_fraud: 'Suspected Fraud'
 entrepids.braintree.settings.merch_id.label: 'Merchant ID'
-entrepids.braintree.settings.merch_id.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account."
+entrepids.braintree.settings.merch_id.label.tooltip: '<a href="https://www.braintreepayments.com/"> Obtain <a/> this value from your Braintree Sandbox/Production Account.'
 entrepids.braintree.settings.merch_account_id.label: 'Merchant Account ID'
 entrepids.braintree.settings.merch_account_id.label.tooltip: "Obtain this value from your Braintree Sandbox/Production Account.\n If accepting different currencies across multiple websites, you will need to adjust this Merchant Account ID for each scope."
 entrepids.braintree.settings.public_key.label: 'Public Key'
