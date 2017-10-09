@@ -46,7 +46,6 @@ class CreditCardType extends AbstractType
     public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, TranslatorInterface $translator){
     	$this->doctrineHelper = $doctrineHelper; 
     	$this->tokenStorage = $tokenStorage;
-    	//$this->adapter = $adapter;
     	$this->translator = $translator;
     	$this->getTransactionCustomerORM();
     }
@@ -95,6 +94,9 @@ class CreditCardType extends AbstractType
         );
         
         $creditsCards = [];
+        // muevo esta linea aca porque si la dejo despues del for entonces en el js me llega undefined en el metodo
+        // setCreditCardsSavedValue cuando quiero obtner el valor para mostrar o no el resto de los datos del formulario
+        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
         foreach ($this->paymentsTransactions as $paymentTransaction){
         	$reference = $paymentTransaction->getReference ();
         	$paymentID = $paymentTransaction->getId ();
@@ -105,7 +107,7 @@ class CreditCardType extends AbstractType
         	}
         
         }
-        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
+
         
         //$creditsCards['newCreditCard1'] = 'entrepids.braintree.braintreeflow.use_different_card';
         

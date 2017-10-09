@@ -21,13 +21,8 @@ class BraintreeSettings extends Transport
 {
 
 	// Seccion de Detalles
-	//const BRAINTREE_ENABLED_KEY = 'braintree_enabled';
 	const BRAINTREE_LABEL_KEY = 'braintree_label';
 	const BRAINTREE_SHORT_LABEL_KEY = 'braintree_short_label';
-	//const BRAINTREE_SORT_ORDER_KEY = 'braintree_sort_order';
-//	const BRAINTREE_ALLOWED_COUNTRIES_KEY = 'braintree_allowed_countries';
-//	const BRAINTREE_SELECTED_COUNTRIES_KEY = 'braintree_selected_countries';
-//	const BRAINTREE_ALLOWED_CURRENCIES = 'braintree_allowed_currencies';
 	const BRAINTREE_PRO_ALLOWED_CC_TYPES_KEY = 'braintree_allowed_cc_types';
 	// Seccion de Braintree Account Details
 	const BRAINTREE_ENVIRONMENT_TYPES = 'braintree_environment_types';
@@ -36,20 +31,13 @@ class BraintreeSettings extends Transport
 	const BRAINTREE_SANDBOX_PUBLIC_KEY = 'braintree_sandbox_merch_public_key';
 	const BRAINTREE_SANDBOX_PRIVATE_KEY = 'braintree_sandbox_merch_private_key';
 	// Seccion de Credit Card
-	//const BRAINTREE_CREDIT_CARD_ENABLED = 'braintree_credit_card_enabled';
-	//const BRAINTREE_CREDIT_CARD_TITLE = 'braintree_credit_card_title';
 	const BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER = "braintree_safe_for_later";
 	// agregar si quiere mostrar el checkbox de saveForLater
 	
 	
 	// Seccion de Capture
 	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
-	//const BRAINTREE_CAPTURE_CAPTURE_ACTION = 'braintree_capture_capture_action';
-	//const BRAINTREE_CAPTURE_NEW_ORDER_STATUS = 'braintree_new_order_status';
 	// Seccion de features
-	//const BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS = 'braintree_vault_saved_cards';
-	//const BRAINTREE_FEATURES_CVV_VERIFICATION = 'braintree_cvv_verification';
-	//const BRAINTREE_FEATURES_DISPLAY_CARD_TYPES = 'braintree_display_card_types';	
 	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
 	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';	
 	/**
@@ -188,21 +176,14 @@ class BraintreeSettings extends Transport
 					[
 							self::BRAINTREE_LABEL_KEY => $this->getBraintreeLabel(),
 							self::BRAINTREE_SHORT_LABEL_KEY => $this->getBraintreeShortLabel(),
-							//self::BRAINTREE_SORT_ORDER_KEY => $this->getExpressCheckoutLabels(),
 							self::BRAINTREE_PRO_ALLOWED_CC_TYPES_KEY => $this->getAllowedCreditCardTypes(),
 							self::BRAINTREE_ENVIRONMENT_TYPES => $this->getBraintreeEnvironmentType(),
 							self::BRAINTREE_SANDBOX_MERCH_ID => $this->getBraintreeMerchId(),
 							self::BRAINTREE_SANDBOX_ACCOUNT_ID => $this->getBraintreeMerchAccountId(),
 							self::BRAINTREE_SANDBOX_PUBLIC_KEY => $this->getBraintreeMerchPublicKey(),
 							self::BRAINTREE_SANDBOX_PRIVATE_KEY => $this->getBraintreeMerchPrivateKey(),
-							//self::BRAINTREE_CREDIT_CARD_ENABLED => $this->getCreditCardEnabled(),
 							self::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER => $this->getSaveForLater(),
 							self::BRAINTREE_CAPTURE_PAYMENT_ACTION => $this->getBraintreePaymentAction(),
-							//self::BRAINTREE_CAPTURE_CAPTURE_ACTION => $this->getBraintreeCaptureAction(),
-							//self::BRAINTREE_CAPTURE_NEW_ORDER_STATUS => $this->getNewOrderStatus(),
-							//self::BRAINTREE_FEATURES_ENABLED_VAULT_SAVED_CARDS => $this->getSavedCards(),
-							//self::BRAINTREE_FEATURES_CVV_VERIFICATION => $this->getCvvVerification(),
-							//self::BRAINTREE_FEATURES_DISPLAY_CARD_TYPES => $this->getDisplayCardTypes(),
 							self::ZERO_AMOUNT_AUTHORIZATION_KEY => $this->getZeroAmountAuthorization(),
 							self::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY => $this->getAuthorizationForRequiredAmount(),
 					]

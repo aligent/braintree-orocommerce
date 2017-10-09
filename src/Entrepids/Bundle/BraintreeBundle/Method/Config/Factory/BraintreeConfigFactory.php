@@ -47,18 +47,12 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
             $this->identifierGenerator->generateIdentifier($channel);
         $params[BraintreeConfig::ALLOWED_CREDIT_CARD_TYPES_KEY] = $settings->getAllowedCreditCardTypes();
         $params[BraintreeConfig::PAYMENT_ACTION_KEY] = $settings->getBraintreePaymentAction();
-        //$params[BraintreeConfig::CAPTURE_PAYMENT_ACTION_KEY] = $settings->getBraintreeCaptureAction();
         $params[BraintreeConfig::ENVIRONMENT_TYPE] = $settings->getBraintreeEnvironmentType();
         $params[BraintreeConfig::MERCH_ID_KEY] = $settings->getBraintreeMerchId();
         $params[BraintreeConfig::MERCH_ACCOUNT_ID_KEY] = $settings->getBraintreeMerchAccountId();
         $params[BraintreeConfig::PUBLIC_KEY_KEY] = $settings->getBraintreeMerchPublicKey(); 
         $params[BraintreeConfig::PRIVATE_KEY_KEY] = $settings->getBraintreeMerchPrivateKey();
-        //$params[BraintreeConfig::CREDIT_CARD_ENABLED_KEY] = $settings->getCreditCardEnabled();
         $params[BraintreeConfig::SAVE_FOR_LATER_KEY] = $settings->getSaveForLater();
-        //$params[BraintreeConfig::NEW_ORDER_STATUS_KEY] = $settings->getNewOrderStatus();
-        //$params[BraintreeConfig::SAVED_CARDS_KEY] = $settings->getSavedCards();
-        //$params[BraintreeConfig::CVV_VERIFICATION_KEY] = $settings->getCvvVerification();
-        //$params[BraintreeConfig::DISPLAY_CARDS_TYPE_KEY] = $settings->getDisplayCardTypes();
         $params[BraintreeConfig::ZERO_AMOUNT_AUTHORIZATION_KEY] = $settings->getZeroAmountAuthorization();
         $params[BraintreeConfig::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY] = $settings->getAuthorizationForRequiredAmount();
         $params[BraintreeConfig::ALLOWED_CREDIT_CARD_TYPES_KEY] = $settings->getAllowedCreditCardTypes();

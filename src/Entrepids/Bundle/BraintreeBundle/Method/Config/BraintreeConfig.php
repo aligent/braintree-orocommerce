@@ -15,20 +15,14 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	const ADMIN_LABEL_KEY = 'admin_label';
 	const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
 	const PAYMENT_ACTION_KEY  = 'payment_action';
-	//const CAPTURE_PAYMENT_ACTION_KEY = "capture_action";
 	const ENVIRONMENT_TYPE = "environment_type";
 	const TYPE = 'braintree';
 	const MERCH_ID_KEY = "merch_id";
 	const MERCH_ACCOUNT_ID_KEY = "merch_account_id";
 	const PUBLIC_KEY_KEY = "public_key";
 	const PRIVATE_KEY_KEY = "private_key";
-	//const CREDIT_CARD_ENABLED_KEY = "credit_card_enabled";
 	const SAVE_FOR_LATER_KEY = "save_for_later";
-	//const NEW_ORDER_STATUS_KEY = "new_order_status";
-	//const SAVED_CARDS_KEY = "saved_cards";
-	//const CVV_VERIFICATION_KEY = "cvv_verification";
-	//const DISPLAY_CARDS_TYPE_KEY = "display_cards_type";
-	
+
 	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
 	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';
 	const ALLOWED_CREDIT_CARD_TYPES_KEY = 'allowed_credit_card_types';

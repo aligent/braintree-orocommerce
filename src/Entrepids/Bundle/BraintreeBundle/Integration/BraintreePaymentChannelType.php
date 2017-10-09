@@ -22,6 +22,6 @@ class BraintreePaymentChannelType implements ChannelInterface, IconAwareIntegrat
 	 */
 	public function getIcon()
 	{
-		return 'bundles/braintreee/img/braintree-logo.png';
+		return 'bundles/braintree/img/braintree-logo.png';
 	}
 }

@@ -61,11 +61,7 @@ class BraintreePaymentMethodFactory implements BraintreePaymentMethodFactoryInte
 	 * @param TranslatorInterface $translator
 	 */	
 	public function __construct(DoctrineHelper $doctrineHelper, PropertyAccessor $propertyAccessor, Session $session, TranslatorInterface $translator) {
-		//$this->router = $router;
-		//$this->adapter = $adapter;
 		$this->doctrineHelper = $doctrineHelper;
-		//$this->optionsProvider = $optionsProvider;
-		//$this->surchargeProvider = $surchargeProvider;
 		$this->propertyAccessor = $propertyAccessor;
 		$this->session = $session;
 		$this->translator = $translator;

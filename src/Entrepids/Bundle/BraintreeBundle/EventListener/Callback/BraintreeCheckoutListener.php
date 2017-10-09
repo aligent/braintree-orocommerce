@@ -59,7 +59,6 @@ class BraintreeCheckoutListener {
 		
 		$eventData = $event->getData();
 		
-		// TODO: BB-3693 Will use typed Response
 		if (!$paymentTransaction || !isset($eventData['PayerID'], $eventData['token']) ||
 				$eventData['token'] !== $paymentTransaction->getReference()
 		) {

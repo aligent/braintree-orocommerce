@@ -103,17 +103,6 @@ class BraintreeSettingsType extends AbstractType
                 'tooltip' => 'entrepids.braintree.settings.credit_card_payment_action.label.tooltip',
                 'required' => true,
             ])
-            /*->add('braintreeCaptureAction', ChoiceType::class, [
-            		'choices' => $this->paymentActionsDataProvider->getCaptureActions(),
-            		'choices_as_values' => true,
-            		'choice_label' => function ($action) {
-            			return $this->translator->trans(
-            					sprintf('entrepids.braintree.settings.capture.capture_action.%s', $action)
-            			);
-            		},
-            		'label' => 'entrepids.braintree.settings.capture.capture_action.label',
-            		'required' => true,
-            		]) */           
             ->add('allowedCreditCardTypes', ChoiceType::class, [
                 'choices' => $this->cardTypesDataProvider->getCardTypes(),
                 'choices_as_values' => true,
@@ -159,37 +148,11 @@ class BraintreeSettingsType extends AbstractType
             	'tooltip' => 'entrepids.braintree.settings.private_key.label.tooltip',
                 'required' => true,
             ])
-            /*->add('creditCardEnabled', CheckboxType::class, [
-                'label' => 'entrepids.braintree.settings.credit_card_enabled.label',
-                'required' => false,
-            ])*/
             ->add('saveForLater', CheckboxType::class, [
                 'label' => 'entrepids.braintree.settings.save_for_later.label',
             	'tooltip' => 'entrepids.braintree.settings.save_for_later.label.tooltip',
                 'required' => false,
             ]);
-            /*->add('newOrderStatus', TextType::class, [
-            		'label' => 'entrepids.braintree.settings.new_order_status.label',
-            		'required' => true,
-            ])
-            ->add('savedCards', CheckboxType::class, [
-                'label' => 'entrepids.braintree.settings.saved_cards.label',
-                'required' => false,
-            ])
-            ->add('cvvVerification', CheckboxType::class, [
-                'label' => 'entrepids.braintree.settings.cvv_verification.label',
-                'required' => false,
-            ])
-            ->add('displayCardTypes', CheckboxType::class, [
-            		'label' => 'entrepids.braintree.settings.display_card_types.label',
-            		'required' => false,
-            ]);*/            
-        /*$this->transformWithEncodedValue($builder, 'vendor');
-        $this->transformWithEncodedValue($builder, 'partner');
-        $this->transformWithEncodedValue($builder, 'user');
-        $this->transformWithEncodedValue($builder, 'password', false);
-        $this->transformWithEncodedValue($builder, 'proxyHost');
-        $this->transformWithEncodedValue($builder, 'proxyPort');*/
     }
 
     /**
