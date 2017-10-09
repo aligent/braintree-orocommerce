@@ -113,7 +113,7 @@ class CreditCardType extends AbstractType
         
         $creditsCardsCount = count($creditsCards);
         
-        //if ($creditsCardsCount > 1){
+        if ($creditsCardsCount > 1){
         	$builder->add('credit_cards_saved', ChoiceType::class, [
         			'required' => true,
         			'choices' => $creditsCards,
@@ -123,7 +123,7 @@ class CreditCardType extends AbstractType
         			],
         				
         	]);
-        //}
+        }
 		
         if ($options['zeroAmountAuthorizationEnabled']) {
         	$builder->add(
