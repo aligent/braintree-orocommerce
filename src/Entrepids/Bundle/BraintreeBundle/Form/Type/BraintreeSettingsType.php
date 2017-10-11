@@ -138,12 +138,12 @@ class BraintreeSettingsType extends AbstractType
             	'tooltip' => 'entrepids.braintree.settings.merch_account_id.label.tooltip',
                 'required' => true,
             ])
-            ->add('braintreeMerchPublicKey', TextType::class, [
+            ->add('braintreeMerchPublicKey', PasswordType::class, [
                 'label' => 'entrepids.braintree.settings.public_key.label',
             	'tooltip' => 'entrepids.braintree.settings.public_key.label.tooltip',
                 'required' => true,
             ])
-            ->add('braintreeMerchPrivateKey', TextType::class, [
+            ->add('braintreeMerchPrivateKey', PasswordType::class, [
                 'label' => 'entrepids.braintree.settings.private_key.label',
             	'tooltip' => 'entrepids.braintree.settings.private_key.label.tooltip',
                 'required' => true,
