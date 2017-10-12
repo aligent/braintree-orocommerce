@@ -31,6 +31,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	const CLIENT_TOKEN = 'braintree_client_token';
 	const CREDIT_CARD_VALUE = 'credit_card_value';
 	const CREDIT_CARD_SELECTED = 'credit_cards_saved';
+	
 	/**
 	 * {@inheritDoc}
 	 */

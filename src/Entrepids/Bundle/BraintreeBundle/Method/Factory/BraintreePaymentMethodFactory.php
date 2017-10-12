@@ -51,6 +51,10 @@ class BraintreePaymentMethodFactory implements BraintreePaymentMethodFactoryInte
 	/** @var Session */
 	protected $session;
 	
+	/**
+	 * 
+	 * @var TranslatorInterface
+	 */
 	protected $translator;
 	
 	/**

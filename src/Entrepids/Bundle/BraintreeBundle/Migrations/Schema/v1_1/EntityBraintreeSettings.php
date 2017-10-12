@@ -31,8 +31,6 @@ class EntityBraintreeSettings implements Migration
     {
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('braintree_payment_action', 'string', ['notnull' => false, 'length' => 255]);
- //       $table->addColumn('braintree_capture_action', 'string', ['notnull' => false, 'length' => 255]);
- //       $table->addColumn('braintree_capture_action', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('braintree_environment_type', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('braintree_allowed_card_types', 'array', ['notnull' => false, 'comment' => '(DC2Type:array)']);
         $table->addColumn('braintree_auth_for_req_amount', 'boolean', ['default' => '0', 'notnull' => false]);
@@ -40,12 +38,7 @@ class EntityBraintreeSettings implements Migration
         $table->addColumn('braintree_merch_account_id', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('braintree_merch_public_key', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('braintree_merch_private_key', 'string', ['notnull' => false, 'length' => 255]);
-        //$table->addColumn('braintree_credit_card_enabled', 'boolean', ['default' => '1', 'notnull' => false]);
         $table->addColumn('braintree_safe_for_later', 'boolean', ['default' => '1', 'notnull' => false]);
-        //$table->addColumn('braintree_new_order_status', 'string', ['notnull' => false, 'length' => 255]);
-        //$table->addColumn('braintree_cvv_verification', 'boolean', ['default' => '1', 'notnull' => false]);
-        //$table->addColumn('braintree_vault_saved_cards', 'boolean', ['default' => '1', 'notnull' => false]);
-        //$table->addColumn('braintree_display_card_types', 'boolean', ['default' => '1', 'notnull' => false]);
         $table->addColumn('braintree_zero_amount', 'boolean', ['default' => '0', 'notnull' => false]);
 
     }

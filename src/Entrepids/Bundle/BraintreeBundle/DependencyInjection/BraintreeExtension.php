@@ -30,7 +30,7 @@ class BraintreeExtension extends Extension
         $loader->load('method.yml');
         $loader->load('factory.yml');
         $loader->load('integration.yml');
-       // $loader->load('listeners.yml');        
+    
         
     }
     

@@ -4,12 +4,19 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize;
 
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
 class OperationAuthorize extends AbstractBraintreeOperation {
 	
-	protected $isValidData;
 	/**
-	 *
+	 * 
+	 * @var Boolean
+	 */
+	protected $isValidData;
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
 	 */
 	protected function preProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
@@ -25,8 +32,9 @@ class OperationAuthorize extends AbstractBraintreeOperation {
 	}
 	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+	 */
 	protected function postProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
 		
@@ -43,9 +51,11 @@ class OperationAuthorize extends AbstractBraintreeOperation {
 	
 				
 	}
+
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+	 */
 	protected function preprocessDataToSend (){
 		
 	}

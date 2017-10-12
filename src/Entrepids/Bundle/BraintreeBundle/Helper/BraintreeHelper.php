@@ -51,21 +51,39 @@ class BraintreeHelper implements BraintreeHelperInterface {
 	/** @var Session */
 	protected $session;
 	
+	/**
+	 * 
+	 * @var TranslatorInterface
+	 */
 	protected $translator;
 	
+	/**
+	 * 
+	 * @var String
+	 */
 	protected $paymentOperation;
 	
+	/**
+	 * 
+	 * @var String
+	 */
 	protected $genericOperation;
 	
+	/**
+	 * 
+	 * @var array
+	 */
 	protected $operationsValue = array (
 			"capture" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture",
 			"charge" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge",
 			"purchaseExisting" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase",	
 			"purchaseNewCreditCard" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase",
+			"purchaseError" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseErrorOperation",
 			"validate" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate",
 			"authorize" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize",			
 			
 	);
+	
 	/**
 	 * 
 	 * @param BraintreeConfigInterface $config
@@ -112,9 +130,9 @@ class BraintreeHelper implements BraintreeHelperInterface {
 
 	}
 	
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * @return string
+     */
 	public function getIdentifier()
 	{
 		return $this->config->getPaymentMethodIdentifier();
@@ -128,14 +146,24 @@ class BraintreeHelper implements BraintreeHelperInterface {
 		return $this->propertyAccessor;
 	}
 	
+	/**
+	 * 
+	 */
 	protected function setGenericOperation ($genericOperation){
 		$this->genericOperation = $genericOperation;
 	}
 
+	/**
+	 * @return String
+	 */
 	protected function getGenericOperation (){
 		return $this->genericOperation;
 	}
 	
+	/**
+	 * 
+	 * @param unknown $paymentTransaction
+	 */
 	protected function setAndExecuteOperation($paymentTransaction){
 		$this->getGenericOperation()->setPaymentTransaction($paymentTransaction);
 		return $this->getGenericOperation()->operationProcess();

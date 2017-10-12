@@ -20,24 +20,16 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class BraintreeSettings extends Transport
 {
 
-	// Seccion de Detalles
 	const BRAINTREE_LABEL_KEY = 'braintree_label';
 	const BRAINTREE_SHORT_LABEL_KEY = 'braintree_short_label';
 	const BRAINTREE_PRO_ALLOWED_CC_TYPES_KEY = 'braintree_allowed_cc_types';
-	// Seccion de Braintree Account Details
 	const BRAINTREE_ENVIRONMENT_TYPES = 'braintree_environment_types';
 	const BRAINTREE_SANDBOX_MERCH_ID = 'braintree_sandbox_merch_id';
 	const BRAINTREE_SANDBOX_ACCOUNT_ID = 'braintree_sandbox_merch_account_id';
 	const BRAINTREE_SANDBOX_PUBLIC_KEY = 'braintree_sandbox_merch_public_key';
 	const BRAINTREE_SANDBOX_PRIVATE_KEY = 'braintree_sandbox_merch_private_key';
-	// Seccion de Credit Card
 	const BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER = "braintree_safe_for_later";
-	// agregar si quiere mostrar el checkbox de saveForLater
-	
-	
-	// Seccion de Capture
 	const BRAINTREE_CAPTURE_PAYMENT_ACTION = 'braintree_capture_payment_action';
-	// Seccion de features
 	const ZERO_AMOUNT_AUTHORIZATION_KEY = 'zero_amount_authorization';
 	const AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY = 'authorization_for_required_amount';	
 	/**

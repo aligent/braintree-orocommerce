@@ -15,33 +15,65 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use phpDocumentor\Reflection\Types\Array_;
+use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
 abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 
+	/**
+	 * 
+	 * @var Array_
+	 */
 	protected $customerData;
+
+	/**
+	 *
+	 * @var Array_
+	 */
 	
 	protected $billingData;
 	
+	/**
+	 *
+	 * @var Array_
+	 */
+	
 	protected $shipingData;
 	
+	/**
+	 * 
+	 * @var unknown
+	 */
 	protected $identifier;
 	
+	/**
+	 * 
+	 * @var Boolean
+	 */
 	protected $isCharge;
 	
+	
+	/**
+	 * 
+	 * @var Boolean
+	 */
 	protected $isAuthorize;
 	
 	/**
-	 *
+	 * This method is used to obtain response from Braintree 
 	 */
 	abstract protected function getResponseFromBraintree();
+	
 	/**
-	 *
+	 * This method is used to process the response of braintree core
+	 * 
 	 * @param unknown $response
 	 */
 	abstract protected function processResponseBriantee($response);
 	
 	/**
-	 *
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
 	 */
 	protected function postProcessOperation(){
 		$response = $this->getResponseFromBraintree();
@@ -49,7 +81,8 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	}
 	
 	/**
-	 *
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
 	 */
 	protected function preprocessDataToSend (){
 		$paymentTransaction = $this->paymentTransaction;
@@ -81,6 +114,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	}
 	
 	/**
+	 * This method set the error from braintree responses
 	 *
 	 * @param unknown $response
 	 */
@@ -104,6 +138,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	}
 	
 	/**
+	 * This is a method to obtain the data of customer user to send to braintree
 	 *
 	 * @param PaymentTransaction $sourcepaymenttransaction
 	 */
@@ -162,6 +197,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	}
 	
 	/**
+	 * This method obtain the address depending of typeAddress
 	 *
 	 * @param PaymentTransaction $sourcepaymenttransaction
 	 * @param unknown $typeAddress
@@ -234,6 +270,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	
 	
 	/**
+	 * This is function to check if data is or not null
 	 *
 	 * @param unknown $data
 	 * @return boolean
@@ -247,6 +284,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	}
 	
 	/**
+	 * This function add error to flash bag
 	 *
 	 * @param unknown $errorMessage
 	 */

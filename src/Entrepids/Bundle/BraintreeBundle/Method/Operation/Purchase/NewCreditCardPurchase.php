@@ -17,9 +17,17 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase;
 
 class NewCreditCardPurchase extends AbstractBraintreePurchase {
-	
+
+	/**
+	 * 
+	 * @var String
+	 */
 	protected $nonce;
 	
+	/**
+	 * 
+	 * @var Boolean
+	 */
 	protected $submitForSettlement;
 	
 	/**
@@ -42,6 +50,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 		}
 		
 		// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+		$merchAccountID = $this->config->getSandBoxMerchAccountId();
 		try {
 			$customer = $this->adapter->findCustomer ( $this->customerData ['id'] );
 			$data = [
@@ -52,6 +61,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
+					'merchantAccountId' => $merchAccountID,
 					'options' => [
 							'submitForSettlement' => $this->submitForSettlement,
 							'storeInVaultOnSuccess' => $storeInVaultOnSuccess
@@ -67,6 +77,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
+					'merchantAccountId' => $merchAccountID,
 					'options' => [
 							'submitForSettlement' => $this->submitForSettlement,
 							'storeInVaultOnSuccess' => $storeInVaultOnSuccess

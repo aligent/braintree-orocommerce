@@ -35,7 +35,6 @@ class BraintreeView implements PaymentMethodViewInterface
 	/** {@inheritdoc} */
 	public function getOptions(PaymentContextInterface $context)
 	{
-        //$isZeroAmountAuthorizationEnabled = $this->config->isZeroAmountAuthorizationEnabled();
 
         $formOptions = [
             'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
@@ -51,10 +50,6 @@ class BraintreeView implements PaymentMethodViewInterface
                 'allowedCreditCards' => $this->getAllowedCreditCards(),
             ],
         ];
-
-        /*if (!$isZeroAmountAuthorizationEnabled) {
-            return $viewOptions;
-        }*/
 
         $validateTransaction = $this->paymentTransactionProvider
             ->getActiveValidatePaymentTransaction($this->getPaymentMethodType());

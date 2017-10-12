@@ -8,16 +8,19 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation
 class OperationValidate extends AbstractBraintreeOperation {
 	
 	const ZERO_AMOUNT = 0;
+
 	/**
-	 *
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
 	 */
 	protected function preProcessOperation (){
 		
 	}
 	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+	 */
 	protected function postProcessOperation (){
 		
 		$paymentTransaction = $this->paymentTransaction;
@@ -53,9 +56,11 @@ class OperationValidate extends AbstractBraintreeOperation {
 		
 				
 	}
+
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+	 */
 	protected function preprocessDataToSend (){
 		
 	}

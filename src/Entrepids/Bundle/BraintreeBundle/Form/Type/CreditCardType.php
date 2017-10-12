@@ -51,33 +51,7 @@ class CreditCardType extends AbstractType
     }
     
     
-    private function getTransactionCustomerORM (){
-   
-    	$qb = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->createQueryBuilder('pt');
-    	$res =  $qb->select('response')
-    	->where(
-    			$qb->expr()->isNotNull('reference')
-    	)
-    	->orderBy('id');
-    	
-    	$customerUser = $this->getLoggedCustomerUser();
 
-    	$criteria = Criteria::create()
-    	->where(Criteria::expr()->isNull('reference'));
-    	
-    	$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
-    			'frontendOwner' => $customerUser,
-    	]);
-    
-		$this->paymentsTransactions = $paymentTransactionEntity;
-
-    	
-    	$query = $qb->getQuery();
-
-    	$result = new BufferedQueryResultIterator($qb);
-    	
-
-    }
     
     /** {@inheritdoc} */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -94,22 +68,7 @@ class CreditCardType extends AbstractType
         );
         
         $creditsCards = [];
-        // muevo esta linea aca porque si la dejo despues del for entonces en el js me llega undefined en el metodo
-        // setCreditCardsSavedValue cuando quiero obtner el valor para mostrar o no el resto de los datos del formulario
-        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
-        foreach ($this->paymentsTransactions as $paymentTransaction){
-        	$reference = $paymentTransaction->getReference ();
-        	$paymentID = $paymentTransaction->getId ();
-        	if (trim($reference)) { // esto porque más arriba tengo que obtener los pagos en donde reference no sea null
-        		// Significa que tiene un reference que no esta vacio
-        		$response = $paymentTransaction->getResponse ();
-        		$creditsCards [$paymentID] = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
-        	}
-        
-        }
-
-        
-        //$creditsCards['newCreditCard1'] = 'entrepids.braintree.braintreeflow.use_different_card';
+        $creditsCards = $this->getCreditCardsSaved();
         
         $creditsCardsCount = count($creditsCards);
         
@@ -131,7 +90,7 @@ class CreditCardType extends AbstractType
         			'checkbox',
         			[
         					'required' => false,
-        					'label' => 'oro.paypal.credit_card.save_for_later.label',
+        					'label' => 'entrepids.braintree.settings.save_for_later.label',
         					'mapped' => false,
         					'data' => false,
         					'attr' => [
@@ -229,5 +188,41 @@ class CreditCardType extends AbstractType
     	}
     
     	return null;
+    }
+    
+    /**
+     *  The method get the customer user and then get the transactions to determine if they have any saved card
+     */
+    private function getTransactionCustomerORM (){
+    	$customerUser = $this->getLoggedCustomerUser();
+    	$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
+    			'frontendOwner' => $customerUser,
+    	]);
+    
+    	$this->paymentsTransactions = $paymentTransactionEntity;
+
+    	 
+    
+    }   
+    
+    /**
+     * get credit cards saved from customer user
+     * 
+     * @return array
+     */
+    private function getCreditCardsSaved (){
+    	$creditsCards = [];
+    	$creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
+    	foreach ($this->paymentsTransactions as $paymentTransaction){
+    		$reference = $paymentTransaction->getReference ();
+    		$paymentID = $paymentTransaction->getId ();
+    		if (trim($reference)) {
+    			$response = $paymentTransaction->getResponse ();
+    			$creditsCards [$paymentID] = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
+    		}
+    	
+    	} 
+    	
+    	return $creditsCards;
     }
 }

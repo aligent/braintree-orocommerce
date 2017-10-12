@@ -4,15 +4,26 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture;
 
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
+use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
 class OperationCapture extends AbstractBraintreeOperation {
 	
+	/**
+	 * 
+	 * @var Integer
+	 */
 	protected $transactionId;
 	
+	/**
+	 * 
+	 * @var Boolean
+	 */
 	protected $isAuthorize;
 
 	/**
-	 *
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
 	 */
 	protected function preProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
@@ -41,8 +52,9 @@ class OperationCapture extends AbstractBraintreeOperation {
 	}
 	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+	 */
 	protected function postProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction ();
@@ -54,7 +66,7 @@ class OperationCapture extends AbstractBraintreeOperation {
 			];
 		}
 		else{
-			if ($this->transactionId != null) { // si existe el id de la transaccion entonces
+			if ($this->transactionId != null) { 
 				$response = $this->adapter->submitForSettlement ( $this->transactionId );
 				
 				if (! $response->success) {
@@ -62,23 +74,17 @@ class OperationCapture extends AbstractBraintreeOperation {
 					$transactionData = $response->transaction;
 					$status = $transactionData->__get ( 'status' );
 				
-					if (strcmp ( $status, Braintree\Transaction::AUTHORIZED ) == 0) { // esto es lo que dice la clase Transaction del modulo Braintree
-						// es estado authorizado y fallo
+					if (strcmp ( $status, Braintree\Transaction::AUTHORIZED ) == 0) { 
 						$paymentTransaction->setSuccessful ( $response->success )->setActive ( true );
-						// ->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
-						// ->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
 					} else {
-						// es otro estado y fallo, aca tengo que poner la transaccion que ya fue capturada previamente
+
 						$paymentTransaction->setSuccessful ( true )-> // lo pongo en true porque no es estado authorized
 						setActive ( false );
-						// ->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
-						// ->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
+
 					}
 				} else {
 					$errors = 'No errors';
 					$paymentTransaction->setSuccessful ( $response->success )->setActive ( false );
-					// ->setReference($response->getReference()) // no estoy seguro, lo saco hasta que sepa que va
-					// ->setResponse($response->getData()); // ni idea que puede ser data, lo saco hasta que sepa
 				}
 				
 				if ($sourcePaymentTransaction) {
@@ -94,8 +100,8 @@ class OperationCapture extends AbstractBraintreeOperation {
 						'successful' => $response->success
 				];
 				
-			} else { // no existe el id de la transaccion
-				// dejo la transaccion y la orden como estaba??
+			} else { 
+				
 
 				return [
 				 'message' => 'No transaction Id',
@@ -104,9 +110,12 @@ class OperationCapture extends AbstractBraintreeOperation {
 			}		
 		}
 	}
+
+	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+	 */
 	protected function preprocessDataToSend (){
 		$paymentTransaction = $this->paymentTransaction;
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction ();

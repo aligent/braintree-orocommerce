@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Entrepids. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
@@ -40,14 +40,6 @@ class BraintreeSearchAdapter
     public function orderId()
     {
         return TransactionSearch::orderId();
-    }
-
-    /**
-     * @return TextNode
-     */
-    public function paypalPaymentId()
-    {
-        return TransactionSearch::paypalPaymentId();
     }
 
     /**

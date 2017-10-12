@@ -41,6 +41,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 		$token = $paymentTransactionEntity->getReference();
 		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
 		// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+		$merchAccountID = $this->config->getSandBoxMerchAccountId();
 		try {
 			$customer = $this->adapter->findCustomer ( $this->customerData ['id'] );
 			$data = [
@@ -50,6 +51,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
+					'merchantAccountId' => $merchAccountID,
 			];
 		} catch ( NotFound $e ) {
 			$data = [
@@ -60,6 +62,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
+					'merchantAccountId' => $merchAccountID,
 		
 			];
 		}

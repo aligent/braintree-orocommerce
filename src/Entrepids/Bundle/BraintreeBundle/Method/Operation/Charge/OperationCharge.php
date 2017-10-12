@@ -4,13 +4,19 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge;
 
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
 class OperationCharge extends AbstractBraintreeOperation {
 	
+	/**
+	 * 
+	 * @var Integer
+	 */
 	protected $transactionID;
 	
 	/**
-	 *
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
 	 */
 	protected function preProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
@@ -27,8 +33,9 @@ class OperationCharge extends AbstractBraintreeOperation {
 	}
 	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+	 */
 	protected function postProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction ();
@@ -82,9 +89,12 @@ class OperationCharge extends AbstractBraintreeOperation {
 		}
 		
 	}
+
+	
 	/**
-	 *
-	*/
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+	 */
 	protected function preprocessDataToSend (){
 		
 	}

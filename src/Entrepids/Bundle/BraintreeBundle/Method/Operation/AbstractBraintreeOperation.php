@@ -18,32 +18,52 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterf
 
 abstract class AbstractBraintreeOperation implements OperationInterface {
 	
+	/**
+	 * 
+	 * @var DoctrineHelper
+	 */
 	protected $doctrineHelper;
 	
+	/**
+	 * 
+	 * @var BraintreeAdapter
+	 */
 	protected $adapter;
 	
+	/**
+	 * 
+	 * @var PaymentTransaction
+	 */
 	protected $paymentTransaction;
 	
+	/**
+	 * 
+	 * @var BraintreeConfigInterface
+	 */
 	protected $config;
 	
 	/** @var Session */
 	protected $session;
 	
+	/**
+	 * 
+	 * @var TranslatorInterface
+	 */
 	protected $translator;	
 	/**
 	 * @var PropertyAccessor
 	 */
 	protected $propertyAccessor;	
 
-    /**
-     * 
-     * @param Session $session
-     * @param TranslatorInterface $translator
-     * @param PropertyAccessor $propertyAccessor
-     * @param DoctrineHelper $doctrineHelper
-     * @param BraintreeAdapter $braintreeAdapter
-     * @param BraintreeConfigInterface $config
-     */
+	/**
+	 * 
+	 * @param Session $session
+	 * @param TranslatorInterface $translator
+	 * @param PropertyAccessor $propertyAccessor
+	 * @param DoctrineHelper $doctrineHelper
+	 * @param BraintreeAdapter $braintreeAdapter
+	 * @param BraintreeConfigInterface $config
+	 */
 	public function __construct(Session $session, TranslatorInterface $translator, PropertyAccessor $propertyAccessor, DoctrineHelper $doctrineHelper, BraintreeAdapter $braintreeAdapter, BraintreeConfigInterface $config ){
 		$this->doctrineHelper = $doctrineHelper;
 		$this->adapter = $braintreeAdapter;
@@ -72,7 +92,7 @@ abstract class AbstractBraintreeOperation implements OperationInterface {
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationPurchase()
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
 	 */
 	public function operationProcess (){
 		//Aca se preparan los datos que luego van a ser procesados y enviados a Braintree
@@ -84,16 +104,17 @@ abstract class AbstractBraintreeOperation implements OperationInterface {
 	}
 	
 	/**
-	 * 
+	 * This method is used to preprocess the information of the operation 
 	 */
 	abstract protected function preProcessOperation ();
 
 	/**
-	 * 
+	 * This method is used to postprecess the information of the operation
 	 */
 	abstract protected function postProcessOperation ();
+	
 	/**
-	 * 
+	 * This method is used when exists data to send to braintree core 
 	 */
 	abstract protected function preprocessDataToSend ();
 

@@ -9,5 +9,8 @@ interface CardTypesDataProviderInterface
      */
     public function getCardTypes();
     
+    /**
+     * @return string[]
+     */
     public function getEnvironmentType();
 }
