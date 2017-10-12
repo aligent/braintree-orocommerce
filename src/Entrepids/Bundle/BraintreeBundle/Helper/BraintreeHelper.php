@@ -24,7 +24,7 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\Complete\OperationComplete
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize;
 
 
-class BraintreeHelper {
+class BraintreeHelper implements BraintreeHelperInterface {
 
 	
 	/**
@@ -53,7 +53,19 @@ class BraintreeHelper {
 	
 	protected $translator;
 	
+	protected $paymentOperation;
+	
 	protected $genericOperation;
+	
+	protected $operationsValue = array (
+			"capture" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture",
+			"charge" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge",
+			"purchaseExisting" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase",	
+			"purchaseNewCreditCard" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase",
+			"validate" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate",
+			"authorize" => "Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize",			
+			
+	);
 	/**
 	 * 
 	 * @param BraintreeConfigInterface $config
@@ -73,92 +85,32 @@ class BraintreeHelper {
 	}
 	
 	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 * @return array
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelperInterface::setPaymentOperation()
 	 */
-	public function capture(PaymentTransaction $paymentTransaction) {
-		$operationCapture = new OperationCapture($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-		$this->setGenericOperation($operationCapture);
-		$this->setAndExecuteOperation($paymentTransaction);
-		
+	public function setPaymentOperation (String $paymentOperation){
+		$this->paymentOperation = $paymentOperation;
 	}
-	
+
+
 	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 * @return array
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelperInterface::execute()
 	 */
-	public function charge(PaymentTransaction $paymentTransaction) {
-		$operationCharge = new OperationCharge($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-		$this->setGenericOperation($operationCharge);
-		$this->setAndExecuteOperation($paymentTransaction);
-	}	
-	
-	
-	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 * @return array
-	 */
-	public function purchase(PaymentTransaction $paymentTransaction) {
-		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
-		if ($sourcepaymenttransaction != null) {
-			$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
-			
-			$transactionOptions = $sourcepaymenttransaction->getTransactionOptions ();
-			$nonce = $transactionOptions ['nonce'];
-			if (array_key_exists ( 'credit_card_value', $transactionOptions )) {
-				$creditCardValue = $transactionOptions ['credit_card_value'];
-			} else {
-				$creditCardValue = "newCreditCard";
-			}
-			
-			if ( ( !empty($creditCardValue)) && ( strcmp ( $creditCardValue, "newCreditCard" ) != 0) ) {
-				$purchaseOperation = new ExistingCreditCardPurchase($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-			} else {
-				$purchaseOperation = new NewCreditCardPurchase($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-			} // else de nuevaTarjeta de Credito
-			$this->setGenericOperation($purchaseOperation);
+	public function execute (PaymentTransaction $paymentTransaction, String $operation){
+		$operationExecute = $this->operationsValue[$operation];
+		try{
+			$genericOperation = new $operationExecute($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
+			$this->setGenericOperation($genericOperation);
 			$this->setAndExecuteOperation($paymentTransaction);
-		} // del $sourcepaymenttransaction != null
-		else{
-			// esto es cuando $sourcepaymenttransaction es null
-			// que se hace en este caso?
 		}
+		catch (\Exception $e){
+			$paymentTransaction->setAction ( $this->paymentOperation )->setActive ( false )->setSuccessful ( false );
+			$paymentTransaction->getSourcePaymentTransaction()->setActive ( false )->setSuccessful ( false );
+		}
+		
+
 	}
-	
-	
-	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 * @return array
-	 */
-	public function validate(PaymentTransaction $paymentTransaction) {
-		$operationValidate = new OperationValidate($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-		$this->setGenericOperation($operationValidate);
-		return $this->setAndExecuteOperation($paymentTransaction);
-	}
-	
-	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 */
-	public function complete(PaymentTransaction $paymentTransaction) {
-		$operationComplete = new OperationComplete($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-		$this->setGenericOperation($operationComplete);
-		$this->setAndExecuteOperation($paymentTransaction);
-	}
-	
-	/**
-	 *
-	 * @param PaymentTransaction $paymentTransaction
-	 */
-	public function authorize(PaymentTransaction $paymentTransaction) {
-		$operationAuthorize = new OperationAuthorize($this->session, $this->translator,$this->propertyAccessor, $this->doctrineHelper, $this->adapter, $this->config);
-		$this->setGenericOperation($operationAuthorize);
-		$this->setAndExecuteOperation($paymentTransaction);
-	}	
 	
 	/**
 	 * {@inheritdoc}
@@ -189,5 +141,6 @@ class BraintreeHelper {
 		return $this->getGenericOperation()->operationProcess();
 		
 	}
+	
 	
 }

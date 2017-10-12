@@ -101,7 +101,11 @@ class Braintree implements PaymentMethodInterface {
 	 * @return array
 	 */
 	public function capture(PaymentTransaction $paymentTransaction) {
-		$this->braintreeHelper->capture($paymentTransaction);
+		// voy a crear una interface para el helper en donde tenga que setearle el PaymentTransaction y tenga ademas
+		// una funcion execute donde le paso el PaymentTransaction y la operacion (capture, charge, purchase, validate, complete, authorize)
+		//$this->braintreeHelper->capture($paymentTransaction);
+		$this->braintreeHelper->setPaymentOperation(PaymentMethodInterface::CAPTURE);
+		$this->braintreeHelper->execute($paymentTransaction, PaymentMethodInterface::CAPTURE);
 	}
 	
 	/**
@@ -110,7 +114,9 @@ class Braintree implements PaymentMethodInterface {
 	 * @return array
 	 */
 	public function charge(PaymentTransaction $paymentTransaction) {
-	$this->braintreeHelper->charge($paymentTransaction);
+	//$this->braintreeHelper->charge($paymentTransaction);
+		$this->braintreeHelper->setPaymentOperation(PaymentMethodInterface::CHARGE);
+		$this->braintreeHelper->execute($paymentTransaction, PaymentMethodInterface::CHARGE);	
 	}
 	
 
@@ -120,7 +126,32 @@ class Braintree implements PaymentMethodInterface {
 	 * @return array
 	 */
 	public function purchase(PaymentTransaction $paymentTransaction) {
-		$this->braintreeHelper->purchase($paymentTransaction);
+		//$this->braintreeHelper->purchase($paymentTransaction);
+		
+		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
+		if ($sourcepaymenttransaction != null) {
+			$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
+				
+			$transactionOptions = $sourcepaymenttransaction->getTransactionOptions ();
+			$nonce = $transactionOptions ['nonce'];
+			if (array_key_exists ( 'credit_card_value', $transactionOptions )) {
+				$creditCardValue = $transactionOptions ['credit_card_value'];
+			} else {
+				$creditCardValue = "newCreditCard";
+			}
+				
+			if ( ( !empty($creditCardValue)) && ( strcmp ( $creditCardValue, "newCreditCard" ) != 0) ) {
+				$purchaseOperation = "purchaseExisting";
+			} else {
+				$purchaseOperation = "purchaseNewCreditCard";
+			} // else de nuevaTarjeta de Credito
+			$this->braintreeHelper->setPaymentOperation(PaymentMethodInterface::PURCHASE);
+			$this->braintreeHelper->execute($paymentTransaction, $purchaseOperation);
+		} // del $sourcepaymenttransaction != null
+		else{
+			// esto es cuando $sourcepaymenttransaction es null
+			// que se hace en este caso?
+		}		
 	}
 	
 	/**
@@ -129,7 +160,12 @@ class Braintree implements PaymentMethodInterface {
 	 * @return array
 	 */
 	public function validate(PaymentTransaction $paymentTransaction) {
-		$this->braintreeHelper->validate($paymentTransaction);
+		// vamos a probar
+		
+		//$this->braintreeHelper->validate($paymentTransaction);
+		//PaymentMethodInterface::VALIDATE
+		$this->braintreeHelper->setPaymentOperation(PaymentMethodInterface::VALIDATE);
+		$this->braintreeHelper->execute($paymentTransaction, PaymentMethodInterface::VALIDATE);
 	}
 	
 	/**
@@ -137,7 +173,9 @@ class Braintree implements PaymentMethodInterface {
 	 * @param PaymentTransaction $paymentTransaction        	
 	 */
 	public function complete(PaymentTransaction $paymentTransaction) {
-		$this->braintreeHelper->complete($paymentTransaction);
+		//$this->braintreeHelper->complete($paymentTransaction);
+		$this->braintreeHelper->setPaymentOperation($this::COMPLETE);
+		$this->braintreeHelper->execute($paymentTransaction, $this::COMPLETE);
 	}
 	
 	/**
@@ -145,7 +183,9 @@ class Braintree implements PaymentMethodInterface {
 	 * @param PaymentTransaction $paymentTransaction        	
 	 */
 	public function authorize(PaymentTransaction $paymentTransaction) {
-		$this->braintreeHelper->authorize($paymentTransaction);
+		//$this->braintreeHelper->authorize($paymentTransaction);
+		$this->braintreeHelper->setPaymentOperation(PaymentMethodInterface::AUTHORIZE);
+		$this->braintreeHelper->execute($paymentTransaction, PaymentMethodInterface::AUTHORIZE);
 	}
 	
 	/**
