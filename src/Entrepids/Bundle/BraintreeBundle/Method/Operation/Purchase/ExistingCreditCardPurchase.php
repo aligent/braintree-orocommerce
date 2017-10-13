@@ -73,35 +73,38 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\AbstractBraintreePurchase::processResponseBriantee()
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::setDataToPreProcessResponse()
 	 */
-	protected function processResponseBriantee ( $response){
-		$paymentTransaction = $this->getPaymentTransaction();
-		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
+	protected function setDataToPreProcessResponse (){
 		
-		if ($response->success || ! is_null ( $response->transaction )) {
-			// Esto es si chage
-			$transaction = $response->transaction;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::processSuccess()
+	 */
+	protected function processSuccess ( $response){
 		
-			if ($this->isCharge) {
-				$paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
-			}
-		
-			// Esto es si authorizr
-			if ($this->isAuthorize) {
-				$transactionID = $transaction->id;
-				$paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
-		
-				$transactionOptions = $paymentTransaction->getTransactionOptions ();
-				$transactionOptions ['transactionId'] = $transactionID;
-				$paymentTransaction->setTransactionOptions ( $transactionOptions );
-			}
-		
-		
-			$sourcepaymenttransaction->setActive ( false );
-		} else {
-			$this->processError($response);
+		// Esto es si chage
+		$transaction = $response->transaction;
+	
+		if ($this->isCharge) {
+			$this->paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
 		}
+	
+		// Esto es si authorizr
+		if ($this->isAuthorize) {
+			$transactionID = $transaction->id;
+			$this->paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
+	
+			$transactionOptions = $this->paymentTransaction->getTransactionOptions ();
+			$transactionOptions ['transactionId'] = $transactionID;
+			$this->paymentTransaction->setTransactionOptions ( $transactionOptions );
+		}
+	
+	
+		$this->paymentTransaction->getSourcePaymentTransaction()->setActive ( false );
+
 			
 	}	
 

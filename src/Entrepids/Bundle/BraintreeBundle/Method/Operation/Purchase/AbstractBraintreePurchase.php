@@ -65,11 +65,29 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	abstract protected function getResponseFromBraintree();
 	
 	/**
+	 * This method is used to set data success to Oro
+	 */
+	abstract protected function processSuccess ($response);
+	
+	/**
+	 * This method check or set variables needs to preprocess response
+	 */
+	abstract protected function setDataToPreProcessResponse ();
+	
+	/**
 	 * This method is used to process the response of braintree core
 	 * 
 	 * @param unknown $response
 	 */
-	abstract protected function processResponseBriantee($response);
+	protected function processResponseBriantee($response){
+		$this->setDataToPreProcessResponse();
+		
+		if ($response->success && ! is_null ( $response->transaction )) {
+			$this->processSuccess($response);
+		}else{
+			$this->processError($response);
+		}
+	}
 	
 	/**
 	 * (non-PHPdoc)
@@ -124,7 +142,14 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 		foreach ( $response->errors->deepAll () as $error ) {
 			$errorString .= $error->message . " [" . $error->code .  "]\n";
 		}
+		
+		$errorMessage = "";
+		if (! is_null ($response->message)){
+			$errorMessage = $response->message;
+		}
 	
+		$errorString .= $errorString . " [ ". $errorMessage . "]\n";
+		
 		$this->paymentTransaction->setAction ( PaymentMethodInterface::VALIDATE )->setActive ( false )->setSuccessful ( false );
 		$this->paymentTransaction->getSourcePaymentTransaction()->setActive ( false )->setSuccessful ( false );
 	
@@ -136,6 +161,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 		];
 	
 	}
+	
 	
 	/**
 	 * This is a method to obtain the data of customer user to send to braintree

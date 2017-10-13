@@ -31,6 +31,12 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 	protected $submitForSettlement;
 	
 	/**
+	 * 
+	 * @var Boolean
+	 */
+	protected $saveForLater;
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\AbstractBraintreePurchase::getResponseFromBraintree()
 	 */
@@ -92,9 +98,9 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\AbstractBraintreePurchase::processResponseBriantee()
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::setDataToPreProcessResponse()
 	 */
-	protected function processResponseBriantee ($response){
+	protected function setDataToPreProcessResponse (){
 		$sourcepaymenttransaction = $this->getPaymentTransaction()->getSourcePaymentTransaction ();
 		$transactionOptions = $sourcepaymenttransaction->getTransactionOptions ();
 		$saveForLater = false;
@@ -102,37 +108,43 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 			$saveForLater = $transactionOptions ['saveForLaterUse'];
 		}
 		
-		if ($response->success || ! is_null ( $response->transaction )) {
-			// Esto es si chage
-			$transaction = $response->transaction;
-		
-			if ($this->isCharge) {
-				$this->paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
-			}
-		
-			// Esto es si authorizr
-			if ($this->isAuthorize) {
-				$transactionID = $transaction->id;
-				$this->paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
-		
-				$transactionOptions = $this->paymentTransaction->getTransactionOptions ();
-				$transactionOptions ['transactionId'] = $transactionID;
-				$this->paymentTransaction->setTransactionOptions ( $transactionOptions );
-			}
-		
-		
-			// $paymentTransaction->setReference($reference);
-			// Para la parte del token id de la tarjeta de credito
-			if ($saveForLater) {
-				$creditCardValuesResponse = $transaction->creditCard;
-				$token = $creditCardValuesResponse ['token'];
-				$this->paymentTransaction->setReference ( $token );
-				$this->paymentTransaction->setResponse ( $creditCardValuesResponse );
-			}
-			$sourcepaymenttransaction->setActive ( false );
-		} else {
-			$this->processError($response);
-		}		
+		$this->saveForLater = $saveForLater;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::processSuccess()
+	 */
+	protected function processSuccess ($response){
+	
+		// Esto es si chage
+		$transaction = $response->transaction;
+	
+		if ($this->isCharge) {
+			$this->paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
+		}
+	
+		// Esto es si authorizr
+		if ($this->isAuthorize) {
+			$transactionID = $transaction->id;
+			$this->paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
+	
+			$transactionOptions = $this->paymentTransaction->getTransactionOptions ();
+			$transactionOptions ['transactionId'] = $transactionID;
+			$this->paymentTransaction->setTransactionOptions ( $transactionOptions );
+		}
+	
+	
+		// $paymentTransaction->setReference($reference);
+		// Para la parte del token id de la tarjeta de credito
+		if ($this->saveForLater) {
+			$creditCardValuesResponse = $transaction->creditCard;
+			$token = $creditCardValuesResponse ['token'];
+			$this->paymentTransaction->setReference ( $token );
+			$this->paymentTransaction->setResponse ( $creditCardValuesResponse );
+		}
+		$this->paymentTransaction->getSourcePaymentTransaction()->setActive ( false );
+	
 	}
 	
 	/**
