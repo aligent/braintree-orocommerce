@@ -139,16 +139,16 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	protected function processError($response){
 	
 		$errorString = "";
+		$erroProcessed = false;
 		foreach ( $response->errors->deepAll () as $error ) {
 			$errorString .= $error->message . " [" . $error->code .  "]\n";
+			$erroProcessed = true;
 		}
 		
 		$errorMessage = "";
-		if (! is_null ($response->message)){
-			$errorMessage = $response->message;
+		if (!$erroProcessed && ! is_null ($response->message)){
+			$errorString = $response->message;
 		}
-	
-		$errorString .= $errorString . " [ ". $errorMessage . "]\n";
 		
 		$this->paymentTransaction->setAction ( PaymentMethodInterface::VALIDATE )->setActive ( false )->setSuccessful ( false );
 		$this->paymentTransaction->getSourcePaymentTransaction()->setActive ( false )->setSuccessful ( false );
