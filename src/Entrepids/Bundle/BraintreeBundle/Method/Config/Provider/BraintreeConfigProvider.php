@@ -94,7 +94,6 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
             return $this->doctrine->getManagerForClass('BraintreeBundle:BraintreeSettings')
                 ->getRepository('BraintreeBundle:BraintreeSettings')
                 ->getEnabledSettingsByType('Braintree');
-               // ->findWithEnabledChannel();
         } catch (\UnexpectedValueException $e) {
             $this->logger->critical($e->getMessage());
 

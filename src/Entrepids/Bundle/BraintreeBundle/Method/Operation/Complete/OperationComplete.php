@@ -22,7 +22,6 @@ class OperationComplete extends AbstractBraintreeOperation {
 	 */
 	protected function postProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
-		// Que hay que hacer en esta operacion? Cuando se llama?
 		if ($paymentTransaction->getAction () === PaymentMethodInterface::CHARGE) {
 			$paymentTransaction->setActive ( false );
 		}		

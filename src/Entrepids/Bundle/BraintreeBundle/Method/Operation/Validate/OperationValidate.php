@@ -25,9 +25,7 @@ class OperationValidate extends AbstractBraintreeOperation {
 		
 		$paymentTransaction = $this->paymentTransaction;
 		$paymentTransaction->setAmount ( self::ZERO_AMOUNT )->setCurrency ( 'USD' );
-		
-		
-		// sino esta la tarjeta temporalmete poner en false
+
 		$transactionOptions = $paymentTransaction->getTransactionOptions ();
 		if (array_key_exists ( 'credit_card_value', $_POST )) {
 			$credit_card_value = $_POST ['credit_card_value'];
@@ -43,8 +41,6 @@ class OperationValidate extends AbstractBraintreeOperation {
 		else{
 			$nonce = null;
 		}
-		
-		
 		
 		$transactionOptions ['nonce'] = $nonce;
 		$transactionOptions['credit_card_value'] = $credit_card_value;

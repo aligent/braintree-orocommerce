@@ -44,9 +44,6 @@ class OperationAuthorize extends AbstractBraintreeOperation {
 			$transactionOptions ['nonce'] = $nonce;
 			$paymentTransaction->setTransactionOptions ( $transactionOptions );
 			$paymentTransaction->setSuccessful ( true )->setAction ( PaymentMethodInterface::VALIDATE )->setActive ( true );
-			// ->setReference($response->getReference())
-			// ->setResponse($response->getData());
-					
 		}
 	
 				

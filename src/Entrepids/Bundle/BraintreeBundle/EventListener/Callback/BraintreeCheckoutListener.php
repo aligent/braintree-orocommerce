@@ -75,7 +75,6 @@ class BraintreeCheckoutListener {
 			$event->markSuccessful();
 		} catch (\InvalidArgumentException $e) {
 			if ($this->logger) {
-				// do not expose sensitive data in context
 				$this->logger->error($e->getMessage(), []);
 			}
 		}

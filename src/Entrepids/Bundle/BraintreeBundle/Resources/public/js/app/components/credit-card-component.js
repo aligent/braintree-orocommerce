@@ -145,43 +145,25 @@ define(function(require) {
 
         setCreditCardsSavedValue: function(form) {
             var $el = form;
-            //var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
-            
+          
             var $value = this.$form.find(this.options.selectors.credit_card_first_value); 
             var valueTransaction = $value.prop('value');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
-            /*if ($value == null || $value == "newCreditCard"){
-            	$('#braintree-custom-cc-form').show();
-            	$('#save_for_later_field_row').show();
-            } else {
-            	$('#braintree-custom-cc-form').hide();
-            	$('#save_for_later_field_row').hide();
-            }*/
-            
-           /* var component = this;
-	    	var creditsCardsSaved1 = component.$el.find(component.options.selectors.creditCardsSaved);
-	    	creditsCardsSaved1.val($value);
-	    	$("[name='oro_workflow_transition']").append(creditsCardsSaved1[0]);  
-            $("[name='oro_workflow_transition']").submit();
-            */
-            //alert('Hey');
+
     		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
     		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
     		credit_card_value.val(valueTransaction);
-    		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
-    		//document.querySelector('input[name="credit_card_value"]').value = $value;
+
             this.valueCreditCard = valueTransaction;
             if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
-            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isTokenized = false;
             	this.isCreditCardSaved = true;
             }
             else{
-            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isTokenized = false;
             	this.isCreditCardSaved = false;            	
             }
-            //$("[name='oro_workflow_transition']").submit();
 
-            //mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },       
         
         
@@ -296,7 +278,7 @@ define(function(require) {
          */
         onCreditCardsSavedChange: function(e) {
             var $el = $(e.target);
-            var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
+            var $value = $el.prop('value'); 
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
             if ($value == null || $value == "newCreditCard"){
             	$('#braintree-custom-cc-form').show();
@@ -305,38 +287,28 @@ define(function(require) {
             	$('#braintree-custom-cc-form').hide();
             	$('#save_for_later_field_row').hide();
             }
-            
-           /* var component = this;
-	    	var creditsCardsSaved1 = component.$el.find(component.options.selectors.creditCardsSaved);
-	    	creditsCardsSaved1.val($value);
-	    	$("[name='oro_workflow_transition']").append(creditsCardsSaved1[0]);  
-            $("[name='oro_workflow_transition']").submit();
-            */
-            //alert('Hey');
+
     		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
     		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
     		credit_card_value.val($value);
-    		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
-    		//document.querySelector('input[name="credit_card_value"]').value = $value;
+
             this.valueCreditCard = $value;
             if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
-            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isTokenized = false; 
             	this.isCreditCardSaved = true;
             }
             else{
-            	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
+            	this.isTokenized = false; 
             	this.isCreditCardSaved = false;            	
             }
-            //$("[name='oro_workflow_transition']").submit();
 
-            //mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },       
         
         /**
          * @param {Object} eventData
          */
         beforeTransit: function(eventData) {
-        	//
+
         	if (this.isTokenized) {
            		this.isTokenized = false;        		
         		var component = this;
@@ -402,7 +374,7 @@ define(function(require) {
         	}
         	
             if (eventData.data.paymentMethod === this.options.paymentMethod) {
-                //eventData.stopped = !this.validate();
+
             }
             
         },
@@ -418,7 +390,7 @@ define(function(require) {
         },
 
         removeFilledForm: function() {
-            // Remove hidden form js component
+
             if (!this.disposable) {
                 this.disposable = true;
                 this.dispose();

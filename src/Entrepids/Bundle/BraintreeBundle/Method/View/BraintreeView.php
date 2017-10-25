@@ -38,7 +38,6 @@ class BraintreeView implements PaymentMethodViewInterface
 
         $formOptions = [
             'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
-            //'requireCvvEntryEnabled' => $this->config->isEnabledCvvVerification(),
         ];
 
         $config = $this->config;
@@ -63,7 +62,6 @@ class BraintreeView implements PaymentMethodViewInterface
         $viewOptions['creditCardComponent'] = 'braintree/js/app/components/authorized-credit-card-component';
 
         $viewOptions['creditCardComponentOptions'] = array_merge($viewOptions['creditCardComponentOptions'], [
-            //'acct' => $this->getLast4($validateTransaction),
             'saveForLaterUse' => !empty($transactionOptions['saveForLaterUse']),
         ]);
 

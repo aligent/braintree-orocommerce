@@ -40,14 +40,13 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 		
 		$token = $paymentTransactionEntity->getReference();
 		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
-		// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
+
 		$merchAccountID = $this->config->getSandBoxMerchAccountId();
 		try {
 			$customer = $this->adapter->findCustomer ( $this->customerData ['id'] );
 			$data = [
 					'amount' => $paymentTransaction->getAmount (),
-					'customerId' => $this->customerData ['id'], // esto cuando ya existe el cliente y tengo que dar de alta
-					// una nueva tarjeta
+					'customerId' => $this->customerData ['id'], 
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
@@ -56,9 +55,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 		} catch ( NotFound $e ) {
 			$data = [
 					'amount' => $paymentTransaction->getAmount (),
-					'customer' => $this->customerData, // esto si es nuevo lo tengo que enviar
-					// 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
-					// una nueva tarjeta
+					'customer' => $this->customerData, 
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
@@ -85,14 +82,12 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 	 */
 	protected function processSuccess ( $response){
 		
-		// Esto es si chage
 		$transaction = $response->transaction;
 	
 		if ($this->isCharge) {
 			$this->paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
 		}
 	
-		// Esto es si authorizr
 		if ($this->isAuthorize) {
 			$transactionID = $transaction->id;
 			$this->paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
@@ -115,9 +110,6 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase {
 	protected function preProcessOperation(){
 
 		$purchaseAction = $this->config->getPurchaseAction ();
-		// authorize or charge
-		// si charge mando true
-		// si authorize mando false
 		$isAuthorize = false;
 		$isCharge = false;
 		if (strcmp ( "authorize", $purchaseAction ) == 0) {

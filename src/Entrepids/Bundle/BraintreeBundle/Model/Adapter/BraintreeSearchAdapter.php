@@ -1,8 +1,5 @@
 <?php
-/**
- * Copyright © 2017 Entrepids. All rights reserved.
- * See COPYING.txt for license details.
- */
+
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 
 use Braintree\MultipleValueNode;

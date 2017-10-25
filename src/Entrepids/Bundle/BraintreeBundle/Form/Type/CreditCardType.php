@@ -106,7 +106,6 @@ class CreditCardType extends AbstractType
         	);
         }
         else{
-        	// newCreditCard
         	$builder->add(
         			'credit_card_first_value',
         			'hidden',
@@ -137,23 +136,30 @@ class CreditCardType extends AbstractType
         }
         
         if ($options['data'] !== null){
+        	
         	$config = $options['data'];
         	$this->adapter = new BraintreeAdapter($config);
+        	$braintreeClientToken = $this->adapter->generate();
+        	
+        	$builder->add(
+        			'braintree_client_token',
+        			'hidden',
+        			[
+        					'mapped' => true,
+        					'data' => $braintreeClientToken,
+        			]
+        	);
         }
         else{
-        	// Revisar que hacer en este caso
+        	$builder->add(
+        			'braintree_client_token',
+        			'hidden',
+        			[
+        					'mapped' => true,
+        					'data' => 'basura',
+        			]
+        	);
         }
-        
-        $braintreeClientToken = $this->adapter->generate();
-        
-        $builder->add(
-        		'braintree_client_token',
-        		'hidden',
-        		[
-        				'mapped' => true,
-        				'data' => $braintreeClientToken,
-        		]
-        );
         
         $builder->add(
         		'credit_card_value',
@@ -177,7 +183,6 @@ class CreditCardType extends AbstractType
             'label' => 'entrepids.braintree.methods.credit_card.label',
             'csrf_protection' => false,
             'zeroAmountAuthorizationEnabled' => false,
-            //'requireCvvEntryEnabled' => true,
         ]);
     }
 

@@ -27,7 +27,6 @@ class OperationCapture extends AbstractBraintreeOperation {
 	 */
 	protected function preProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
-		//$options = $this->getPaymentOptions ( $paymentTransaction );
 		$options = [
 				'AMT' => round ( $paymentTransaction->getAmount (), 2 ),
 				'TENDER' => 'C',
@@ -39,14 +38,12 @@ class OperationCapture extends AbstractBraintreeOperation {
 		}
 		
 		$paymentTransaction->setRequest ( $options );
-		// Aca tengo que obtener el transactionID y realizar la llamada a Braintree mediante el adapter
+
 		$purchaseAction = $this->config->getPurchaseAction ();
 	
-		// me fijo por las dudas si esta en modo authorize, aunque no se bien...
 		$this->isAuthorize = false;
 		if (strcmp ( "authorize", $purchaseAction ) == 0) {
 			$this->isAuthorize = true;
-			// hacer lo que tenga que hacer si esta en modo authorize
 		}
 	
 	}
@@ -58,7 +55,7 @@ class OperationCapture extends AbstractBraintreeOperation {
 	protected function postProcessOperation (){
 		$paymentTransaction = $this->paymentTransaction;
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction ();
-		if (! $sourcePaymentTransaction) { // esto estaba original de la copia de PAYPAL
+		if (! $sourcePaymentTransaction) { 
 			$paymentTransaction->setSuccessful ( false )->setActive ( false );
 	
 			return [
@@ -78,7 +75,7 @@ class OperationCapture extends AbstractBraintreeOperation {
 						$paymentTransaction->setSuccessful ( $response->success )->setActive ( true );
 					} else {
 
-						$paymentTransaction->setSuccessful ( true )-> // lo pongo en true porque no es estado authorized
+						$paymentTransaction->setSuccessful ( true )-> 
 						setActive ( false );
 
 					}
@@ -119,7 +116,7 @@ class OperationCapture extends AbstractBraintreeOperation {
 	protected function preprocessDataToSend (){
 		$paymentTransaction = $this->paymentTransaction;
 		$sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction ();
-		if (! $sourcePaymentTransaction) { // esto estaba original de la copia de PAYPAL
+		if (! $sourcePaymentTransaction) {
 			$paymentTransaction->setSuccessful ( false )->setActive ( false );
 
 		}

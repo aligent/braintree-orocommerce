@@ -95,11 +95,8 @@ abstract class AbstractBraintreeOperation implements OperationInterface {
 	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
 	 */
 	public function operationProcess (){
-		//Aca se preparan los datos que luego van a ser procesados y enviados a Braintree
 		$this->preprocessDataToSend();
 		$this->preProcessOperation();
-		
-		// Esta parte se encarga de la lógica en donde se envia y recibe la respuesta de Braintree
 		return $this->postProcessOperation();
 	}
 	

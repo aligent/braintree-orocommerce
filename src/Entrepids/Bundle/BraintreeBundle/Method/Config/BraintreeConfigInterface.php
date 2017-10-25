@@ -3,7 +3,6 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
 use Oro\Bundle\PaymentBundle\Method\Config\PaymentConfigInterface;
-//use Oro\Bundle\PaymentBundle\Method\Config\CountryConfigAwareInterface;
 
 interface BraintreeConfigInterface extends
 PaymentConfigInterface

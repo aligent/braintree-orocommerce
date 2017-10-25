@@ -120,7 +120,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	
 		$responseTransaction = $paymentTransaction->getResponse ();
 		$request = ( array ) $paymentTransaction->getRequest ();
-		// Para ver si aca ya esta la orden creada
+
 		$entity = $this->doctrineHelper->getEntityReference(
 				$paymentTransaction->getEntityClass(),
 				$paymentTransaction->getEntityIdentifier()
@@ -202,8 +202,8 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 		if ($this->isNullDataToSend($email)){
 			$email = '';
 		}
-		$phone = 0; // no se de donde sacarlo
-		$fax = 0; // no se de donde sacarlo aun
+		$phone = 0;
+		$fax = 0;
 		$website = '';
 		if ($this->isNullDataToSend($website)){
 			$website = '';

@@ -50,20 +50,18 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 		}		
 		$storeInVaultOnSuccess = false;
 		if ($saveForLater) {
-			$storeInVaultOnSuccess = true; // aca esta el caso que tengo que guardar los datos de la tarjeta
+			$storeInVaultOnSuccess = true; 
 		} else {
-			$storeInVaultOnSuccess = false; // o el usuario no selecciono el checkbox o por configuracion no esta habilitado
+			$storeInVaultOnSuccess = false; 
 		}
 		
-		// Esto es para ver si el cliente exite en Braintree y sino es asi entonces le mando los datos
 		$merchAccountID = $this->config->getSandBoxMerchAccountId();
 		try {
 			$customer = $this->adapter->findCustomer ( $this->customerData ['id'] );
 			$data = [
 					'amount' => $this->paymentTransaction->getAmount (),
 					'paymentMethodNonce' => $this->nonce,
-					'customerId' => $this->customerData ['id'], // esto cuando ya existe el cliente y tengo que dar de alta
-					// una nueva tarjeta
+					'customerId' => $this->customerData ['id'],
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
@@ -77,9 +75,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 			$data = [
 					'amount' => $this->paymentTransaction->getAmount (),
 					'paymentMethodNonce' => $this->nonce,
-					'customer' => $this->customerData, // esto si es nuevo lo tengo que enviar
-					// 'customerId' => 'the_customer_id', // esto cuando ya existe el cliente y tengo que dar de alta
-					// una nueva tarjeta
+					'customer' => $this->customerData, 
 					'billing' => $this->billingData,
 					'shipping' => $this->shipingData,
 					'orderId' => $this->identifier,
@@ -117,14 +113,12 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 	 */
 	protected function processSuccess ($response){
 	
-		// Esto es si chage
 		$transaction = $response->transaction;
 	
 		if ($this->isCharge) {
 			$this->paymentTransaction->setAction ( PaymentMethodInterface::PURCHASE )->setActive ( false )->setSuccessful ( $response->success );
 		}
 	
-		// Esto es si authorizr
 		if ($this->isAuthorize) {
 			$transactionID = $transaction->id;
 			$this->paymentTransaction->setAction ( PaymentMethodInterface::AUTHORIZE )->setActive ( true )->setSuccessful ( $response->success );
@@ -134,9 +128,6 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 			$this->paymentTransaction->setTransactionOptions ( $transactionOptions );
 		}
 	
-	
-		// $paymentTransaction->setReference($reference);
-		// Para la parte del token id de la tarjeta de credito
 		if ($this->saveForLater) {
 			$creditCardValuesResponse = $transaction->creditCard;
 			$token = $creditCardValuesResponse ['token'];
@@ -159,9 +150,6 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 		$nonce = $transactionOptions ['nonce'];
 
 		$purchaseAction = $this->config->getPurchaseAction ();
-		// authorize or charge
-		// si charge mando true
-		// si authorize mando false
 		$submitForSettlement = true;
 		$isAuthorize = false;
 		$isCharge = false;
