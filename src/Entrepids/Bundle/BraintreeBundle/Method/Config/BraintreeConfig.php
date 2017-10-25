@@ -32,6 +32,8 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	const CREDIT_CARD_VALUE = 'credit_card_value';
 	const CREDIT_CARD_SELECTED = 'credit_cards_saved';
 	
+	const CREDIT_CARD_FIRST_VALUE = 'credit_card_first_value';
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,7 +138,13 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 	public function getCreditCardValue(){
 		return (string)$this->get(self::CREDIT_CARD_VALUE);
 	}
-	
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getCreditCardFirstValue(){
+		return (string)$this->get(self::CREDIT_CARD_FIRST_VALUE);
+	}	
 	/**
 	 * {@inheritdoc}
 	 */

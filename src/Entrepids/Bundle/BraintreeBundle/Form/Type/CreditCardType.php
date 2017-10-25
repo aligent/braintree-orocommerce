@@ -37,6 +37,12 @@ class CreditCardType extends AbstractType
     /** @var TranslatorInterface */
     protected $translator;
     
+    /**
+     * 
+     * @var String
+     */
+    protected $selectedCard;
+    
 	/**
 	 * 
 	 * @param DoctrineHelper $doctrineHelper
@@ -76,12 +82,42 @@ class CreditCardType extends AbstractType
         	$builder->add('credit_cards_saved', ChoiceType::class, [
         			'required' => true,
         			'choices' => $creditsCards,
+        			'choices_as_values' => false,
+        			'choice_value' => function ($choice) {
+        			           return $choice;
+        			},
         			'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
         			'attr' => [
         					'data-credit-cards-saved' => true,
         			],
         				
         	]);
+        	
+        	$builder->add(
+        			'credit_card_first_value',
+        			'hidden',
+        			[
+        					'mapped' => true,
+        					'data' => $this->selectedCard,
+        					'attr' => [
+        							'data-credit_card_first_value' => $this->selectedCard,
+        					],
+        			]
+        	);
+        }
+        else{
+        	// newCreditCard
+        	$builder->add(
+        			'credit_card_first_value',
+        			'hidden',
+        			[
+        					'mapped' => true,
+        					'data' => 'newCreditCard',
+        					'attr' => [
+        							'data-credit_card_first_value' => 'newCreditCard',
+        					],
+        			]
+        	);
         }
 		
         if ($options['zeroAmountAuthorizationEnabled']) {
@@ -212,17 +248,25 @@ class CreditCardType extends AbstractType
      */
     private function getCreditCardsSaved (){
     	$creditsCards = [];
-    	$creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
+    	
+    	$countCreditCards = 0;
+    	
     	foreach ($this->paymentsTransactions as $paymentTransaction){
     		$reference = $paymentTransaction->getReference ();
     		$paymentID = $paymentTransaction->getId ();
     		if (trim($reference)) {
     			$response = $paymentTransaction->getResponse ();
-    			$creditsCards [$paymentID] = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
+    			$valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
+    			$creditsCards [$paymentID] = $valueCreditCard;
+ 				$countCreditCards++;
+ 				if ($countCreditCards == 1){
+ 					$this->selectedCard = $paymentID;
+ 				}
     		}
     	
     	} 
     	
+    	$creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
     	return $creditsCards;
     }
 }

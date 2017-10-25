@@ -58,7 +58,12 @@ PaymentConfigInterface
 	/**
 	 * @return string
 	 */
-	public function getCreditCardValue();	
+	public function getCreditCardValue();
+	
+	/**
+	 * @return string
+	 */
+	public function getCreditCardFirstValue();	
 
 	/**
 	 * @return string

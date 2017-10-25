@@ -23,6 +23,7 @@ define(function(require) {
                 creditCardsSaved: '[data-credit-cards-saved]',
                 credit_card_value: 'input[name="credit_card_value"]',
                 braintree_client_token: 'input[name="braintree_client_token"]',
+                credit_card_first_value: '[data-credit_card_first_value]',
             }
         },
 
@@ -144,15 +145,18 @@ define(function(require) {
 
         setCreditCardsSavedValue: function(form) {
             var $el = form;
-            var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
+            //var $value = $el.prop('value'); // es el id de la transaccion o newCreditCard que siginifica que quiere ingresar un nuevo valor
+            
+            var $value = this.$form.find(this.options.selectors.credit_card_first_value); 
+            var valueTransaction = $value.prop('value');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
-            if ($value == null || $value == "newCreditCard"){
+            /*if ($value == null || $value == "newCreditCard"){
             	$('#braintree-custom-cc-form').show();
             	$('#save_for_later_field_row').show();
             } else {
             	$('#braintree-custom-cc-form').hide();
             	$('#save_for_later_field_row').hide();
-            }
+            }*/
             
            /* var component = this;
 	    	var creditsCardsSaved1 = component.$el.find(component.options.selectors.creditCardsSaved);
@@ -163,10 +167,10 @@ define(function(require) {
             //alert('Hey');
     		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
     		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
-    		credit_card_value.val($value);
+    		credit_card_value.val(valueTransaction);
     		//$("[name='oro_workflow_transition']").append(credit_card_value[0]); 
     		//document.querySelector('input[name="credit_card_value"]').value = $value;
-            this.valueCreditCard = $value;
+            this.valueCreditCard = valueTransaction;
             if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
             	this.isTokenized = false; // Esto porque selecciono una de las que ya estaban guardadas
             	this.isCreditCardSaved = true;
