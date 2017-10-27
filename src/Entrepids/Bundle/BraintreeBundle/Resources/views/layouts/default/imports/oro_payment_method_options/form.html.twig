@@ -36,6 +36,7 @@
         					<div class="{{ class_prefix }}__form__col form__col form__col_x12">    
         						<label for="card-number" class="label label--full required">{{ 'entrepids.braintree.credit_card.card_number.label'|trans }}</label>
             				  	<div id="card-number" class="input input-braintree-cc"></div>
+            				  	<span id="number" class="helper-text"></span>
 				  			</div>
     					</fieldset>
 					</div>
@@ -44,6 +45,7 @@
         					<div class="{{ class_prefix }}__form__col form__col form__col_x12">
 				  				<label for="expiration-date" class="label label--full required">{{ 'entrepids.braintree.credit_card.expiration_date.label'|trans }}</label>
 				  				<div id="expiration-date" class="input input-braintree-expdate"></div>
+				  				<span id="expirationDate" class="helper-text"></span>
 				  			</div>
     					</fieldset>
 					</div>
@@ -52,6 +54,7 @@
         					<div class="{{ class_prefix }}__form__col form__col form__col_x12">	
 				  				<label for="cvv" class="label label--full required">{{ 'entrepids.braintree.credit_card.cvv2.label'|trans }}</label>
 				  				<div id="cvv" class="input input-braintree-cvv"></div>{{ block('_entrepids_braintree_credit_card_payment_credit_card_cvv_widget') }}
+				  				<span id="cvvH" class="helper-text"></span>
 				  			</div>
     					</fieldset>
 					</div>	

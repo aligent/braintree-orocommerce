@@ -8,6 +8,7 @@ define(function(require) {
     var BaseComponent = require('oroui/js/app/components/base/component');
     var client = require('braintree/js/braintree/braintree-client');
     var hostedFields = require('braintree/js/braintree/braintree-hosted-fields');
+    var __ = require('orotranslation/js/translator');
 
     CreditCardComponent = BaseComponent.extend({
         /**
@@ -120,7 +121,18 @@ define(function(require) {
         		  		component.hostedFieldsInstance.on('validityChange', function (event) {
         		  			  
 	        		  	    var field = event.fields[event.emittedBy];
-	
+
+	            	    	var fieldsBraintree = [];
+	            	    	fieldsBraintree["number"] = "#number";
+	            	    	fieldsBraintree["expirationDate"] = "#expirationDate";
+	            	    	fieldsBraintree["cvv"] = "#cvvH"; 
+
+	            	    	var fieldEmitted = event.emittedBy;
+	           	    		
+	            	    	$(fieldsBraintree[fieldEmitted]).text('');
+	           	    		//$('#expirationDate').text('');
+	           	    		//$('#cvvH').text('');
+	        		  	    
 	        		        if (field.isValid) {
 	        		        	$(field.container).removeClass('error');
 	        		        	if (event.emittedBy === 'expirationDate') {
@@ -369,6 +381,52 @@ define(function(require) {
             	    }, 
             	    function (error) {
             	    	component.tokenizationError = error.error;
+
+            	    	var fieldsBraintree = [];
+            	    	fieldsBraintree["number"] = "#number";
+            	    	fieldsBraintree["expirationDate"] = "#expirationDate";
+            	    	fieldsBraintree["cvv"] = "#cvvH"; 
+           	    		var fieldId = fieldsBraintree[i];
+           	    		$('#number').text('');
+           	    		$('#expirationDate').text('');
+           	    		$('#cvvH').text('');
+            	    	
+           	    		var allfieldsEmptyMessage = __('entrepids.braintree.braintreeflow.error.all_empty_fields');
+           	    		
+            	    	if (error.error.code == "HOSTED_FIELDS_FIELDS_EMPTY"){
+
+               	    		$('#number').text(allfieldsEmptyMessage);
+               	    		$('#expirationDate').text(allfieldsEmptyMessage);
+               	    		$('#cvvH').text(allfieldsEmptyMessage);
+            	    	}
+            	    	else{
+            	    		if (error.error.code == "HOSTED_FIELDS_FIELDS_INVALID"){
+            	    			var fields = component.hostedFieldsInstance.getState().fields;
+            	    			
+                    	    	var eLen = error.error.details.invalidFieldKeys.length;
+                    	    	var i, fieldId, fieldOrigId;
+
+                    	    	var errorFields = [];
+                    	    	errorFields["number"] = __('entrepids.braintree.braintreeflow.error.credit_card_invalid');
+                    	    	errorFields["expirationDate"] = __('entrepids.braintree.braintreeflow.error.expiration_date_invalid');
+                    	    	errorFields["cvv"] = __('entrepids.braintree.braintreeflow.error.cvv_invalid'); 
+                    	    	for (i = 0; i < eLen; i++) {
+                    	    		fieldOrigId = error.error.details.invalidFieldKeys[i];
+                    	    		fieldId = fieldsBraintree[fieldOrigId];
+                    	    		var isEmptyField = eval('fields.'+fieldOrigId+'.isEmpty');
+                    	    		if (isEmptyField == true){
+                    	    			$(fieldId).text(allfieldsEmptyMessage);
+                    	    		}
+                    	    		else{
+                       	    		    $(fieldId).text(errorFields[fieldOrigId]);                  	    			
+                    	    		}
+
+                    	    	}
+
+            	    		}
+         	    		
+            	    	}
+
             	    }
             	);
         	}
