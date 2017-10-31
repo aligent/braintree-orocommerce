@@ -373,6 +373,7 @@ define(function(require) {
             	    		
             	    	}
             	    	
+           	    	
                         document.querySelector('input[name="credit_card_value"]').value = component.valueCreditCard;
                 		var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
                 		credit_card_value.val(component.valueCreditCard);
@@ -434,6 +435,8 @@ define(function(require) {
             if (eventData.data.paymentMethod === this.options.paymentMethod) {
 
             }
+            
+
             
         },
 

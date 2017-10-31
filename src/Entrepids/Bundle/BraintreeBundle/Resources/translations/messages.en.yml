@@ -107,3 +107,7 @@ entrepids.braintree.settings.allowed_cc_types.%s: __entrepids.braintree.settings
 entrepids.braintree.settings.environment_types.%s: __entrepids.braintree.settings.environment_types.%s
 entrepids.braintree.settings.label: __entrepids.braintree.settings.label
 entrepids.braintree.settings.capture.capture_action.label: __entrepids.braintree.settings.capture.capture_action.label
+entrepids.braintree.order_view.info.label: 'Payment Details'
+entrepids.braintree.order_view.info_detail: '{{brand}} {{type}} Card ending in {{last4}}'
+entrepids.braintree.order_view.info_nodata: 'No Data Saved'
+oro.ui.empty: __oro.ui.empty

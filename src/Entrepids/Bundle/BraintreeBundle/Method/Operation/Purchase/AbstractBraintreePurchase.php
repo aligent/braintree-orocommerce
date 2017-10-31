@@ -74,6 +74,16 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 	 */
 	abstract protected function setDataToPreProcessResponse ();
 	
+	protected function saveResponseSuccessData ($response){
+		$transaction = $response->transaction;
+		
+		$creditCardDetails = $transaction->creditCardDetails;
+		$transactionOptions = $this->paymentTransaction->getTransactionOptions ();
+		$transactionOptions ['creditCardDetails'] = serialize($creditCardDetails);
+		$transactionOptions['isBraintreeEntrepids'] = true;
+		$this->paymentTransaction->setTransactionOptions ( $transactionOptions );
+	}
+	
 	/**
 	 * This method is used to process the response of braintree core
 	 * 
@@ -83,6 +93,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 		$this->setDataToPreProcessResponse();
 		
 		if ($response->success && ! is_null ( $response->transaction )) {
+			$this->saveResponseSuccessData($response);
 			$this->processSuccess($response);
 		}else{
 			$this->processError($response);

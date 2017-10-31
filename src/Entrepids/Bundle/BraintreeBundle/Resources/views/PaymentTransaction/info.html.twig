@@ -1,0 +1,12 @@
+<div class="control-group">
+    <label class="control-label">{{ 'entrepids.braintree.order_view.info.label'|trans }}</label>
+    <div class="controls">
+        <div class="control-label">
+            {% if data is not empty %}
+                {{ data }}
+            {% else %}
+                {{ 'oro.ui.empty'|trans }}
+            {% endif %}
+        </div>
+    </div>
+</div>
