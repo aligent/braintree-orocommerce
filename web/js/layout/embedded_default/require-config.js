@@ -1,1 +1,0 @@
-require({"waitSeconds":0});
