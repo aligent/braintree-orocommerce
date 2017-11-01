@@ -36,5 +36,7 @@ services:
             - '%oro_payment.entity.payment_transaction.class%'
             - '@translator'
         calls:
-            - ['setLogger', ['@logger']]         
+            - ['setLogger', ['@logger']]
+        tags:
+            - { name: layout.data_provider, alias: braintree_payment_order_data }      
             
