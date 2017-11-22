@@ -8,6 +8,10 @@ use Entrepids\Bundle\BraintreeBundle\Method\Braintree;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 
+/**
+ * This is the class that check and validate a operation in the checkout
+ *
+ */
 class BraintreeCheckoutListener {
 	use LoggerAwareTrait;
 	

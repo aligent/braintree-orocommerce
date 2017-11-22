@@ -7,6 +7,11 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation
 use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
+/**
+ * 
+ * This class capture the data of the payment
+ *
+ */
 class OperationCapture extends AbstractBraintreeOperation {
 	
 	/**

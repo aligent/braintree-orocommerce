@@ -6,6 +6,11 @@ use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
+/**
+ * 
+ * This class checks and validate all data in authorization process
+ *
+ */
 class OperationAuthorize extends AbstractBraintreeOperation {
 	
 	/**

@@ -72,6 +72,8 @@ class BraintreePaymentMethodFactory implements BraintreePaymentMethodFactoryInte
 	}	
 	
 	/**
+     * This method is called when the Braintree method is selected in the checkout process
+     * 
      * {@inheritdoc}
      */
     public function create(BraintreeConfigInterface $config)

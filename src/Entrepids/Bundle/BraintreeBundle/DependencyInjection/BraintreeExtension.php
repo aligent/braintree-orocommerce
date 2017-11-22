@@ -14,7 +14,10 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class BraintreeExtension extends Extension
 {
-	
+	/**
+	 * 
+	 * @var unknown
+	 */
 	const ALIAS = 'braintree';
     /**
      * {@inheritdoc}

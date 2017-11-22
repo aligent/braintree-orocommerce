@@ -17,6 +17,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * 
+ * This is the class that loads the form in the checkout process
+ *
+ */
 class CreditCardType extends AbstractType
 {
     const NAME = 'entrepids_braintree_credit_card';

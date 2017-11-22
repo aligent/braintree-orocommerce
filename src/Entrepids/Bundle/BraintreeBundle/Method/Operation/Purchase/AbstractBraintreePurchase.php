@@ -18,6 +18,11 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation
 use phpDocumentor\Reflection\Types\Array_;
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 
+/**
+ * 
+ * This is abstract class that contains generic methods for the purchase operation
+ *
+ */
 abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation {
 
 	/**

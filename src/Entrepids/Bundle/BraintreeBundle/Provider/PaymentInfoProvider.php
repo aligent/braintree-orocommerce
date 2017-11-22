@@ -70,6 +70,11 @@ class PaymentInfoProvider
     	return $this->getPaymentData($entity);
     }
     
+    /**
+     * this method return the detail of order in Braintree to show
+     * 
+     * @param unknown $entity
+     */
     protected function getPaymentData ($entity){
     	$className = $this->doctrineHelper->getEntityClass($entity);
     	$identifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
@@ -116,7 +121,10 @@ class PaymentInfoProvider
     	return '';
     }
 
-
+	/**
+	 * 
+	 * @param unknown $entity
+	 */
 	public function isApplicable ($entity){
 		
 		$className = $this->doctrineHelper->getEntityClass($entity);

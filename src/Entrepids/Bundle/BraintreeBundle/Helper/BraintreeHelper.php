@@ -23,7 +23,11 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Complete\OperationComplete;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize;
 
-
+/**
+ * 
+ * This is the class that execute a determined operation in the step of checkout
+ *
+ */
 class BraintreeHelper implements BraintreeHelperInterface {
 
 	
@@ -112,6 +116,8 @@ class BraintreeHelper implements BraintreeHelperInterface {
 
 
 	/**
+	 * This method execute a operation that is passed by parameter
+	 * 
 	 * (non-PHPdoc)
 	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelperInterface::execute()
 	 */

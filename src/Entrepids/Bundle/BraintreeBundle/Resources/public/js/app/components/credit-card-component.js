@@ -130,8 +130,6 @@ define(function(require) {
 	            	    	var fieldEmitted = event.emittedBy;
 	           	    		
 	            	    	$(fieldsBraintree[fieldEmitted]).text('');
-	           	    		//$('#expirationDate').text('');
-	           	    		//$('#cvvH').text('');
 	        		  	    
 	        		        if (field.isValid) {
 	        		        	$(field.container).removeClass('error');
