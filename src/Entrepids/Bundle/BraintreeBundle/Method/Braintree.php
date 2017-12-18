@@ -16,7 +16,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
 
-
+// ORO REVIEW:
+// Please, use "Method" suffix for the name of this class.
 class Braintree implements PaymentMethodInterface {
 	const TYPE = 'braintree';
 	const COMPLETE = 'complete';
@@ -119,6 +120,8 @@ class Braintree implements PaymentMethodInterface {
 	 */
 	public function purchase(PaymentTransaction $paymentTransaction) {
 		$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();
+		// ORO REVIEW:
+        // Please, don't use magical string here and in other places.
 		$purchaseOperation = "purchaseError";
 		if ($sourcepaymenttransaction != null) {
 			$sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction ();

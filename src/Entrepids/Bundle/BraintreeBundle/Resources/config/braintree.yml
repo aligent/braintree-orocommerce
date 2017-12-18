@@ -1,9 +1,10 @@
 services:
-
-    entrepids_braintree.braintree.payflow.client.http:
-        class: 'Guzzle\Http\Client'
-        public: false
-        lazy: true
+    # ORO REVIEW:
+    # This service is never used.
+#    entrepids_braintree.braintree.payflow.client.http:
+#        class: 'Guzzle\Http\Client'
+#        public: false
+#        lazy: true
         
     entrepids_braintree.event_listener.callback.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\EventListener\Callback\BraintreeCheckoutListener'
@@ -13,6 +14,8 @@ services:
         calls:
             - ['setLogger', ['@logger']]
         tags:
-            - { name: kernel.event_listener, event: oro_payment.callback.error.braintree, method: onError }
-            - { name: kernel.event_listener, event: oro_payment.callback.return.braintree, method: onReturn }
-           
+            # ORO REVIEW:
+            # Event with "braintree" suffix will be never dispatched.
+            # Why we need this service?
+            - { name: kernel.event_listener, event: oro_payment.callback.error, method: onError }
+            - { name: kernel.event_listener, event: oro_payment.callback.return, method: onReturn }

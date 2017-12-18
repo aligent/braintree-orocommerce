@@ -28,6 +28,11 @@ class BraintreeAdapter
     public function __construct(BraintreeConfigInterface $config)
     {
         $this->config = $config;
+        // ORO REVIEW:
+        // It's highly recommended to not access system config in services constructors.
+        // The application could not be installed, because on DI container building we have no tables in a DB.
+        // "SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "oro_config" does not exist"
+        // error occurs.
         $this->initCredentials();
     }
 

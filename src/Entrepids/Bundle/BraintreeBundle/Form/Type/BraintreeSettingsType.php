@@ -28,6 +28,8 @@ use Symfony\Component\Validator\Exception\MissingOptionsException;
  */
 class BraintreeSettingsType extends AbstractType
 {
+    // ORO REVIEW:
+    // It's recommended to use a company name as a prefix for a block prefixes of form types.
     const BLOCK_PREFIX = 'braintree_settings';
 
     /**
@@ -103,6 +105,9 @@ class BraintreeSettingsType extends AbstractType
                 'tooltip' => 'entrepids.braintree.settings.credit_card_payment_action.label.tooltip',
                 'required' => true,
             ])
+            // ORO REVIEW:
+            // For better user experience, please, add default values to form fields, if it is pertinent.
+            // See \Oro\Bundle\PayPalBundle\Form\Type\PayPalSettingsType::preSetData
             ->add('allowedCreditCardTypes', ChoiceType::class, [
                 'choices' => $this->cardTypesDataProvider->getCardTypes(),
                 'choices_as_values' => true,
@@ -138,6 +143,9 @@ class BraintreeSettingsType extends AbstractType
             	'tooltip' => 'entrepids.braintree.settings.merch_account_id.label.tooltip',
                 'required' => true,
             ])
+            // ORO REVIEW:
+            // This fields are required on update of a integration, but they should not
+            // Please, use \Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType
             ->add('braintreeMerchPublicKey', PasswordType::class, [
                 'label' => 'entrepids.braintree.settings.public_key.label',
             	'tooltip' => 'entrepids.braintree.settings.public_key.label.tooltip',
@@ -176,6 +184,10 @@ class BraintreeSettingsType extends AbstractType
         return self::BLOCK_PREFIX;
     }
 
+    // ORO REVIEW:
+    // This method is never used.
+    // Sensitive data (such as Merchant Id, Public Key, Private Key)
+    // should not be stored in DB as an unencrypted values.
     /**
      * @param FormBuilderInterface $builder
      * @param string               $field

@@ -61,7 +61,14 @@ class BraintreeBundleInstaller implements Installation
         $table->addColumn('transport_id', 'integer', []);
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey(['transport_id', 'localized_value_id']);
-        $table->addUniqueIndex(['localized_value_id'], 'UNIQ_92E5B87EEB576E89');
+        // ORO REVIEW:
+        // ERROR: An exception occurred while executing
+        // 'CREATE UNIQUE INDEX UNIQ_92E5B87EEB576E89 ON entrepids_braintree_lbl (localized_value_id)':
+        // SQLSTATE[42P07]: Duplicate table: 7 ERROR:  relation "uniq_92e5b87eeb576e89" already exists
+        //
+        // This index name is already used for PayPal tables, please use another one,
+        // or use `oro:migration:dump` command
+        $table->addUniqueIndex(['localized_value_id'], 'UNIQ_92E5B87EEB576E80');
     }
 
     /**
@@ -74,7 +81,9 @@ class BraintreeBundleInstaller implements Installation
         $table->addColumn('transport_id', 'integer', []);
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey(['transport_id', 'localized_value_id']);
-        $table->addUniqueIndex(['localized_value_id'], 'UNIQ_55FE472FEB576E89');
+        // ORO REVIEW:
+        // Same us for unique index of entrepids_braintree_lbl table
+        $table->addUniqueIndex(['localized_value_id'], 'UNIQ_55FE472FEB576E80');
     }
 
     /**

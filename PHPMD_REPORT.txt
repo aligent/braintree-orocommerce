@@ -1,0 +1,5 @@
+braintree/src/Entrepids/Bundle/BraintreeBundle/Form/Type/CreditCardType.php:68       The method buildForm() has 113 lines of code. Current threshold is set to 100. Avoid really long methods.
+braintree/src/Entrepids/Bundle/BraintreeBundle/Method/Braintree.php:20       The class Braintree has 11 public methods. Consider refactoring Braintree to keep number of public methods under 10.
+braintree/src/Entrepids/Bundle/BraintreeBundle/Method/Operation/Purchase/AbstractBraintreePurchase.php:247   The method getOrderAddressPayment() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.
+braintree/src/Entrepids/Bundle/BraintreeBundle/Method/Operation/Purchase/AbstractBraintreePurchase.php:247   The method getOrderAddressPayment() has an NPath complexity of 1024. The configured NPath complexity threshold is 200.
+braintree/src/Entrepids/Bundle/BraintreeBundle/Model/Adapter/BraintreeAdapter.php:17 The class BraintreeAdapter has 16 public methods. Consider refactoring BraintreeAdapter to keep number of public methods under 10.

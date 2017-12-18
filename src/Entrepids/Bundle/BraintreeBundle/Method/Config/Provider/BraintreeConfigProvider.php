@@ -4,6 +4,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
+use Entrepids\Bundle\BraintreeBundle\Integration\BraintreePaymentChannelType;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactoryInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Psr\Log\LoggerInterface;
@@ -93,7 +94,9 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
         try {
             return $this->doctrine->getManagerForClass('BraintreeBundle:BraintreeSettings')
                 ->getRepository('BraintreeBundle:BraintreeSettings')
-                ->getEnabledSettingsByType('Braintree');
+                // ORO REVIEW:
+                // Please, don't use "magical" string (or any other) constants
+                ->getEnabledSettingsByType(BraintreePaymentChannelType::TYPE);
         } catch (\UnexpectedValueException $e) {
             $this->logger->critical($e->getMessage());
 

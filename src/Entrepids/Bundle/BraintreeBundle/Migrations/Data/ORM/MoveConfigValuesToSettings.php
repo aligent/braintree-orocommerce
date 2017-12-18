@@ -13,6 +13,8 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\PaymentBundle\Migrations\Data\ORM\AbstractMoveConfigValuesToSettings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+// ORO REVIEW:
+// If version with setting in a system config will not be released, this migration can be removed.
 class MoveConfigValuesToSettings extends AbstractMoveConfigValuesToSettings
 {
 	const SECTION_NAME = 'braintree';

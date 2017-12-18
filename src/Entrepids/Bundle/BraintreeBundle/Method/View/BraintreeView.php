@@ -40,6 +40,8 @@ class BraintreeView implements PaymentMethodViewInterface
             'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
         ];
 
+        // ORO REVIEW:
+        // Why BraintreeConfigInterface is used as data for CreditCardType form type?
         $config = $this->config;
         $formView = $this->formFactory->create(CreditCardType::NAME, $config, $formOptions)->createView();
 
@@ -111,6 +113,8 @@ class BraintreeView implements PaymentMethodViewInterface
 		return $this->config->getPaymentMethodIdentifier();
 	}
 
+    // ORO REVIEW:
+    // This method can be private.
 	/**
 	 * @return array
 	 */
@@ -119,6 +123,8 @@ class BraintreeView implements PaymentMethodViewInterface
 		return $this->config->getAllowedCreditCards();
 	}
 
+    // ORO REVIEW:
+    // Next methods isn't called at all.
 	/**
 	 * @return array
 	 */

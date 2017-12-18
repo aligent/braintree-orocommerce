@@ -107,6 +107,9 @@ class BraintreeHelper implements BraintreeHelperInterface {
 	}
 	
 	/**
+     * ORO REVIEW:
+     * Mutable services is really bad practice, please, try to avoid such practices.
+     *
 	 * (non-PHPdoc)
 	 * @see \Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelperInterface::setPaymentOperation()
 	 */

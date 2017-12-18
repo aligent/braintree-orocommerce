@@ -101,6 +101,8 @@ entrepids.braintree.result.error: 'Payment failed. {{errorMessage}}'
 entrepids.braintree.braintreeflow_checkout.redirect_to_braintree: 'You will be redirected to Braintree website to complete your purchase after the order review step.'
 entrepids.braintree.channel_type.braintree.label: Braintree
 oro.payment.admin.braintree.label: Braintree
+# ORO REVIEW:
+# Please, add translations for next messages.
 entrepids.braintree.settings.payment_action.%s: __entrepids.braintree.settings.payment_action.%s
 entrepids.braintree.settings.capture.capture_action.%s: __entrepids.braintree.settings.capture.capture_action.%s
 entrepids.braintree.settings.allowed_cc_types.%s: __entrepids.braintree.settings.allowed_cc_types.%s
@@ -110,4 +112,6 @@ entrepids.braintree.settings.capture.capture_action.label: __entrepids.braintree
 entrepids.braintree.order_view.info.label: 'Payment Details'
 entrepids.braintree.order_view.info_detail: '{{brand}} {{type}} Card ending in {{last4}}'
 entrepids.braintree.order_view.info_nodata: 'No Data Saved'
+# ORO REVIEW:
+# Seems that this line is excess.
 oro.ui.empty: __oro.ui.empty

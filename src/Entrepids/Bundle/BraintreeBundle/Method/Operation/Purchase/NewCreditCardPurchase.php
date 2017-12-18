@@ -131,6 +131,11 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase {
 		if ($this->saveForLater) {
 			$creditCardValuesResponse = $transaction->creditCard;
 			$token = $creditCardValuesResponse ['token'];
+            // ORO REVIEW:
+            // Reference should be set for all transactions, and I believe it should be $transaction->id
+            // Please, pay attention to PaymentStatusProvider.
+            // After successful checkout order should have "Payment authorize" status,
+            // in case when we don't choose "Save for later" it will be "Pending payment".
 			$this->paymentTransaction->setReference ( $token );
 			$this->paymentTransaction->setResponse ( $creditCardValuesResponse );
 		}

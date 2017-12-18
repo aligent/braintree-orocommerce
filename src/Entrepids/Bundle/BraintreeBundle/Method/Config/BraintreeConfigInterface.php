@@ -14,7 +14,11 @@ PaymentConfigInterface
 	/**
 	 * @return string
 	 */
-	public function getAllowedEnvironmentTypes();	
+	public function getAllowedEnvironmentTypes();
+
+    // ORO REVIEW:
+    // Why do the next fields have "sandbox" prefix in the name?
+    // It will be used for production mode also.
 	/**
 	 * @return string
 	 */
@@ -43,7 +47,11 @@ PaymentConfigInterface
 	 * @return bool
 	 */
 	public function isZeroAmountAuthorizationEnabled();	
-	
+
+    // ORO REVIEW:
+    // Next methods violates Open/closed principle.
+    // They don't relate to this interface,
+    // and was added only for using config object as data for form, for some reason
 	/**
 	 * @return string
 	 */

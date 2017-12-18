@@ -240,7 +240,13 @@ class CreditCardType extends AbstractType
      *  The method get the customer user and then get the transactions to determine if they have any saved card
      */
     private function getTransactionCustomerORM (){
+
     	$customerUser = $this->getLoggedCustomerUser();
+
+    	// ORO REVIEW:
+        // This query can fetch thousand of transaction, and contain only one credit card.
+        // It can be a serious failure in performance.
+        // Please, reorganize data storing, maybe tokens should be moved to a separate table.
     	$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
     			'frontendOwner' => $customerUser,
     	]);

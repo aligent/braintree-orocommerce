@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class BraintreeExtension extends Extension
 {
+    // ORO REVIEW:
+    // It's recommended to use a company name as a prefix for bundle aliases.
 	/**
 	 * 
 	 * @var unknown
