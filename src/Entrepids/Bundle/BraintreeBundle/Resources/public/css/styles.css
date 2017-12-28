@@ -1,16 +1,16 @@
 .input-braintree-cc {
     width: 200px;
-	height: 40px;
+    height: 40px;
 }
 
 .input-braintree-expdate {
     width: 80px;
-	height: 40px;
+    height: 40px;
 }
 
 .input-braintree-cvv {
     width: 60px;
-	height: 40px;
+    height: 40px;
 }
 
 .helper-text {

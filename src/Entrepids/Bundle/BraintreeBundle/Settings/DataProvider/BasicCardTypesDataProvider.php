@@ -32,7 +32,7 @@ class BasicCardTypesDataProvider implements CardTypesDataProviderInterface
     /**
      * @internal
      */
-    const PRODUCTION = 'production';    
+    const PRODUCTION = 'production';
     
     /**
      * @return string[]
@@ -50,10 +50,11 @@ class BasicCardTypesDataProvider implements CardTypesDataProviderInterface
     /**
      * @return string[]
      */
-    public function getEnvironmentType(){
-    	return [
-    		self::SANDBOX,
-    		self::PRODUCTION,
-    	];
+    public function getEnvironmentType()
+    {
+        return [
+            self::SANDBOX,
+            self::PRODUCTION,
+        ];
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
 use Oro\Bundle\LocaleBundle\Form\Type\LocalizedFallbackValueCollectionType;
@@ -33,29 +32,34 @@ class BraintreeSettingsType extends AbstractType
     const BLOCK_PREFIX = 'braintree_settings';
 
     /**
+     *
      * @var TranslatorInterface
      */
     protected $translator;
 
     /**
+     *
      * @var SymmetricCrypterInterface
      */
     protected $encoder;
 
     /**
+     *
      * @var CardTypesDataProviderInterface
      */
     private $cardTypesDataProvider;
 
     /**
+     *
      * @var PaymentActionsDataProviderInterface
      */
     private $paymentActionsDataProvider;
 
     /**
-     * @param TranslatorInterface                 $translator
-     * @param SymmetricCrypterInterface           $encoder
-     * @param CardTypesDataProviderInterface      $cardTypesDataProvider
+     *
+     * @param TranslatorInterface $translator
+     * @param SymmetricCrypterInterface $encoder
+     * @param CardTypesDataProviderInterface $cardTypesDataProvider
      * @param PaymentActionsDataProviderInterface $paymentActionsDataProvider
      */
     public function __construct(
@@ -71,8 +75,9 @@ class BraintreeSettingsType extends AbstractType
     }
 
     /**
+     *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      *
      * @throws ConstraintDefinitionException
      * @throws InvalidOptionsException
@@ -81,98 +86,107 @@ class BraintreeSettingsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $a=1;
-    	$builder
-            ->add('braintreeLabel', LocalizedFallbackValueCollectionType::NAME, [
-                'label' => 'entrepids.braintree.settings.credit_card_labels.label',
-                'required' => true,
-                'options' => ['constraints' => [new NotBlank()]],
-            ])
+        $a = 1;
+        $builder->add('braintreeLabel', LocalizedFallbackValueCollectionType::NAME, [
+            'label' => 'entrepids.braintree.settings.credit_card_labels.label',
+            'required' => true,
+            'options' => [
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ]
+        ])
             ->add('braintreeShortLabel', LocalizedFallbackValueCollectionType::NAME, [
-                'label' => 'entrepids.braintree.settings.credit_card_short_labels.label',
-                'required' => true,
-                'options' => ['constraints' => [new NotBlank()]],
+            'label' => 'entrepids.braintree.settings.credit_card_short_labels.label',
+            'required' => true,
+            'options' => [
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ]
             ])
             ->add('braintreePaymentAction', ChoiceType::class, [
-                'choices' => $this->paymentActionsDataProvider->getPaymentActions(),
-                'choices_as_values' => true,
-                'choice_label' => function ($action) {
-                    return $this->translator->trans(
-                        sprintf('entrepids.braintree.settings.payment_action.%s', $action)
-                    );
-                },
-                'label' => 'entrepids.braintree.settings.credit_card_payment_action.label',
-                'tooltip' => 'entrepids.braintree.settings.credit_card_payment_action.label.tooltip',
-                'required' => true,
+            'choices' => $this->paymentActionsDataProvider->getPaymentActions(),
+            'choices_as_values' => true,
+            'choice_label' => function ($action) {
+                return $this->translator->trans(sprintf('entrepids.braintree.settings.payment_action.%s', $action));
+            },
+            'label' => 'entrepids.braintree.settings.credit_card_payment_action.label',
+            'tooltip' => 'entrepids.braintree.settings.credit_card_payment_action.label.tooltip',
+            'required' => true
             ])
-            // ORO REVIEW:
-            // For better user experience, please, add default values to form fields, if it is pertinent.
-            // See \Oro\Bundle\PayPalBundle\Form\Type\PayPalSettingsType::preSetData
-            ->add('allowedCreditCardTypes', ChoiceType::class, [
-                'choices' => $this->cardTypesDataProvider->getCardTypes(),
-                'choices_as_values' => true,
-                'choice_label' => function ($cardType) {
-                    return $this->translator->trans(
-                        sprintf('entrepids.braintree.settings.allowed_cc_types.%s', $cardType)
-                    );
-                },
-                'label' => 'entrepids.braintree.settings.allowed_cc_types.label',
-                'required' => true,
-                'multiple' => true,
-            ])
+            ->
+        // ORO REVIEW:
+        // For better user experience, please, add default values to form fields, if it is pertinent.
+        // See \Oro\Bundle\PayPalBundle\Form\Type\PayPalSettingsType::preSetData
+        add('allowedCreditCardTypes', ChoiceType::class, [
+            'choices' => $this->cardTypesDataProvider->getCardTypes(),
+            'choices_as_values' => true,
+            'choice_label' => function ($cardType) {
+                return $this->translator->trans(sprintf('entrepids.braintree.settings.allowed_cc_types.%s', $cardType));
+            },
+            'label' => 'entrepids.braintree.settings.allowed_cc_types.label',
+            'required' => true,
+            'multiple' => true
+        ])
             ->add('braintreeEnvironmentType', ChoiceType::class, [
-            		'choices' => $this->cardTypesDataProvider->getEnvironmentType(),
-            		'choices_as_values' => true,
-            		'choice_label' => function ($cardType) {
-            			return $this->translator->trans(
-            					sprintf('entrepids.braintree.settings.environment_types.%s', $cardType)
-            			);
-            		},
-            		'label' => 'entrepids.braintree.settings.environment_types.label',
-            		'tooltip' => 'entrepids.braintree.settings.environment_types.label.tooltip',
-            		'required' => true,
-            		])            
-            
-            ->add('braintreeMerchId', TextType::class, [
-                'label' => 'entrepids.braintree.settings.merch_id.label',
-            	'tooltip' => 'entrepids.braintree.settings.merch_id.label.tooltip',
-                'required' => true,
+            'choices' => $this->cardTypesDataProvider->getEnvironmentType(),
+            'choices_as_values' => true,
+            'choice_label' => function ($cardType) {
+                return $this->translator->trans(
+                    sprintf(
+                        'entrepids.braintree.settings.environment_types.%s',
+                        $cardType
+                    )
+                );
+            },
+            'label' => 'entrepids.braintree.settings.environment_types.label',
+            'tooltip' => 'entrepids.braintree.settings.environment_types.label.tooltip',
+            'required' => true
             ])
+            ->
+        add('braintreeMerchId', TextType::class, [
+            'label' => 'entrepids.braintree.settings.merch_id.label',
+            'tooltip' => 'entrepids.braintree.settings.merch_id.label.tooltip',
+            'required' => true
+        ])
             ->add('braintreeMerchAccountId', TextType::class, [
-                'label' => 'entrepids.braintree.settings.merch_account_id.label',
-            	'tooltip' => 'entrepids.braintree.settings.merch_account_id.label.tooltip',
-                'required' => true,
+            'label' => 'entrepids.braintree.settings.merch_account_id.label',
+            'tooltip' => 'entrepids.braintree.settings.merch_account_id.label.tooltip',
+            'required' => true
             ])
-            // ORO REVIEW:
-            // This fields are required on update of a integration, but they should not
-            // Please, use \Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType
-            ->add('braintreeMerchPublicKey', PasswordType::class, [
-                'label' => 'entrepids.braintree.settings.public_key.label',
-            	'tooltip' => 'entrepids.braintree.settings.public_key.label.tooltip',
-                'required' => true,
-            ])
+            ->
+        // ORO REVIEW:
+        // This fields are required on update of a integration, but they should not
+        // Please, use \Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType
+        add('braintreeMerchPublicKey', PasswordType::class, [
+            'label' => 'entrepids.braintree.settings.public_key.label',
+            'tooltip' => 'entrepids.braintree.settings.public_key.label.tooltip',
+            'required' => true
+        ])
             ->add('braintreeMerchPrivateKey', PasswordType::class, [
-                'label' => 'entrepids.braintree.settings.private_key.label',
-            	'tooltip' => 'entrepids.braintree.settings.private_key.label.tooltip',
-                'required' => true,
+            'label' => 'entrepids.braintree.settings.private_key.label',
+            'tooltip' => 'entrepids.braintree.settings.private_key.label.tooltip',
+            'required' => true
             ])
             ->add('saveForLater', CheckboxType::class, [
-                'label' => 'entrepids.braintree.settings.save_for_later.label',
-            	'tooltip' => 'entrepids.braintree.settings.save_for_later.label.tooltip',
-                'required' => false,
+            'label' => 'entrepids.braintree.settings.save_for_later.label',
+            'tooltip' => 'entrepids.braintree.settings.save_for_later.label.tooltip',
+            'required' => false
             ]);
     }
 
     /**
+     *
      * @param OptionsResolver $resolver
      *
      * @throws AccessException
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-    	$a = 1;
+        $a = 1;
         $resolver->setDefaults([
-            'data_class' => BraintreeSettings::class,
+            'data_class' => BraintreeSettings::class
         ]);
     }
 
@@ -183,31 +197,29 @@ class BraintreeSettingsType extends AbstractType
     {
         return self::BLOCK_PREFIX;
     }
-
+    
     // ORO REVIEW:
     // This method is never used.
     // Sensitive data (such as Merchant Id, Public Key, Private Key)
     // should not be stored in DB as an unencrypted values.
     /**
+     *
      * @param FormBuilderInterface $builder
-     * @param string               $field
-     * @param bool                 $decrypt
+     * @param string $field
+     * @param bool $decrypt
      *
      * @throws \InvalidArgumentException
      */
     protected function transformWithEncodedValue(FormBuilderInterface $builder, $field, $decrypt = true)
     {
-        $builder->get($field)->addModelTransformer(new CallbackTransformer(
-            function ($value) use ($decrypt) {
-                if ($decrypt === true) {
-                    return $this->encoder->decryptData($value);
-                }
-
-                return $value;
-            },
-            function ($value) {
-                return $this->encoder->encryptData($value);
+        $builder->get($field)->addModelTransformer(new CallbackTransformer(function ($value) use ($decrypt) {
+            if ($decrypt === true) {
+                return $this->encoder->decryptData($value);
             }
-        ));
+            
+            return $value;
+        }, function ($value) {
+            return $this->encoder->encryptData($value);
+        }));
     }
 }

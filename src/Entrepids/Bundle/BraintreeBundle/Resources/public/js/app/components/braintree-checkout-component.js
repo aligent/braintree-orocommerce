@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var BraintreeCheckoutComponent;
@@ -17,7 +17,7 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        initialize: function(options) {
+        initialize: function (options) {
             this.options = _.extend({}, this.options, options);
 
             mediator.on('checkout:place-order:response', this.handleSubmit, this);
@@ -26,7 +26,7 @@ define(function(require) {
         /**
          * @param {Object} eventData
          */
-        handleSubmit: function(eventData) {
+        handleSubmit: function (eventData) {
             if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
                 eventData.stopped = true;
                 if (!eventData.responseData.purchaseRedirectUrl) {
@@ -38,7 +38,7 @@ define(function(require) {
             }
         },
 
-        dispose: function() {
+        dispose: function () {
             if (this.disposed) {
                 return;
             }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use Braintree\Exception\NotFound;
@@ -16,114 +15,128 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface;
 
-abstract class AbstractBraintreeOperation implements OperationInterface {
-	
-	/**
-	 * 
-	 * @var DoctrineHelper
-	 */
-	protected $doctrineHelper;
-	
-	/**
-	 * 
-	 * @var BraintreeAdapter
-	 */
-	protected $adapter;
-	
-	/**
-	 * 
-	 * @var PaymentTransaction
-	 */
-	protected $paymentTransaction;
-	
-	/**
-	 * 
-	 * @var BraintreeConfigInterface
-	 */
-	protected $config;
-	
-	/** @var Session */
-	protected $session;
-	
-	/**
-	 * 
-	 * @var TranslatorInterface
-	 */
-	protected $translator;	
-	/**
-	 * @var PropertyAccessor
-	 */
-	protected $propertyAccessor;	
+abstract class AbstractBraintreeOperation implements OperationInterface
+{
 
-	/**
-	 * 
-	 * @param Session $session
-	 * @param TranslatorInterface $translator
-	 * @param PropertyAccessor $propertyAccessor
-	 * @param DoctrineHelper $doctrineHelper
-	 * @param BraintreeAdapter $braintreeAdapter
-	 * @param BraintreeConfigInterface $config
-	 */
-	public function __construct(Session $session, TranslatorInterface $translator, PropertyAccessor $propertyAccessor, DoctrineHelper $doctrineHelper, BraintreeAdapter $braintreeAdapter, BraintreeConfigInterface $config ){
-		$this->doctrineHelper = $doctrineHelper;
-		$this->adapter = $braintreeAdapter;
-		$this->config = $config;
-		$this->propertyAccessor = $propertyAccessor;
-		$this->session = $session;
-		$this->translator = $translator;
-	}	
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::setPaymentTransaction()
-	 */
-	public function setPaymentTransaction(PaymentTransaction $paymentTransaction ){
-		$this->paymentTransaction = $paymentTransaction;
-	
-	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::getPaymentTransaction()
-	 */
-	public function getPaymentTransaction(){
-		return $this->paymentTransaction;
-	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
-	 */
-	public function operationProcess (){
-		$this->preprocessDataToSend();
-		$this->preProcessOperation();
-		return $this->postProcessOperation();
-	}
-	
-	/**
-	 * This method is used to preprocess the information of the operation 
-	 */
-	abstract protected function preProcessOperation ();
+    /**
+     *
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
 
-	/**
-	 * This method is used to postprecess the information of the operation
-	 */
-	abstract protected function postProcessOperation ();
-	
-	/**
-	 * This method is used when exists data to send to braintree core 
-	 */
-	abstract protected function preprocessDataToSend ();
+    /**
+     *
+     * @var BraintreeAdapter
+     */
+    protected $adapter;
 
+    /**
+     *
+     * @var PaymentTransaction
+     */
+    protected $paymentTransaction;
 
+    /**
+     *
+     * @var BraintreeConfigInterface
+     */
+    protected $config;
 
-	/**
-	 *
-	 * @return PropertyAccessor
-	 */
-	protected function getPropertyAccessor() {
-		return $this->propertyAccessor;
-	}
-	
+    /**
+     * @var Session
+     */
+    protected $session;
 
+    /**
+     *
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     *
+     * @var PropertyAccessor
+     */
+    protected $propertyAccessor;
+
+    /**
+     *
+     * @param Session $session
+     * @param TranslatorInterface $translator
+     * @param PropertyAccessor $propertyAccessor
+     * @param DoctrineHelper $doctrineHelper
+     * @param BraintreeAdapter $braintreeAdapter
+     * @param BraintreeConfigInterface $config
+     */
+    public function __construct(
+        Session $session,
+        TranslatorInterface $translator,
+        PropertyAccessor $propertyAccessor,
+        DoctrineHelper $doctrineHelper,
+        BraintreeAdapter $braintreeAdapter,
+        BraintreeConfigInterface $config
+    ) {
+        $this->doctrineHelper = $doctrineHelper;
+        $this->adapter = $braintreeAdapter;
+        $this->config = $config;
+        $this->propertyAccessor = $propertyAccessor;
+        $this->session = $session;
+        $this->translator = $translator;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::setPaymentTransaction()
+     */
+    public function setPaymentTransaction(PaymentTransaction $paymentTransaction)
+    {
+        $this->paymentTransaction = $paymentTransaction;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::getPaymentTransaction()
+     */
+    public function getPaymentTransaction()
+    {
+        return $this->paymentTransaction;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
+     */
+    public function operationProcess()
+    {
+        $this->preprocessDataToSend();
+        $this->preProcessOperation();
+        return $this->postProcessOperation();
+    }
+
+    /**
+     * This method is used to preprocess the information of the operation
+     */
+    abstract protected function preProcessOperation();
+
+    /**
+     * This method is used to postprecess the information of the operation
+     */
+    abstract protected function postProcessOperation();
+
+    /**
+     * This method is used when exists data to send to braintree core
+     */
+    abstract protected function preprocessDataToSend();
+
+    /**
+     *
+     * @return PropertyAccessor
+     */
+    protected function getPropertyAccessor()
+    {
+        return $this->propertyAccessor;
+    }
 }

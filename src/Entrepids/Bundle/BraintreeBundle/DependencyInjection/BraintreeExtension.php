@@ -1,5 +1,4 @@
 <?php
-
 namespace Entrepids\Bundle\BraintreeBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,18 +15,20 @@ class BraintreeExtension extends Extension
 {
     // ORO REVIEW:
     // It's recommended to use a company name as a prefix for bundle aliases.
-	/**
-	 * 
-	 * @var unknown
-	 */
-	const ALIAS = 'braintree';
     /**
-     * {@inheritdoc}
+     *
+     * @var unknown
+     */
+    const ALIAS = 'braintree';
+
+    /**
+     *
+     * @ERROR!!!
+     *
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('braintree.yml');
         $loader->load('services.yml');
         $loader->load('form_types.yml');
@@ -35,15 +36,13 @@ class BraintreeExtension extends Extension
         $loader->load('method.yml');
         $loader->load('factory.yml');
         $loader->load('integration.yml');
-    
-        
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public function getAlias()
     {
-    	return self::ALIAS;
+        return self::ALIAS;
     }
 }

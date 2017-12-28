@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var CreditCardComponent;
@@ -64,7 +64,7 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        initialize: function(options) {
+        initialize: function (options) {
             this.options = _.extend({}, this.options, options);
 
             this.$el = this.options._sourceElement;
@@ -73,7 +73,7 @@ define(function(require) {
 
             this.$el
                 .on('change', this.options.selectors.saveForLater, $.proxy(this.onSaveForLaterChange, this))
-            	.on('change', this.options.selectors.creditCardsSaved, $.proxy(this.onCreditCardsSavedChange, this));
+                .on('change', this.options.selectors.creditCardsSaved, $.proxy(this.onCreditCardsSavedChange, this));
 
             mediator.on('checkout:place-order:response', this.handleSubmit, this);
             mediator.on('checkout:payment:method:changed', this.onPaymentMethodChanged, this);
@@ -85,109 +85,108 @@ define(function(require) {
             
             var component = this;
             
-            this.setCreditCardsSavedValue (this.$el);
+            this.setCreditCardsSavedValue(this.$el);
             
-        	client.create({
-        		authorization: component.$el.find(component.options.selectors.braintree_client_token).val()
-        		}, function (err, clientInstance) {
-        			if (err) {
-        				console.log(err);
-        				return;
-        			}
-
-        		hostedFields.create({
-        			client: clientInstance,
+            client.create({
+                authorization: component.$el.find(component.options.selectors.braintree_client_token).val()
+                }, function (err, clientInstance) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    
+                    hostedFields.create({
+                        client: clientInstance,
                     // ORO REVIEW:
                     // Placeholders look really strange, it seems that form is filled.
-        			fields: {
-        		    	number: {
-        		    		selector: '#card-number',
-        		    		placeholder: '1111 1111 1111 1111'
-        		    	},
-        		    	cvv: {
-        		    		selector: '#cvv',
-        		    		placeholder: '123'
-        		    	},
-        		    	expirationDate: {
-        		    		selector: '#expiration-date',
-        		    		placeholder: '10 / ' + ((new Date).getFullYear() + 2)
-        		    	}
-        		    }
-        		  	}, function (err, hostedFieldsInst) {
-        		  		component.hostedFieldsInstance = hostedFieldsInst;
-        		  		if (err) {
-        		  			console.log(err);
-        		  			return;
-        		  		}
-        		  		
-        		  		component.hostedFieldsInstance.on('validityChange', function (event) {
-        		  			  
-	        		  	    var field = event.fields[event.emittedBy];
+                        fields: {
+                            number: {
+                                selector: '#card-number',
+                                placeholder: '1111 1111 1111 1111'
+                            },
+                            cvv: {
+                                selector: '#cvv',
+                                placeholder: '123'
+                            },
+                            expirationDate: {
+                                selector: '#expiration-date',
+                                placeholder: '10 / ' + ((new Date).getFullYear() + 2)
+                            }
+                        }
+                      }, function (err, hostedFieldsInst) {
+                        component.hostedFieldsInstance = hostedFieldsInst;
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
 
-	            	    	var fieldsBraintree = [];
-	            	    	fieldsBraintree["number"] = "#number";
-	            	    	fieldsBraintree["expirationDate"] = "#expirationDate";
-	            	    	fieldsBraintree["cvv"] = "#cvvH"; 
+                        component.hostedFieldsInstance.on('validityChange', function (event) {
+  
+                            var field = event.fields[event.emittedBy];
 
-	            	    	var fieldEmitted = event.emittedBy;
-	           	    		
-	            	    	$(fieldsBraintree[fieldEmitted]).text('');
-	        		  	    
-	        		        if (field.isValid) {
-	        		        	$(field.container).removeClass('error');
-	        		        	if (event.emittedBy === 'expirationDate') {
-	        		        		if (!event.fields.expirationDate.isValid ) {
-	        		        			return;
-	        		        		}
-	        		        	}
-	        		        } else if (field.isPotentiallyValid) {
-	        		        	$(field.container).removeClass('error');
-	        		        } else {
-	        		        	$(field.container).addClass('error');
-	        		        }
-	        		        
-	        		        var formValid = Object.keys(event.fields).every(function (key) {
-	        		  	        return event.fields[key].isValid;
-	        		  	    });
-	        		        component.isFormValid = formValid;
-        		  	    });
-        		  	});
-            });
+                            var fieldsBraintree = [];
+                            fieldsBraintree["number"] = "#number";
+                            fieldsBraintree["expirationDate"] = "#expirationDate";
+                            fieldsBraintree["cvv"] = "#cvvH";
+
+                            var fieldEmitted = event.emittedBy;
+                   
+                            $(fieldsBraintree[fieldEmitted]).text('');
+                  
+                            if (field.isValid) {
+                                $(field.container).removeClass('error');
+                                if (event.emittedBy === 'expirationDate') {
+                                    if (!event.fields.expirationDate.isValid ) {
+                                        return;
+                                    }
+                                }
+                            } else if (field.isPotentiallyValid) {
+                                         $(field.container).removeClass('error');
+                            } else {
+                                         $(field.container).addClass('error');
+                            }
+                   
+                            var formValid = Object.keys(event.fields).every(function (key) {
+                                 return event.fields[key].isValid;
+                            });
+                            component.isFormValid = formValid;
+                        });
+                      });
+                });
         },
 
-        setCreditCardsSavedValue: function(form) {
+        setCreditCardsSavedValue: function (form) {
             var $el = form;
           
-            var $value = this.$form.find(this.options.selectors.credit_card_first_value); 
+            var $value = this.$form.find(this.options.selectors.credit_card_first_value);
             var valueTransaction = $value.prop('value');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
 
-    		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
-    		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
-    		credit_card_value.val(valueTransaction);
+            var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
+            var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
+            credit_card_value.val(valueTransaction);
 
             this.valueCreditCard = valueTransaction;
-            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
-            	this.isTokenized = false;
-            	this.isCreditCardSaved = true;
-            }
-            else{
-            	this.isTokenized = false;
-            	this.isCreditCardSaved = false;            	
+            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard") {
+                this.isTokenized = false;
+                this.isCreditCardSaved = true;
+            } else {
+                this.isTokenized = false;
+                this.isCreditCardSaved = false;
             }
 
-        },       
+        },
         
         
-        refreshPaymentMethod: function() {
+        refreshPaymentMethod: function () {
             mediator.trigger('checkout:payment:method:refresh');
         },
 
         /**
          * @param {Object} eventData
          */
-        handleSubmit: function(eventData) {
-        	if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
+        handleSubmit: function (eventData) {
+            if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
                 eventData.stopped = true;
                 var resolvedEventData = _.extend(
                     {
@@ -207,7 +206,7 @@ define(function(require) {
             }
         },
 
-        dispose: function() {
+        dispose: function () {
             if (this.disposed || !this.disposable) {
                 return;
             }
@@ -228,14 +227,14 @@ define(function(require) {
         /**
          * @param {String} elementSelector
          */
-        validate: function() {
+        validate: function () {
             return this.isFormValid;
         },
         
         /**
          * @param {Boolean} state
          */
-        setGlobalPaymentValidate: function(state) {
+        setGlobalPaymentValidate: function (state) {
             this.paymentValidationRequiredComponentState = state;
             mediator.trigger('checkout:payment:validate:change', state);
         },
@@ -244,7 +243,7 @@ define(function(require) {
         /**
          * @returns {jQuery}
          */
-        getSaveForLaterElement: function() {
+        getSaveForLaterElement: function () {
             if (!this.hasOwnProperty('$saveForLaterElement')) {
                 this.$saveForLaterElement = this.$form.find(this.options.selectors.saveForLater);
             }
@@ -255,24 +254,24 @@ define(function(require) {
         /**
          * @returns {Boolean}
          */
-        getSaveForLaterState: function() {
+        getSaveForLaterState: function () {
             return this.getSaveForLaterElement().prop('checked');
         },
 
-        setSaveForLaterBasedOnForm: function() {
+        setSaveForLaterBasedOnForm: function () {
             mediator.trigger('checkout:payment:save-for-later:change', this.getSaveForLaterState());
         },
 
         /**
          * @param {Object} eventData
          */
-        onPaymentMethodChanged: function(eventData) {
+        onPaymentMethodChanged: function (eventData) {
             if (eventData.paymentMethod === this.options.paymentMethod) {
                 this.onCurrentPaymentMethodSelected();
             }
         },
 
-        onCurrentPaymentMethodSelected: function() {
+        onCurrentPaymentMethodSelected: function () {
             this.setGlobalPaymentValidate(this.paymentValidationRequiredComponentState);
             this.setSaveForLaterBasedOnForm();
         },
@@ -280,7 +279,7 @@ define(function(require) {
         /**
          * @param {Object} e
          */
-        onSaveForLaterChange: function(e) {
+        onSaveForLaterChange: function (e) {
             var $el = $(e.target);
             mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },
@@ -288,169 +287,150 @@ define(function(require) {
         /**
          * @param {Object} e
          */
-        onCreditCardsSavedChange: function(e) {
+        onCreditCardsSavedChange: function (e) {
             var $el = $(e.target);
-            var $value = $el.prop('value'); 
+            var $value = $el.prop('value');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
-            if ($value == null || $value == "newCreditCard"){
-            	$('#braintree-custom-cc-form').show();
-            	$('#save_for_later_field_row').show();
+            if ($value == null || $value == "newCreditCard") {
+                $('#braintree-custom-cc-form').show();
+                $('#save_for_later_field_row').show();
             } else {
-            	$('#braintree-custom-cc-form').hide();
-            	$('#save_for_later_field_row').hide();
+                $('#braintree-custom-cc-form').hide();
+                $('#save_for_later_field_row').hide();
             }
 
-    		var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
-    		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
-    		credit_card_value.val($value);
+            var credit_card_value = this.$el.find(this.options.selectors.credit_card_value);
+            var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
+            credit_card_value.val($value);
 
             this.valueCreditCard = $value;
-            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard"){
-            	this.isTokenized = false; 
-            	this.isCreditCardSaved = true;
-            }
-            else{
-            	this.isTokenized = false; 
-            	this.isCreditCardSaved = false;            	
+            if (this.valueCreditCard != null && this.valueCreditCard != "newCreditCard") {
+                this.isTokenized = false;
+                this.isCreditCardSaved = true;
+            } else {
+                this.isTokenized = false;
+                this.isCreditCardSaved = false;
             }
 
-        },       
+        },
         
         /**
          * @param {Object} eventData
          */
-        beforeTransit: function(eventData) {
+        beforeTransit: function (eventData) {
 
-        	if (this.isTokenized) {
-           		this.isTokenized = false;        		
-        		var component = this;
-        		
-           		var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
-           		if (!this.isCreditCardSaved){
-           			payment_method_nonce.val(this.tokenizationPayload.nonce); 
-        		}
-           		else{
-           			payment_method_nonce.val("noValue"); 
-           		}
+            if (this.isTokenized) {
+                this.isTokenized = false;
+                var component = this;
+          
+                var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
+                if (!this.isCreditCardSaved) {
+                    payment_method_nonce.val(this.tokenizationPayload.nonce);
+                } else {
+                    payment_method_nonce.val("noValue");
+                }
 
-           		eventData.stopped = false;
-        		
-        	} else {
-        		eventData.stopped = true;
-        		
-        		var component = this;
-            	this.tokenizationPayload = null;
-            	this.tokenizationError = null;
-            	
-            	var deferred = $.Deferred();
-            	var tokenizationCallback = function (error, payload) {
-            	    if (error && !component.isCreditCardSaved) {
-            			deferred.reject({error});
-            		} else {
-    	        		deferred.resolve({payload});
-            		}
-            	};
+                eventData.stopped = false;
+            } else {
+                eventData.stopped = true;
+          
+                var component = this;
+                this.tokenizationPayload = null;
+                this.tokenizationError = null;
+             
+                var deferred = $.Deferred();
+                var tokenizationCallback = function (error, payload) {
+                    if (error && !component.isCreditCardSaved) {
+                        deferred.reject({error});
+                    } else {
+                        deferred.resolve({payload});
+                    }
+                };
 
-            	var getPaymentNonce = function () {
-            		component.hostedFieldsInstance.tokenize(tokenizationCallback);
-            	    return deferred.promise();
-            	};
+                    var getPaymentNonce = function () {
+                        component.hostedFieldsInstance.tokenize(tokenizationCallback);
+                        return deferred.promise();
+                    };
 
-            	getPaymentNonce().then(
-            	    function (payload) {
-            	    	component.tokenizationPayload = payload.payload;
-            	    	
-            	    	component.isTokenized = true;
-            	    	if (!component.isCreditCardSaved){
-                	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-                	    	payment_method_nonce.val(component.tokenizationPayload.nonce);
-                	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]);               	    		
-            	    	}
-            	    	else{
-                	    	var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-                	    	payment_method_nonce.val("noValue");
-                	    	$("[name='oro_workflow_transition']").append(payment_method_nonce[0]); 
-            	    		
-            	    	}
-            	    	
-           	    	
+                getPaymentNonce().then(
+                    function (payload) {
+                        component.tokenizationPayload = payload.payload;
+                  
+                        component.isTokenized = true;
+                        if (!component.isCreditCardSaved) {
+                            var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+                            payment_method_nonce.val(component.tokenizationPayload.nonce);
+                            $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
+                        } else {
+                            var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+                            payment_method_nonce.val("noValue");
+                            $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
+                        }
                         document.querySelector('input[name="credit_card_value"]').value = component.valueCreditCard;
-                		var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
-                		credit_card_value.val(component.valueCreditCard);
-                		$("[name='oro_workflow_transition']").append(credit_card_value[0]);
-            	    	$("[name='oro_workflow_transition']").submit();
-            	    }, 
-            	    function (error) {
-            	    	component.tokenizationError = error.error;
+                        var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
+                        credit_card_value.val(component.valueCreditCard);
+                        $("[name='oro_workflow_transition']").append(credit_card_value[0]);
+                        $("[name='oro_workflow_transition']").submit();
+                    },
+                    function (error) {
+                        component.tokenizationError = error.error;
 
-            	    	var fieldsBraintree = [];
-            	    	fieldsBraintree["number"] = "#number";
-            	    	fieldsBraintree["expirationDate"] = "#expirationDate";
-            	    	fieldsBraintree["cvv"] = "#cvvH"; 
-           	    		var fieldId = fieldsBraintree[i];
-           	    		$('#number').text('');
-           	    		$('#expirationDate').text('');
-           	    		$('#cvvH').text('');
-            	    	
-           	    		var allfieldsEmptyMessage = __('entrepids.braintree.braintreeflow.error.all_empty_fields');
-           	    		
-            	    	if (error.error.code == "HOSTED_FIELDS_FIELDS_EMPTY"){
+                        var fieldsBraintree = [];
+                        fieldsBraintree["number"] = "#number";
+                        fieldsBraintree["expirationDate"] = "#expirationDate";
+                        fieldsBraintree["cvv"] = "#cvvH";
+                        var fieldId = fieldsBraintree[i];
+                        $('#number').text('');
+                        $('#expirationDate').text('');
+                        $('#cvvH').text('');
+                  
+                        var allfieldsEmptyMessage = __('entrepids.braintree.braintreeflow.error.all_empty_fields');
 
-               	    		$('#number').text(allfieldsEmptyMessage);
-               	    		$('#expirationDate').text(allfieldsEmptyMessage);
-               	    		$('#cvvH').text(allfieldsEmptyMessage);
-            	    	}
-            	    	else{
-            	    		if (error.error.code == "HOSTED_FIELDS_FIELDS_INVALID"){
-            	    			var fields = component.hostedFieldsInstance.getState().fields;
-            	    			
-                    	    	var eLen = error.error.details.invalidFieldKeys.length;
-                    	    	var i, fieldId, fieldOrigId;
+                        if (error.error.code == "HOSTED_FIELDS_FIELDS_EMPTY") {
+                             $('#number').text(allfieldsEmptyMessage);
+                             $('#expirationDate').text(allfieldsEmptyMessage);
+                             $('#cvvH').text(allfieldsEmptyMessage);
+                        } else {
+                            if (error.error.code == "HOSTED_FIELDS_FIELDS_INVALID") {
+                                var fields = component.hostedFieldsInstance.getState().fields;
+                    
+                                var eLen = error.error.details.invalidFieldKeys.length;
+                                var i, fieldId, fieldOrigId;
 
-                    	    	var errorFields = [];
-                    	    	errorFields["number"] = __('entrepids.braintree.braintreeflow.error.credit_card_invalid');
-                    	    	errorFields["expirationDate"] = __('entrepids.braintree.braintreeflow.error.expiration_date_invalid');
-                    	    	errorFields["cvv"] = __('entrepids.braintree.braintreeflow.error.cvv_invalid'); 
-                    	    	for (i = 0; i < eLen; i++) {
-                    	    		fieldOrigId = error.error.details.invalidFieldKeys[i];
-                    	    		fieldId = fieldsBraintree[fieldOrigId];
-                    	    		var isEmptyField = eval('fields.'+fieldOrigId+'.isEmpty');
-                    	    		if (isEmptyField == true){
-                    	    			$(fieldId).text(allfieldsEmptyMessage);
-                    	    		}
-                    	    		else{
-                       	    		    $(fieldId).text(errorFields[fieldOrigId]);                  	    			
-                    	    		}
-
-                    	    	}
-
-            	    		}
-         	    		
-            	    	}
-
-            	    }
-            	);
-        	}
-        	
-            if (eventData.data.paymentMethod === this.options.paymentMethod) {
-
+                                var errorFields = [];
+                                errorFields["number"] = __('entrepids.braintree.braintreeflow.error.credit_card_invalid');
+                                errorFields["expirationDate"] = __('entrepids.braintree.braintreeflow.error.expiration_date_invalid');
+                                errorFields["cvv"] = __('entrepids.braintree.braintreeflow.error.cvv_invalid');
+                                for (i = 0; i < eLen; i++) {
+                                    fieldOrigId = error.error.details.invalidFieldKeys[i];
+                                    fieldId = fieldsBraintree[fieldOrigId];
+                                    var isEmptyField = eval('fields.'+fieldOrigId+'.isEmpty');
+                                    if (isEmptyField == true) {
+                                        $(fieldId).text(allfieldsEmptyMessage);
+                                    } else {
+                                        $(fieldId).text(errorFields[fieldOrigId]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                );
             }
-            
-
-            
+            if (eventData.data.paymentMethod === this.options.paymentMethod) {
+            }
         },
 
-        beforeHideFilledForm: function() {
+        beforeHideFilledForm: function () {
             this.disposable = false;
         },
 
-        beforeRestoreFilledForm: function() {
+        beforeRestoreFilledForm: function () {
             if (this.disposable) {
                 this.dispose();
             }
         },
 
-        removeFilledForm: function() {
+        removeFilledForm: function () {
 
             if (!this.disposable) {
                 this.disposable = true;

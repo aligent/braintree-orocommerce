@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 
 use Braintree\ClientToken;
@@ -18,11 +16,13 @@ class BraintreeAdapter
 {
 
     /**
+     *
      * @var Config
      */
     private $config;
 
     /**
+     *
      * @param Config $config
      */
     public function __construct(BraintreeConfigInterface $config)
@@ -31,7 +31,7 @@ class BraintreeAdapter
         // ORO REVIEW:
         // It's highly recommended to not access system config in services constructors.
         // The application could not be installed, because on DI container building we have no tables in a DB.
-        // "SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "oro_config" does not exist"
+        // "SQLSTATE[42P01]: Undefined table: 7 ERROR: relation "oro_config" does not exist"
         // error occurs.
         $this->initCredentials();
     }
@@ -43,7 +43,7 @@ class BraintreeAdapter
      */
     protected function initCredentials()
     {
-    	$environmentSelected = $this->config->getAllowedEnvironmentTypes();
+        $environmentSelected = $this->config->getAllowedEnvironmentTypes();
         if (strcmp($environmentSelected, 'Production') == 0 || strcmp($environmentSelected, 'production') == 0) {
             $this->environment('production');
         } else {
@@ -55,6 +55,7 @@ class BraintreeAdapter
     }
 
     /**
+     *
      * @param string|null $value
      * @return mixed
      */
@@ -64,6 +65,7 @@ class BraintreeAdapter
     }
 
     /**
+     *
      * @param string|null $value
      * @return mixed
      */
@@ -73,6 +75,7 @@ class BraintreeAdapter
     }
 
     /**
+     *
      * @param string|null $value
      * @return mixed
      */
@@ -82,6 +85,7 @@ class BraintreeAdapter
     }
 
     /**
+     *
      * @param string|null $value
      * @return mixed
      */
@@ -91,6 +95,7 @@ class BraintreeAdapter
     }
 
     /**
+     *
      * @param array $params
      * @return \Braintree\Result\Successful|\Braintree\Result\Error|null
      */
@@ -104,37 +109,7 @@ class BraintreeAdapter
     }
 
     /**
-     * @param string $token
-     * @return \Braintree\CreditCard|null
-     */
-    public function find($token)
-    {
-        try {
-            return CreditCard::find($token);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * @param array $filters
-     * @return \Braintree\ResourceCollection
-     */
-    public function search(array $filters)
-    {
-        return Transaction::search($filters);
-    }
-
-    /**
-     * @param string $token
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
-     */
-    public function createNonce($token)
-    {
-        return PaymentMethodNonce::create($token);
-    }
-
-    /**
+     *
      * @param array $attributes
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
@@ -142,19 +117,20 @@ class BraintreeAdapter
     {
         return Transaction::sale($attributes);
     }
-    
+
     /**
-     * 
+     *
      * @param string $token
      * @param array $attributes
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
-    public function creditCardsale($token, array $attributes){
-    	
-    	return CreditCard::sale($token, $attributes);
+    public function creditCardsale($token, array $attributes)
+    {
+        return CreditCard::sale($token, $attributes);
     }
 
     /**
+     *
      * @param string $transactionId
      * @param null|float $amount
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
@@ -165,37 +141,12 @@ class BraintreeAdapter
     }
 
     /**
-     * @param string $transactionId
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     *
+     * @param string $customerId
+     * @param unknown $customerId
      */
-    public function void($transactionId)
+    public function findCustomer($customerId)
     {
-        return Transaction::void($transactionId);
+        return Customer::find($customerId);
     }
-
-    /**
-     * @param string $transactionId
-     * @param null|float $amount
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
-     */
-    public function refund($transactionId, $amount = null)
-    {
-        return Transaction::refund($transactionId, $amount);
-    }
-
-    /**
-     * Clone original transaction
-     * @param string $transactionId
-     * @param array $attributes
-     * @return mixed
-     */
-    public function cloneTransaction($transactionId, array $attributes)
-    {
-        return Transaction::cloneTransaction($transactionId, $attributes);
-    }
-    
-    public function findCustomer($customerId){
-    	 
-    	return Customer::find($customerId);
-    }    
 }

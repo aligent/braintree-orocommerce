@@ -27,7 +27,7 @@ class BasicPaymentActionsDataProvider implements PaymentActionsDataProviderInter
     /**
      * @internal
      */
-    const AUTHORIZED = 'authorized';    
+    const AUTHORIZED = 'authorized';
     /**
      * @return string[]
      */
@@ -38,16 +38,4 @@ class BasicPaymentActionsDataProvider implements PaymentActionsDataProviderInter
             self::CHARGE,
         ];
     }
-    
-    /**
-     * @return string[]
-     */
-    public function getCaptureActions()
-    {
-    	return [
-			self::INVOICE,
-    		self::SHIPMENT,
-    		self::AUTHORIZED,
-    	];
-    }    
 }

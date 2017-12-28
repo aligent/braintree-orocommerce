@@ -18,168 +18,121 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * 
  * This is the class that loads the form in the checkout process
- *
  */
 class CreditCardType extends AbstractType
 {
+
     const NAME = 'entrepids_braintree_credit_card';
 
     /**
+     *
      * @var DoctrineHelper
      */
     protected $doctrineHelper;
-    
-    /** @var TokenStorageInterface */
+
+    /**
+     * @var TokenStorageInterface
+     */
     protected $tokenStorage;
-    
+
     protected $paymentsTransactions;
-    
-    /** @var BraintreeAdapter */
+
+    /**
+     * @var BraintreeAdapter
+     */
     protected $adapter;
 
-    /** @var TranslatorInterface */
-    protected $translator;
-    
     /**
-     * 
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     *
      * @var String
      */
     protected $selectedCard;
-    
-	/**
-	 * 
-	 * @param DoctrineHelper $doctrineHelper
-	 * @param TokenStorageInterface $tokenStorage
-	 * @param TranslatorInterface $translator
-	 */
-    public function __construct(DoctrineHelper $doctrineHelper,  TokenStorageInterface $tokenStorage, TranslatorInterface $translator){
-    	$this->doctrineHelper = $doctrineHelper; 
-    	$this->tokenStorage = $tokenStorage;
-    	$this->translator = $translator;
-    	$this->getTransactionCustomerORM();
-    }
-    
-    
 
-    
-    /** {@inheritdoc} */
+    /**
+     *
+     * @param DoctrineHelper $doctrineHelper
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        DoctrineHelper $doctrineHelper,
+        TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator
+    ) {
+        $this->doctrineHelper = $doctrineHelper;
+        $this->tokenStorage = $tokenStorage;
+        $this->translator = $translator;
+        $this->getTransactionCustomerORM();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-        	'payment_method_nonce',
-        	'hidden',
+            'payment_method_nonce',
+            'hidden',
             [
-            		'mapped' => true,
-                'attr' => [
-                    'data-gateway' => true,
-                ],
+            'mapped' => true,
+            'attr' => [
+                'data-gateway' => true]
             ]
         );
         
         $creditsCards = [];
         $creditsCards = $this->getCreditCardsSaved();
-        
         $creditsCardsCount = count($creditsCards);
+        if ($creditsCardsCount > 1) {
+            $builder = $this->setCreditsCard($builder, $creditsCards);
+        } else {
+            $builder = $this->setNewCreditCard($builder);
+        }
         
-        if ($creditsCardsCount > 1){
-        	$builder->add('credit_cards_saved', ChoiceType::class, [
-        			'required' => true,
-        			'choices' => $creditsCards,
-        			'choices_as_values' => false,
-        			'choice_value' => function ($choice) {
-        			           return $choice;
-        			},
-        			'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
-        			'attr' => [
-        					'data-credit-cards-saved' => true,
-        			],
-        				
-        	]);
-        	
-        	$builder->add(
-        			'credit_card_first_value',
-        			'hidden',
-        			[
-        					'mapped' => true,
-        					'data' => $this->selectedCard,
-        					'attr' => [
-        							'data-credit_card_first_value' => $this->selectedCard,
-        					],
-        			]
-        	);
-        }
-        else{
-        	$builder->add(
-        			'credit_card_first_value',
-        			'hidden',
-        			[
-        					'mapped' => true,
-        					'data' => 'newCreditCard',
-        					'attr' => [
-        							'data-credit_card_first_value' => 'newCreditCard',
-        					],
-        			]
-        	);
-        }
-		
         if ($options['zeroAmountAuthorizationEnabled']) {
-        	$builder->add(
-        			'save_for_later',
-        			'checkbox',
-        			[
-        					'required' => false,
-        					'label' => 'entrepids.braintree.settings.save_for_later.label',
-        					'mapped' => false,
-        					'data' => false,
-        					'attr' => [
-        							'data-save-for-later' => true,
-        					],
-        			]
-        	);
+            $builder->add('save_for_later', 'checkbox', [
+                'required' => false,
+                'label' => 'entrepids.braintree.settings.save_for_later.label',
+                'mapped' => false,
+                'data' => false,
+                'attr' => [
+                    'data-save-for-later' => true
+                ]
+            ]);
         }
         
-        if ($options['data'] !== null){
-        	
-        	$config = $options['data'];
-        	$this->adapter = new BraintreeAdapter($config);
-        	$braintreeClientToken = $this->adapter->generate();
-        	
-        	$builder->add(
-        			'braintree_client_token',
-        			'hidden',
-        			[
-        					'mapped' => true,
-        					'data' => $braintreeClientToken,
-        			]
-        	);
-        }
-        else{
-        	$builder->add(
-        			'braintree_client_token',
-        			'hidden',
-        			[
-        					'mapped' => true,
-        					'data' => 'basura',
-        			]
-        	);
+        if ($options['data'] !== null) {
+            $config = $options['data'];
+            $this->adapter = new BraintreeAdapter($config);
+            $braintreeClientToken = $this->adapter->generate();
+            
+            $builder->add('braintree_client_token', 'hidden', [
+                'mapped' => true,
+                'data' => $braintreeClientToken
+            ]);
+        } else {
+            $builder->add('braintree_client_token', 'hidden', [
+                'mapped' => true,
+                'data' => 'basura'
+            ]);
         }
         
-        $builder->add(
-        		'credit_card_value',
-        		'hidden',
-        		[
-        				'mapped' => true,
-        				'attr' => [
-        						'data-gateway' => true,
-        				],
-        		]
-        );
-                
+        $builder->add('credit_card_value', 'hidden', [
+            'mapped' => true,
+            'attr' => [
+                'data-gateway' => true
+            ]
+        ]);
     }
 
     /**
+     *
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -187,12 +140,14 @@ class CreditCardType extends AbstractType
         $resolver->setDefaults([
             'label' => 'entrepids.braintree.methods.credit_card.label',
             'csrf_protection' => false,
-            'zeroAmountAuthorizationEnabled' => false,
+            'zeroAmountAuthorizationEnabled' => false
         ]);
     }
 
     /**
-     * {@inheritdoc}
+     *
+     * @ERROR!!!
+     *
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -202,6 +157,7 @@ class CreditCardType extends AbstractType
     }
 
     /**
+     *
      * @return string
      */
     public function getName()
@@ -210,79 +166,134 @@ class CreditCardType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     *
+     * @ERROR!!!
+     *
      */
     public function getBlockPrefix()
     {
         return self::NAME;
     }
-    
+
     /**
+     *
      * @return CustomerUser|null
      */
     protected function getLoggedCustomerUser()
     {
-    	$token = $this->tokenStorage->getToken();
-    	if (!$token) {
-    		return null;
-    	}
-    
-    	$user = $token->getUser();
-    
-    	if ($user instanceof CustomerUser) {
-    		return $user;
-    	}
-    
-    	return null;
+        $token = $this->tokenStorage->getToken();
+        if (! $token) {
+            return null;
+        }
+        
+        $user = $token->getUser();
+        
+        if ($user instanceof CustomerUser) {
+            return $user;
+        }
+        
+        return null;
     }
-    
+
     /**
-     *  The method get the customer user and then get the transactions to determine if they have any saved card
+     * The method get the customer user and then get the transactions to determine if they have any saved card
      */
-    private function getTransactionCustomerORM (){
-
-    	$customerUser = $this->getLoggedCustomerUser();
-
-    	// ORO REVIEW:
+    private function getTransactionCustomerORM()
+    {
+        $customerUser = $this->getLoggedCustomerUser();
+        
+        // ORO REVIEW:
         // This query can fetch thousand of transaction, and contain only one credit card.
         // It can be a serious failure in performance.
         // Please, reorganize data storing, maybe tokens should be moved to a separate table.
-    	$paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
-    			'frontendOwner' => $customerUser,
-    	]);
-    
-    	$this->paymentsTransactions = $paymentTransactionEntity;
+        $paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
+            'frontendOwner' => $customerUser
+        ]);
+        
+        $this->paymentsTransactions = $paymentTransactionEntity;
+    }
 
-    	 
-    
-    }   
-    
     /**
      * get credit cards saved from customer user
-     * 
+     *
      * @return array
      */
-    private function getCreditCardsSaved (){
-    	$creditsCards = [];
-    	
-    	$countCreditCards = 0;
-    	
-    	foreach ($this->paymentsTransactions as $paymentTransaction){
-    		$reference = $paymentTransaction->getReference ();
-    		$paymentID = $paymentTransaction->getId ();
-    		if (trim($reference)) {
-    			$response = $paymentTransaction->getResponse ();
-    			$valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', ['{{brand}}' => $response['cardType'], '{{last4}}' => $response['last4'], '{{month}}' => $response['expirationMonth'], '{{year}}' => $response['expirationYear']]);
-    			$creditsCards [$paymentID] = $valueCreditCard;
- 				$countCreditCards++;
- 				if ($countCreditCards == 1){
- 					$this->selectedCard = $paymentID;
- 				}
-    		}
-    	
-    	} 
-    	
-    	$creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
-    	return $creditsCards;
+    private function getCreditCardsSaved()
+    {
+        $creditsCards = [];
+        
+        $countCreditCards = 0;
+        
+        foreach ($this->paymentsTransactions as $paymentTransaction) {
+            $reference = $paymentTransaction->getReference();
+            $paymentID = $paymentTransaction->getId();
+            if (trim($reference)) {
+                $response = $paymentTransaction->getResponse();
+                $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
+                    '{{brand}}' => $response['cardType'],
+                    '{{last4}}' => $response['last4'],
+                    '{{month}}' => $response['expirationMonth'],
+                    '{{year}}' => $response['expirationYear']
+                ]);
+                $creditsCards[$paymentID] = $valueCreditCard;
+                $countCreditCards ++;
+                if ($countCreditCards == 1) {
+                    $this->selectedCard = $paymentID;
+                }
+            }
+        }
+        
+        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
+        return $creditsCards;
+    }
+
+    /**
+     *
+     * @param FormBuilderInterface $builder
+     */
+    private function setCreditsCard(FormBuilderInterface $builder, $creditsCards)
+    {
+        $builder->add(
+            'credit_cards_saved',
+            ChoiceType::class,
+            [
+            'required' => true,
+            'choices' => $creditsCards,
+            'choices_as_values' => false,
+            'choice_value' => function ($choice) {
+                return $choice;
+            },
+            'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+            'attr' => [
+                'data-credit-cards-saved' => true]
+            ]
+        );
+        
+        $builder->add('credit_card_first_value', 'hidden', [
+            'mapped' => true,
+            'data' => $this->selectedCard,
+            'attr' => [
+                'data-credit_card_first_value' => $this->selectedCard
+            ]
+        ]);
+        
+        return $builder;
+    }
+
+    /**
+     *
+     * @param FormBuilderInterface $builder
+     */
+    private function setNewCreditCard(FormBuilderInterface $builder)
+    {
+        $builder->add('credit_card_first_value', 'hidden', [
+            'mapped' => true,
+            'data' => 'newCreditCard',
+            'attr' => [
+                'data-credit_card_first_value' => 'newCreditCard'
+            ]
+        ]);
+        
+        return $builder;
     }
 }

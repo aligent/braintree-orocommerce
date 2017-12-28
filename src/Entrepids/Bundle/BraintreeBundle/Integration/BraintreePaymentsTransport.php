@@ -1,5 +1,4 @@
 <?php
-
 namespace Entrepids\Bundle\BraintreeBundle\Integration;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -11,38 +10,48 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class BraintreePaymentsTransport implements TransportInterface
 {
-	/** @var ParameterBag */
-	protected $settings;
 
-	/**
-	 * @param Transport $transportEntity
-	 */
-	public function init(Transport $transportEntity)
-	{
-		$this->settings = $transportEntity->getSettingsBag();
-	}
+    /**
+     * @var ParameterBag
+     */
+    protected $settings;
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSettingsFormType()
-	{
-		return BraintreeSettingsType::class;
-	}
+    /**
+     *
+     * @param Transport $transportEntity
+     */
+    public function init(Transport $transportEntity)
+    {
+        $this->settings = $transportEntity->getSettingsBag();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSettingsEntityFQCN()
-	{
-		return BraintreeSettings::class;
-	}
+    /**
+     *
+     * @ERROR!!!
+     *
+     */
+    public function getSettingsFormType()
+    {
+        return BraintreeSettingsType::class;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getLabel()
-	{
-		return 'entrepids.braintree.settings.label';
-	}
+    /**
+     *
+     * @ERROR!!!
+     *
+     */
+    public function getSettingsEntityFQCN()
+    {
+        return BraintreeSettings::class;
+    }
+
+    /**
+     *
+     * @ERROR!!!
+     *
+     */
+    public function getLabel()
+    {
+        return 'entrepids.braintree.settings.label';
+    }
 }
