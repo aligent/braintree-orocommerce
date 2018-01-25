@@ -9,6 +9,7 @@ services:
             - '@doctrine'
             - '@logger'
             - '@entrepids_braintree.factory.braintree_config'
+            - '%entrepids_braintree.method.braintree%'
 
     entrepids_braintree.payment_method_provider.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider'

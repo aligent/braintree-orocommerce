@@ -25,7 +25,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
      */
     protected function getResponseFromBraintree()
     {
-        $paymentTransaction = $this->getPaymentTransaction();
+        $paymentTransaction = $this->paymentTransaction;
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
         
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
@@ -42,7 +42,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         $token = $paymentTransactionEntity->getReference();
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
         
-        $merchAccountID = $this->config->getSandBoxMerchAccountId();
+        $merchAccountID = $this->config->getBoxMerchAccountId();
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
             $data = [

@@ -15,5 +15,6 @@ services:
             - '@oro_security.encoder.mcrypt'
             - '@entrepids_braintree.settings.card_type.provider'
             - '@entrepids_braintree.settings.payment_action.provider'
+            - '@entrepids_braintree.settings.environment.provider'
         tags:
             - { name: form.type }

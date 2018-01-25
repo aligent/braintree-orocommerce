@@ -86,31 +86,11 @@ abstract class AbstractBraintreeOperation implements OperationInterface
 
     /**
      * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::setPaymentTransaction()
-     */
-    public function setPaymentTransaction(PaymentTransaction $paymentTransaction)
-    {
-        $this->paymentTransaction = $paymentTransaction;
-    }
-
-    /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::getPaymentTransaction()
-     */
-    public function getPaymentTransaction()
-    {
-        return $this->paymentTransaction;
-    }
-
-    /**
-     * (non-PHPdoc)
-     *
      * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
      */
-    public function operationProcess()
+    public function operationProcess(PaymentTransaction $paymentTransaction)
     {
+        $this->paymentTransaction = $paymentTransaction;
         $this->preprocessDataToSend();
         $this->preProcessOperation();
         return $this->postProcessOperation();

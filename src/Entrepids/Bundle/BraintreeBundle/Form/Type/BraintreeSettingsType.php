@@ -5,12 +5,14 @@ use Oro\Bundle\LocaleBundle\Form\Type\LocalizedFallbackValueCollectionType;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
 use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\CardTypesDataProviderInterface;
 use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\PaymentActionsDataProviderInterface;
+use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
@@ -20,6 +22,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,9 +31,8 @@ use Symfony\Component\Validator\Exception\MissingOptionsException;
  */
 class BraintreeSettingsType extends AbstractType
 {
-    // ORO REVIEW:
-    // It's recommended to use a company name as a prefix for a block prefixes of form types.
-    const BLOCK_PREFIX = 'braintree_settings';
+
+    const BLOCK_PREFIX = 'entrepids_braintree_settings';
 
     /**
      *
@@ -54,6 +57,12 @@ class BraintreeSettingsType extends AbstractType
      * @var PaymentActionsDataProviderInterface
      */
     private $paymentActionsDataProvider;
+    
+    /**
+     *
+     * @var BasicEnvironmentDataProvider
+     */
+    private $environmentProvider;
 
     /**
      *
@@ -61,17 +70,20 @@ class BraintreeSettingsType extends AbstractType
      * @param SymmetricCrypterInterface $encoder
      * @param CardTypesDataProviderInterface $cardTypesDataProvider
      * @param PaymentActionsDataProviderInterface $paymentActionsDataProvider
+     * @param BasicEnvironmentDataProvider $basicEnvironmentProvider
      */
     public function __construct(
         TranslatorInterface $translator,
         SymmetricCrypterInterface $encoder,
         CardTypesDataProviderInterface $cardTypesDataProvider,
-        PaymentActionsDataProviderInterface $paymentActionsDataProvider
+        PaymentActionsDataProviderInterface $paymentActionsDataProvider,
+        BasicEnvironmentDataProvider $basicEnvironmentProvider
     ) {
         $this->translator = $translator;
         $this->encoder = $encoder;
         $this->cardTypesDataProvider = $cardTypesDataProvider;
         $this->paymentActionsDataProvider = $paymentActionsDataProvider;
+        $this->environmentProvider = $basicEnvironmentProvider;
     }
 
     /**
@@ -116,9 +128,6 @@ class BraintreeSettingsType extends AbstractType
             'required' => true
             ])
             ->
-        // ORO REVIEW:
-        // For better user experience, please, add default values to form fields, if it is pertinent.
-        // See \Oro\Bundle\PayPalBundle\Form\Type\PayPalSettingsType::preSetData
         add('allowedCreditCardTypes', ChoiceType::class, [
             'choices' => $this->cardTypesDataProvider->getCardTypes(),
             'choices_as_values' => true,
@@ -130,7 +139,7 @@ class BraintreeSettingsType extends AbstractType
             'multiple' => true
         ])
             ->add('braintreeEnvironmentType', ChoiceType::class, [
-            'choices' => $this->cardTypesDataProvider->getEnvironmentType(),
+            'choices' => $this->environmentProvider->getEnvironmentType(),
             'choices_as_values' => true,
             'choice_label' => function ($cardType) {
                 return $this->translator->trans(
@@ -156,15 +165,12 @@ class BraintreeSettingsType extends AbstractType
             'required' => true
             ])
             ->
-        // ORO REVIEW:
-        // This fields are required on update of a integration, but they should not
-        // Please, use \Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType
-        add('braintreeMerchPublicKey', PasswordType::class, [
+        add('braintreeMerchPublicKey', OroEncodedPlaceholderPasswordType::class, [
             'label' => 'entrepids.braintree.settings.public_key.label',
             'tooltip' => 'entrepids.braintree.settings.public_key.label.tooltip',
             'required' => true
         ])
-            ->add('braintreeMerchPrivateKey', PasswordType::class, [
+            ->add('braintreeMerchPrivateKey', OroEncodedPlaceholderPasswordType::class, [
             'label' => 'entrepids.braintree.settings.private_key.label',
             'tooltip' => 'entrepids.braintree.settings.private_key.label.tooltip',
             'required' => true
@@ -174,8 +180,24 @@ class BraintreeSettingsType extends AbstractType
             'tooltip' => 'entrepids.braintree.settings.save_for_later.label.tooltip',
             'required' => false
             ]);
+            
+            
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
     }
 
+
+    /**
+     * @param FormEvent $event
+     */
+    public function preSetData(FormEvent $event)
+    {
+        /** @var PayPalSettings|null $data */
+        $data = $event->getData();
+        if ($data && !$data->getAllowedCreditCardTypes()) {
+            $data->setAllowedCreditCardTypes($this->cardTypesDataProvider->getDefaultCardTypes());
+        }
+    }
+    
     /**
      *
      * @param OptionsResolver $resolver
@@ -196,30 +218,5 @@ class BraintreeSettingsType extends AbstractType
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;
-    }
-    
-    // ORO REVIEW:
-    // This method is never used.
-    // Sensitive data (such as Merchant Id, Public Key, Private Key)
-    // should not be stored in DB as an unencrypted values.
-    /**
-     *
-     * @param FormBuilderInterface $builder
-     * @param string $field
-     * @param bool $decrypt
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function transformWithEncodedValue(FormBuilderInterface $builder, $field, $decrypt = true)
-    {
-        $builder->get($field)->addModelTransformer(new CallbackTransformer(function ($value) use ($decrypt) {
-            if ($decrypt === true) {
-                return $this->encoder->decryptData($value);
-            }
-            
-            return $value;
-        }, function ($value) {
-            return $this->encoder->encryptData($value);
-        }));
     }
 }

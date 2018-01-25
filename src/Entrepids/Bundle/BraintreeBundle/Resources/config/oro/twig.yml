@@ -1,2 +1,2 @@
 bundles:
-    - BraintreeBundle:Form:fields.html.twig
+    - EntrepidsBraintreeBundle:Form:fields.html.twig

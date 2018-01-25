@@ -30,6 +30,11 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
      * @var LoggerInterface
      */
     protected $logger;
+    
+    /**
+     * @var string
+     */
+    protected $type;
 
     /**
      * @param ManagerRegistry                  $doctrine
@@ -39,11 +44,13 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     public function __construct(
         ManagerRegistry $doctrine,
         LoggerInterface $logger,
-        BraintreeConfigFactoryInterface $configFactory
+        BraintreeConfigFactoryInterface $configFactory,
+        $type
     ) {
         $this->doctrine = $doctrine;
         $this->logger = $logger;
         $this->configFactory = $configFactory;
+        $this->type = $type;
     }
 
     /**
@@ -87,16 +94,22 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     }
 
     /**
+     * @return string
+     */
+    protected function getType()
+    {
+        return $this->type;
+    }
+    
+    /**
      * @return BraintreeSettings[]
      */
     protected function getEnabledIntegrationSettings()
     {
         try {
-            return $this->doctrine->getManagerForClass('BraintreeBundle:BraintreeSettings')
-                ->getRepository('BraintreeBundle:BraintreeSettings')
-                // ORO REVIEW:
-                // Please, don't use "magical" string (or any other) constants
-                ->getEnabledSettingsByType(BraintreePaymentChannelType::TYPE);
+            return $this->doctrine->getManagerForClass('EntrepidsBraintreeBundle:BraintreeSettings')
+                ->getRepository('EntrepidsBraintreeBundle:BraintreeSettings')
+                ->getEnabledSettingsByType($this->getType());
         } catch (\UnexpectedValueException $e) {
             $this->logger->critical($e->getMessage());
 

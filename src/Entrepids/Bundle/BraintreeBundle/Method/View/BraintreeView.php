@@ -1,7 +1,7 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\View;
 
-use Entrepids\Bundle\BraintreeBundle\Method\BraintreeMethod;
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
@@ -55,6 +55,7 @@ class BraintreeView implements PaymentMethodViewInterface
         
         // ORO REVIEW:
         // Why BraintreeConfigInterface is used as data for CreditCardType form type?
+        // Waiting
         $config = $this->config;
         $formView = $this->formFactory->create(CreditCardType::NAME, $config, $formOptions)->createView();
         
@@ -119,13 +120,12 @@ class BraintreeView implements PaymentMethodViewInterface
 
     public function getPaymentMethodType()
     {
-        return BraintreeMethod::TYPE;
+        return EntrepidsBraintreeMethod::TYPE;
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface::getAdminLabel()
      */
     public function getAdminLabel()
     {
@@ -139,107 +139,13 @@ class BraintreeView implements PaymentMethodViewInterface
     {
         return $this->config->getPaymentMethodIdentifier();
     }
-    
-    // ORO REVIEW:
-    // This method can be private.
+
     /**
      *
      * @return array
      */
-    public function getAllowedCreditCards()
+    private function getAllowedCreditCards()
     {
         return $this->config->getAllowedCreditCards();
-    }
-    
-    // ORO REVIEW:
-    // Next methods isn't called at all.
-    /**
-     *
-     * @return array
-     */
-    public function getAllowedEnvironmentTypes()
-    {
-        return $this->config->getAllowedEnvironmentTypes();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSandBoxMerchId()
-    {
-        return $this->config->getSandBoxMerchId();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSandBoxMerchAccountId()
-    {
-        return $this->config->getSandBoxMerchAccountId();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSandBoxPublickKey()
-    {
-        return $this->config->getSandBoxPublickKey();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSandBoxPrivateKey()
-    {
-        return $this->config->getSandBoxPrivateKey();
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    public function isCreditCardEnabled()
-    {
-        return $this->config->isCreditCardEnabled();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSandBoxCreditCardTitle()
-    {
-        return $this->config->getSandBoxCreditCardTitle();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getPurchaseAction()
-    {
-        return $this->config->getPurchaseAction();
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    public function isEnabledVaultSavedCards()
-    {
-        return $this->config->isEnabledVaultSavedCards();
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    public function isDisplayCreditCard()
-    {
-        return $this->config->isDisplayCreditCard();
     }
 }

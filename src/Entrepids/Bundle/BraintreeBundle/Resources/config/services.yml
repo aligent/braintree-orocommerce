@@ -1,5 +1,5 @@
 parameters:
-    entrepids_braintree.method.identifier_prefix.braintree: 'braintree'
+    entrepids_braintree.method.identifier_prefix.braintree: 'entrepids_braintree'
 services:
     entrepids_braintree.provider.credit_form_provider:
         class: 'Entrepids\Bundle\BraintreeBundle\Layout\DataProvider\CreditCardFormProvider'
@@ -11,9 +11,15 @@ services:
  
     entrepids_braintree.settings.payment_action.provider:
         class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicPaymentActionsDataProvider
+        
+    entrepids_braintree.method.purchase.purchase_data:
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData    
 
     entrepids_braintree.settings.card_type.provider:
         class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicCardTypesDataProvider
+
+    entrepids_braintree.settings.environment.provider:
+        class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider
         
     entrepids_braintree.generator.braintree_config_identifier:
         parent: oro_integration.generator.prefixed_identifier_generator

@@ -110,6 +110,7 @@ class CreditCardType extends AbstractType
         if ($options['data'] !== null) {
             $config = $options['data'];
             $this->adapter = new BraintreeAdapter($config);
+            $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
             
             $builder->add('braintree_client_token', 'hidden', [
@@ -145,9 +146,7 @@ class CreditCardType extends AbstractType
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -167,7 +166,7 @@ class CreditCardType extends AbstractType
 
     /**
      *
-     * @ERROR!!!
+     * @return string
      *
      */
     public function getBlockPrefix()

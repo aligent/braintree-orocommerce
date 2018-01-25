@@ -4,7 +4,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Migrations\Data\ORM\Config;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Entrepids\Bundle\BraintreeBundle\DependencyInjection\BraintreeExtension;
+use Entrepids\Bundle\BraintreeBundle\DependencyInjection\EntrepidsBraintreeExtension;
 
 class BraintreeConfig
 {
@@ -31,7 +31,7 @@ class BraintreeConfig
      */
     protected function getPaymentExtensionAlias()
     {
-        return BraintreeExtension::ALIAS;
+        return EntrepidsBraintreeExtension::ALIAS;
     }
 
     /**
@@ -93,7 +93,7 @@ class BraintreeConfig
      */
     private function getFullConfigKey($key)
     {
-        return BraintreeExtension::ALIAS . ConfigManager::SECTION_MODEL_SEPARATOR . $key;
+        return EntrepidsBraintreeExtension::ALIAS . ConfigManager::SECTION_MODEL_SEPARATOR . $key;
     }
 
     /**

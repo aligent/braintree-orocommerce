@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block _entrepids_braintree_credit_card_widget %}
-    {% set creditCardComponent = 'braintree/js/app/components/credit-card-component' %}
+    {% set creditCardComponent = 'entrepidsbraintree/js/app/components/credit-card-component' %}
     {% set creditCardComponentOptions = options.creditCardComponentOptions|default({})|merge({paymentMethod: paymentMethod}) %}
 
     <div class="{{ class_prefix }}-form__payment-methods"

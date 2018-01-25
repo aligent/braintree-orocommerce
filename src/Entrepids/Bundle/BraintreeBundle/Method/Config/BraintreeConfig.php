@@ -1,12 +1,15 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
-use Entrepids\Bundle\BraintreeBundle\Method\BraintreeMethod;
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Method\Config\AbstractPaymentConfig;
 use Oro\Bundle\PaymentBundle\Method\Config\CountryAwarePaymentConfigTrait;
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm\BraintreeFormInterface;
 
-class BraintreeConfig extends AbstractParameterBagPaymentConfig implements BraintreeConfigInterface
+class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
+    BraintreeConfigInterface,
+    BraintreeFormInterface
 {
 
     const LABEL_KEY = 'label';
@@ -21,7 +24,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
 
     const ENVIRONMENT_TYPE = "environment_type";
 
-    const TYPE = 'braintree';
+    const TYPE = 'entrepids_braintree';
 
     const MERCH_ID_KEY = "merch_id";
 
@@ -62,7 +65,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
      */
     protected function getPaymentExtensionAlias()
     {
-        return BraintreeMethod::TYPE;
+        return EntrepidsBraintreeMethod::TYPE;
     }
 
     /**
@@ -74,9 +77,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getAllowedCreditCards()
     {
@@ -84,9 +85,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getAllowedEnvironmentTypes()
     {
@@ -94,49 +93,39 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
-    public function getSandBoxMerchId()
+    public function getBoxMerchId()
     {
         return (string) $this->get(self::MERCH_ID_KEY);
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
-    public function getSandBoxMerchAccountId()
+    public function getBoxMerchAccountId()
     {
         return (string) $this->get(self::MERCH_ACCOUNT_ID_KEY);
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
-    public function getSandBoxPublickKey()
+    public function getBoxPublickKey()
     {
         return (string) $this->get(self::PUBLIC_KEY_KEY);
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
-    public function getSandBoxPrivateKey()
+    public function getBoxPrivateKey()
     {
         return (string) $this->get(self::PRIVATE_KEY_KEY);
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getPurchaseAction()
     {
@@ -144,9 +133,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function isEnableSaveForLater()
     {
@@ -154,9 +141,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function isZeroAmountAuthorizationEnabled()
     {
@@ -164,9 +149,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getPaymentMethodNonce()
     {
@@ -174,9 +157,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getBraintreeClientToken()
     {
@@ -184,9 +165,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getCreditCardValue()
     {
@@ -194,9 +173,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getCreditCardFirstValue()
     {
@@ -204,9 +181,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * {@inheritdoc}
      */
     public function getCreditCardsSaved()
     {

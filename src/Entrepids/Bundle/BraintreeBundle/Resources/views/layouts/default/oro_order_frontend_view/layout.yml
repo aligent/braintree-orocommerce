@@ -2,7 +2,7 @@ layout:
     imports:
     actions:
         - '@setBlockTheme':
-            themes: 'BraintreeBundle:layouts:default/oro_order_frontend_view/layout.html.twig'
+            themes: 'EntrepidsBraintreeBundle:layouts:default/oro_order_frontend_view/layout.html.twig'
         - '@add':
             id: order_braintree_entrepids
             parentId: order_body_column_right

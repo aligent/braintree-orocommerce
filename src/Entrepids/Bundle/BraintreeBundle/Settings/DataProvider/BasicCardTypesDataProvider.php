@@ -23,16 +23,6 @@ class BasicCardTypesDataProvider implements CardTypesDataProviderInterface
      * @internal
      */
     const AMERICAN_EXPRESS = 'american_express';
-
-    /**
-     * @internal
-     */
-    const SANDBOX = 'sandbox';
-    
-    /**
-     * @internal
-     */
-    const PRODUCTION = 'production';
     
     /**
      * @return string[]
@@ -48,13 +38,13 @@ class BasicCardTypesDataProvider implements CardTypesDataProviderInterface
     }
 
     /**
-     * @return string[]
+     * {@inheritdoc}
      */
-    public function getEnvironmentType()
+    public function getDefaultCardTypes()
     {
         return [
-            self::SANDBOX,
-            self::PRODUCTION,
+            self::VISA,
+            self::MASTERCARD,
         ];
     }
 }

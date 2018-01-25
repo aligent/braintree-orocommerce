@@ -6,6 +6,6 @@ placeholders:
 
     items:
         payment_braintree_info:
-            template: BraintreeBundle:PaymentTransaction:info.html.twig
+            template: EntrepidsBraintreeBundle:PaymentTransaction:info.html.twig
             data: '@entrepids_braintree.provider.payment_info->getPaymentInfo($entity$)'
             applicable: "@entrepids_braintree.provider.payment_info->isApplicable($entity$)"

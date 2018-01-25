@@ -10,9 +10,8 @@ class BraintreePaymentChannelType implements ChannelInterface, IconAwareIntegrat
     const TYPE = 'braintree';
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\IntegrationBundle\Provider\ChannelInterface::getLabel()
      */
     public function getLabel()
     {
@@ -20,12 +19,11 @@ class BraintreePaymentChannelType implements ChannelInterface, IconAwareIntegrat
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface::getIcon()
      */
     public function getIcon()
     {
-        return 'bundles/braintree/img/braintree-logo.png';
+        return 'bundles/entrepidsbraintree/img/braintree-logo.png';
     }
 }

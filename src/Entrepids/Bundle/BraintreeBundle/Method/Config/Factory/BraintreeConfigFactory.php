@@ -6,10 +6,16 @@ use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterfa
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 
 class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
 {
 
+    /**
+     * @var SymmetricCrypterInterface
+     */
+    private $encoder;
+    
     /**
      *
      * @var LocalizationHelper
@@ -24,13 +30,16 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
 
     /**
      *
+     * @param SymmetricCrypterInterface $encoder
      * @param LocalizationHelper $localizationHelper
      * @param IntegrationIdentifierGeneratorInterface $identifierGenerator
      */
     public function __construct(
+        SymmetricCrypterInterface $encoder,
         LocalizationHelper $localizationHelper,
         IntegrationIdentifierGeneratorInterface $identifierGenerator
     ) {
+        $this->encoder = $encoder;
         $this->localizationHelper = $localizationHelper;
         $this->identifierGenerator = $identifierGenerator;
     }
@@ -53,8 +62,8 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
         $params[BraintreeConfig::ENVIRONMENT_TYPE] = $settings->getBraintreeEnvironmentType();
         $params[BraintreeConfig::MERCH_ID_KEY] = $settings->getBraintreeMerchId();
         $params[BraintreeConfig::MERCH_ACCOUNT_ID_KEY] = $settings->getBraintreeMerchAccountId();
-        $params[BraintreeConfig::PUBLIC_KEY_KEY] = $settings->getBraintreeMerchPublicKey();
-        $params[BraintreeConfig::PRIVATE_KEY_KEY] = $settings->getBraintreeMerchPrivateKey();
+        $params[BraintreeConfig::PUBLIC_KEY_KEY] = $this->getDecryptedValue($settings->getBraintreeMerchPublicKey());
+        $params[BraintreeConfig::PRIVATE_KEY_KEY] = $this->getDecryptedValue($settings->getBraintreeMerchPrivateKey());
         $params[BraintreeConfig::SAVE_FOR_LATER_KEY] = $settings->getSaveForLater();
         $params[BraintreeConfig::ZERO_AMOUNT_AUTHORIZATION_KEY] = $settings->getZeroAmountAuthorization();
         $params[BraintreeConfig::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY] =
@@ -63,6 +72,16 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
         return new BraintreeConfig($params);
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
+    protected function getDecryptedValue($value)
+    {
+        return (string)$this->encoder->decryptData($value);
+    }
+    
+    
     /**
      *
      * @param Collection $values

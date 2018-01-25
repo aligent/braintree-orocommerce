@@ -3,6 +3,7 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory'
         public: false
         arguments:
+            - '@oro_security.encoder.mcrypt'        
             - '@oro_locale.helper.localization'
             - '@entrepids_braintree.generator.braintree_config_identifier'
 
@@ -13,7 +14,8 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@property_accessor' 
             - '@session'
-            - '@translator'                   
+            - '@translator' 
+            - '@entrepids_braintree.method.purchase.purchase_data'                  
 
     entrepids_braintree.factory.method_view.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\View\Factory\BraintreePaymentMethodViewFactory'

@@ -28,12 +28,6 @@ class BraintreeAdapter
     public function __construct(BraintreeConfigInterface $config)
     {
         $this->config = $config;
-        // ORO REVIEW:
-        // It's highly recommended to not access system config in services constructors.
-        // The application could not be installed, because on DI container building we have no tables in a DB.
-        // "SQLSTATE[42P01]: Undefined table: 7 ERROR: relation "oro_config" does not exist"
-        // error occurs.
-        $this->initCredentials();
     }
 
     /**
@@ -41,7 +35,7 @@ class BraintreeAdapter
      *
      * @return void
      */
-    protected function initCredentials()
+    public function initCredentials()
     {
         $environmentSelected = $this->config->getAllowedEnvironmentTypes();
         if (strcmp($environmentSelected, 'Production') == 0 || strcmp($environmentSelected, 'production') == 0) {
@@ -49,9 +43,9 @@ class BraintreeAdapter
         } else {
             $this->environment('sandbox');
         }
-        $this->merchantId($this->config->getSandBoxMerchId());
-        $this->publicKey($this->config->getSandBoxPublickKey());
-        $this->privateKey($this->config->getSandBoxPrivateKey());
+        $this->merchantId($this->config->getBoxMerchId());
+        $this->publicKey($this->config->getBoxPublickKey());
+        $this->privateKey($this->config->getBoxPrivateKey());
     }
 
     /**

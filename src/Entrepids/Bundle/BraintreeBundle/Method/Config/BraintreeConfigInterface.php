@@ -18,32 +18,29 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      */
     public function getAllowedEnvironmentTypes();
     
-    // ORO REVIEW:
-    // Why do the next fields have "sandbox" prefix in the name?
-    // It will be used for production mode also.
     /**
      *
      * @return string
      */
-    public function getSandBoxMerchId();
+    public function getBoxMerchId();
 
     /**
      *
      * @return string
      */
-    public function getSandBoxMerchAccountId();
+    public function getBoxMerchAccountId();
 
     /**
      *
      * @return string
      */
-    public function getSandBoxPublickKey();
+    public function getBoxPublickKey();
 
     /**
      *
      * @return string
      */
-    public function getSandBoxPrivateKey();
+    public function getBoxPrivateKey();
 
     /**
      *
@@ -62,38 +59,4 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      * @return bool
      */
     public function isZeroAmountAuthorizationEnabled();
-    
-    // ORO REVIEW:
-    // Next methods violates Open/closed principle.
-    // They don't relate to this interface,
-    // and was added only for using config object as data for form, for some reason
-    /**
-     *
-     * @return string
-     */
-    public function getPaymentMethodNonce();
-
-    /**
-     *
-     * @return string
-     */
-    public function getBraintreeClientToken();
-
-    /**
-     *
-     * @return string
-     */
-    public function getCreditCardValue();
-
-    /**
-     *
-     * @return string
-     */
-    public function getCreditCardFirstValue();
-
-    /**
-     *
-     * @return string
-     */
-    public function getCreditCardsSaved();
 }

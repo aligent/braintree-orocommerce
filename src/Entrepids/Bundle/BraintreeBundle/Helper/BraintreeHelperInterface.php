@@ -8,14 +8,8 @@ interface BraintreeHelperInterface
 
     /**
      *
-     * @param String $paymentOperation
-     */
-    public function setPaymentOperation(String $paymentOperation);
-
-    /**
-     *
      BraintreeHelper.php* @param PaymentTransaction $paymentTransaction
      * @param String $operation
      */
-    public function execute(PaymentTransaction $paymentTransaction, String $operation);
+    public function execute(PaymentTransaction $paymentTransaction, $operation = null);
 }

@@ -2,7 +2,7 @@
 namespace Entrepids\Bundle\BraintreeBundle\EventListener\Callback;
 
 use Psr\Log\LoggerAwareTrait;
-use Entrepids\Bundle\BraintreeBundle\Method\BraintreeMethod;
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 
@@ -79,7 +79,7 @@ class BraintreeCheckoutListener
         
         try {
             $paymentMethod = $this->paymentMethodProvider->getPaymentMethod($paymentMethodId);
-            $paymentMethod->execute(BraintreeMethod::COMPLETE, $paymentTransaction);
+            $paymentMethod->execute(EntrepidsBraintreeMethod::COMPLETE, $paymentTransaction);
             
             $event->markSuccessful();
         } catch (\InvalidArgumentException $e) {

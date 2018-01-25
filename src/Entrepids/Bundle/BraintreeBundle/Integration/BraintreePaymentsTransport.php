@@ -26,9 +26,8 @@ class BraintreePaymentsTransport implements TransportInterface
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\IntegrationBundle\Provider\TransportInterface::getSettingsFormType()
      */
     public function getSettingsFormType()
     {
@@ -36,9 +35,8 @@ class BraintreePaymentsTransport implements TransportInterface
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\IntegrationBundle\Provider\TransportInterface::getSettingsEntityFQCN()
      */
     public function getSettingsEntityFQCN()
     {
@@ -46,9 +44,8 @@ class BraintreePaymentsTransport implements TransportInterface
     }
 
     /**
-     *
-     * @ERROR!!!
-     *
+     * (non-PHPdoc)
+     * @see \Oro\Bundle\IntegrationBundle\Provider\TransportInterface::getLabel()
      */
     public function getLabel()
     {

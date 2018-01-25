@@ -43,7 +43,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
      */
     protected function getResponseFromBraintree()
     {
-        $sourcepaymenttransaction = $this->getPaymentTransaction()->getSourcePaymentTransaction();
+        $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
         $saveForLater = false;
         
@@ -57,7 +57,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $storeInVaultOnSuccess = false;
         }
         
-        $merchAccountID = $this->config->getSandBoxMerchAccountId();
+        $merchAccountID = $this->config->getBoxMerchAccountId();
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
             $data = [
@@ -101,7 +101,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
      */
     protected function setDataToPreProcessResponse()
     {
-        $sourcepaymenttransaction = $this->getPaymentTransaction()->getSourcePaymentTransaction();
+        $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
         $saveForLater = false;
         if (array_key_exists('saveForLaterUse', $transactionOptions)) {
@@ -140,11 +140,6 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         if ($this->saveForLater) {
             $creditCardValuesResponse = $transaction->creditCard;
             $token = $creditCardValuesResponse['token'];
-            // ORO REVIEW:
-            // Reference should be set for all transactions, and I believe it should be $transaction->id
-            // Please, pay attention to PaymentStatusProvider.
-            // After successful checkout order should have "Payment authorize" status,
-            // in case when we don't choose "Save for later" it will be "Pending payment".
             $this->paymentTransaction->setReference($token);
             $this->paymentTransaction->setResponse($creditCardValuesResponse);
         }

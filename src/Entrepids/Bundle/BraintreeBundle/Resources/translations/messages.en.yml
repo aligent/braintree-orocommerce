@@ -15,7 +15,7 @@ entrepids.braintree.settings.partner.label: Partner
 entrepids.braintree.settings.user.label: User
 entrepids.braintree.settings.vendor.label: Vendor
 entrepids.braintree.settings.password.label: Password
-entrepids.braintree.settings.payment_action.label: 'Payment Action pitazo'
+entrepids.braintree.settings.payment_action.label: 'Payment Action'
 entrepids.braintree.settings.payment_action.authorize: Authorize
 entrepids.braintree.settings.payment_action.charge: 'Authorize and Charge'
 entrepids.braintree.settings.allowed_cc_types.label: 'Allowed Credit Card Types'
@@ -112,6 +112,4 @@ entrepids.braintree.settings.capture.capture_action.label: __entrepids.braintree
 entrepids.braintree.order_view.info.label: 'Payment Details'
 entrepids.braintree.order_view.info_detail: '{{brand}} {{type}} Card ending in {{last4}}'
 entrepids.braintree.order_view.info_nodata: 'No Data Saved'
-# ORO REVIEW:
-# Seems that this line is excess.
-oro.ui.empty: __oro.ui.empty
+
