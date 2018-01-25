@@ -200,14 +200,16 @@ class CreditCardType extends AbstractType
     private function getTransactionCustomerORM()
     {
         $customerUser = $this->getLoggedCustomerUser();
-        
-        // ORO REVIEW:
-        // This query can fetch thousand of transaction, and contain only one credit card.
-        // It can be a serious failure in performance.
-        // Please, reorganize data storing, maybe tokens should be moved to a separate table.
-        $paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findBy([
-            'frontendOwner' => $customerUser
-        ]);
+       
+        $where = "p.frontendOwner = :customerUser AND p.reference IS NOT NULL";
+        $paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(
+            PaymentTransaction::class
+        )
+            ->createQueryBuilder('p')
+        ->setParameters(array('customerUser' => $customerUser))
+        ->where($where)
+        ->getQuery()
+        ->getResult();
         
         $this->paymentsTransactions = $paymentTransactionEntity;
     }
@@ -226,19 +228,17 @@ class CreditCardType extends AbstractType
         foreach ($this->paymentsTransactions as $paymentTransaction) {
             $reference = $paymentTransaction->getReference();
             $paymentID = $paymentTransaction->getId();
-            if (trim($reference)) {
-                $response = $paymentTransaction->getResponse();
-                $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
-                    '{{brand}}' => $response['cardType'],
-                    '{{last4}}' => $response['last4'],
-                    '{{month}}' => $response['expirationMonth'],
-                    '{{year}}' => $response['expirationYear']
-                ]);
-                $creditsCards[$paymentID] = $valueCreditCard;
-                $countCreditCards ++;
-                if ($countCreditCards == 1) {
-                    $this->selectedCard = $paymentID;
-                }
+            $response = $paymentTransaction->getResponse();
+            $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
+                 '{{brand}}' => $response['cardType'],
+                 '{{last4}}' => $response['last4'],
+                 '{{month}}' => $response['expirationMonth'],
+                 '{{year}}' => $response['expirationYear']
+            ]);
+            $creditsCards[$paymentID] = $valueCreditCard;
+            $countCreditCards ++;
+            if ($countCreditCards == 1) {
+                 $this->selectedCard = $paymentID;
             }
         }
         
