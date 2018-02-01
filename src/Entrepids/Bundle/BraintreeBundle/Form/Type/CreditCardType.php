@@ -107,8 +107,8 @@ class CreditCardType extends AbstractType
             ]);
         }
         
-        if ($options['data'] !== null) {
-            $config = $options['data'];
+        if ($options['braintreeConfig'] !== null) {
+            $config = $options['braintreeConfig'];
             $this->adapter = new BraintreeAdapter($config);
             $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
@@ -141,7 +141,8 @@ class CreditCardType extends AbstractType
         $resolver->setDefaults([
             'label' => 'entrepids.braintree.methods.credit_card.label',
             'csrf_protection' => false,
-            'zeroAmountAuthorizationEnabled' => false
+            'zeroAmountAuthorizationEnabled' => false,
+            'braintreeConfig' => null,
         ]);
     }
 

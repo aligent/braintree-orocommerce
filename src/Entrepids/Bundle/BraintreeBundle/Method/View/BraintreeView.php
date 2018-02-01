@@ -50,14 +50,11 @@ class BraintreeView implements PaymentMethodViewInterface
     public function getOptions(PaymentContextInterface $context)
     {
         $formOptions = [
-            'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater()
+            'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
+            'braintreeConfig' => $this->config,
         ];
         
-        // ORO REVIEW:
-        // Why BraintreeConfigInterface is used as data for CreditCardType form type?
-        // Waiting
-        $config = $this->config;
-        $formView = $this->formFactory->create(CreditCardType::NAME, $config, $formOptions)->createView();
+        $formView = $this->formFactory->create(CreditCardType::NAME, null, $formOptions)->createView();
         
         $viewOptions = [
             'formView' => $formView,
