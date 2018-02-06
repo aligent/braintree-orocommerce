@@ -1,5 +1,4 @@
 <?php
-
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
 use Doctrine\Common\Collections\Criteria;
@@ -16,6 +15,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 
 /**
  * This is the class that loads the form in the checkout process
@@ -37,6 +37,12 @@ class CreditCardType extends AbstractType
     protected $tokenStorage;
 
     protected $paymentsTransactions;
+    
+    /**
+     *
+     * @var unknown
+     */
+    protected $customerTokens;
 
     /**
      * @var BraintreeAdapter
@@ -68,7 +74,7 @@ class CreditCardType extends AbstractType
         $this->doctrineHelper = $doctrineHelper;
         $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
-        $this->getTransactionCustomerORM();
+        $this->getTransactionCustomerToken();
     }
 
     /**
@@ -87,7 +93,7 @@ class CreditCardType extends AbstractType
         );
         
         $creditsCards = [];
-        $creditsCards = $this->getCreditCardsSaved();
+        $creditsCards = $this->getCreditCardsSavedForCustomer();
         $creditsCardsCount = count($creditsCards);
         if ($creditsCardsCount > 1) {
             $builder = $this->setCreditsCard($builder, $creditsCards);
@@ -194,25 +200,19 @@ class CreditCardType extends AbstractType
         
         return null;
     }
-
+    
     /**
-     * The method get the customer user and then get the transactions to determine if they have any saved card
+     * The method get the customer token to determine if they have any saved card
      */
-    private function getTransactionCustomerORM()
+    private function getTransactionCustomerToken()
     {
         $customerUser = $this->getLoggedCustomerUser();
-       
-        $where = "p.frontendOwner = :customerUser AND p.reference IS NOT NULL";
-        $paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(
-            PaymentTransaction::class
-        )
-            ->createQueryBuilder('p')
-        ->setParameters(array('customerUser' => $customerUser))
-        ->where($where)
-        ->getQuery()
-        ->getResult();
+        $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findBy([
+            'customer' => $customerUser
+            
+        ]);
         
-        $this->paymentsTransactions = $paymentTransactionEntity;
+        $this->customerTokens = $customerTokens;
     }
 
     /**
@@ -220,26 +220,32 @@ class CreditCardType extends AbstractType
      *
      * @return array
      */
-    private function getCreditCardsSaved()
+    private function getCreditCardsSavedForCustomer()
     {
         $creditsCards = [];
         
         $countCreditCards = 0;
         
-        foreach ($this->paymentsTransactions as $paymentTransaction) {
-            $reference = $paymentTransaction->getReference();
-            $paymentID = $paymentTransaction->getId();
+        foreach ($this->customerTokens as $customerToken) {
+            $paymentID = $customerToken->getTransaction(); // es el id del sourcepaymentTransaction
+            $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
+            //$paymentTransaction = $em->find(PaymentTransaction::class, $paymentID);
+            
+            $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
+                'sourcePaymentTransaction' => $paymentID
+            ]);
+            
             $response = $paymentTransaction->getResponse();
             $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
-                 '{{brand}}' => $response['cardType'],
-                 '{{last4}}' => $response['last4'],
-                 '{{month}}' => $response['expirationMonth'],
-                 '{{year}}' => $response['expirationYear']
+                '{{brand}}' => $response['cardType'],
+                '{{last4}}' => $response['last4'],
+                '{{month}}' => $response['expirationMonth'],
+                '{{year}}' => $response['expirationYear']
             ]);
             $creditsCards[$paymentID] = $valueCreditCard;
             $countCreditCards ++;
             if ($countCreditCards == 1) {
-                 $this->selectedCard = $paymentID;
+                $this->selectedCard = $paymentID;
             }
         }
         

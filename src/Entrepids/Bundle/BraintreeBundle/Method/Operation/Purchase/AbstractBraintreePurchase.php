@@ -83,6 +83,9 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         $transactionOptions['creditCardDetails'] = serialize($creditCardDetails);
         $transactionOptions['isBraintreeEntrepids'] = true;
         $this->paymentTransaction->setTransactionOptions($transactionOptions);
+        if (isset($transaction->id)) {
+            $this->paymentTransaction->setReference($transaction->id);
+        }
     }
 
     /**

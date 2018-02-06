@@ -50,46 +50,6 @@ class BraintreeAdapter
 
     /**
      *
-     * @param string|null $value
-     * @return mixed
-     */
-    public function environment($value = null)
-    {
-        return Configuration::environment($value);
-    }
-
-    /**
-     *
-     * @param string|null $value
-     * @return mixed
-     */
-    public function merchantId($value = null)
-    {
-        return Configuration::merchantId($value);
-    }
-
-    /**
-     *
-     * @param string|null $value
-     * @return mixed
-     */
-    public function publicKey($value = null)
-    {
-        return Configuration::publicKey($value);
-    }
-
-    /**
-     *
-     * @param string|null $value
-     * @return mixed
-     */
-    public function privateKey($value = null)
-    {
-        return Configuration::privateKey($value);
-    }
-
-    /**
-     *
      * @param array $params
      * @return \Braintree\Result\Successful|\Braintree\Result\Error|null
      */
@@ -142,5 +102,45 @@ class BraintreeAdapter
     public function findCustomer($customerId)
     {
         return Customer::find($customerId);
+    }
+    
+    /**
+     *
+     * @param string|null $value
+     * @return mixed
+     */
+    private function merchantId($value = null)
+    {
+        return Configuration::merchantId($value);
+    }
+    
+    /**
+     *
+     * @param string|null $value
+     * @return mixed
+     */
+    private function publicKey($value = null)
+    {
+        return Configuration::publicKey($value);
+    }
+    
+    /**
+     *
+     * @param string|null $value
+     * @return mixed
+     */
+    private function privateKey($value = null)
+    {
+        return Configuration::privateKey($value);
+    }
+    
+    /**
+     *
+     * @param string|null $value
+     * @return mixed
+     */
+    private function environment($value = null)
+    {
+        return Configuration::environment($value);
     }
 }

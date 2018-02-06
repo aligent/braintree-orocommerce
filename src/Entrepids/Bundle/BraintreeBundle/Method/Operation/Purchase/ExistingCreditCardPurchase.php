@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase;
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 
 class ExistingCreditCardPurchase extends AbstractBraintreePurchase
 {
@@ -35,13 +37,14 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
             $creditCardValue = "newCreditCard";
         }
         
-        $paymentTransactionEntity = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
-            'id' => $creditCardValue
-        ]);
-        
-        $token = $paymentTransactionEntity->getReference();
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-        
+
+        if (isset($creditCardValue) && strcmp($creditCardValue, PurchaseData::NEWCREDITCARD) != 0) {
+            $token = $this->getTransactionCustomerToken($creditCardValue);
+        } else {
+            $token = null;
+        }
+        // sourcepayment no es null y payment el id aun no esta generado, y AHORAA!!!, me duermo
         $merchAccountID = $this->config->getBoxMerchAccountId();
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
@@ -126,5 +129,17 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         
         $this->isAuthorize = $isAuthorize;
         $this->isCharge = $isCharge;
+    }
+    
+    /**
+     * The method get the customer token to determine if they have any saved card
+     */
+    private function getTransactionCustomerToken($transaction)
+    {
+        $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findOneBy([
+            'transaction' => $transaction
+        ]);
+    
+        return $customerTokens->getToken();
     }
 }

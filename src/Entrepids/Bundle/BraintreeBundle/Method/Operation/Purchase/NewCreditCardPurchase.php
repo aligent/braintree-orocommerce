@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase;
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 
 class NewCreditCardPurchase extends AbstractBraintreePurchase
 {
@@ -140,8 +141,9 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         if ($this->saveForLater) {
             $creditCardValuesResponse = $transaction->creditCard;
             $token = $creditCardValuesResponse['token'];
-            $this->paymentTransaction->setReference($token);
             $this->paymentTransaction->setResponse($creditCardValuesResponse);
+            
+            $this->saveCustomerToken($token);
         }
         $this->paymentTransaction->getSourcePaymentTransaction()->setActive(false);
     }
@@ -176,5 +178,36 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         $this->nonce = $nonce;
         $this->isAuthorize = $isAuthorize;
         $this->isCharge = $isCharge;
+    }
+    
+    /**
+     * This function save the customer and token to BraintreeCustomerToken
+     *
+     * @param string $token
+     */
+    private function saveCustomerToken($token)
+    {
+        $customerToken = new BraintreeCustomerToken();
+         
+        $entityID = $this->paymentTransaction->getEntityIdentifier();
+        $entity = $this->doctrineHelper->getEntityReference(
+            $this->paymentTransaction->getEntityClass(),
+            $this->paymentTransaction->getEntityIdentifier()
+        );
+        $propertyAccessor = $this->getPropertyAccessor();
+        
+        try {
+            $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
+            $userName = $customerUser->getUsername();
+            $customerId = $customerUser->getId();
+            $customerToken->setCustomer($customerId);
+            $customerToken->setToken($token);
+            $paymentTransactionId = $this->paymentTransaction->getSourcePaymentTransaction()->getId();
+            $customerToken->setTransaction($paymentTransactionId);
+            $em = $this->doctrineHelper->getEntityManager(BraintreeCustomerToken::class);
+            $em->persist($customerToken);
+            $em->flush();
+        } catch (NoSuchPropertyException $e) {
+        }
     }
 }

@@ -96,6 +96,7 @@ class OperationCapture extends AbstractBraintreeOperation
                     $sourcePaymentTransaction->setActive(! $paymentTransaction->isSuccessful());
                 }
                 
+                $this->paymentTransaction->setReference($this->transactionId);
                 return [
                     'message' => $response->success,
                     'successful' => $response->success

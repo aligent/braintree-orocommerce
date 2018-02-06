@@ -29,6 +29,7 @@ class EntrepidsBraintreeBundleInstaller implements Installation
         $this->createBraintreeShLblTable($schema);
         $this->addBraintreeLblForeignKeys($schema);
         $this->addBraintreeShLblForeignKeys($schema);
+        $this->createBraintreeCustomerToken($schema);
     }
 
     /**
@@ -81,6 +82,28 @@ class EntrepidsBraintreeBundleInstaller implements Installation
         ]);
     }
 
+    /**
+     * Create braintree_customer_token table
+     *
+     * @param Schema $schema
+     */
+    protected function createBraintreeCustomerToken(Schema $schema)
+    {
+        $table = $schema->createTable('braintree_customer_token');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('customer', 'integer', []);
+        $table->addColumn('token', 'string', [
+            'notnull' => false,
+            'length' => 255
+        ]);
+        $table->addColumn('transaction', 'integer', []);
+        
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['customer'], 'braintree_customer_idx', []);
+        $table->addIndex(['token'], 'braintree_token_idx', []);
+        $table->addIndex(['transaction'], 'braintree_transaction_idx', []);
+    }
+    
     /**
      * Create entrepids_braintree_lbl table
      *
