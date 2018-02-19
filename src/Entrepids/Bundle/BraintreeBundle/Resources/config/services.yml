@@ -1,14 +1,6 @@
 parameters:
     entrepids_braintree.method.identifier_prefix.braintree: 'entrepids_braintree'
 services:
-    entrepids_braintree.provider.credit_form_provider:
-        class: 'Entrepids\Bundle\BraintreeBundle\Layout\DataProvider\CreditCardFormProvider'
-        arguments:
-            - '@form.factory'
-            - '@router'
-        tags:
-            - { name: layout.data_provider, alias: entrepids_braintree_credit_card_form_provider }
- 
     entrepids_braintree.settings.payment_action.provider:
         class: Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicPaymentActionsDataProvider
         
@@ -45,4 +37,3 @@ services:
             - ['setLogger', ['@logger']]
         tags:
             - { name: layout.data_provider, alias: braintree_payment_order_data }      
-            

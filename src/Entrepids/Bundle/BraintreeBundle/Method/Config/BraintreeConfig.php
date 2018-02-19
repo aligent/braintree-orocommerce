@@ -12,16 +12,40 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     BraintreeFormInterface
 {
 
+    /**
+     * ORO REVIEW:
+     * Same value as for
+     * \Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig::FIELD_LABEL is used here.
+     * It is not proper implementation of a ParameterBag.
+     * If you don't like names of AbstractParameterBagPaymentConfig constants, just do not extend from it.
+     * In other case, please, use constants from AbstractParameterBagPaymentConfig.
+     */
     const LABEL_KEY = 'label';
 
+    /**
+     * ORO REVIEW:
+     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
+     */
     const SHORT_LABEL_KEY = 'short_label';
 
+    /**
+     * ORO REVIEW:
+     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
+     */
     const ADMIN_LABEL_KEY = 'admin_label';
 
+    /**
+     * ORO REVIEW:
+     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
+     */
     const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
 
     const PAYMENT_ACTION_KEY = 'payment_action';
 
+    /**
+     * ORO REVIEW:
+     * Please, use one style quotes in all constant values. Single quote is recommended.
+     */
     const ENVIRONMENT_TYPE = "environment_type";
 
     const TYPE = 'entrepids_braintree';
@@ -61,6 +85,9 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     }
 
     /**
+     * ORO REVIEW:
+     * This method is never used.
+     *
      * {@inheritdoc}
      */
     protected function getPaymentExtensionAlias()
@@ -69,6 +96,9 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     }
 
     /**
+     * ORO REVIEW:
+     * This method is never used.
+     *
      * {@inheritdoc}
      */
     public function isEnabled()
@@ -109,6 +139,9 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     }
 
     /**
+     * ORO REVIEW:
+     * Typo in the method name. Should be "Public".
+     *
      * {@inheritdoc}
      */
     public function getBoxPublickKey()

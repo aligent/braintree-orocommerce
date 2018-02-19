@@ -2,6 +2,10 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm;
 
+/**
+ * ORO REVIEW:
+ * Interface is never used.
+ */
 interface BraintreeFormInterface
 {
     

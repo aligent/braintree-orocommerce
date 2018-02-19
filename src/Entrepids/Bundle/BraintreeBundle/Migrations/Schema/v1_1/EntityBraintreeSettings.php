@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * ORO REVIEW:
+ * Why version is v1_1?
+ */
 namespace Entrepids\Bundle\BraintreeBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Schema\Schema;
@@ -110,6 +115,13 @@ class EntityBraintreeSettings implements Migration
             'transport_id',
             'localized_value_id'
         ]);
+        // ORO REVIEW:
+        // ERROR: An exception occurred while executing
+        // 'CREATE UNIQUE INDEX UNIQ_92E5B87EEB576E89 ON entrepids_braintree_lbl (localized_value_id)':
+        // SQLSTATE[42P07]: Duplicate table: 7 ERROR: relation "uniq_92e5b87eeb576e89" already exists
+        //
+        // This index name is already used for PayPal tables, please use another one,
+        // or use `oro:migration:dump` command
         $table->addUniqueIndex([
             'localized_value_id'
         ], 'UNIQ_92E5B87EEB576E89');
@@ -129,6 +141,8 @@ class EntityBraintreeSettings implements Migration
             'transport_id',
             'localized_value_id'
         ]);
+        // ORO REVIEW:
+        // Same as for entrepids_braintree_lbl.
         $table->addUniqueIndex([
             'localized_value_id'
         ], 'UNIQ_55FE472FEB576E89');

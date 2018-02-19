@@ -51,6 +51,10 @@ class OperationAuthorize extends AbstractBraintreeOperation
         $paymentTransaction = $this->paymentTransaction;
         
         if ($this->isValidData) {
+            // ORO REVIEW:
+            // All data transfers should be done via PaymentTransaction.
+            // It is not safe to work with global variables.
+            // The reference to global variables also available in other places.
             $nonce = $_POST["payment_method_nonce"];
             $transactionOptions = $paymentTransaction->getTransactionOptions();
             $transactionOptions['nonce'] = $nonce;

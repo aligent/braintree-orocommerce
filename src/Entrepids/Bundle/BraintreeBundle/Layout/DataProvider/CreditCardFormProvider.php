@@ -7,6 +7,10 @@ use Symfony\Component\Form\FormView;
 use Oro\Bundle\LayoutBundle\Layout\DataProvider\AbstractFormProvider;
 use Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType;
 
+/**
+ * ORO REVIEW:
+ * Service is never used.
+ */
 class CreditCardFormProvider extends AbstractFormProvider
 {
     /**

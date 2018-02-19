@@ -104,6 +104,9 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
     }
 
     /**
+     * ORO REVIEW:
+     * This method is never used.
+     *
      * {@inheritdoc}
      */
     public function isEnabled()
@@ -237,7 +240,7 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
      * Create and execute the BraintreeHelper with specific operation
      *
      * @param PaymentTransaction $paymentTransaction
-     * @param unknown $paymentMethodOperation
+     * @param $paymentMethodOperation
      * @param string $operation
      */
     private function executeBraintreeHelper(

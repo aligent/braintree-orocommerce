@@ -14,7 +14,8 @@ class BasicPaymentActionsDataProvider implements PaymentActionsDataProviderInter
      */
     const CHARGE = 'charge';
 
-    
+    // ORO REVIEW:
+    // Why we need next constants?
     /**
      * @internal
      */
