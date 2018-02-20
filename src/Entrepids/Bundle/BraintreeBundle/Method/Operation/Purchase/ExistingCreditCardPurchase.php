@@ -31,6 +31,8 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
         
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
+        // ORO REVIEW:
+        // Why credit_card_value contains transaction id?
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {

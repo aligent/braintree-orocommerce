@@ -28,6 +28,9 @@ class BraintreeCustomerToken
     private $token;
     
     /**
+     * ORO REVIEW:
+     * What is the purpose of this field?
+     *
      * @ORM\Column(type="integer", nullable=false)
      */
     private $transaction;
