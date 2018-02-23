@@ -1,8 +1,8 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Complete;
 
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 
 class OperationComplete extends AbstractBraintreeOperation
 {

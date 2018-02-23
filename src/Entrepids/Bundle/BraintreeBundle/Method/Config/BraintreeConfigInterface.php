@@ -34,7 +34,7 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      *
      * @return string
      */
-    public function getBoxPublickKey();
+    public function getBoxPublicKey();
 
     /**
      *

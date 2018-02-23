@@ -1,19 +1,14 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
-use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\OrderBundle\Entity\OrderAddress;
-use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface;
 
 abstract class AbstractBraintreeOperation implements OperationInterface
 {

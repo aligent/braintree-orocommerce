@@ -4,9 +4,8 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
-use Entrepids\Bundle\BraintreeBundle\Integration\BraintreePaymentChannelType;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactoryInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactoryInterface;
 use Psr\Log\LoggerInterface;
 
 class BraintreeConfigProvider implements BraintreeConfigProviderInterface

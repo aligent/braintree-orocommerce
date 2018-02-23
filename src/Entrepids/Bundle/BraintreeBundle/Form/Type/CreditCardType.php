@@ -1,9 +1,8 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
-use Doctrine\Common\Collections\Criteria;
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
@@ -15,7 +14,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 
 /**
  * This is the class that loads the form in the checkout process

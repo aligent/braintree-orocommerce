@@ -4,9 +4,8 @@ namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
-use Braintree\PaymentMethodNonce;
-use Braintree\Transaction;
 use Braintree\Customer;
+use Braintree\Transaction;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 /**
@@ -44,7 +43,7 @@ class BraintreeAdapter
             $this->environment('sandbox');
         }
         $this->merchantId($this->config->getBoxMerchId());
-        $this->publicKey($this->config->getBoxPublickKey());
+        $this->publicKey($this->config->getBoxPublicKey());
         $this->privateKey($this->config->getBoxPrivateKey());
     }
 

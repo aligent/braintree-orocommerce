@@ -1,10 +1,10 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture;
 
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
-use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
 /**
  * This class capture the data of the payment

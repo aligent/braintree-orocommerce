@@ -2,9 +2,9 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\View\Factory;
 
-use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\View\BraintreeView;
+use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class BraintreePaymentMethodViewFactory implements BraintreePaymentMethodViewFactoryInterface

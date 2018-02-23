@@ -1,11 +1,10 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Integration;
 
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
+use Entrepids\Bundle\BraintreeBundle\Form\Type\BraintreeSettingsType;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
-use Entrepids\Bundle\BraintreeBundle\Entity\Repository\BraintreeSettingsRepository;
-use Entrepids\Bundle\BraintreeBundle\Form\Type\BraintreeSettingsType;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class BraintreePaymentsTransport implements TransportInterface

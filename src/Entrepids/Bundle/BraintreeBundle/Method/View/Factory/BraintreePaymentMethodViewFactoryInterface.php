@@ -2,8 +2,8 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\View\Factory;
 
-use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 
 interface BraintreePaymentMethodViewFactoryInterface
 {

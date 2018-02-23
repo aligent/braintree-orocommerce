@@ -1,10 +1,9 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize;
 
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
-use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 
 /**
  * This class checks and validate all data in authorization process

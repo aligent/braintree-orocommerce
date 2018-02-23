@@ -2,10 +2,10 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Factory;
 
 use Doctrine\Common\Collections\Collection;
-use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterface;
-use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterface;
+use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 
 class BraintreeConfigFactory implements BraintreeConfigFactoryInterface

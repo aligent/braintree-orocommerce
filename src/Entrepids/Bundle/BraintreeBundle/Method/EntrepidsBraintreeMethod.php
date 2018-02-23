@@ -1,20 +1,16 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method;
 
-use Braintree\Exception\NotFound;
+use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\OrderBundle\Entity\OrderAddress;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
-use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 
 class EntrepidsBraintreeMethod implements PaymentMethodInterface
 {
@@ -101,17 +97,6 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
     public function getType()
     {
         return self::TYPE;
-    }
-
-    /**
-     * ORO REVIEW:
-     * This method is never used.
-     *
-     * {@inheritdoc}
-     */
-    public function isEnabled()
-    {
-        return $this->config->isEnabled();
     }
 
     /**

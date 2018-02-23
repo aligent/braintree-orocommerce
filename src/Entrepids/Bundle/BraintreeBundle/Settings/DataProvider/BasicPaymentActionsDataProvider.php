@@ -14,24 +14,6 @@ class BasicPaymentActionsDataProvider implements PaymentActionsDataProviderInter
      */
     const CHARGE = 'charge';
 
-    // ORO REVIEW:
-    // Why we need next constants?
-    /**
-     * @internal
-     */
-    const INVOICE = 'invoice';
-    
-    /**
-     * @internal
-     */
-    const SHIPMENT = 'shipment';
-    /**
-     * @internal
-     */
-    const AUTHORIZED = 'authorized';
-    /**
-     * @return string[]
-     */
     public function getPaymentActions()
     {
         return [

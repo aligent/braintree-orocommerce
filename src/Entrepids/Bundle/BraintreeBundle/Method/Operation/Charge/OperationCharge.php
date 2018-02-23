@@ -1,8 +1,8 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge;
 
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
 class OperationCharge extends AbstractBraintreeOperation

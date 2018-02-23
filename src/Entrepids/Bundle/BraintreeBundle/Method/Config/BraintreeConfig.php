@@ -1,11 +1,9 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
-use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
-use Oro\Bundle\PaymentBundle\Method\Config\AbstractPaymentConfig;
-use Oro\Bundle\PaymentBundle\Method\Config\CountryAwarePaymentConfigTrait;
-use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm\BraintreeFormInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
+use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
 class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     BraintreeConfigInterface,
@@ -42,11 +40,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
 
     const PAYMENT_ACTION_KEY = 'payment_action';
 
-    /**
-     * ORO REVIEW:
-     * Please, use one style quotes in all constant values. Single quote is recommended.
-     */
-    const ENVIRONMENT_TYPE = "environment_type";
+    const ENVIRONMENT_TYPE = 'environment_type';
 
     const TYPE = 'entrepids_braintree';
 
@@ -85,28 +79,6 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     }
 
     /**
-     * ORO REVIEW:
-     * This method is never used.
-     *
-     * {@inheritdoc}
-     */
-    protected function getPaymentExtensionAlias()
-    {
-        return EntrepidsBraintreeMethod::TYPE;
-    }
-
-    /**
-     * ORO REVIEW:
-     * This method is never used.
-     *
-     * {@inheritdoc}
-     */
-    public function isEnabled()
-    {
-        return (string) $this->get(self::CREDIT_CARD_ENABLED_KEY);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getAllowedCreditCards()
@@ -139,12 +111,9 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     }
 
     /**
-     * ORO REVIEW:
-     * Typo in the method name. Should be "Public".
-     *
      * {@inheritdoc}
      */
-    public function getBoxPublickKey()
+    public function getBoxPublicKey()
     {
         return (string) $this->get(self::PUBLIC_KEY_KEY);
     }

@@ -1,13 +1,12 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\View;
 
-use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
-use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
-use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
-use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
+use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
+use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
+use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class BraintreeView implements PaymentMethodViewInterface

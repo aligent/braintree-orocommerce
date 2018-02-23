@@ -1,17 +1,12 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Provider;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerAwareTrait;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
-use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Oro\Bundle\PaymentBundle\Event\TransactionCompleteEvent;
 use Oro\Bundle\PaymentBundle\Entity\Repository\PaymentTransactionRepository;
+use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class PaymentInfoProvider

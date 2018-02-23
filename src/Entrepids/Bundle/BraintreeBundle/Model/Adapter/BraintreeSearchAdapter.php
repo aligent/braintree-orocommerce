@@ -5,7 +5,6 @@ namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 use Braintree\MultipleValueNode;
 use Braintree\RangeNode;
 use Braintree\TextNode;
-use Braintree\Transaction;
 use Braintree\TransactionSearch;
 
 /**

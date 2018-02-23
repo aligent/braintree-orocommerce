@@ -1,10 +1,10 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\EventListener\Callback;
 
-use Psr\Log\LoggerAwareTrait;
 use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * This is the class that check and validate a operation in the checkout

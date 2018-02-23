@@ -3,15 +3,15 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Factory;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Symfony\Component\Routing\RouterInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Provider\ExtractOptionsProvider;
 use Oro\Bundle\PaymentBundle\Provider\SurchargeProvider;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 
 class BraintreePaymentMethodFactory implements BraintreePaymentMethodFactoryInterface
 {

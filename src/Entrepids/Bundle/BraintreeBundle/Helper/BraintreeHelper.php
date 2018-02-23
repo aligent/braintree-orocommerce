@@ -1,27 +1,21 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Helper;
 
-use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\OrderBundle\Entity\OrderAddress;
-use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Complete\OperationComplete;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 
 /**
  * This is the class that execute a determined operation in the step of checkout
