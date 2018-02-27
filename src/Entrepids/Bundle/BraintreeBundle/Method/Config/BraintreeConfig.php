@@ -10,32 +10,12 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     BraintreeFormInterface
 {
 
-    /**
-     * ORO REVIEW:
-     * Same value as for
-     * \Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig::FIELD_LABEL is used here.
-     * It is not proper implementation of a ParameterBag.
-     * If you don't like names of AbstractParameterBagPaymentConfig constants, just do not extend from it.
-     * In other case, please, use constants from AbstractParameterBagPaymentConfig.
-     */
     const LABEL_KEY = 'label';
 
-    /**
-     * ORO REVIEW:
-     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
-     */
     const SHORT_LABEL_KEY = 'short_label';
 
-    /**
-     * ORO REVIEW:
-     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
-     */
     const ADMIN_LABEL_KEY = 'admin_label';
 
-    /**
-     * ORO REVIEW:
-     * Same as for \Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig::LABEL_KEY
-     */
     const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
 
     const PAYMENT_ACTION_KEY = 'payment_action';

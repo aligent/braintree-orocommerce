@@ -38,7 +38,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         } else {
             $token = null;
         }
-        // sourcepayment no es null y payment el id aun no esta generado, y AHORAA!!!, me duermo
+
         $merchAccountID = $this->config->getBoxMerchAccountId();
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);

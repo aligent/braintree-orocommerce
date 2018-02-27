@@ -75,14 +75,8 @@ class OperationCapture extends AbstractBraintreeOperation
                     $errors = $response->message;
                     $transactionData = $response->transaction;
                     $status = $transactionData->__get('status');
+                    $paymentTransaction->setSuccessful(true)->setActive(false);
 
-                    // ORO REVIEW:
-                    // Undefined namespace "Braintree".
-                    if (strcmp($status, Braintree\Transaction::AUTHORIZED) == 0) {
-                        $paymentTransaction->setSuccessful($response->success)->setActive(true);
-                    } else {
-                        $paymentTransaction->setSuccessful(true)->setActive(false);
-                    }
                 } else {
                     $errors = 'No errors';
                     $paymentTransaction->setSuccessful($response->success)->setActive(false);
