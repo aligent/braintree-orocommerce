@@ -1,0 +1,10 @@
+services:
+    entrepids_braintree.event_listener.callback.braintree:
+        class: 'Entrepids\Bundle\BraintreeBundle\EventListener\Callback\BraintreeCheckoutListener'
+        lazy: true
+        arguments:
+            - '@entrepids_braintree.payment_method_provider.braintree'
+        calls:
+            - ['setLogger', ['@logger']]
+        tags:
+            - { name: kernel.event_listener, event: oro_payment.callback.error, method: onError }
