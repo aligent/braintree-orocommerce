@@ -58,6 +58,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $data = [
                 'amount' => $this->paymentTransaction->getAmount(),
                 'paymentMethodNonce' => $this->nonce,
+            	'channel' => 'OroCommerceBT_SP',
                 'customerId' => $this->customerData['id'],
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,
@@ -72,6 +73,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $data = [
                 'amount' => $this->paymentTransaction->getAmount(),
                 'paymentMethodNonce' => $this->nonce,
+            	'channel' => 'OroCommerceBT_SP',
                 'customer' => $this->customerData,
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,
