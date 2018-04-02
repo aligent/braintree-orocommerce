@@ -5,21 +5,28 @@ use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm\BraintreeFormIn
 use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
+// sacar la BraintreeFormInterface
 class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     BraintreeConfigInterface,
     BraintreeFormInterface
 {
 
-    const LABEL_KEY = 'label';
+    // A cambiar esto como esta en la version 1.6.6
+    // ESTE
+    //const LABEL_KEY = 'label';
 
-    const SHORT_LABEL_KEY = 'short_label';
+    // ESTE
+    //const SHORT_LABEL_KEY = 'short_label';
 
-    const ADMIN_LABEL_KEY = 'admin_label';
+    // ESTE
+    //const ADMIN_LABEL_KEY = 'admin_label';
 
-    const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
+    // ESTE
+    //const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
 
     const PAYMENT_ACTION_KEY = 'payment_action';
 
+    // ESTE no lo encuentro en payapal
     const ENVIRONMENT_TYPE = 'environment_type';
 
     const TYPE = 'entrepids_braintree';

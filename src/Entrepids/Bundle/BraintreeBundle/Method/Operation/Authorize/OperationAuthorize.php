@@ -50,6 +50,15 @@ class OperationAuthorize extends AbstractBraintreeOperation
         $paymentTransaction = $this->paymentTransaction;
         
         if ($this->isValidData) {
+            // chequear si el nonce viene en transactionOptions cuando debugeo
+            // En OperationValidate en la linea 39 - 40 se lee de POST de la misma manera y no hay comentarios al respecto
+            // Hice pruebas con nueva tarjea, tarjeta guardada, eu o us con Authorization y Authorization Charge
+            // Y nunca se llama a la authorize, PABLO como logro probar esto, porque entra al validate y dependiendo de la
+            // configuracion lo deja en authorize o en Paid in full. La primera vez que entra en validate ya lo guarda en 
+            // $transactionOptions['nonce'] = $nonce; linea 45 de OperationValidate.
+            // Lo que queda es obtenerlo del transactionOptions, no pude probar este tema
+            //  $nonce = $transactionOptions['nonce']; // y listo, tratemos de reproducirlo sino lo cambio y listo
+            
             $nonce = $_POST["payment_method_nonce"];
             $transactionOptions = $paymentTransaction->getTransactionOptions();
             $transactionOptions['nonce'] = $nonce;

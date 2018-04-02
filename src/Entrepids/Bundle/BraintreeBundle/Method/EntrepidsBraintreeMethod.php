@@ -153,7 +153,7 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
     protected function purchase(PaymentTransaction $paymentTransaction)
     {
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-        $purchaseOperation = $this->purchaseData->getPurchaseError();
+        $purchaseOperation = PurchaseData::PURCHASE_ERROR;
         if ($sourcepaymenttransaction != null) {
             $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
             
@@ -162,14 +162,14 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
             if (array_key_exists('credit_card_value', $transactionOptions)) {
                 $creditCardValue = $transactionOptions['credit_card_value'];
             } else {
-                $creditCardValue = $this->purchaseData->getNewCreditCard();
+                $creditCardValue = PurchaseData::NEWCREDITCARD;
             }
             
-            $purchaseNewCreditCard = $this->purchaseData->getNewCreditCard();
+            $purchaseNewCreditCard = PurchaseData::NEWCREDITCARD;
             if ((! empty($creditCardValue)) && (strcmp($creditCardValue, $purchaseNewCreditCard) != 0)) {
-                $purchaseOperation = $this->purchaseData->getPurchaseExisting();
+                $purchaseOperation = PurchaseData::PURCHASE_EXISTING;
             } else {
-                $purchaseOperation = $this->purchaseData->getPurchaseNewCreditCard();
+                $purchaseOperation = PurchaseData::PURCHASE_NEWCREDITCARD;
             }
         }
         

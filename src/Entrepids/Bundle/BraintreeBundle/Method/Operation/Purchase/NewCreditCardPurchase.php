@@ -161,17 +161,11 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         $submitForSettlement = true;
         $isAuthorize = false;
         $isCharge = false;
-        // ORO REVIEW:
-        // Next code shows on a problems with a architecture.
-        // Why you add constants into
-        // \Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicPaymentActionsDataProvider,
-        // if you never use them?
-        // Also this block is copy pasted in several places.
-        if (strcmp("authorize", $purchaseAction) == 0) {
+        if (strcmp(PaymentMethodInterface::AUTHORIZE, $purchaseAction) == 0) {
             $submitForSettlement = false;
             $isAuthorize = true;
         }
-        if (strcmp("charge", $purchaseAction) == 0) {
+        if (strcmp(PaymentMethodInterface::CHARGE, $purchaseAction) == 0) {
             $submitForSettlement = true;
             $isCharge = true;
         }

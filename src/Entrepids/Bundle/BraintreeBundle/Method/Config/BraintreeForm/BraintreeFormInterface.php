@@ -2,6 +2,7 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm;
 
+// eliminarla y chequear que funcione todo
 interface BraintreeFormInterface
 {
     

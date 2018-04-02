@@ -2,7 +2,7 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData;
 
-class PurchaseData implements PurchaseDataInterface
+class PurchaseData
 {
     
     /**
@@ -25,39 +25,4 @@ class PurchaseData implements PurchaseDataInterface
      */
     const NEWCREDITCARD = 'newCreditCard';
 
-    /**
-     * (non-PHPdoc)
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseDataInterface::getPurchaseError()
-     */
-    public function getPurchaseError()
-    {
-        return self::PURCHASE_ERROR;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseDataInterface::getPurchaseExisting()
-     */
-    public function getPurchaseExisting()
-    {
-        return self::PURCHASE_EXISTING;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseDataInterface::getPurchaseNewCreditCard()
-     */
-    public function getPurchaseNewCreditCard()
-    {
-        return self::PURCHASE_NEWCREDITCARD;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseDataInterface::getNewCreditCard()
-     */
-    public function getNewCreditCard()
-    {
-        return self::NEWCREDITCARD;
-    }
-}
+ }

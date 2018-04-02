@@ -16,11 +16,7 @@ class EntrepidsBraintreeBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        /**
-         * ORO REVIEW:
-         * Why version is v1_2?
-         */
-        return 'v1_2';
+        return 'v1_0';
     }
 
     /**

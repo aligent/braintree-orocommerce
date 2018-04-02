@@ -23,8 +23,6 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
         
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
-        // ORO REVIEW:
-        // Why credit_card_value contains transaction id?
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {
@@ -116,10 +114,10 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         $purchaseAction = $this->config->getPurchaseAction();
         $isAuthorize = false;
         $isCharge = false;
-        if (strcmp("authorize", $purchaseAction) == 0) {
+        if (strcmp(PaymentMethodInterface::AUTHORIZE, $purchaseAction) == 0) {
             $isAuthorize = true;
         }
-        if (strcmp("charge", $purchaseAction) == 0) {
+        if (strcmp(PaymentMethodInterface::CHARGE, $purchaseAction) == 0) {
             $isCharge = true;
         }
         

@@ -52,10 +52,22 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
         $params = [];
         $channel = $settings->getChannel();
         
-        $params[BraintreeConfig::LABEL_KEY] = $this->getLocalizedValue($settings->getBraintreeLabel());
-        $params[BraintreeConfig::SHORT_LABEL_KEY] = $this->getLocalizedValue($settings->getBraintreeShortLabel());
-        $params[BraintreeConfig::ADMIN_LABEL_KEY] = $channel->getName();
-        $params[BraintreeConfig::PAYMENT_METHOD_IDENTIFIER_KEY] =
+        /*
+                $params[PayPalExpressCheckoutConfig::FIELD_PAYMENT_METHOD_IDENTIFIER] =
+            $this->getPaymentMethodIdentifier($channel);
+
+        $params[PayPalExpressCheckoutConfig::FIELD_ADMIN_LABEL] = $settings->getExpressCheckoutName();
+        $params[PayPalExpressCheckoutConfig::FIELD_LABEL] =
+            $this->getLocalizedValue($settings->getExpressCheckoutLabels());
+        $params[PayPalExpressCheckoutConfig::FIELD_SHORT_LABEL] =
+            $this->getLocalizedValue($settings->getExpressCheckoutShortLabels());
+         
+         */
+        
+        $params[BraintreeConfig::FIELD_LABEL] = $this->getLocalizedValue($settings->getBraintreeLabel());
+        $params[BraintreeConfig::FIELD_SHORT_LABEL] = $this->getLocalizedValue($settings->getBraintreeShortLabel());
+        $params[BraintreeConfig::FIELD_ADMIN_LABEL] = $channel->getName();
+        $params[BraintreeConfig::FIELD_PAYMENT_METHOD_IDENTIFIER] =
             $this->identifierGenerator->generateIdentifier($channel);
         $params[BraintreeConfig::ALLOWED_CREDIT_CARD_TYPES_KEY] = $settings->getAllowedCreditCardTypes();
         $params[BraintreeConfig::PAYMENT_ACTION_KEY] = $settings->getBraintreePaymentAction();

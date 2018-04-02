@@ -117,11 +117,11 @@ class BraintreeHelper implements BraintreeHelperInterface
                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture",
             PaymentMethodInterface::CHARGE =>
                    "Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge",
-            $this->purchaseData->getPurchaseExisting() =>
+            PurchaseData::PURCHASE_EXISTING =>
                    "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase",
-            $this->purchaseData->getPurchaseNewCreditCard() =>
+            PurchaseData::PURCHASE_NEWCREDITCARD =>
                    "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase",
-            $this->purchaseData->getPurchaseError() =>
+            PurchaseData::PURCHASE_ERROR =>
                    "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseErrorOperation",
             PaymentMethodInterface::VALIDATE =>
                    "Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate",
