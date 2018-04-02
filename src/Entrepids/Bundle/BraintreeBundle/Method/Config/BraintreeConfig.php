@@ -11,22 +11,9 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     BraintreeFormInterface
 {
 
-    // A cambiar esto como esta en la version 1.6.6
-    // ESTE
-    //const LABEL_KEY = 'label';
-
-    // ESTE
-    //const SHORT_LABEL_KEY = 'short_label';
-
-    // ESTE
-    //const ADMIN_LABEL_KEY = 'admin_label';
-
-    // ESTE
-    //const PAYMENT_METHOD_IDENTIFIER_KEY = 'payment_method_identifier';
-
     const PAYMENT_ACTION_KEY = 'payment_action';
 
-    // ESTE no lo encuentro en payapal
+    // not found in paypal
     const ENVIRONMENT_TYPE = 'environment_type';
 
     const TYPE = 'entrepids_braintree';

@@ -51,19 +51,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
     {
         $params = [];
         $channel = $settings->getChannel();
-        
-        /*
-                $params[PayPalExpressCheckoutConfig::FIELD_PAYMENT_METHOD_IDENTIFIER] =
-            $this->getPaymentMethodIdentifier($channel);
-
-        $params[PayPalExpressCheckoutConfig::FIELD_ADMIN_LABEL] = $settings->getExpressCheckoutName();
-        $params[PayPalExpressCheckoutConfig::FIELD_LABEL] =
-            $this->getLocalizedValue($settings->getExpressCheckoutLabels());
-        $params[PayPalExpressCheckoutConfig::FIELD_SHORT_LABEL] =
-            $this->getLocalizedValue($settings->getExpressCheckoutShortLabels());
-         
-         */
-        
+       
         $params[BraintreeConfig::FIELD_LABEL] = $this->getLocalizedValue($settings->getBraintreeLabel());
         $params[BraintreeConfig::FIELD_SHORT_LABEL] = $this->getLocalizedValue($settings->getBraintreeShortLabel());
         $params[BraintreeConfig::FIELD_ADMIN_LABEL] = $channel->getName();
