@@ -225,9 +225,8 @@ class CreditCardType extends AbstractType
         $countCreditCards = 0;
         
         foreach ($this->customerTokens as $customerToken) {
-            $paymentID = $customerToken->getTransaction(); // es el id del sourcepaymentTransaction
+            $paymentID = $customerToken->getTransaction();
             $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
-            //$paymentTransaction = $em->find(PaymentTransaction::class, $paymentID);
             
             $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
                 'sourcePaymentTransaction' => $paymentID

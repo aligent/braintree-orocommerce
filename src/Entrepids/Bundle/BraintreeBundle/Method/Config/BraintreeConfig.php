@@ -7,8 +7,7 @@ use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaym
 
 // sacar la BraintreeFormInterface
 class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
-    BraintreeConfigInterface,
-    BraintreeFormInterface
+    BraintreeConfigInterface
 {
 
     const PAYMENT_ACTION_KEY = 'payment_action';
@@ -124,43 +123,4 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
         return (bool) $this->get(self::ZERO_AMOUNT_AUTHORIZATION_KEY);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPaymentMethodNonce()
-    {
-        return (string) $this->get(self::PAYMETHOD_NONCE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBraintreeClientToken()
-    {
-        return (string) $this->get(self::CLIENT_TOKEN);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreditCardValue()
-    {
-        return (string) $this->get(self::CREDIT_CARD_VALUE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreditCardFirstValue()
-    {
-        return (string) $this->get(self::CREDIT_CARD_FIRST_VALUE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreditCardsSaved()
-    {
-        return (string) $this->get(self::CREDIT_CARD_SELECTED);
-    }
 }
