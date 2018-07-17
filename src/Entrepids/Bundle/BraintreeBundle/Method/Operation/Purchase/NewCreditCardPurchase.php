@@ -58,6 +58,9 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $data = [
                 'amount' => $this->paymentTransaction->getAmount(),
                 'paymentMethodNonce' => $this->nonce,
+                // ORO REVIEW:
+                // What is the pupropose of this constant? Why it is not saved into php constant,
+                // or into specific configuration?
             	'channel' => 'OroCommerceBT_SP',
                 'customerId' => $this->customerData['id'],
                 'billing' => $this->billingData,
@@ -70,6 +73,11 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
                 ]
             ];
         } catch (NotFound $e) {
+            // ORO REVIEW:
+            // It really hard to understand what is the difference from `$data` variable in `try` block.
+            // Please, refactor without the copy paste.
+            // As I see `$this->customerData` cannot contain only an array.
+            // Is this block was tested?
             $data = [
                 'amount' => $this->paymentTransaction->getAmount(),
                 'paymentMethodNonce' => $this->nonce,
@@ -161,6 +169,9 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         $submitForSettlement = true;
         $isAuthorize = false;
         $isCharge = false;
+        // ORO REVIEW:
+        // This logic is copy pasted.
+        // src/Entrepids/Bundle/BraintreeBundle/Method/Operation/Purchase/ExistingCreditCardPurchase.php
         if (strcmp(PaymentMethodInterface::AUTHORIZE, $purchaseAction) == 0) {
             $submitForSettlement = false;
             $isAuthorize = true;

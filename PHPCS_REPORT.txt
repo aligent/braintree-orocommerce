@@ -1,0 +1,75 @@
+FILE: ...le/BraintreeBundle/Method/Operation/Capture/OperationCapture.php
+----------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 81 | ERROR | [x] Blank line found at end of control structure
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...intreeBundle/Method/Operation/Purchase/NewCreditCardPurchase.php
+----------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+----------------------------------------------------------------------
+ 64 | ERROR | [x] Spaces must be used to indent lines; tabs are not
+    |       |     allowed
+ 84 | ERROR | [x] Spaces must be used to indent lines; tabs are not
+    |       |     allowed
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 2 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...eBundle/Method/Operation/Purchase/ExistingCreditCardPurchase.php
+----------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 3 LINES
+----------------------------------------------------------------------
+ 52 | ERROR | [x] Spaces must be used to indent lines; tabs are not
+    |       |     allowed
+ 62 | ERROR | [x] Spaces must be used to indent lines; tabs are not
+    |       |     allowed
+ 63 | ERROR | [x] Spaces must be used to indent lines; tabs are not
+    |       |     allowed
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...eeBundle/Method/Operation/Purchase/PurchaseData/PurchaseData.php
+----------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 28 | ERROR | [x] Line indented incorrectly; expected 0 spaces, found
+    |       |     1
+ 28 | ERROR | [x] The closing brace for the class must go on the next
+    |       |     line after the body
+ 28 | ERROR | [x] Closing brace indented incorrectly; expected 0
+    |       |     spaces, found 1
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...trepids/Bundle/BraintreeBundle/Method/Config/BraintreeConfig.php
+----------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 126 | ERROR | [x] The closing brace for the class must go on the
+     |       |     next line after the body
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...ntreeBundle/EventListener/Callback/BraintreeCheckoutListener.php
+----------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+----------------------------------------------------------------------
+  1 | ERROR | [x] End of line character is invalid; expected "\n" but
+    |       |     found "\r\n"
+ 49 | ERROR | [x] The closing brace for the class must go on the next
+    |       |     line after the body
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 2 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------

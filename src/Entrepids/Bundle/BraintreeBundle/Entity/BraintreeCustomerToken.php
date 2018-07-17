@@ -28,6 +28,9 @@ class BraintreeCustomerToken
     private $token;
     
     /**
+     * ORO_REVIEW:
+     * Question about this field is unanswered. We discussed in in jira.
+     * Please, see \Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType::getCreditCardsSavedForCustomer comments
      *
      * @ORM\Column(type="integer", nullable=false)
      */

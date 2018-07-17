@@ -227,7 +227,11 @@ class CreditCardType extends AbstractType
         foreach ($this->customerTokens as $customerToken) {
             $paymentID = $customerToken->getTransaction();
             $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
-            
+
+            // ORO REVIEW:
+            // Why we cannot store information about card in BraintreeCustomerToken?
+            // I believe that it was created for it.
+            // Application can have a lot of transaction, and it can be performance bottleneck.
             $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
                 'sourcePaymentTransaction' => $paymentID
             ]);

@@ -39,7 +39,10 @@ class BraintreeCheckoutListener
         if (! $paymentTransaction) {
             return;
         }
-        
+
+        // ORO REVIEW:
+        // Without checking that the payment method is braintree, this code can broke other payment methods.
+        // Please, see \Oro\Bundle\PayPalBundle\EventListener\Callback\PayflowExpressCheckoutListener::onError
         $paymentTransaction->setSuccessful(false)->setActive(false);
     }
 

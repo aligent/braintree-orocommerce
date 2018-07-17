@@ -31,6 +31,9 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
 
+        // ORO REVIEW:
+        // `strcmp` checks exist overall the package. Why we need such inconclusive checks?
+        // It really hard to read such statements, and it affect the safety of a app.
         if (isset($creditCardValue) && strcmp($creditCardValue, PurchaseData::NEWCREDITCARD) != 0) {
             $token = $this->getTransactionCustomerToken($creditCardValue);
         } else {
@@ -38,6 +41,10 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         }
 
         $merchAccountID = $this->config->getBoxMerchAccountId();
+        // ORO REVIEW:
+        // Please, see
+        // \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase::getResponseFromBraintree
+        // comments
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
             $data = [

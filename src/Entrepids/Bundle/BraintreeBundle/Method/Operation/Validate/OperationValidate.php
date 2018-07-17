@@ -28,6 +28,10 @@ class OperationValidate extends AbstractBraintreeOperation
         $paymentTransaction = $this->paymentTransaction;
         $paymentTransaction->setAmount(self::ZERO_AMOUNT)->setCurrency('USD');
         
+        // ORO REVIEW:
+        // All data transfers should be done via PaymentTransaction.
+        // It is not safe to work with global variables.
+        // The reference to global variables also available in other places.
         $transactionOptions = $paymentTransaction->getTransactionOptions();
         if (array_key_exists('credit_card_value', $_POST)) {
             $credit_card_value = $_POST['credit_card_value'];
@@ -35,7 +39,7 @@ class OperationValidate extends AbstractBraintreeOperation
             $paymentTransaction->setSuccessful(false)->setActive(false);
             return [];
         }
-        
+
         if (array_key_exists('payment_method_nonce', $_POST)) {
             $nonce = $_POST["payment_method_nonce"];
         } else {
