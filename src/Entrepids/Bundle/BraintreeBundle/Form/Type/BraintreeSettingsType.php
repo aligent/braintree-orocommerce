@@ -98,22 +98,18 @@ class BraintreeSettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $a = 1;
-        $builder->add('braintreeLabel', LocalizedFallbackValueCollectionType::NAME, [
+        $builder->add('braintreeLabel', LocalizedFallbackValueCollectionType::class, [
             'label' => 'entrepids.braintree.settings.credit_card_labels.label',
             'required' => true,
-            'options' => [
-                'constraints' => [
-                    new NotBlank(),
-                ],
+            'constraints' => [
+                new NotBlank(),
             ],
         ])
-            ->add('braintreeShortLabel', LocalizedFallbackValueCollectionType::NAME, [
+            ->add('braintreeShortLabel', LocalizedFallbackValueCollectionType::class, [
                 'label' => 'entrepids.braintree.settings.credit_card_short_labels.label',
                 'required' => true,
-                'options' => [
-                    'constraints' => [
-                        new NotBlank(),
-                    ],
+                'constraints' => [
+                    new NotBlank(),
                 ],
             ])
             ->add('braintreePaymentAction', ChoiceType::class, [
