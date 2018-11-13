@@ -61,7 +61,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
                 // ORO REVIEW:
                 // What is the pupropose of this constant? Why it is not saved into php constant,
                 // or into specific configuration?
-            	'channel' => 'OroCommerceBT_SP',
+                'channel' => 'OroCommerceBT_SP',
                 'customerId' => $this->customerData['id'],
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,
@@ -81,7 +81,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $data = [
                 'amount' => $this->paymentTransaction->getAmount(),
                 'paymentMethodNonce' => $this->nonce,
-            	'channel' => 'OroCommerceBT_SP',
+                'channel' => 'OroCommerceBT_SP',
                 'customer' => $this->customerData,
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,

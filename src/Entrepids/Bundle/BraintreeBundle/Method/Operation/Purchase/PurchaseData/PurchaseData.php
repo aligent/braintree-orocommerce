@@ -24,5 +24,4 @@ class PurchaseData
      * @internal
      */
     const NEWCREDITCARD = 'newCreditCard';
-
- }
+}

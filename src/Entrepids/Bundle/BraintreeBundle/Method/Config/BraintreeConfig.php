@@ -122,5 +122,4 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
     {
         return (bool) $this->get(self::ZERO_AMOUNT_AUTHORIZATION_KEY);
     }
-
 }

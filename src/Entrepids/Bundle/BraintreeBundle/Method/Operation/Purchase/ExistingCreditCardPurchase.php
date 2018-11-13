@@ -49,7 +49,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
             $customer = $this->adapter->findCustomer($this->customerData['id']);
             $data = [
                 'amount' => $paymentTransaction->getAmount(),
-            	'channel' => 'OroCommerceBT_SP',
+                'channel' => 'OroCommerceBT_SP',
                 'customerId' => $this->customerData['id'],
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,
@@ -59,8 +59,8 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         } catch (NotFound $e) {
             $data = [
                 'amount' => $paymentTransaction->getAmount(),
-            	'channel' => 'OroCommerceBT_SP',
-            	'customer' => $this->customerData,
+                'channel' => 'OroCommerceBT_SP',
+                'customer' => $this->customerData,
                 'billing' => $this->billingData,
                 'shipping' => $this->shipingData,
                 'orderId' => $this->identifier,

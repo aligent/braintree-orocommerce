@@ -45,5 +45,4 @@ class BraintreeCheckoutListener
         // Please, see \Oro\Bundle\PayPalBundle\EventListener\Callback\PayflowExpressCheckoutListener::onError
         $paymentTransaction->setSuccessful(false)->setActive(false);
     }
-
 }

@@ -78,7 +78,6 @@ class OperationCapture extends AbstractBraintreeOperation
                     // Implicit magic method calls should be avoided as these methods are used by PHP internals.
                     $status = $transactionData->__get('status');
                     $paymentTransaction->setSuccessful(true)->setActive(false);
-
                 } else {
                     $errors = 'No errors';
                     $paymentTransaction->setSuccessful($response->success)->setActive(false);
