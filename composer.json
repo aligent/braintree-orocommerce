@@ -13,6 +13,6 @@
        "psr-4": {"": "src/"}
     },
     "require": {
-       "braintree/braintree_php": "3.22.0" 
+       "braintree/braintree_php": "3.36.*"
     }	
 }
