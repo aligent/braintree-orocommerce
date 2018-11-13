@@ -8,11 +8,14 @@
             "name": "Entrepids, Inc",
             "homepage": "http://www.entrepids.com"
         }
-    ],	
+    ],
     "autoload": {
-       "psr-4": {"": "src/"}
+        "psr-4": {
+            "": "src/"
+        }
     },
     "require": {
-       "braintree/braintree_php": "3.36.*"
-    }	
+        "braintree/braintree_php": "3.36.*",
+        "oro/platform": "3.*"
+    }
 }
