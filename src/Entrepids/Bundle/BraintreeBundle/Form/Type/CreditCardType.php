@@ -7,7 +7,9 @@ use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -82,7 +84,7 @@ class CreditCardType extends AbstractType
     {
         $builder->add(
             'payment_method_nonce',
-            'hidden',
+            HiddenType::class,
             [
             'mapped' => true,
             'attr' => [
@@ -100,7 +102,7 @@ class CreditCardType extends AbstractType
         }
         
         if ($options['zeroAmountAuthorizationEnabled']) {
-            $builder->add('save_for_later', 'checkbox', [
+            $builder->add('save_for_later', CheckboxType::class, [
                 'required' => false,
                 'label' => 'entrepids.braintree.settings.save_for_later.label',
                 'mapped' => false,
@@ -117,18 +119,18 @@ class CreditCardType extends AbstractType
             $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
             
-            $builder->add('braintree_client_token', 'hidden', [
+            $builder->add('braintree_client_token', HiddenType::class, [
                 'mapped' => true,
                 'data' => $braintreeClientToken
             ]);
         } else {
-            $builder->add('braintree_client_token', 'hidden', [
+            $builder->add('braintree_client_token', HiddenType::class, [
                 'mapped' => true,
                 'data' => 'basura'
             ]);
         }
         
-        $builder->add('credit_card_value', 'hidden', [
+        $builder->add('credit_card_value', HiddenType::class, [
             'mapped' => true,
             'attr' => [
                 'data-gateway' => true
@@ -276,7 +278,7 @@ class CreditCardType extends AbstractType
             ]
         );
         
-        $builder->add('credit_card_first_value', 'hidden', [
+        $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
             'data' => $this->selectedCard,
             'attr' => [
@@ -293,7 +295,7 @@ class CreditCardType extends AbstractType
      */
     private function setNewCreditCard(FormBuilderInterface $builder)
     {
-        $builder->add('credit_card_first_value', 'hidden', [
+        $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
             'data' => 'newCreditCard',
             'attr' => [

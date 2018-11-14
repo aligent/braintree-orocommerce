@@ -53,7 +53,7 @@ class BraintreeView implements PaymentMethodViewInterface
             'braintreeConfig' => $this->config,
         ];
         
-        $formView = $this->formFactory->create(CreditCardType::NAME, null, $formOptions)->createView();
+        $formView = $this->formFactory->create(CreditCardType::class, null, $formOptions)->createView();
         
         $viewOptions = [
             'formView' => $formView,
