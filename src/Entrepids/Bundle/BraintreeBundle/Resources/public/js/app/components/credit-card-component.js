@@ -6,8 +6,8 @@ define(function (require) {
     var $ = require('jquery');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
-    var client = require('entrepidsbraintree/js/braintree/braintree-client');
-    var hostedFields = require('entrepidsbraintree/js/braintree/braintree-hosted-fields');
+    var client = require('braintree/js/braintree/braintree-client');
+    var hostedFields = require('braintree/js/braintree/braintree-hosted-fields');
     var __ = require('orotranslation/js/translator');
 
     CreditCardComponent = BaseComponent.extend({

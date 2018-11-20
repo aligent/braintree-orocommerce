@@ -1,6 +1,7 @@
 <?php
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge;
 
+use Braintree\Transaction;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
@@ -49,11 +50,11 @@ class OperationCharge extends AbstractBraintreeOperation
             if (! $response->success) {
                 $errors = $response->message;
                 $transactionData = $response->transaction;
-                $status = $transactionData->__get('status');
+                $status = $transactionData->status;
 
                 // ORO REVIEW:
                 // Undefined namespace "Braintree".
-                if (strcmp($status, Braintree\Transaction::AUTHORIZED) == 0) {
+                if (strcmp($status, Transaction::AUTHORIZED) == 0) {
                     $paymentTransaction->setSuccessful($response->success)->setActive(true);
                 } else {
                     $paymentTransaction->setSuccessful(true)->setActive(false);
