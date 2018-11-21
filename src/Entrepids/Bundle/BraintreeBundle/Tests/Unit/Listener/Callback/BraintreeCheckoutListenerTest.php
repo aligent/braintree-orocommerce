@@ -93,5 +93,4 @@ class PayflowExpressCheckoutListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->listener->onError($event);
     }
-
 }
