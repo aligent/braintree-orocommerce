@@ -10,6 +10,8 @@ use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
  */
 class OperationAuthorize extends AbstractBraintreeOperation
 {
+    // TODO: JOH 21/11/18 I'm not actually sure this class is used at all.  Determine
+    // whether it can in fact be removed.
 
     /**
      *

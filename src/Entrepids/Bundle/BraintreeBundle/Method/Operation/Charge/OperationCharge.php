@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge;
 
 use Braintree\Transaction;
@@ -8,6 +9,8 @@ use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
 class OperationCharge extends AbstractBraintreeOperation
 {
+    // TODO: JOH 21/11/18 I'm not actually sure this class is used at all.  Determine
+    // whether it can in fact be removed.
 
     /**
      *
@@ -24,9 +27,9 @@ class OperationCharge extends AbstractBraintreeOperation
     {
         $paymentTransaction = $this->paymentTransaction;
         $sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
-        
+
         $transactionOptions = $sourcePaymentTransaction->getTransactionOptions();
-        
+
         if (array_key_exists('transactionId', $transactionOptions)) {
             $this->transactionID = $transactionOptions['transactionId'];
         } else {
@@ -43,45 +46,38 @@ class OperationCharge extends AbstractBraintreeOperation
     {
         $paymentTransaction = $this->paymentTransaction;
         $sourcePaymentTransaction = $paymentTransaction->getSourcePaymentTransaction();
-        
+
         if ($this->transactionID != null) {
             $response = $this->adapter->submitForSettlement($this->transactionID);
-            
-            if (! $response->success) {
-                $errors = $response->message;
-                $transactionData = $response->transaction;
-                $status = $transactionData->status;
 
-                // ORO REVIEW:
-                // Undefined namespace "Braintree".
-                if (strcmp($status, Transaction::AUTHORIZED) == 0) {
+            if (!$response->success) {
+                $transactionData = $response->transaction;
+                if ($transactionData->status == Transaction::AUTHORIZED) {
                     $paymentTransaction->setSuccessful($response->success)->setActive(true);
                 } else {
                     $paymentTransaction->setSuccessful(true)->setActive(false);
                 }
             } else {
-                $errors = 'No errors';
                 $paymentTransaction->setSuccessful($response->success)->setActive(false);
             }
-            
+
             if ($sourcePaymentTransaction) {
                 $paymentTransaction->setActive(false);
             }
-            if ($sourcePaymentTransaction
-                &&
+            if ($sourcePaymentTransaction &&
                 $sourcePaymentTransaction->getAction() !== PaymentMethodInterface::VALIDATE
-                ) {
-                $sourcePaymentTransaction->setActive(! $paymentTransaction->isSuccessful());
+            ) {
+                $sourcePaymentTransaction->setActive(!$paymentTransaction->isSuccessful());
             }
-            
+
             return [
                 'message' => $response->success,
-                'successful' => $response->success
+                'successful' => $response->success,
             ];
         } else {
             return [
                 'message' => 'No transaction Id',
-                'successful' => false
+                'successful' => false,
             ];
         }
     }

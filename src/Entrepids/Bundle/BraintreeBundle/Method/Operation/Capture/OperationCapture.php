@@ -72,14 +72,8 @@ class OperationCapture extends AbstractBraintreeOperation
                 $response = $this->adapter->submitForSettlement($this->transactionId);
                 
                 if (! $response->success) {
-                    $errors = $response->message;
-                    $transactionData = $response->transaction;
-                    // ORO REVIEW:
-                    // Implicit magic method calls should be avoided as these methods are used by PHP internals.
-                    $status = $transactionData->status;
                     $paymentTransaction->setSuccessful(true)->setActive(false);
                 } else {
-                    $errors = 'No errors';
                     $paymentTransaction->setSuccessful($response->success)->setActive(false);
                 }
                 
