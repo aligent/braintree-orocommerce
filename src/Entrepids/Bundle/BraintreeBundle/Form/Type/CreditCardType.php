@@ -112,24 +112,19 @@ class CreditCardType extends AbstractType
                 ]
             ]);
         }
-        
+
+        // TODO: Shouldn't this fail hard instead of just writing invalid data into the hidden field?
+        $braintreeClientToken = '';
         if ($options['braintreeConfig'] !== null) {
-            $config = $options['braintreeConfig'];
-            $this->adapter = new BraintreeAdapter($config);
+            $this->adapter = new BraintreeAdapter($options['braintreeConfig']);
             $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
-            
-            $builder->add('braintree_client_token', HiddenType::class, [
-                'mapped' => true,
-                'data' => $braintreeClientToken
-            ]);
-        } else {
-            $builder->add('braintree_client_token', HiddenType::class, [
-                'mapped' => true,
-                'data' => 'basura'
-            ]);
         }
-        
+        $builder->add('braintree_client_token', HiddenType::class, [
+            'mapped' => true,
+            'data' => $braintreeClientToken
+        ]);
+
         $builder->add('credit_card_value', HiddenType::class, [
             'mapped' => true,
             'attr' => [
