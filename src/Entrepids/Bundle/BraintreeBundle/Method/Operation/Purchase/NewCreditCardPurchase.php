@@ -172,11 +172,11 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         // ORO REVIEW:
         // This logic is copy pasted.
         // src/Entrepids/Bundle/BraintreeBundle/Method/Operation/Purchase/ExistingCreditCardPurchase.php
-        if (strcmp(PaymentMethodInterface::AUTHORIZE, $purchaseAction) == 0) {
+        if ($purchaseAction == PaymentMethodInterface::AUTHORIZE) {
             $submitForSettlement = false;
             $isAuthorize = true;
         }
-        if (strcmp(PaymentMethodInterface::CHARGE, $purchaseAction) == 0) {
+        if ($purchaseAction == PaymentMethodInterface::CHARGE) {
             $submitForSettlement = true;
             $isCharge = true;
         }

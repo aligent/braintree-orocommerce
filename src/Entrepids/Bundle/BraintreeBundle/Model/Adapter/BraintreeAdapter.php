@@ -7,6 +7,7 @@ use Braintree\CreditCard;
 use Braintree\Customer;
 use Braintree\Transaction;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider;
 
 /**
  * Class BraintreeAdapter
@@ -36,11 +37,14 @@ class BraintreeAdapter
      */
     public function initCredentials()
     {
+        // TODO: JOH 22/11/19 I'm reasonably sure the only possible values of getAllowedEnvironmentTypes
+        // _are_ the two constants, so this could probably be a straight assignment.
+        //  getAllowedEnvironmentTypes is pretty poorly named since it returnes the selected environment.
         $environmentSelected = $this->config->getAllowedEnvironmentTypes();
-        if (strcmp($environmentSelected, 'Production') == 0 || strcmp($environmentSelected, 'production') == 0) {
-            $this->environment('production');
+        if ($environmentSelected == BasicEnvironmentDataProvider::PRODUCTION) {
+            $this->environment(BasicEnvironmentDataProvider::PRODUCTION);
         } else {
-            $this->environment('sandbox');
+            $this->environment(BasicEnvironmentDataProvider::SANDBOX);
         }
         $this->merchantId($this->config->getBoxMerchId());
         $this->publicKey($this->config->getBoxPublicKey());

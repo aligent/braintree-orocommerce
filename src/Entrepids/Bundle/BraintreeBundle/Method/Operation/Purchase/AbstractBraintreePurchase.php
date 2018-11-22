@@ -3,6 +3,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\OrderBundle\Entity\OrderAddress;

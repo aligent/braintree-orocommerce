@@ -3,6 +3,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicPaymentActionsDataProvider;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
@@ -46,10 +47,7 @@ class OperationCapture extends AbstractBraintreeOperation
         
         $purchaseAction = $this->config->getPurchaseAction();
         
-        $this->isAuthorize = false;
-        if (strcmp("authorize", $purchaseAction) == 0) {
-            $this->isAuthorize = true;
-        }
+        $this->isAuthorize = ($purchaseAction == BasicPaymentActionsDataProvider::AUTHORIZE);
     }
 
     /**

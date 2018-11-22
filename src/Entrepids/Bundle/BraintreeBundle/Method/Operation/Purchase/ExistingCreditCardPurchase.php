@@ -26,15 +26,12 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {
-            $creditCardValue = "newCreditCard";
+            $creditCardValue = PurchaseData::NEWCREDITCARD;
         }
         
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
 
-        // ORO REVIEW:
-        // `strcmp` checks exist overall the package. Why we need such inconclusive checks?
-        // It really hard to read such statements, and it affect the safety of a app.
-        if (isset($creditCardValue) && strcmp($creditCardValue, PurchaseData::NEWCREDITCARD) != 0) {
+        if ($creditCardValue != PurchaseData::NEWCREDITCARD) {
             $token = $this->getTransactionCustomerToken($creditCardValue);
         } else {
             $token = null;
@@ -119,17 +116,9 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
     protected function preProcessOperation()
     {
         $purchaseAction = $this->config->getPurchaseAction();
-        $isAuthorize = false;
-        $isCharge = false;
-        if (strcmp(PaymentMethodInterface::AUTHORIZE, $purchaseAction) == 0) {
-            $isAuthorize = true;
-        }
-        if (strcmp(PaymentMethodInterface::CHARGE, $purchaseAction) == 0) {
-            $isCharge = true;
-        }
-        
-        $this->isAuthorize = $isAuthorize;
-        $this->isCharge = $isCharge;
+
+        $this->isAuthorize = ($purchaseAction == PaymentMethodInterface::AUTHORIZE);
+        $this->isCharge = ($purchaseAction == PaymentMethodInterface::CHARGE);
     }
     
     /**

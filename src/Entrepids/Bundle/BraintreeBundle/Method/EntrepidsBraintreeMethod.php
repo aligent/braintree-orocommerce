@@ -165,8 +165,7 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
                 $creditCardValue = PurchaseData::NEWCREDITCARD;
             }
             
-            $purchaseNewCreditCard = PurchaseData::NEWCREDITCARD;
-            if ((! empty($creditCardValue)) && (strcmp($creditCardValue, $purchaseNewCreditCard) != 0)) {
+            if ($creditCardValue != PurchaseData::NEWCREDITCARD) {
                 $purchaseOperation = PurchaseData::PURCHASE_EXISTING;
             } else {
                 $purchaseOperation = PurchaseData::PURCHASE_NEWCREDITCARD;
