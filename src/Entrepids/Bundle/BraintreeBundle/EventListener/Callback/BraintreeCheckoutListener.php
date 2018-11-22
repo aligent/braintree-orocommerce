@@ -1,7 +1,7 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\EventListener\Callback;
 
-use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -35,8 +35,8 @@ class BraintreeCheckoutListener
     public function onError(AbstractCallbackEvent $event)
     {
         $paymentTransaction = $event->getPaymentTransaction();
-        
-        if (! $paymentTransaction) {
+
+        if (!$paymentTransaction) {
             return;
         }
 

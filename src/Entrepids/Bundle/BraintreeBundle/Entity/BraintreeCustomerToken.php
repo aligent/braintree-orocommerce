@@ -16,17 +16,17 @@ class BraintreeCustomerToken
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
     private $customer;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $token;
-    
+
     /**
      * ORO_REVIEW:
      * Question about this field is unanswered. We discussed in in jira.
@@ -35,7 +35,7 @@ class BraintreeCustomerToken
      * @ORM\Column(type="integer", nullable=false)
      */
     private $transaction;
-    
+
     /**
      * Get id
      *
@@ -45,7 +45,7 @@ class BraintreeCustomerToken
     {
         return $this->id;
     }
-    
+
     /**
      * @param int $id
      *
@@ -54,10 +54,10 @@ class BraintreeCustomerToken
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
-    
+
     /**
      * Set Customer
      *
@@ -66,10 +66,10 @@ class BraintreeCustomerToken
     public function setCustomer($customer)
     {
         $this->customer = $customer;
-        
+
         return $this;
     }
-    
+
     /**
      * @return integer
      */
@@ -77,7 +77,7 @@ class BraintreeCustomerToken
     {
         return $this->customer;
     }
-    
+
     /**
      * Set token
      *
@@ -86,10 +86,10 @@ class BraintreeCustomerToken
     public function setToken($token)
     {
         $this->token = $token;
-        
+
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -97,7 +97,7 @@ class BraintreeCustomerToken
     {
         return $this->token;
     }
-    
+
     /**
      * Set Transaction
      *
@@ -106,10 +106,10 @@ class BraintreeCustomerToken
     public function setTransaction($transaction)
     {
         $this->transaction = $transaction;
-    
+
         return $this;
     }
-    
+
     /**
      * @return integer
      */

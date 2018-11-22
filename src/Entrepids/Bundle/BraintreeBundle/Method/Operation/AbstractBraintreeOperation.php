@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;

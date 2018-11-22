@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
@@ -50,7 +51,7 @@ class OperationAuthorize extends AbstractBraintreeOperation
     protected function postProcessOperation()
     {
         $paymentTransaction = $this->paymentTransaction;
-        
+
         if ($this->isValidData) {
             $transactionOptions = $paymentTransaction->getTransactionOptions();
             $nonce = $transactionOptions['nonce'];

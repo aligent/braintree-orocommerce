@@ -5,11 +5,9 @@ namespace Oro\Bundle\PayPalBundle\Tests\Unit\EventListener\Callback;
 use Entrepids\Bundle\BraintreeBundle\EventListener\Callback\BraintreeCheckoutListener;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Event\CallbackErrorEvent;
-use Oro\Bundle\PaymentBundle\Event\CallbackReturnEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 use Oro\Bundle\PayPalBundle\EventListener\Callback\PayflowExpressCheckoutListener;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class PayflowExpressCheckoutListenerTest extends \PHPUnit_Framework_TestCase
 {

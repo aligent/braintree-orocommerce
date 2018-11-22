@@ -29,15 +29,15 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
      * @var LoggerInterface
      */
     protected $logger;
-    
+
     /**
      * @var string
      */
     protected $type;
 
     /**
-     * @param ManagerRegistry                  $doctrine
-     * @param LoggerInterface                  $logger
+     * @param ManagerRegistry $doctrine
+     * @param LoggerInterface $logger
      * @param BraintreeConfigFactoryInterface $configFactory
      */
     public function __construct(
@@ -99,7 +99,7 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     {
         return $this->type;
     }
-    
+
     /**
      * @return BraintreeSettings[]
      */

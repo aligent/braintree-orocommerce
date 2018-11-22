@@ -1,17 +1,13 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\OrderBundle\Entity\OrderAddress;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use phpDocumentor\Reflection\Types\Array_;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * This is abstract class that contains generic methods for the purchase operation
@@ -73,7 +69,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
     protected function saveResponseSuccessData($response)
     {
         $transaction = $response->transaction;
-        
+
         $creditCardDetails = $transaction->creditCardDetails;
         $transactionOptions = $this->paymentTransaction->getTransactionOptions();
         $transactionOptions['creditCardDetails'] = serialize($creditCardDetails);
@@ -92,8 +88,8 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
     protected function processResponseBriantee($response)
     {
         $this->setDataToPreProcessResponse();
-        
-        if ($response->success && ! is_null($response->transaction)) {
+
+        if ($response->success && !is_null($response->transaction)) {
             $this->saveResponseSuccessData($response);
             $this->processSuccess($response);
         } else {
@@ -121,15 +117,15 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
     {
         $paymentTransaction = $this->paymentTransaction;
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-        
+
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
-        
+
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {
             $creditCardValue = PurchaseData::NEWCREDITCARD;
         }
-        
+
         $this->customerData = $this->getCustomerDataPayment($sourcepaymenttransaction);
         $this->shipingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'shippingAddress');
         $this->billingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'billingAddress');
@@ -138,7 +134,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             $paymentTransaction->getEntityClass(),
             $paymentTransaction->getEntityIdentifier()
         );
-        
+
         $orderID = $entity->getId();
         $this->identifier = $entity->getIdentifier();
     }
@@ -156,24 +152,24 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             $errorString .= $error->message . " [" . $error->code . "]\n";
             $erroProcessed = true;
         }
-        
+
         $errorMessage = "";
-        if (! $erroProcessed && ! is_null($response->message)) {
+        if (!$erroProcessed && !is_null($response->message)) {
             $errorString = $response->message;
         }
-        
+
         $this->paymentTransaction->setAction(PaymentMethodInterface::VALIDATE)
             ->setActive(false)
             ->setSuccessful(false);
         $this->paymentTransaction->getSourcePaymentTransaction()
             ->setActive(false)
             ->setSuccessful(false);
-        
+
         $this->setErrorMessage($errorString);
-        
+
         return [
             'message' => $errorString,
-            'successful' => false
+            'successful' => false,
         ];
     }
 
@@ -190,19 +186,19 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             $sourcepaymenttransaction->getEntityIdentifier()
         );
         $propertyAccessor = $this->getPropertyAccessor();
-        
+
         try {
             $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
         } catch (NoSuchPropertyException $e) {
         }
-        
+
         $userName = $customerUser->getUsername();
-        
+
         $id = $customerUser->getId();
         if ($this->isNullDataToSend($id)) {
             $id = '';
         }
-        
+
         $firstName = $customerUser->getFirstName();
         if ($this->isNullDataToSend($firstName)) {
             $firstName = '';
@@ -225,7 +221,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($website)) {
             $website = '';
         }
-        $customer = array(
+        $customer = [
             'id' => $id,
             'firstName' => $firstName,
             'lastName' => $lastName,
@@ -233,9 +229,9 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             'email' => $email,
             'phone' => $phone,
             'fax' => $fax,
-            'website' => $website
-        );
-        
+            'website' => $website,
+        ];
+
         return $customer;
     }
 
@@ -253,26 +249,26 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             $sourcepaymenttransaction->getEntityIdentifier()
         );
         $propertyAccessor = $this->getPropertyAccessor();
-        
+
         try {
             $orderAddress = $propertyAccessor->getValue($entity, $typeAddress);
         } catch (NoSuchPropertyException $e) {
         }
-        
+
         $firstName = $this->setNameOrderAddress($orderAddress);
-        
+
         $lastName = $this->setLastName($orderAddress);
-        
+
         $company = $this->setCompany($orderAddress);
-        
+
         $streetAddress = $this->setStreet1($orderAddress);
         $streetAddress2 = $this->setStreet2($orderAddress);
         $locality = $this->setLocality($orderAddress);
         $region = $this->setRegion($orderAddress);
         $postalCode = $this->setCodePostal($orderAddress);
         $countryName = $this->setCountryName($orderAddress);
-        
-        $orderReturn = array(
+
+        $orderReturn = [
             'firstName' => $firstName,
             'lastName' => $lastName,
             'company' => $company,
@@ -281,9 +277,9 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             'locality' => $locality,
             'region' => $region,
             'postalCode' => $postalCode,
-            'countryName' => $countryName
-        );
-        
+            'countryName' => $countryName,
+        ];
+
         return $orderReturn;
     }
 
@@ -298,7 +294,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             ->getName())) {
             return '';
         }
-        
+
         return $orderAddress->getCountry()->getName();
     }
 
@@ -312,7 +308,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getPostalCode())) {
             return '';
         }
-        
+
         return $orderAddress->getPostalCode();
     }
 
@@ -327,7 +323,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
             ->getCode())) {
             return '';
         }
-        
+
         return $orderAddress->getRegion()->getCode();
     }
 
@@ -341,7 +337,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getFirstName())) {
             return '';
         }
-        
+
         return $orderAddress->getFirstName();
     }
 
@@ -355,7 +351,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getLastName())) {
             return '';
         }
-        
+
         return $orderAddress->getLastName();
     }
 
@@ -369,7 +365,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getOrganization())) {
             return '';
         }
-        
+
         return $orderAddress->getOrganization();
     }
 
@@ -383,7 +379,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getStreet())) {
             return '';
         }
-        
+
         return $orderAddress->getStreet();
     }
 
@@ -397,7 +393,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getStreet2())) {
             return '';
         }
-        
+
         return $orderAddress->getStreet2();
     }
 
@@ -411,7 +407,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if ($this->isNullDataToSend($orderAddress->getCity())) {
             return '';
         }
-        
+
         return $orderAddress->getCity();
     }
 
@@ -438,10 +434,10 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
     private function setErrorMessage($errorMessage)
     {
         $flashBag = $this->session->getFlashBag();
-        
-        if (! $flashBag->has('error')) {
+
+        if (!$flashBag->has('error')) {
             $flashBag->add('error', $this->translator->trans('entrepids.braintree.result.error', [
-                '{{errorMessage}}' => $errorMessage
+                '{{errorMessage}}' => $errorMessage,
             ]));
         }
     }

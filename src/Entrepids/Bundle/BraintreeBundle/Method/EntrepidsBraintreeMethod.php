@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method;
 
 use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
@@ -24,30 +25,30 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
      * @var DoctrineHelper
      */
     protected $doctrineHelper;
-    
+
     /**
      *
      * @var PropertyAccessor
      */
     protected $propertyAccessor;
-    
+
     /**
      * @var Session
      */
     protected $session;
-    
+
     /**
      *
      * @var TranslatorInterface
      */
     protected $translator;
-    
+
     /**
      *
      * @var PurchaseData
      */
     protected $purchaseData;
-    
+
     /**
      *
      * @var BraintreeConfigInterface
@@ -84,11 +85,11 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
      */
     public function execute($action, PaymentTransaction $paymentTransaction)
     {
-        if (! $this->supports($action)) {
+        if (!$this->supports($action)) {
             throw new \InvalidArgumentException(sprintf('Unsupported action "%s"', $action));
         }
-        
-        return $this->{$action}($paymentTransaction) ?  : [];
+
+        return $this->{$action}($paymentTransaction) ?: [];
     }
 
     /**
@@ -115,13 +116,13 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
         if ($actionName === self::VALIDATE) {
             return true;
         }
-        
-        return in_array((string) $actionName, [
+
+        return in_array((string)$actionName, [
             self::AUTHORIZE,
             self::CAPTURE,
             self::CHARGE,
             self::PURCHASE,
-            self::COMPLETE
+            self::COMPLETE,
         ], true);
     }
 
@@ -162,14 +163,14 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
             } else {
                 $creditCardValue = PurchaseData::NEWCREDITCARD;
             }
-            
+
             if ($creditCardValue != PurchaseData::NEWCREDITCARD) {
                 $purchaseOperation = PurchaseData::PURCHASE_EXISTING;
             } else {
                 $purchaseOperation = PurchaseData::PURCHASE_NEWCREDITCARD;
             }
         }
-        
+
         $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::PURCHASE, $purchaseOperation);
     }
 
@@ -217,7 +218,7 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
     {
         return $this->propertyAccessor;
     }
-    
+
     /**
      * Create and execute the BraintreeHelper with specific operation
      *
@@ -239,7 +240,7 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
             $paymentMethodOperation,
             $this->purchaseData
         );
-        
+
         $braintreeHelper->execute($paymentTransaction, $operation);
     }
 }

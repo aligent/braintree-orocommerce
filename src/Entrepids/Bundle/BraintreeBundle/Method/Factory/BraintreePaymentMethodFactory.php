@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Factory;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
@@ -62,7 +63,7 @@ class BraintreePaymentMethodFactory implements BraintreePaymentMethodFactoryInte
      * @var TranslatorInterface
      */
     protected $translator;
-    
+
     /**
      *
      * @var PurchaseData

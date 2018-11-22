@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;

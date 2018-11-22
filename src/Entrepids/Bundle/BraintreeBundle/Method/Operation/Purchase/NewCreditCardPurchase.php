@@ -1,14 +1,10 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase;
 
 use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase;
-use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class NewCreditCardPurchase extends AbstractBraintreePurchase
 {
@@ -41,7 +37,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
         $saveForLater = false;
-        
+
         if (array_key_exists('saveForLaterUse', $transactionOptions)) {
             $saveForLater = $transactionOptions['saveForLaterUse'];
         }
@@ -51,7 +47,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         } else {
             $storeInVaultOnSuccess = false;
         }
-        
+
         $merchAccountID = $this->config->getBoxMerchAccountId();
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
@@ -69,8 +65,8 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
                 'merchantAccountId' => $merchAccountID,
                 'options' => [
                     'submitForSettlement' => $this->submitForSettlement,
-                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess
-                ]
+                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
+                ],
             ];
         } catch (NotFound $e) {
             // ORO REVIEW:
@@ -89,13 +85,13 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
                 'merchantAccountId' => $merchAccountID,
                 'options' => [
                     'submitForSettlement' => $this->submitForSettlement,
-                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess
-                ]
+                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
+                ],
             ];
         }
-        
+
         $response = $this->adapter->sale($data);
-        
+
         return $response;
     }
 
@@ -112,7 +108,7 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
         if (array_key_exists('saveForLaterUse', $transactionOptions)) {
             $saveForLater = $transactionOptions['saveForLaterUse'];
         }
-        
+
         $this->saveForLater = $saveForLater;
     }
 
@@ -124,29 +120,29 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
     protected function processSuccess($response)
     {
         $transaction = $response->transaction;
-        
+
         if ($this->isCharge) {
             $this->paymentTransaction->setAction(PaymentMethodInterface::PURCHASE)
                 ->setActive(false)
                 ->setSuccessful($response->success);
         }
-        
+
         if ($this->isAuthorize) {
             $transactionID = $transaction->id;
             $this->paymentTransaction->setAction(PaymentMethodInterface::AUTHORIZE)
                 ->setActive(true)
                 ->setSuccessful($response->success);
-            
+
             $transactionOptions = $this->paymentTransaction->getTransactionOptions();
             $transactionOptions['transactionId'] = $transactionID;
             $this->paymentTransaction->setTransactionOptions($transactionOptions);
         }
-        
+
         if ($this->saveForLater) {
             $creditCardValuesResponse = $transaction->creditCard;
             $token = $creditCardValuesResponse['token'];
             $this->paymentTransaction->setResponse($creditCardValuesResponse);
-            
+
             $this->saveCustomerToken($token);
         }
         $this->paymentTransaction->getSourcePaymentTransaction()->setActive(false);
@@ -161,10 +157,10 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
     {
         $paymentTransaction = $this->paymentTransaction;
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-        
+
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
         $nonce = $transactionOptions['nonce'];
-        
+
         $purchaseAction = $this->config->getPurchaseAction();
         $submitForSettlement = true;
         $isAuthorize = false;
@@ -180,13 +176,13 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
             $submitForSettlement = true;
             $isCharge = true;
         }
-        
+
         $this->submitForSettlement = $submitForSettlement;
         $this->nonce = $nonce;
         $this->isAuthorize = $isAuthorize;
         $this->isCharge = $isCharge;
     }
-    
+
     /**
      * This function save the customer and token to BraintreeCustomerToken
      *
@@ -195,14 +191,14 @@ class NewCreditCardPurchase extends AbstractBraintreePurchase
     private function saveCustomerToken($token)
     {
         $customerToken = new BraintreeCustomerToken();
-         
+
         $entityID = $this->paymentTransaction->getEntityIdentifier();
         $entity = $this->doctrineHelper->getEntityReference(
             $this->paymentTransaction->getEntityClass(),
             $this->paymentTransaction->getEntityIdentifier()
         );
         $propertyAccessor = $this->getPropertyAccessor();
-        
+
         try {
             $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
             $userName = $customerUser->getUsername();

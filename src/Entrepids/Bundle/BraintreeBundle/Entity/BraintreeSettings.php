@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -56,7 +57,7 @@ class BraintreeSettings extends Transport
      *      cascade={"ALL"},
      *      orphanRemoval=true
      *      )
-     *      @ORM\JoinTable(
+     * @ORM\JoinTable(
      *      name="entrepids_braintree_lbl",
      *      joinColumns={
      *      @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
@@ -75,7 +76,7 @@ class BraintreeSettings extends Transport
      *      cascade={"ALL"},
      *      orphanRemoval=true
      *      )
-     *      @ORM\JoinTable(
+     * @ORM\JoinTable(
      *      name="entrepids_braintree_sh_lbl",
      *      joinColumns={
      *      @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
@@ -176,10 +177,10 @@ class BraintreeSettings extends Transport
                 self::BRAINTREE_CREDIT_CARD_SAFE_FOR_LATER => $this->getSaveForLater(),
                 self::BRAINTREE_CAPTURE_PAYMENT_ACTION => $this->getBraintreePaymentAction(),
                 self::ZERO_AMOUNT_AUTHORIZATION_KEY => $this->getZeroAmountAuthorization(),
-                self::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY => $this->getAuthorizationForRequiredAmount()
+                self::AUTHORIZATION_FOR_REQUIRED_AMOUNT_KEY => $this->getAuthorizationForRequiredAmount(),
             ]);
         }
-        
+
         return $this->settings;
     }
 
@@ -192,10 +193,10 @@ class BraintreeSettings extends Transport
      */
     public function addBraintreeLabel(LocalizedFallbackValue $braintreeLabel)
     {
-        if (! $this->braintreeLabel->contains($braintreeLabel)) {
+        if (!$this->braintreeLabel->contains($braintreeLabel)) {
             $this->braintreeLabel->add($braintreeLabel);
         }
-        
+
         return $this;
     }
 
@@ -211,7 +212,7 @@ class BraintreeSettings extends Transport
         if ($this->braintreeLabel->contains($braintreeLabel)) {
             $this->braintreeLabel->removeElement($braintreeLabel);
         }
-        
+
         return $this;
     }
 
@@ -234,10 +235,10 @@ class BraintreeSettings extends Transport
      */
     public function addBraintreeShortLabel(LocalizedFallbackValue $braintreeShortLabel)
     {
-        if (! $this->braintreeShortLabel->contains($braintreeShortLabel)) {
+        if (!$this->braintreeShortLabel->contains($braintreeShortLabel)) {
             $this->braintreeShortLabel->add($braintreeShortLabel);
         }
-        
+
         return $this;
     }
 
@@ -253,7 +254,7 @@ class BraintreeSettings extends Transport
         if ($this->braintreeShortLabel->contains($braintreeShortLabel)) {
             $this->braintreeShortLabel->removeElement($braintreeShortLabel);
         }
-        
+
         return $this;
     }
 
@@ -277,7 +278,7 @@ class BraintreeSettings extends Transport
     public function setAllowedCreditCardTypes(array $allowedCreditCardTypes)
     {
         $this->allowedCreditCardTypes = $allowedCreditCardTypes;
-        
+
         return $this;
     }
 
@@ -301,7 +302,7 @@ class BraintreeSettings extends Transport
     public function setBraintreeEnvironmentType($braintreeEnvironmentType)
     {
         $this->braintreeEnvironmentType = $braintreeEnvironmentType;
-        
+
         return $this;
     }
 
@@ -325,7 +326,7 @@ class BraintreeSettings extends Transport
     public function setBraintreeMerchId($braintreeMerchId)
     {
         $this->braintreeMerchId = $braintreeMerchId;
-        
+
         return $this;
     }
 
@@ -349,7 +350,7 @@ class BraintreeSettings extends Transport
     public function setBraintreeMerchAccountId($braintreeMerchAccountId)
     {
         $this->braintreeMerchAccountId = $braintreeMerchAccountId;
-        
+
         return $this;
     }
 
@@ -373,7 +374,7 @@ class BraintreeSettings extends Transport
     public function setBraintreeMerchPublicKey($braintreeMerchPublicKey)
     {
         $this->braintreeMerchPublicKey = $braintreeMerchPublicKey;
-        
+
         return $this;
     }
 
@@ -397,7 +398,7 @@ class BraintreeSettings extends Transport
     public function setBraintreeMerchPrivateKey($braintreeMerchPrivateKey)
     {
         $this->braintreeMerchPrivateKey = $braintreeMerchPrivateKey;
-        
+
         return $this;
     }
 
@@ -421,7 +422,7 @@ class BraintreeSettings extends Transport
     public function setSaveForLater($saveForLater)
     {
         $this->saveForLater = $saveForLater;
-        
+
         return $this;
     }
 
@@ -445,7 +446,7 @@ class BraintreeSettings extends Transport
     public function setBraintreePaymentAction($braintreePaymentAction)
     {
         $this->braintreePaymentAction = $braintreePaymentAction;
-        
+
         return $this;
     }
 

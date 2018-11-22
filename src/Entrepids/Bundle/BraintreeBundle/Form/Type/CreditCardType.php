@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
@@ -38,7 +39,7 @@ class CreditCardType extends AbstractType
     protected $tokenStorage;
 
     protected $paymentsTransactions;
-    
+
     /**
      *
      * @var unknown
@@ -87,12 +88,13 @@ class CreditCardType extends AbstractType
             'payment_method_nonce',
             HiddenType::class,
             [
-            'mapped' => true,
-            'attr' => [
-                'data-gateway' => true]
+                'mapped' => true,
+                'attr' => [
+                    'data-gateway' => true,
+                ],
             ]
         );
-        
+
         $creditCards = $this->getCreditCardsSavedForCustomer();
         $creditCardsCount = count($creditCards);
         if ($creditCardsCount > 1) {
@@ -100,7 +102,7 @@ class CreditCardType extends AbstractType
         } else {
             $builder = $this->setNewCreditCard($builder);
         }
-        
+
         if ($options['zeroAmountAuthorizationEnabled']) {
             $builder->add('save_for_later', CheckboxType::class, [
                 'required' => false,
@@ -108,8 +110,8 @@ class CreditCardType extends AbstractType
                 'mapped' => false,
                 'data' => false,
                 'attr' => [
-                    'data-save-for-later' => true
-                ]
+                    'data-save-for-later' => true,
+                ],
             ]);
         }
 
@@ -122,14 +124,14 @@ class CreditCardType extends AbstractType
         }
         $builder->add('braintree_client_token', HiddenType::class, [
             'mapped' => true,
-            'data' => $braintreeClientToken
+            'data' => $braintreeClientToken,
         ]);
 
         $builder->add('credit_card_value', HiddenType::class, [
             'mapped' => true,
             'attr' => [
-                'data-gateway' => true
-            ]
+                'data-gateway' => true,
+            ],
         ]);
     }
 
@@ -183,19 +185,19 @@ class CreditCardType extends AbstractType
     protected function getLoggedCustomerUser()
     {
         $token = $this->tokenStorage->getToken();
-        if (! $token) {
+        if (!$token) {
             return null;
         }
-        
+
         $user = $token->getUser();
-        
+
         if ($user instanceof CustomerUser) {
             return $user;
         }
-        
+
         return null;
     }
-    
+
     /**
      * The method get the customer token to determine if they have any saved card
      */
@@ -203,9 +205,9 @@ class CreditCardType extends AbstractType
     {
         $customerUser = $this->getLoggedCustomerUser();
         $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findBy([
-            'customer' => $customerUser
+            'customer' => $customerUser,
         ]);
-        
+
         $this->customerTokens = $customerTokens;
     }
 
@@ -217,9 +219,9 @@ class CreditCardType extends AbstractType
     private function getCreditCardsSavedForCustomer()
     {
         $creditCards = [];
-        
+
         $countCreditCards = 0;
-        
+
         foreach ($this->customerTokens as $customerToken) {
             $paymentID = $customerToken->getTransaction();
             $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
@@ -229,15 +231,15 @@ class CreditCardType extends AbstractType
             // I believe that it was created for it.
             // Application can have a lot of transaction, and it can be performance bottleneck.
             $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
-                'sourcePaymentTransaction' => $paymentID
+                'sourcePaymentTransaction' => $paymentID,
             ]);
-            
+
             $response = $paymentTransaction->getResponse();
             $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
                 '{{brand}}' => $response['cardType'],
                 '{{last4}}' => $response['last4'],
                 '{{month}}' => $response['expirationMonth'],
-                '{{year}}' => $response['expirationYear']
+                '{{year}}' => $response['expirationYear'],
             ]);
             $creditCards[$valueCreditCard] = $paymentID;
             $countCreditCards++;
@@ -262,22 +264,23 @@ class CreditCardType extends AbstractType
             'credit_cards_saved',
             ChoiceType::class,
             [
-            'required' => true,
-            'choices' => $creditCards,
-            'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
-            'attr' => [
-                'data-credit-cards-saved' => true]
+                'required' => true,
+                'choices' => $creditCards,
+                'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+                'attr' => [
+                    'data-credit-cards-saved' => true,
+                ],
             ]
         );
-        
+
         $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
             'data' => $this->selectedCard,
             'attr' => [
-                'data-credit_card_first_value' => $this->selectedCard
-            ]
+                'data-credit_card_first_value' => $this->selectedCard,
+            ],
         ]);
-        
+
         return $builder;
     }
 
@@ -291,10 +294,10 @@ class CreditCardType extends AbstractType
             'mapped' => true,
             'data' => PurchaseData::NEWCREDITCARD,
             'attr' => [
-                'data-credit_card_first_value' => PurchaseData::NEWCREDITCARD
-            ]
+                'data-credit_card_first_value' => PurchaseData::NEWCREDITCARD,
+            ],
         ]);
-        
+
         return $builder;
     }
 }

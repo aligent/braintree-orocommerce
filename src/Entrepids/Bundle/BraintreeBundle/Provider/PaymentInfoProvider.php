@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -11,7 +12,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class PaymentInfoProvider
 {
-    
+
     use LoggerAwareTrait;
 
     /**
@@ -84,16 +85,16 @@ class PaymentInfoProvider
          * @var PaymentTransactionRepository $repository
          */
         $repository = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class);
-        
+
         /**
          * @var PaymentTransaction $transaction
          */
         $transaction = $repository->findOneBy([
             'entityClass' => $className,
-            'entityIdentifier' => $identifier
+            'entityIdentifier' => $identifier,
         ]);
-        
-        if (! $transaction) {
+
+        if (!$transaction) {
             return '';
         } else {
             $transactionOptions = $transaction->getTransactionOptions();
@@ -106,7 +107,7 @@ class PaymentInfoProvider
                 $cardType = $object->cardType;
                 $last4 = $object->last4;
                 $debit = $object->debit;
-                
+
                 $typeCard = 'Credit';
                 if ($debit == 'Yes') {
                     $typeCard = 'Debit';
@@ -114,15 +115,15 @@ class PaymentInfoProvider
                 $valueShow = $this->translator->trans('entrepids.braintree.order_view.info_detail', [
                     '{{brand}}' => $cardType,
                     '{{type}}' => $typeCard,
-                    '{{last4}}' => $last4
+                    '{{last4}}' => $last4,
                 ]);
-                
+
                 return $valueShow;
             } else {
                 return $this->translator->trans('entrepids.braintree.order_view.info_nodata');
             }
         }
-        
+
         return '';
     }
 
@@ -139,17 +140,17 @@ class PaymentInfoProvider
          */
         $repository = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class);
         $methods = $repository->getPaymentMethods($className, [
-            $identifier
+            $identifier,
         ]);
         /**
          * @var PaymentTransaction $transaction
          */
         $transaction = $repository->findOneBy([
             'entityClass' => $className,
-            'entityIdentifier' => $identifier
+            'entityIdentifier' => $identifier,
         ]);
-        
-        if (! $transaction) {
+
+        if (!$transaction) {
             return false;
         } else {
             $transactionOptions = $transaction->getTransactionOptions();
@@ -159,7 +160,7 @@ class PaymentInfoProvider
                 return true;
             }
         }
-        
+
         return false;
     }
 }

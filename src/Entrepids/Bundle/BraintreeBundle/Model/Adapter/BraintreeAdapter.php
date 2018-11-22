@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 
 use Braintree\ClientToken;
@@ -106,7 +107,7 @@ class BraintreeAdapter
     {
         return Customer::find($customerId);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -116,7 +117,7 @@ class BraintreeAdapter
     {
         return Configuration::merchantId($value);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -126,7 +127,7 @@ class BraintreeAdapter
     {
         return Configuration::publicKey($value);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -136,7 +137,7 @@ class BraintreeAdapter
     {
         return Configuration::privateKey($value);
     }
-    
+
     /**
      *
      * @param string|null $value

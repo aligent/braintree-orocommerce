@@ -1,14 +1,9 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Helper;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
@@ -111,24 +106,23 @@ class BraintreeHelper implements BraintreeHelperInterface
         $this->translator = $translator;
         $this->paymentOperation = $operation;
         $this->purchaseData = $purchaseData;
-        
-        $this->operationsValue = array(
+
+        $this->operationsValue = [
             PaymentMethodInterface::CAPTURE =>
-                  "Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture\OperationCapture",
             PaymentMethodInterface::CHARGE =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge\OperationCharge",
             PurchaseData::PURCHASE_EXISTING =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\ExistingCreditCardPurchase",
             PurchaseData::PURCHASE_NEWCREDITCARD =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase",
             PurchaseData::PURCHASE_ERROR =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseErrorOperation",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseErrorOperation",
             PaymentMethodInterface::VALIDATE =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate",
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate\OperationValidate",
             PaymentMethodInterface::AUTHORIZE =>
-                   "Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize"
-        )
-        ;
+                "Entrepids\Bundle\BraintreeBundle\Method\Operation\Authorize\OperationAuthorize",
+        ];
     }
 
     /**

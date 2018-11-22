@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
@@ -23,7 +24,7 @@ class PurchaseErrorOperation extends AbstractBraintreeOperation
     protected function postProcessOperation()
     {
         $paymentTransaction = $this->paymentTransaction;
-        
+
         $paymentTransaction->setAction($this->paymentOperation)
             ->setActive(false)
             ->setSuccessful(false);

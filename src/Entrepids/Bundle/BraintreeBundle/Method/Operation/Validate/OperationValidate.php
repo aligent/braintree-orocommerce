@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
@@ -27,7 +28,7 @@ class OperationValidate extends AbstractBraintreeOperation
     {
         $paymentTransaction = $this->paymentTransaction;
         $paymentTransaction->setAmount(self::ZERO_AMOUNT)->setCurrency('USD');
-        
+
         // ORO REVIEW:
         // All data transfers should be done via PaymentTransaction.
         // It is not safe to work with global variables.
@@ -45,15 +46,15 @@ class OperationValidate extends AbstractBraintreeOperation
         } else {
             $nonce = null;
         }
-        
+
         $transactionOptions['nonce'] = $nonce;
         $transactionOptions['credit_card_value'] = $credit_card_value;
         $paymentTransaction->setTransactionOptions($transactionOptions);
-        
+
         $paymentTransaction->setSuccessful(true)
             ->setAction(PaymentMethodInterface::VALIDATE)
             ->setActive(true);
-        
+
         return [];
     }
 

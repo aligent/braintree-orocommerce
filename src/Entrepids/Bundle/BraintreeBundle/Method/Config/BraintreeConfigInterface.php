@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
 use Oro\Bundle\PaymentBundle\Method\Config\PaymentConfigInterface;
@@ -17,7 +18,7 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      * @return string
      */
     public function getAllowedEnvironmentTypes();
-    
+
     /**
      *
      * @return string

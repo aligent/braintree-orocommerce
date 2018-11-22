@@ -23,7 +23,7 @@ class BasicCardTypesDataProvider implements CardTypesDataProviderInterface
      * @internal
      */
     const AMERICAN_EXPRESS = 'american_express';
-    
+
     /**
      * @return string[]
      */

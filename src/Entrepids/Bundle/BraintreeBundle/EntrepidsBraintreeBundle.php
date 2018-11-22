@@ -1,8 +1,9 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Entrepids\Bundle\BraintreeBundle\DependencyInjection\EntrepidsBraintreeExtension;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EntrepidsBraintreeBundle extends Bundle
 {
@@ -14,10 +15,10 @@ class EntrepidsBraintreeBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        if (! $this->extension) {
+        if (!$this->extension) {
             $this->extension = new EntrepidsBraintreeExtension();
         }
-        
+
         return $this->extension;
     }
 }

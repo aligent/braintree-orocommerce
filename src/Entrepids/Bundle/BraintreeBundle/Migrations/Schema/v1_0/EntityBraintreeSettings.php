@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
@@ -34,43 +35,43 @@ class EntityBraintreeSettings implements Migration
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('braintree_payment_action', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_environment_type', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_allowed_card_types', 'array', [
             'notnull' => false,
-            'comment' => '(DC2Type:array)'
+            'comment' => '(DC2Type:array)',
         ]);
         $table->addColumn('braintree_auth_for_req_amount', 'boolean', [
             'default' => '0',
-            'notnull' => false
+            'notnull' => false,
         ]);
         $table->addColumn('braintree_merch_id', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_merch_account_id', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_merch_public_key', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_merch_private_key', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('braintree_safe_for_later', 'boolean', [
             'default' => '1',
-            'notnull' => false
+            'notnull' => false,
         ]);
         $table->addColumn('braintree_zero_amount', 'boolean', [
             'default' => '0',
-            'notnull' => false
+            'notnull' => false,
         ]);
     }
 
@@ -86,16 +87,16 @@ class EntityBraintreeSettings implements Migration
         $table->addColumn('customer', 'integer', []);
         $table->addColumn('token', 'string', [
             'notnull' => false,
-            'length' => 255
+            'length' => 255,
         ]);
         $table->addColumn('transaction', 'integer', []);
-    
+
         $table->setPrimaryKey(['id']);
         $table->addIndex(['customer'], 'braintree_customer_idx', []);
         $table->addIndex(['token'], 'braintree_token_idx', []);
         $table->addIndex(['transaction'], 'braintree_transaction_idx', []);
     }
-    
+
     /**
      * Create entrepids_braintree_lbl table
      *
@@ -108,10 +109,10 @@ class EntityBraintreeSettings implements Migration
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey([
             'transport_id',
-            'localized_value_id'
+            'localized_value_id',
         ]);
         $table->addUniqueIndex([
-            'localized_value_id'
+            'localized_value_id',
         ], 'UNIQ_ETPBTRELBL_LVID');
     }
 
@@ -127,10 +128,10 @@ class EntityBraintreeSettings implements Migration
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey([
             'transport_id',
-            'localized_value_id'
+            'localized_value_id',
         ]);
         $table->addUniqueIndex([
-            'localized_value_id'
+            'localized_value_id',
         ], 'UNIQ_ETPBTRESHLBL_LVID');
     }
 
@@ -143,20 +144,20 @@ class EntityBraintreeSettings implements Migration
     {
         $table = $schema->getTable('entrepids_braintree_lbl');
         $table->addForeignKeyConstraint($schema->getTable('oro_integration_transport'), [
-            'transport_id'
+            'transport_id',
         ], [
-            'id'
+            'id',
         ], [
             'onDelete' => 'CASCADE',
-            'onUpdate' => null
+            'onUpdate' => null,
         ]);
         $table->addForeignKeyConstraint($schema->getTable('oro_fallback_localization_val'), [
-            'localized_value_id'
+            'localized_value_id',
         ], [
-            'id'
+            'id',
         ], [
             'onDelete' => 'CASCADE',
-            'onUpdate' => null
+            'onUpdate' => null,
         ]);
     }
 
@@ -169,20 +170,20 @@ class EntityBraintreeSettings implements Migration
     {
         $table = $schema->getTable('entrepids_braintree_sh_lbl');
         $table->addForeignKeyConstraint($schema->getTable('oro_integration_transport'), [
-            'transport_id'
+            'transport_id',
         ], [
-            'id'
+            'id',
         ], [
             'onDelete' => 'CASCADE',
-            'onUpdate' => null
+            'onUpdate' => null,
         ]);
         $table->addForeignKeyConstraint($schema->getTable('oro_fallback_localization_val'), [
-            'localized_value_id'
+            'localized_value_id',
         ], [
-            'id'
+            'id',
         ], [
             'onDelete' => 'CASCADE',
-            'onUpdate' => null
+            'onUpdate' => null,
         ]);
     }
 }

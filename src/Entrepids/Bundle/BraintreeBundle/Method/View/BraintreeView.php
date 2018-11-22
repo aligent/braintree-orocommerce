@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\View;
 
 use Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType;
@@ -52,33 +53,32 @@ class BraintreeView implements PaymentMethodViewInterface
             'zeroAmountAuthorizationEnabled' => $this->config->isEnableSaveForLater(),
             'braintreeConfig' => $this->config,
         ];
-        
+
         $formView = $this->formFactory->create(CreditCardType::class, null, $formOptions)->createView();
-        
+
         $viewOptions = [
             'formView' => $formView,
             'creditCardComponentOptions' => [
-                'allowedCreditCards' => $this->getAllowedCreditCards()
-            ]
+                'allowedCreditCards' => $this->getAllowedCreditCards(),
+            ],
         ];
-        
-        $validateTransaction = $this->paymentTransactionProvider->
-            getActiveValidatePaymentTransaction(
-                $this->getPaymentMethodType()
-            );
-        
-        if (! $validateTransaction) {
+
+        $validateTransaction = $this->paymentTransactionProvider->getActiveValidatePaymentTransaction(
+            $this->getPaymentMethodType()
+        );
+
+        if (!$validateTransaction) {
             return $viewOptions;
         }
-        
+
         $transactionOptions = $validateTransaction->getTransactionOptions();
-        
+
         $viewOptions['creditCardComponent'] = 'braintree/js/app/components/authorized-credit-card-component';
-        
+
         $viewOptions['creditCardComponentOptions'] = array_merge($viewOptions['creditCardComponentOptions'], [
-            'saveForLaterUse' => ! empty($transactionOptions['saveForLaterUse'])
+            'saveForLaterUse' => !empty($transactionOptions['saveForLaterUse']),
         ]);
-        
+
         return $viewOptions;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Complete;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;

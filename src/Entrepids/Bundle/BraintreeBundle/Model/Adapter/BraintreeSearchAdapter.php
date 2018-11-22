@@ -9,6 +9,7 @@ use Braintree\TransactionSearch;
 
 /**
  * Class Braintree Search Adapter
+ *
  * @codeCoverageIgnore
  */
 class BraintreeSearchAdapter
