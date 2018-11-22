@@ -77,12 +77,9 @@ class OperationCapture extends AbstractBraintreeOperation
                 
                 if ($sourcePaymentTransaction) {
                     $paymentTransaction->setActive(false);
-                }
-                if ($sourcePaymentTransaction
-                    &&
-                    $sourcePaymentTransaction->getAction() !== PaymentMethodInterface::VALIDATE
-                    ) {
-                    $sourcePaymentTransaction->setActive(! $paymentTransaction->isSuccessful());
+                    if ($sourcePaymentTransaction->getAction() !== PaymentMethodInterface::VALIDATE) {
+                        $sourcePaymentTransaction->setActive(!$paymentTransaction->isSuccessful());
+                    }
                 }
                 
                 $this->paymentTransaction->setReference($this->transactionId);

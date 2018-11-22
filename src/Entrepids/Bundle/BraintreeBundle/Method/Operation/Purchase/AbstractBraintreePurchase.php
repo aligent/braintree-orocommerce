@@ -127,16 +127,13 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {
-            $creditCardValue = "newCreditCard";
+            $creditCardValue = PurchaseData::NEWCREDITCARD;
         }
         
         $this->customerData = $this->getCustomerDataPayment($sourcepaymenttransaction);
         $this->shipingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'shippingAddress');
         $this->billingData = $this->getOrderAddressPayment($sourcepaymenttransaction, 'billingAddress');
-        
-        $responseTransaction = $paymentTransaction->getResponse();
-        $request = (array) $paymentTransaction->getRequest();
-        
+
         $entity = $this->doctrineHelper->getEntityReference(
             $paymentTransaction->getEntityClass(),
             $paymentTransaction->getEntityIdentifier()

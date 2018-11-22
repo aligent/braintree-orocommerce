@@ -155,8 +155,6 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
         $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
         $purchaseOperation = PurchaseData::PURCHASE_ERROR;
         if ($sourcepaymenttransaction != null) {
-            $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-            
             $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
             $nonce = $transactionOptions['nonce'];
             if (array_key_exists('credit_card_value', $transactionOptions)) {

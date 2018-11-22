@@ -62,8 +62,7 @@ class ExistingCreditCardPurchase extends AbstractBraintreePurchase
                 'shipping' => $this->shipingData,
                 'orderId' => $this->identifier,
                 'merchantAccountId' => $merchAccountID
-            ]
-            ;
+            ];
         }
         
         $response = $this->adapter->creditCardsale($token, $data);
