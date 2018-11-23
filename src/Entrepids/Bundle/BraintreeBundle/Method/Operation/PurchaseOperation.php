@@ -5,30 +5,56 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 class PurchaseOperation extends AbstractBraintreeOperation
 {
 
-    /**
-     *
-     * @var String
-     */
+    /** @var String */
     protected $nonce;
 
-    /**
-     *
-     * @var boolean
-     */
+    /** @var boolean */
     protected $submitForSettlement;
 
-    /**
-     *
-     * @var boolean
-     */
+    /** @var boolean */
     protected $saveForLater;
+
+
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
+    /** @var Session */
+    protected $session;
+
+    /** @var TranslatorInterface */
+    protected $translator;
+
+    /** @var PropertyAccessor */
+    protected $propertyAccessor;
+
+    /**
+     * @param Session $session
+     * @param TranslatorInterface $translator
+     * @param PropertyAccessor $propertyAccessor
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function __construct(
+        Session $session,
+        TranslatorInterface $translator,
+        PropertyAccessor $propertyAccessor,
+        DoctrineHelper $doctrineHelper
+    ) {
+        $this->doctrineHelper = $doctrineHelper;
+        $this->propertyAccessor = $propertyAccessor;
+        $this->session = $session;
+        $this->translator = $translator;
+    }
 
     /**
      * (non-PHPdoc)
@@ -50,7 +76,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
         if (array_key_exists('saveForLaterUse', $transactionOptions)) {
             $saveForLater = $transactionOptions['saveForLaterUse'];
         }
-        $storeInVaultOnSuccess = !$saveForLater;
+        $storeInVaultOnSuccess = $saveForLater;
 
         if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
             $token = $this->getTransactionCustomerToken($creditCardValue);
@@ -204,6 +230,10 @@ class PurchaseOperation extends AbstractBraintreeOperation
      */
     private function saveCustomerToken($token)
     {
+        if ($token === null) {
+            return;
+        }
+
         $customerToken = new BraintreeCustomerToken();
 
         $entityID = $this->paymentTransaction->getEntityIdentifier();
@@ -603,4 +633,14 @@ class PurchaseOperation extends AbstractBraintreeOperation
             ]));
         }
     }
+
+    /**
+     *
+     * @return PropertyAccessor
+     */
+    protected function getPropertyAccessor()
+    {
+        return $this->propertyAccessor;
+    }
+
 }

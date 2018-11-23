@@ -80,11 +80,4 @@ class ChargeOperation extends AbstractBraintreeOperation
         }
     }
 
-
-    /**
-     * @inheritDoc
-     */
-    protected function preprocessDataToSend()
-    {
-    }
 }
