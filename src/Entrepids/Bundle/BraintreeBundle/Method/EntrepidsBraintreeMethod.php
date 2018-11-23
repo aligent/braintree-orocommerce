@@ -4,6 +4,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Method;
 
 use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Factory;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseOperation;
@@ -45,9 +46,10 @@ class EntrepidsBraintreeMethod implements
         }
 
         try {
+            /** @var AbstractBraintreeOperation $operation */
             $operation = $this->opFactory->getOperation($action);
-            $operation->setConfig($this->config);
-            return $operation->operationProcess($paymentTransaction);
+            $operation->setConfig($this->config)
+                ->operationProcess($paymentTransaction);
         } catch (\Exception $e) {
             $paymentTransaction->setAction($this->paymentOperation)
                 ->setActive(false)

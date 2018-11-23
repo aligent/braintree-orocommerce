@@ -39,7 +39,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
     {
         $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
-        $saveForLater = false;
 
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
@@ -47,15 +46,11 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $creditCardValue = BraintreeMethodProvider::NEWCREDITCARD;
         }
 
+        $saveForLater = false;
         if (array_key_exists('saveForLaterUse', $transactionOptions)) {
             $saveForLater = $transactionOptions['saveForLaterUse'];
         }
-        $storeInVaultOnSuccess = false;
-        if ($saveForLater) {
-            $storeInVaultOnSuccess = true;
-        } else {
-            $storeInVaultOnSuccess = false;
-        }
+        $storeInVaultOnSuccess = !$saveForLater;
 
         if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
             $token = $this->getTransactionCustomerToken($creditCardValue);
@@ -71,8 +66,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
         try {
             $customer = $this->adapter->findCustomer($this->customerData['id']);
             $data = [
-                'amount' => $paymentTransaction->getAmount(),
-                'paymentMethodNonce' => $this->nonce,
+                'amount' => $this->paymentTransaction->getAmount(),
                 // ORO REVIEW:
                 // What is the pupropose of this constant? Why it is not saved into php constant,
                 // or into specific configuration?
@@ -94,8 +88,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
             // As I see `$this->customerData` cannot contain only an array.
             // Is this block was tested?
             $data = [
-                'amount' => $paymentTransaction->getAmount(),
-                'paymentMethodNonce' => $this->nonce,
+                'amount' => $this->paymentTransaction->getAmount(),
                 'channel' => 'OroCommerceBT_SP',
                 'customer' => $this->customerData,
                 'billing' => $this->billingData,
@@ -108,10 +101,13 @@ class PurchaseOperation extends AbstractBraintreeOperation
                 ],
             ];
         }
+        if ($this->nonce !== 'noValue') {
+            $data['paymentMethodNonce'] = $this->nonce;
+        }
         if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
-            $response = $this->adapter->sale($data);
-        } else {
             $response = $this->adapter->creditCardsale($token, $data);
+        } else {
+            $response = $this->adapter->sale($data);
         }
         return $response;
     }
@@ -142,12 +138,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
     {
         $transaction = $response->transaction;
 
-        if ($this->isCharge) {
-            $this->paymentTransaction->setAction(PaymentMethodInterface::PURCHASE)
-                ->setActive(false)
-                ->setSuccessful($response->success);
-        }
-
         if ($this->isAuthorize) {
             $transactionID = $transaction->id;
             $this->paymentTransaction->setAction(PaymentMethodInterface::AUTHORIZE)
@@ -157,6 +147,12 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $transactionOptions = $this->paymentTransaction->getTransactionOptions();
             $transactionOptions['transactionId'] = $transactionID;
             $this->paymentTransaction->setTransactionOptions($transactionOptions);
+        }
+
+        if ($this->isCharge) {
+            $this->paymentTransaction->setAction(PaymentMethodInterface::PURCHASE)
+                ->setActive(false)
+                ->setSuccessful($response->success);
         }
 
         if ($this->saveForLater) {

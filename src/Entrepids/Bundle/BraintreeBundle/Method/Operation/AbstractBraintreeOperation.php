@@ -81,6 +81,8 @@ abstract class AbstractBraintreeOperation implements OperationInterface
 
         $this->adapter = new BraintreeAdapter($this->config);
         $this->adapter->initCredentials();
+
+        return $this;
     }
 
     /**
