@@ -51,7 +51,7 @@ class EntrepidsBraintreeMethod implements
             $operation->setConfig($this->config)
                 ->operationProcess($paymentTransaction);
         } catch (\Exception $e) {
-            $paymentTransaction->setAction($this->paymentOperation)
+            $paymentTransaction->setAction($action)
                 ->setActive(false)
                 ->setSuccessful(false);
             $paymentTransaction->getSourcePaymentTransaction()
