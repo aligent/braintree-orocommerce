@@ -2,19 +2,21 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
+use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
+use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ValidateOperation extends AbstractBraintreeOperation
 {
-
     const ZERO_AMOUNT = 0;
 
-    /**
-     * @inheritDoc
-     */
-    protected function preProcessOperation()
-    {
+    /** @var RequestStack */
+    protected $requestStack;
+
+    public function __construct(RequestStack $requestStack) {
+        $this->requestStack = $requestStack;
     }
 
 
@@ -23,29 +25,18 @@ class ValidateOperation extends AbstractBraintreeOperation
      */
     protected function postProcessOperation()
     {
+        $request = $this->requestStack->getCurrentRequest();
+
         $paymentTransaction = $this->paymentTransaction;
         $paymentTransaction->setAmount(self::ZERO_AMOUNT)->setCurrency('USD');
 
-        // ORO REVIEW:
-        // All data transfers should be done via PaymentTransaction.
-        // It is not safe to work with global variables.
-        // The reference to global variables also available in other places.
         $transactionOptions = $paymentTransaction->getTransactionOptions();
-        if (array_key_exists('credit_card_value', $_POST)) {
-            $credit_card_value = $_POST['credit_card_value'];
-        } else {
-            $paymentTransaction->setSuccessful(false)->setActive(false);
-            return [];
-        }
 
-        if (array_key_exists('payment_method_nonce', $_POST)) {
-            $nonce = $_POST["payment_method_nonce"];
-        } else {
-            $nonce = null;
-        }
+        $transactionOptions = array_merge($transactionOptions, [
+            'credit_card_value' => $request->get('credit_card_value', BraintreeMethodProvider::NEWCREDITCARD),
+            'nonce' => $request->get('payment_method_nonce', null),
+        ]);
 
-        $transactionOptions['nonce'] = $nonce;
-        $transactionOptions['credit_card_value'] = $credit_card_value;
         $paymentTransaction->setTransactionOptions($transactionOptions);
 
         $paymentTransaction->setSuccessful(true)
@@ -53,13 +44,5 @@ class ValidateOperation extends AbstractBraintreeOperation
             ->setActive(true);
 
         return [];
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    protected function preprocessDataToSend()
-    {
     }
 }
