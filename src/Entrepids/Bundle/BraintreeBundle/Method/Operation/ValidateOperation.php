@@ -1,28 +1,25 @@
 <?php
 
-namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Validate;
+namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 
-class OperationValidate extends AbstractBraintreeOperation
+class ValidateOperation extends AbstractBraintreeOperation
 {
 
     const ZERO_AMOUNT = 0;
 
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
+     * @inheritDoc
      */
     protected function preProcessOperation()
     {
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+     * @inheritDoc
      */
     protected function postProcessOperation()
     {
@@ -58,10 +55,9 @@ class OperationValidate extends AbstractBraintreeOperation
         return [];
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+     * @inheritDoc
      */
     protected function preprocessDataToSend()
     {

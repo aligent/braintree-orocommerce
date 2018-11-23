@@ -1,6 +1,6 @@
 <?php
 
-namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces;
+namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 

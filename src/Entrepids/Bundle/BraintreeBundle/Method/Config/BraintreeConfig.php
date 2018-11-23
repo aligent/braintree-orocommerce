@@ -6,8 +6,7 @@ use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm\BraintreeFormIn
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
 // sacar la BraintreeFormInterface
-class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
-    BraintreeConfigInterface
+class BraintreeConfig extends AbstractParameterBagPaymentConfig
 {
 
     const PAYMENT_ACTION_KEY = 'payment_action';

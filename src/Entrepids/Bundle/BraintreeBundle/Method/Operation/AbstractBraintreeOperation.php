@@ -2,8 +2,8 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\OperationInterface;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
@@ -34,7 +34,7 @@ abstract class AbstractBraintreeOperation implements OperationInterface
 
     /**
      *
-     * @var BraintreeConfigInterface
+     * @var BraintreeConfig
      */
     protected $config;
 
@@ -62,27 +62,30 @@ abstract class AbstractBraintreeOperation implements OperationInterface
      * @param PropertyAccessor $propertyAccessor
      * @param DoctrineHelper $doctrineHelper
      * @param BraintreeAdapter $braintreeAdapter
-     * @param BraintreeConfigInterface $config
      */
     public function __construct(
         Session $session,
         TranslatorInterface $translator,
         PropertyAccessor $propertyAccessor,
-        DoctrineHelper $doctrineHelper,
-        BraintreeAdapter $braintreeAdapter,
-        BraintreeConfigInterface $config
+        DoctrineHelper $doctrineHelper
     ) {
         $this->doctrineHelper = $doctrineHelper;
-        $this->adapter = $braintreeAdapter;
-        $this->config = $config;
         $this->propertyAccessor = $propertyAccessor;
         $this->session = $session;
         $this->translator = $translator;
     }
 
+
+    public function setConfig(BraintreeConfig $config) {
+        $this->config = $config;
+
+        $this->adapter = new BraintreeAdapter($this->config);
+        $this->adapter->initCredentials();
+    }
+
     /**
      * (non-PHPdoc)
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Interfaces\OperationInterface::operationProcess()
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\OperationInterface::operationProcess()
      */
     public function operationProcess(PaymentTransaction $paymentTransaction)
     {

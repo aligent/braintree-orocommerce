@@ -7,7 +7,7 @@ use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\Customer;
 use Braintree\Transaction;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider;
 
 /**
@@ -26,7 +26,7 @@ class BraintreeAdapter
      *
      * @param Config $config
      */
-    public function __construct(BraintreeConfigInterface $config)
+    public function __construct(BraintreeConfig $config)
     {
         $this->config = $config;
     }

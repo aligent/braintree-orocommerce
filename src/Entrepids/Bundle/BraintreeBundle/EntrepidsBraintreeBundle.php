@@ -2,16 +2,16 @@
 
 namespace Entrepids\Bundle\BraintreeBundle;
 
+use Entrepids\Bundle\BraintreeBundle\DependencyInjection\Compiler\OperationPass;
 use Entrepids\Bundle\BraintreeBundle\DependencyInjection\EntrepidsBraintreeExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EntrepidsBraintreeBundle extends Bundle
 {
 
     /**
-     *
-     * {@inheritDoc}
-     *
+     * @inheritDoc
      */
     public function getContainerExtension()
     {
@@ -21,4 +21,10 @@ class EntrepidsBraintreeBundle extends Bundle
 
         return $this->extension;
     }
+
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new OperationPass());
+    }
+
 }

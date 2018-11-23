@@ -3,7 +3,7 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Factory;
 
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 
 interface BraintreeConfigFactoryInterface
 {
@@ -11,7 +11,7 @@ interface BraintreeConfigFactoryInterface
     /**
      *
      * @param BraintreeSettings $settings
-     * @return BraintreeConfigInterface
+     * @return BraintreeConfig
      */
     public function create(BraintreeSettings $settings);
 }

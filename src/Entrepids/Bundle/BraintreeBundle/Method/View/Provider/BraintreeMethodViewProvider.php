@@ -2,7 +2,7 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\View\Provider;
 
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\Provider\BraintreeConfigProviderInterface;
 use Entrepids\Bundle\BraintreeBundle\Method\View\Factory\BraintreePaymentMethodViewFactoryInterface;
 use Oro\Bundle\PaymentBundle\Method\View\AbstractPaymentMethodViewProvider;
@@ -41,9 +41,9 @@ class BraintreeMethodViewProvider extends AbstractPaymentMethodViewProvider
     }
 
     /**
-     * @param BraintreeConfigInterface $config
+     * @param BraintreeConfig $config
      */
-    protected function addBraintreeView(BraintreeConfigInterface $config)
+    protected function addBraintreeView(BraintreeConfig $config)
     {
         $this->addView(
             $config->getPaymentMethodIdentifier(),

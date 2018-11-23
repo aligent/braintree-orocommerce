@@ -4,6 +4,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
+use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -98,7 +99,7 @@ class CreditCardType extends AbstractType
         $creditCards = $this->getCreditCardsSavedForCustomer();
         $creditCardsCount = count($creditCards);
         if ($creditCardsCount > 1) {
-            $builder = $this->setCreditsCard($builder, $creditCards);
+            $builder = $this->setCreditCards($builder, $creditCards);
         } else {
             $builder = $this->setNewCreditCard($builder);
         }
@@ -249,7 +250,7 @@ class CreditCardType extends AbstractType
         }
 
         $useDifferentCard = $this->translator->trans('entrepids.braintree.braintreeflow.use_different_card');
-        $creditCards[$useDifferentCard] = PurchaseData::NEWCREDITCARD;
+        $creditCards[$useDifferentCard] = BraintreeMethodProvider::NEWCREDITCARD;
 
         return $creditCards;
     }
@@ -281,6 +282,7 @@ class CreditCardType extends AbstractType
             ],
         ]);
 
+
         return $builder;
     }
 
@@ -292,9 +294,9 @@ class CreditCardType extends AbstractType
     {
         $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
-            'data' => PurchaseData::NEWCREDITCARD,
+            'data' => BraintreeMethodProvider::NEWCREDITCARD,
             'attr' => [
-                'data-credit_card_first_value' => PurchaseData::NEWCREDITCARD,
+                'data-credit_card_first_value' => BraintreeMethodProvider::NEWCREDITCARD,
             ],
         ]);
 

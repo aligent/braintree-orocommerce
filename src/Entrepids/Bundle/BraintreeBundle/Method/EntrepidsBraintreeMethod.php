@@ -3,82 +3,37 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method;
 
 use Entrepids\Bundle\BraintreeBundle\Helper\BraintreeHelper;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Factory;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseOperation;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\Translation\TranslatorInterface;
 
-class EntrepidsBraintreeMethod implements PaymentMethodInterface
+class EntrepidsBraintreeMethod implements
+    PaymentMethodInterface
 {
 
     const TYPE = 'entrepids_braintree';
 
-    const COMPLETE = 'complete';
-
-    /**
-     *
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
-     *
-     * @var PropertyAccessor
-     */
-    protected $propertyAccessor;
-
-    /**
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     *
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     *
-     * @var PurchaseData
-     */
-    protected $purchaseData;
-
-    /**
-     *
-     * @var BraintreeConfigInterface
-     */
+    /** @var BraintreeConfig */
     private $config;
 
+    /** @var Factory */
+    protected $opFactory;
+
     /**
-     *
-     * @param BraintreeConfigInterface $config
-     * @param DoctrineHelper $doctrineHelper
-     * @param PropertyAccessor $propertyAccessor
-     * @param Session $session
-     * @param TranslatorInterface $translator
-     * @param PurchaseData $purchaseData
+     * @param BraintreeConfig $config
      */
     public function __construct(
-        BraintreeConfigInterface $config,
-        DoctrineHelper $doctrineHelper,
-        PropertyAccessor $propertyAccessor,
-        Session $session,
-        TranslatorInterface $translator,
-        PurchaseData $purchaseData
+        Factory $opFactory,
+        BraintreeConfig $config
     ) {
         $this->config = $config;
-        $this->doctrineHelper = $doctrineHelper;
-        $this->propertyAccessor = $propertyAccessor;
-        $this->session = $session;
-        $this->translator = $translator;
-        $this->purchaseData = $purchaseData;
+        $this->opFactory = $opFactory;
     }
+
 
     /**
      * {@inheritdoc}
@@ -89,7 +44,20 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
             throw new \InvalidArgumentException(sprintf('Unsupported action "%s"', $action));
         }
 
-        return $this->{$action}($paymentTransaction) ?: [];
+        try {
+            $operation = $this->opFactory->getOperation($action);
+            $operation->setConfig($this->config);
+            return $operation->operationProcess($paymentTransaction);
+        } catch (\Exception $e) {
+            $paymentTransaction->setAction($this->paymentOperation)
+                ->setActive(false)
+                ->setSuccessful(false);
+            $paymentTransaction->getSourcePaymentTransaction()
+                ->setActive(false)
+                ->setSuccessful(false);
+        }
+
+        return [];
     }
 
     /**
@@ -113,94 +81,14 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
      */
     public function supports($actionName)
     {
-        if ($actionName === self::VALIDATE) {
-            return true;
-        }
-
         return in_array((string)$actionName, [
-            self::AUTHORIZE,
+            self::VALIDATE,
             self::CAPTURE,
             self::CHARGE,
             self::PURCHASE,
-            self::COMPLETE,
         ], true);
     }
 
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    protected function capture(PaymentTransaction $paymentTransaction)
-    {
-        $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::CAPTURE);
-    }
-
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    protected function charge(PaymentTransaction $paymentTransaction)
-    {
-        $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::CHARGE);
-    }
-
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    protected function purchase(PaymentTransaction $paymentTransaction)
-    {
-        $sourcepaymenttransaction = $paymentTransaction->getSourcePaymentTransaction();
-        $purchaseOperation = PurchaseData::PURCHASE_ERROR;
-        if ($sourcepaymenttransaction != null) {
-            $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
-            $nonce = $transactionOptions['nonce'];
-            if (array_key_exists('credit_card_value', $transactionOptions)) {
-                $creditCardValue = $transactionOptions['credit_card_value'];
-            } else {
-                $creditCardValue = PurchaseData::NEWCREDITCARD;
-            }
-
-            if ($creditCardValue != PurchaseData::NEWCREDITCARD) {
-                $purchaseOperation = PurchaseData::PURCHASE_EXISTING;
-            } else {
-                $purchaseOperation = PurchaseData::PURCHASE_NEWCREDITCARD;
-            }
-        }
-
-        $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::PURCHASE, $purchaseOperation);
-    }
-
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    protected function validate(PaymentTransaction $paymentTransaction)
-    {
-        $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::VALIDATE);
-    }
-
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     */
-    protected function complete(PaymentTransaction $paymentTransaction)
-    {
-        $this->executeBraintreeHelper($paymentTransaction, $this::COMPLETE);
-    }
-
-    /**
-     *
-     * @param PaymentTransaction $paymentTransaction
-     */
-    protected function authorize(PaymentTransaction $paymentTransaction)
-    {
-        $this->executeBraintreeHelper($paymentTransaction, PaymentMethodInterface::AUTHORIZE);
-    }
 
     /**
      * {@inheritdoc}
@@ -210,37 +98,4 @@ class EntrepidsBraintreeMethod implements PaymentMethodInterface
         return $this->config->getPaymentMethodIdentifier();
     }
 
-    /**
-     *
-     * @return PropertyAccessor
-     */
-    protected function getPropertyAccessor()
-    {
-        return $this->propertyAccessor;
-    }
-
-    /**
-     * Create and execute the BraintreeHelper with specific operation
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @param $paymentMethodOperation
-     * @param string $operation
-     */
-    private function executeBraintreeHelper(
-        PaymentTransaction $paymentTransaction,
-        $paymentMethodOperation,
-        $operation = null
-    ) {
-        $braintreeHelper = new BraintreeHelper(
-            $this->config,
-            $this->doctrineHelper,
-            $this->propertyAccessor,
-            $this->session,
-            $this->translator,
-            $paymentMethodOperation,
-            $this->purchaseData
-        );
-
-        $braintreeHelper->execute($paymentTransaction, $operation);
-    }
 }

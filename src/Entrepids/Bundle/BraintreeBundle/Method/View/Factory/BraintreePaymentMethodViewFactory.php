@@ -2,7 +2,7 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\View\Factory;
 
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\View\BraintreeView;
 use Oro\Bundle\PaymentBundle\Provider\PaymentTransactionProvider;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -32,7 +32,7 @@ class BraintreePaymentMethodViewFactory implements BraintreePaymentMethodViewFac
     /**
      * {@inheritdoc}
      */
-    public function create(BraintreeConfigInterface $config)
+    public function create(BraintreeConfig $config)
     {
         return new BraintreeView($this->formFactory, $config, $this->transactionProvider);
     }

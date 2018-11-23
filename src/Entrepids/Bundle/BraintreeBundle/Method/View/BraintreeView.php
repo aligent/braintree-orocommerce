@@ -3,7 +3,7 @@
 namespace Entrepids\Bundle\BraintreeBundle\Method\View;
 
 use Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
@@ -19,7 +19,7 @@ class BraintreeView implements PaymentMethodViewInterface
     protected $formFactory;
 
     /**
-     * @var BraintreeConfigInterface
+     * @var BraintreeConfig
      */
     protected $config;
 
@@ -31,12 +31,12 @@ class BraintreeView implements PaymentMethodViewInterface
     /**
      *
      * @param FormFactoryInterface $formFactory
-     * @param BraintreeConfigInterface $config
+     * @param BraintreeConfig $config
      * @param PaymentTransactionProvider $paymentTransactionProvider
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        BraintreeConfigInterface $config,
+        BraintreeConfig $config,
         PaymentTransactionProvider $paymentTransactionProvider
     ) {
         $this->formFactory = $formFactory;

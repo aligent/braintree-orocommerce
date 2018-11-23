@@ -1,13 +1,13 @@
 <?php
 
-namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Charge;
+namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use Braintree\Transaction;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 
-class OperationCharge extends AbstractBraintreeOperation
+class ChargeOperation extends AbstractBraintreeOperation
 {
     // TODO: JOH 21/11/18 I'm not actually sure this class is used at all.  Determine
     // whether it can in fact be removed.
@@ -18,10 +18,9 @@ class OperationCharge extends AbstractBraintreeOperation
      */
     protected $transactionID;
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
+     * @inheritDoc
      */
     protected function preProcessOperation()
     {
@@ -37,10 +36,9 @@ class OperationCharge extends AbstractBraintreeOperation
         }
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+     * @inheritDoc
      */
     protected function postProcessOperation()
     {
@@ -82,10 +80,9 @@ class OperationCharge extends AbstractBraintreeOperation
         }
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+     * @inheritDoc
      */
     protected function preprocessDataToSend()
     {

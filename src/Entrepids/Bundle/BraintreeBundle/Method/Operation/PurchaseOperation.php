@@ -1,70 +1,236 @@
 <?php
 
-namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase;
+namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
-use BeSimple\SoapCommon\Type\KeyValue\Boolean;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
-use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
+use Braintree\Exception\NotFound;
+use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
+use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use phpDocumentor\Reflection\Types\Array_;
 
-/**
- * This is abstract class that contains generic methods for the purchase operation
- */
-abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
+
+class PurchaseOperation extends AbstractBraintreeOperation
 {
 
     /**
      *
-     * @var Array_
+     * @var String
      */
-    protected $customerData;
+    protected $nonce;
 
     /**
      *
-     * @var Array_
+     * @var boolean
      */
-    protected $billingData;
+    protected $submitForSettlement;
 
     /**
      *
-     * @var Array_
+     * @var boolean
      */
-    protected $shipingData;
+    protected $saveForLater;
 
     /**
+     * (non-PHPdoc)
      *
-     * @var unknown
+     * @see \Entrepids\Bundle\BraintreeBundle\Helper\AbstractBraintreePurchase::getResponseFromBraintree()
      */
-    protected $identifier;
+    protected function getResponseFromBraintree()
+    {
+        $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
+        $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
+        $saveForLater = false;
+
+        if (array_key_exists('credit_card_value', $transactionOptions)) {
+            $creditCardValue = $transactionOptions['credit_card_value'];
+        } else {
+            $creditCardValue = BraintreeMethodProvider::NEWCREDITCARD;
+        }
+
+        if (array_key_exists('saveForLaterUse', $transactionOptions)) {
+            $saveForLater = $transactionOptions['saveForLaterUse'];
+        }
+        $storeInVaultOnSuccess = false;
+        if ($saveForLater) {
+            $storeInVaultOnSuccess = true;
+        } else {
+            $storeInVaultOnSuccess = false;
+        }
+
+        if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
+            $token = $this->getTransactionCustomerToken($creditCardValue);
+        } else {
+            $token = null;
+        }
+
+        $merchAccountID = $this->config->getBoxMerchAccountId();
+        // ORO REVIEW:
+        // Please, see
+        // \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase::getResponseFromBraintree
+        // comments
+        try {
+            $customer = $this->adapter->findCustomer($this->customerData['id']);
+            $data = [
+                'amount' => $paymentTransaction->getAmount(),
+                'paymentMethodNonce' => $this->nonce,
+                // ORO REVIEW:
+                // What is the pupropose of this constant? Why it is not saved into php constant,
+                // or into specific configuration?
+                'channel' => 'OroCommerceBT_SP',
+                'customerId' => $this->customerData['id'],
+                'billing' => $this->billingData,
+                'shipping' => $this->shipingData,
+                'orderId' => $this->identifier,
+                'merchantAccountId' => $merchAccountID,
+                'options' => [
+                    'submitForSettlement' => $this->submitForSettlement,
+                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
+                ],
+            ];
+        } catch (NotFound $e) {
+            // ORO REVIEW:
+            // It really hard to understand what is the difference from `$data` variable in `try` block.
+            // Please, refactor without the copy paste.
+            // As I see `$this->customerData` cannot contain only an array.
+            // Is this block was tested?
+            $data = [
+                'amount' => $paymentTransaction->getAmount(),
+                'paymentMethodNonce' => $this->nonce,
+                'channel' => 'OroCommerceBT_SP',
+                'customer' => $this->customerData,
+                'billing' => $this->billingData,
+                'shipping' => $this->shipingData,
+                'orderId' => $this->identifier,
+                'merchantAccountId' => $merchAccountID,
+                'options' => [
+                    'submitForSettlement' => $this->submitForSettlement,
+                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
+                ],
+            ];
+        }
+        if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
+            $response = $this->adapter->sale($data);
+        } else {
+            $response = $this->adapter->creditCardsale($token, $data);
+        }
+        return $response;
+    }
 
     /**
+     * (non-PHPdoc)
      *
-     * @var Boolean
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::setDataToPreProcessResponse()
      */
-    protected $isCharge;
+    protected function setDataToPreProcessResponse()
+    {
+        $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
+        $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
+        $saveForLater = false;
+        if (array_key_exists('saveForLaterUse', $transactionOptions)) {
+            $saveForLater = $transactionOptions['saveForLaterUse'];
+        }
+
+        $this->saveForLater = $saveForLater;
+    }
 
     /**
+     * (non-PHPdoc)
      *
-     * @var Boolean
+     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\AbstractBraintreePurchase::processSuccess()
      */
-    protected $isAuthorize;
+    protected function processSuccess($response)
+    {
+        $transaction = $response->transaction;
+
+        if ($this->isCharge) {
+            $this->paymentTransaction->setAction(PaymentMethodInterface::PURCHASE)
+                ->setActive(false)
+                ->setSuccessful($response->success);
+        }
+
+        if ($this->isAuthorize) {
+            $transactionID = $transaction->id;
+            $this->paymentTransaction->setAction(PaymentMethodInterface::AUTHORIZE)
+                ->setActive(true)
+                ->setSuccessful($response->success);
+
+            $transactionOptions = $this->paymentTransaction->getTransactionOptions();
+            $transactionOptions['transactionId'] = $transactionID;
+            $this->paymentTransaction->setTransactionOptions($transactionOptions);
+        }
+
+        if ($this->saveForLater) {
+            $creditCardValuesResponse = $transaction->creditCard;
+            $token = $creditCardValuesResponse['token'];
+            $this->paymentTransaction->setResponse($creditCardValuesResponse);
+
+            $this->saveCustomerToken($token);
+        }
+        $this->paymentTransaction->getSourcePaymentTransaction()->setActive(false);
+    }
 
     /**
-     * This method is used to obtain response from Braintree
+     * (non-PHPdoc)
+     *
+     * @see \Entrepids\Bundle\BraintreeBundle\Helper\AbstractBraintreePurchase::preProcessPurchase()
      */
-    abstract protected function getResponseFromBraintree();
+    protected function preProcessOperation()
+    {
+        $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
+
+        $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
+        $this->nonce = $transactionOptions['nonce'];
+
+        $purchaseAction = $this->config->getPurchaseAction();
+
+        $this->submitForSettlement = $purchaseAction != PaymentMethodInterface::AUTHORIZE;
+        $this->isAuthorize = true;
+        $this->isCharge = $purchaseAction == PaymentMethodInterface::CHARGE;
+    }
 
     /**
-     * This method is used to set data success to Oro
+     * The method get the customer token to determine if they have any saved card
      */
-    abstract protected function processSuccess($response);
+    private function getTransactionCustomerToken($transaction)
+    {
+        $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findOneBy([
+            'transaction' => $transaction,
+        ]);
+
+        return $customerTokens->getToken();
+    }
+
 
     /**
-     * This method check or set variables needs to preprocess response
+     * This function save the customer and token to BraintreeCustomerToken
+     *
+     * @param string $token
      */
-    abstract protected function setDataToPreProcessResponse();
+    private function saveCustomerToken($token)
+    {
+        $customerToken = new BraintreeCustomerToken();
+
+        $entityID = $this->paymentTransaction->getEntityIdentifier();
+        $entity = $this->doctrineHelper->getEntityReference(
+            $this->paymentTransaction->getEntityClass(),
+            $this->paymentTransaction->getEntityIdentifier()
+        );
+        $propertyAccessor = $this->getPropertyAccessor();
+
+        try {
+            $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
+            $userName = $customerUser->getUsername();
+            $customerId = $customerUser->getId();
+            $customerToken->setCustomer($customerId);
+            $customerToken->setToken($token);
+            $paymentTransactionId = $this->paymentTransaction->getSourcePaymentTransaction()->getId();
+            $customerToken->setTransaction($paymentTransactionId);
+            $em = $this->doctrineHelper->getEntityManager(BraintreeCustomerToken::class);
+            $em->persist($customerToken);
+            $em->flush();
+        } catch (NoSuchPropertyException $e) {
+        }
+    }
 
     protected function saveResponseSuccessData($response)
     {
@@ -123,7 +289,7 @@ abstract class AbstractBraintreePurchase extends AbstractBraintreeOperation
         if (array_key_exists('credit_card_value', $transactionOptions)) {
             $creditCardValue = $transactionOptions['credit_card_value'];
         } else {
-            $creditCardValue = PurchaseData::NEWCREDITCARD;
+            $creditCardValue = BraintreeMethodProvider::NEWCREDITCARD;
         }
 
         $this->customerData = $this->getCustomerDataPayment($sourcepaymenttransaction);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Entrepids\Bundle\BraintreeBundle\Method\Operation\Capture;
+namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation;
@@ -11,7 +11,7 @@ use Oro\Bundle\ValidationBundle\Validator\Constraints\Integer;
 /**
  * This class capture the data of the payment
  */
-class OperationCapture extends AbstractBraintreeOperation
+class CaptureOperation extends AbstractBraintreeOperation
 {
 
     /**
@@ -26,10 +26,9 @@ class OperationCapture extends AbstractBraintreeOperation
      */
     protected $isAuthorize;
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preProcessOperation()
+     * @inheritDoc
      */
     protected function preProcessOperation()
     {
@@ -51,10 +50,9 @@ class OperationCapture extends AbstractBraintreeOperation
         $this->isAuthorize = ($purchaseAction == BasicPaymentActionsDataProvider::AUTHORIZE);
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::postProcessOperation()
+     * @inheritDoc
      */
     protected function postProcessOperation()
     {
@@ -97,10 +95,9 @@ class OperationCapture extends AbstractBraintreeOperation
         }
     }
 
+
     /**
-     * (non-PHPdoc)
-     *
-     * @see \Entrepids\Bundle\BraintreeBundle\Method\Operation\AbstractBraintreeOperation::preprocessDataToSend()
+     * @inheritDoc
      */
     protected function preprocessDataToSend()
     {
