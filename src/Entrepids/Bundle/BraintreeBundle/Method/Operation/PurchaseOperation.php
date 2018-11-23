@@ -15,6 +15,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class PurchaseOperation extends AbstractBraintreeOperation
 {
+    const CHANNEL_CODE = 'OroCommerce';
 
     /** @var String */
     protected $nonce;
@@ -84,57 +85,42 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $token = null;
         }
 
-        $merchAccountID = $this->config->getBoxMerchAccountId();
-        // ORO REVIEW:
-        // Please, see
-        // \Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\NewCreditCardPurchase::getResponseFromBraintree
-        // comments
+        $data = [
+            'amount' => $this->paymentTransaction->getAmount(),
+            'channel' => self::CHANNEL_CODE,
+            'billing' => $this->billingData,
+            'shipping' => $this->shipingData,
+            'orderId' => $this->identifier,
+            'merchantAccountId' => $this->config->getBoxMerchAccountId(),
+            'options' => [
+                'submitForSettlement' => $this->submitForSettlement,
+                'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
+            ],
+        ];
+
         try {
+            // Try to find the customer, if they aren't found then pass their entire
+            // details for vaulting.
             $customer = $this->adapter->findCustomer($this->customerData['id']);
-            $data = [
-                'amount' => $this->paymentTransaction->getAmount(),
-                // ORO REVIEW:
-                // What is the pupropose of this constant? Why it is not saved into php constant,
-                // or into specific configuration?
-                'channel' => 'OroCommerceBT_SP',
+            $data = array_merge($data, [
                 'customerId' => $this->customerData['id'],
-                'billing' => $this->billingData,
-                'shipping' => $this->shipingData,
-                'orderId' => $this->identifier,
-                'merchantAccountId' => $merchAccountID,
-                'options' => [
-                    'submitForSettlement' => $this->submitForSettlement,
-                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
-                ],
-            ];
+            ]);
         } catch (NotFound $e) {
-            // ORO REVIEW:
-            // It really hard to understand what is the difference from `$data` variable in `try` block.
-            // Please, refactor without the copy paste.
-            // As I see `$this->customerData` cannot contain only an array.
-            // Is this block was tested?
-            $data = [
-                'amount' => $this->paymentTransaction->getAmount(),
-                'channel' => 'OroCommerceBT_SP',
+            $data = array_merge($data, [
                 'customer' => $this->customerData,
-                'billing' => $this->billingData,
-                'shipping' => $this->shipingData,
-                'orderId' => $this->identifier,
-                'merchantAccountId' => $merchAccountID,
-                'options' => [
-                    'submitForSettlement' => $this->submitForSettlement,
-                    'storeInVaultOnSuccess' => $storeInVaultOnSuccess,
-                ],
-            ];
+            ]);
         }
+
         if ($this->nonce !== 'noValue') {
             $data['paymentMethodNonce'] = $this->nonce;
         }
+
         if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
             $response = $this->adapter->creditCardsale($token, $data);
         } else {
             $response = $this->adapter->sale($data);
         }
+
         return $response;
     }
 
