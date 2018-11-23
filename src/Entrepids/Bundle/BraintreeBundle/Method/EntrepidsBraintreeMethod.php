@@ -99,5 +99,4 @@ class EntrepidsBraintreeMethod implements
     {
         return $this->config->getPaymentMethodIdentifier();
     }
-
 }

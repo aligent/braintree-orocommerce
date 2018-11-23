@@ -15,13 +15,15 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class BraintreePaymentMethodFactory {
+class BraintreePaymentMethodFactory
+{
 
     /** @var Factory */
     protected $opFactory;
 
 
-    public function __construct(Factory $opFactory) {
+    public function __construct(Factory $opFactory)
+    {
         $this->opFactory = $opFactory;
     }
 

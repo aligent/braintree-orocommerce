@@ -28,7 +28,8 @@ abstract class AbstractBraintreeOperation implements OperationInterface
     protected $config;
 
 
-    public function setConfig(BraintreeConfig $config) {
+    public function setConfig(BraintreeConfig $config)
+    {
         $this->config = $config;
 
         $this->adapter = new BraintreeAdapter($this->config);
@@ -52,15 +53,21 @@ abstract class AbstractBraintreeOperation implements OperationInterface
     /**
      * This method is used to preprocess the information of the operation
      */
-    protected function preProcessOperation() {}
+    protected function preProcessOperation()
+    {
+    }
 
     /**
      * This method is used to postprecess the information of the operation
      */
-    protected function postProcessOperation() {}
+    protected function postProcessOperation()
+    {
+    }
 
     /**
      * This method is used when exists data to send to braintree core
      */
-    protected function preprocessDataToSend() {}
+    protected function preprocessDataToSend()
+    {
+    }
 }

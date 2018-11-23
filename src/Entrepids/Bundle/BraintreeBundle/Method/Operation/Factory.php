@@ -12,7 +12,6 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
-
 class Factory
 {
     private $operations;
@@ -33,5 +32,4 @@ class Factory
             return $this->operations[$transactionType];
         }
     }
-
 }

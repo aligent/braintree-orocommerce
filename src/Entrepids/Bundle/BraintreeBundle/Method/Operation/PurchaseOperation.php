@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 
-
 class PurchaseOperation extends AbstractBraintreeOperation
 {
     const CHANNEL_CODE = 'OroCommerce';
@@ -628,5 +627,4 @@ class PurchaseOperation extends AbstractBraintreeOperation
     {
         return $this->propertyAccessor;
     }
-
 }

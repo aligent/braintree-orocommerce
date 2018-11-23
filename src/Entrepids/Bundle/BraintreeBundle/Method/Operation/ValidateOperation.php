@@ -15,7 +15,8 @@ class ValidateOperation extends AbstractBraintreeOperation
     /** @var RequestStack */
     protected $requestStack;
 
-    public function __construct(RequestStack $requestStack) {
+    public function __construct(RequestStack $requestStack)
+    {
         $this->requestStack = $requestStack;
     }
 

@@ -26,5 +26,4 @@ class EntrepidsBraintreeBundle extends Bundle
     {
         $container->addCompilerPass(new OperationPass());
     }
-
 }

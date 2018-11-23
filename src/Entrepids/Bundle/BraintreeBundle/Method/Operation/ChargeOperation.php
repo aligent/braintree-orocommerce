@@ -79,5 +79,4 @@ class ChargeOperation extends AbstractBraintreeOperation
             ];
         }
     }
-
 }
