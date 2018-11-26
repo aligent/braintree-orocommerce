@@ -371,53 +371,18 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $sourcepaymenttransaction->getEntityIdentifier()
         );
         $propertyAccessor = $this->getPropertyAccessor();
+        $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
 
-        try {
-            $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
-        } catch (NoSuchPropertyException $e) {
-        }
-
-        $userName = $customerUser->getUsername();
-
-        $id = $customerUser->getId();
-        if ($this->isNullDataToSend($id)) {
-            $id = '';
-        }
-
-        $firstName = $customerUser->getFirstName();
-        if ($this->isNullDataToSend($firstName)) {
-            $firstName = '';
-        }
-        $lastName = $customerUser->getLastName();
-        if ($this->isNullDataToSend($lastName)) {
-            $lastName = '';
-        }
-        $company = $customerUser->getOrganization()->getName();
-        if ($this->isNullDataToSend($company)) {
-            $company = '';
-        }
-        $email = $customerUser->getEmail();
-        if ($this->isNullDataToSend($email)) {
-            $email = '';
-        }
-        $phone = 0;
-        $fax = 0;
-        $website = '';
-        if ($this->isNullDataToSend($website)) {
-            $website = '';
-        }
-        $customer = [
-            'id' => $id,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'company' => $company,
-            'email' => $email,
-            'phone' => $phone,
-            'fax' => $fax,
-            'website' => $website,
+        return [
+            'id' => $customerUser->getId() ?: '',
+            'firstName' => $customerUser->getFirstName() ?: '',
+            'lastName' => $customerUser->getLastName() ?: '',
+            'company' => $customerUser->getOrganization()->getName() ?: '',
+            'email' => $customerUser->getEmail() ?: '',
+            'phone' => '',
+            'fax' => '',
+            'website' => '',
         ];
-
-        return $customer;
     }
 
     /**
@@ -435,181 +400,21 @@ class PurchaseOperation extends AbstractBraintreeOperation
         );
         $propertyAccessor = $this->getPropertyAccessor();
 
-        try {
-            $orderAddress = $propertyAccessor->getValue($entity, $typeAddress);
-        } catch (NoSuchPropertyException $e) {
-        }
+        $orderAddress = $propertyAccessor->getValue($entity, $typeAddress);
 
-        $firstName = $this->setNameOrderAddress($orderAddress);
-
-        $lastName = $this->setLastName($orderAddress);
-
-        $company = $this->setCompany($orderAddress);
-
-        $streetAddress = $this->setStreet1($orderAddress);
-        $streetAddress2 = $this->setStreet2($orderAddress);
-        $locality = $this->setLocality($orderAddress);
-        $region = $this->setRegion($orderAddress);
-        $postalCode = $this->setCodePostal($orderAddress);
-        $countryName = $this->setCountryName($orderAddress);
-
-        $orderReturn = [
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'company' => $company,
-            'streetAddress' => $streetAddress,
-            'extendedAddress' => $streetAddress2,
-            'locality' => $locality,
-            'region' => $region,
-            'postalCode' => $postalCode,
-            'countryName' => $countryName,
+        return [
+            'firstName' => $orderAddress->getFirstName() ?: '',
+            'lastName' => $orderAddress->getLastName() ?: '',
+            'company' => $orderAddress->getOrganization() ?: '',
+            'streetAddress' => $orderAddress->getStreet() ?: '',
+            'extendedAddress' => $orderAddress->getStreet2() ?: '',
+            'locality' => $orderAddress->getCity() ?: '',
+            'region' => $orderAddress->getRegion()->getCode() ?: '',
+            'postalCode' => $orderAddress->getPostalCode() ?: '',
+            'countryName' => $orderAddress->getCountry()->getName() ?: '',
         ];
-
-        return $orderReturn;
     }
 
-    /**
-     * Set Country Name
-     *
-     * @param unknown $orderAddress
-     */
-    private function setCountryName($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getCountry()
-            ->getName())) {
-            return '';
-        }
-
-        return $orderAddress->getCountry()->getName();
-    }
-
-    /**
-     * Set Code Postal
-     *
-     * @param unknown $orderAddress
-     */
-    private function setCodePostal($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getPostalCode())) {
-            return '';
-        }
-
-        return $orderAddress->getPostalCode();
-    }
-
-    /**
-     * Set Region
-     *
-     * @param unknown $orderAddress
-     */
-    private function setRegion($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getRegion()
-            ->getCode())) {
-            return '';
-        }
-
-        return $orderAddress->getRegion()->getCode();
-    }
-
-    /**
-     * Set first name
-     *
-     * @param unknown $orderAddress
-     */
-    private function setNameOrderAddress($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getFirstName())) {
-            return '';
-        }
-
-        return $orderAddress->getFirstName();
-    }
-
-    /**
-     * Set last name
-     *
-     * @param unknown $orderAddress
-     */
-    private function setLastName($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getLastName())) {
-            return '';
-        }
-
-        return $orderAddress->getLastName();
-    }
-
-    /**
-     * set Company
-     *
-     * @param unknown $orderAddress
-     */
-    private function setCompany($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getOrganization())) {
-            return '';
-        }
-
-        return $orderAddress->getOrganization();
-    }
-
-    /**
-     * Set Street address 1
-     *
-     * @param unknown $orderAddress
-     */
-    private function setStreet1($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getStreet())) {
-            return '';
-        }
-
-        return $orderAddress->getStreet();
-    }
-
-    /**
-     * Set Street address 2
-     *
-     * @param unknown $orderAddress
-     */
-    private function setStreet2($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getStreet2())) {
-            return '';
-        }
-
-        return $orderAddress->getStreet2();
-    }
-
-    /**
-     * Set Locality
-     *
-     * @param unknown $orderAddress
-     */
-    private function setLocality($orderAddress)
-    {
-        if ($this->isNullDataToSend($orderAddress->getCity())) {
-            return '';
-        }
-
-        return $orderAddress->getCity();
-    }
-
-    /**
-     * This is function to check if data is or not null
-     *
-     * @param unknown $data
-     * @return boolean
-     */
-    private function isNullDataToSend($data)
-    {
-        if ($data == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * This function add error to flash bag
