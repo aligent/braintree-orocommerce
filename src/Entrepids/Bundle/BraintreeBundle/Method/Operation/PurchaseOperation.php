@@ -79,7 +79,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
         $storeInVaultOnSuccess = $saveForLater;
 
         if ($creditCardValue != BraintreeMethodProvider::NEWCREDITCARD) {
-            $token = $this->getTransactionCustomerToken($creditCardValue);
+            $token = $this->getCustomerToken($creditCardValue, $this->customerData['id']);
         } else {
             $token = null;
         }
@@ -171,7 +171,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $token = $creditCardValuesResponse['token'];
             $this->paymentTransaction->setResponse($creditCardValuesResponse);
 
-            $this->saveCustomerToken($token);
+            $this->saveCustomerToken($token, $creditCardValuesResponse);
         }
         $this->paymentTransaction->getSourcePaymentTransaction()->setActive(false);
     }
@@ -198,13 +198,15 @@ class PurchaseOperation extends AbstractBraintreeOperation
     /**
      * The method get the customer token to determine if they have any saved card
      */
-    private function getTransactionCustomerToken($transaction)
+    private function getCustomerToken($tokenId, $customerId)
     {
-        $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findOneBy([
-            'transaction' => $transaction,
-        ]);
-
-        return $customerTokens->getToken();
+        $customerToken = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findOneBy(
+            [
+                'id' => $tokenId,
+                'customer' => $customerId
+            ]
+        );
+        return $customerToken->getToken();
     }
 
 
@@ -213,31 +215,37 @@ class PurchaseOperation extends AbstractBraintreeOperation
      *
      * @param string $token
      */
-    private function saveCustomerToken($token)
+    private function saveCustomerToken($token, $ccValues)
     {
         if ($token === null) {
             return;
         }
 
-        $customerToken = new BraintreeCustomerToken();
+        $ccDisplayText = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
+            '{{brand}}' => $ccValues['cardType'],
+            '{{last4}}' => $ccValues['last4'],
+            '{{month}}' => $ccValues['expirationMonth'],
+            '{{year}}' => $ccValues['expirationYear'],
+        ]);
 
-        $entityID = $this->paymentTransaction->getEntityIdentifier();
-        $entity = $this->doctrineHelper->getEntityReference(
-            $this->paymentTransaction->getEntityClass(),
-            $this->paymentTransaction->getEntityIdentifier()
-        );
-        $propertyAccessor = $this->getPropertyAccessor();
+        $tokenObj = new BraintreeCustomerToken();
 
         try {
+            $entityID = $this->paymentTransaction->getEntityIdentifier();
+            $entity = $this->doctrineHelper->getEntityReference(
+                $this->paymentTransaction->getEntityClass(),
+                $this->paymentTransaction->getEntityIdentifier()
+            );
+            $propertyAccessor = $this->getPropertyAccessor();
             $customerUser = $propertyAccessor->getValue($entity, 'customerUser');
-            $userName = $customerUser->getUsername();
             $customerId = $customerUser->getId();
-            $customerToken->setCustomer($customerId);
-            $customerToken->setToken($token);
-            $paymentTransactionId = $this->paymentTransaction->getSourcePaymentTransaction()->getId();
-            $customerToken->setTransaction($paymentTransactionId);
+
+            $tokenObj->setCustomer($customerId)
+                ->setToken($token)
+                ->setDisplayText($ccDisplayText);
+
             $em = $this->doctrineHelper->getEntityManager(BraintreeCustomerToken::class);
-            $em->persist($customerToken);
+            $em->persist($tokenObj);
             $em->flush();
         } catch (NoSuchPropertyException $e) {
         }

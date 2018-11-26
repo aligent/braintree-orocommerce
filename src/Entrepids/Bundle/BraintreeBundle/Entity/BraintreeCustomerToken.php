@@ -28,13 +28,10 @@ class BraintreeCustomerToken
     private $token;
 
     /**
-     * ORO_REVIEW:
-     * Question about this field is unanswered. We discussed in in jira.
-     * Please, see \Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType::getCreditCardsSavedForCustomer comments
-     *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(name="display_text", type="string", length=255)
      */
-    private $transaction;
+    private $displayText;
+
 
     /**
      * Get id
@@ -99,22 +96,24 @@ class BraintreeCustomerToken
     }
 
     /**
-     * Set Transaction
+     * Set Display string
      *
-     * @param integer $transaction
+     * @param string $displayText
      */
-    public function setTransaction($transaction)
+    public function setDisplayText($displayText)
     {
-        $this->transaction = $transaction;
+        $this->displayText = $displayText;
 
         return $this;
     }
 
     /**
-     * @return integer
+     * Get display string for card
+     *
+     * @return string
      */
-    public function getTransaction()
+    public function getDisplayText()
     {
-        return $this->transaction;
+        return $this->displayText;
     }
 }

@@ -223,29 +223,12 @@ class CreditCardType extends AbstractType
 
         $countCreditCards = 0;
 
+        /** @var BraintreeCustomerToken $customerToken */
         foreach ($this->customerTokens as $customerToken) {
-            $paymentID = $customerToken->getTransaction();
-            $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
-
-            // ORO REVIEW:
-            // Why we cannot store information about card in BraintreeCustomerToken?
-            // I believe that it was created for it.
-            // Application can have a lot of transaction, and it can be performance bottleneck.
-            $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
-                'sourcePaymentTransaction' => $paymentID,
-            ]);
-
-            $response = $paymentTransaction->getResponse();
-            $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
-                '{{brand}}' => $response['cardType'],
-                '{{last4}}' => $response['last4'],
-                '{{month}}' => $response['expirationMonth'],
-                '{{year}}' => $response['expirationYear'],
-            ]);
-            $creditCards[$valueCreditCard] = $paymentID;
+            $creditCards[$customerToken->getDisplayText()] = $customerToken->getId();
             $countCreditCards++;
             if ($countCreditCards == 1) {
-                $this->selectedCard = $paymentID;
+                $this->selectedCard = $customerToken->getId();
             }
         }
 
