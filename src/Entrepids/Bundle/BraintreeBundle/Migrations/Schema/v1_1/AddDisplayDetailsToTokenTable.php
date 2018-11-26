@@ -11,6 +11,12 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AddDisplayDetailsToTokenTable implements Migration
 {
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('braintree_customer_token');

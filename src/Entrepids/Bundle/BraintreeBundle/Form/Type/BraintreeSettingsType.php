@@ -94,10 +94,10 @@ class BraintreeSettingsType extends AbstractType
      * @throws InvalidOptionsException
      * @throws MissingOptionsException
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $a = 1;
         $builder->add('braintreeLabel', LocalizedFallbackValueCollectionType::class, [
             'label' => 'entrepids.braintree.settings.credit_card_labels.label',
             'required' => true,
@@ -201,7 +201,6 @@ class BraintreeSettingsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $a = 1;
         $resolver->setDefaults([
             'data_class' => BraintreeSettings::class,
         ]);
