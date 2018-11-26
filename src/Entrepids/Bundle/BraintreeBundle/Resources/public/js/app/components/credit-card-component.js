@@ -103,15 +103,15 @@ define(function (require) {
                     fields: {
                         number: {
                             selector: '#card-number',
-                            placeholder: '1111 1111 1111 1111'
+                            placeholder: 'Card Number'
                         },
                         cvv: {
                             selector: '#cvv',
-                            placeholder: '123'
+                            placeholder: 'CVV'
                         },
                         expirationDate: {
                             selector: '#expiration-date',
-                            placeholder: '10 / ' + ((new Date).getFullYear() + 2)
+                            placeholder: 'MM / YY'
                         }
                     }
                 }, function (err, hostedFieldsInst) {
