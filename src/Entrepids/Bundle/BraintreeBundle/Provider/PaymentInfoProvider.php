@@ -5,60 +5,26 @@ namespace Entrepids\Bundle\BraintreeBundle\Provider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Entity\Repository\PaymentTransactionRepository;
-use Psr\Log\LoggerAwareTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class PaymentInfoProvider
 {
 
-    use LoggerAwareTrait;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
-
-    /**
-     * @var DoctrineHelper
-     */
+    /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /**
-     * @var string
-     */
-    protected $paymentTransactionClass;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /**
-     *
      * @param DoctrineHelper $doctrineHelper
-     * @param TokenStorageInterface $tokenStorage
-     * @param EventDispatcherInterface $dispatcher
-     * @param unknown $paymentTransactionClass
      * @param TranslatorInterface $translator
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
-        TokenStorageInterface $tokenStorage,
-        EventDispatcherInterface $dispatcher,
-        $paymentTransactionClass,
         TranslatorInterface $translator
     ) {
         $this->doctrineHelper = $doctrineHelper;
-        $this->paymentTransactionClass = $paymentTransactionClass;
-        $this->dispatcher = $dispatcher;
-        $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
     }
 
@@ -69,62 +35,21 @@ class PaymentInfoProvider
      */
     public function getPaymentInfo($entity)
     {
-        return $this->getPaymentData($entity);
-    }
+        $transaction = $this->fetchEntityTransaction($entity);
 
-    /**
-     * this method return the detail of order in Braintree to show
-     *
-     * @param unknown $entity
-     */
-    protected function getPaymentData($entity)
-    {
-        $className = $this->doctrineHelper->getEntityClass($entity);
-        $identifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-        /**
-         * @var PaymentTransactionRepository $repository
-         */
-        $repository = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class);
-
-        /**
-         * @var PaymentTransaction $transaction
-         */
-        $transaction = $repository->findOneBy([
-            'entityClass' => $className,
-            'entityIdentifier' => $identifier,
-        ]);
-
-        if (!$transaction) {
-            return '';
-        } else {
+        if ($transaction) {
             $transactionOptions = $transaction->getTransactionOptions();
-            $creditCardDetails = null;
             if (isset($transactionOptions['creditCardDetails'])) {
-                $creditCardDetails = $transactionOptions['creditCardDetails'];
-            }
-            if ($creditCardDetails != null) {
-                $object = unserialize($creditCardDetails);
-                $cardType = $object->cardType;
-                $last4 = $object->last4;
-                $debit = $object->debit;
-
-                $typeCard = 'Credit';
-                if ($debit == 'Yes') {
-                    $typeCard = 'Debit';
-                }
-                $valueShow = $this->translator->trans('entrepids.braintree.order_view.info_detail', [
-                    '{{brand}}' => $cardType,
-                    '{{type}}' => $typeCard,
-                    '{{last4}}' => $last4,
+                $ccDetails = unserialize($transactionOptions['creditCardDetails']);
+                $translated = $this->translator->trans('entrepids.braintree.order_view.info_detail', [
+                    '{{brand}}' => $ccDetails->cardType,
+                    '{{type}}' => ($ccDetails->debit == 'Yes'  ? 'Debit' : 'Credit'),
+                    '{{last4}}' => $ccDetails->last4,
                 ]);
-
-                return $valueShow;
-            } else {
-                return $this->translator->trans('entrepids.braintree.order_view.info_nodata');
+                return $translated;
             }
         }
-
-        return '';
+        return $this->translator->trans('entrepids.braintree.order_view.info_nodata');
     }
 
     /**
@@ -133,34 +58,35 @@ class PaymentInfoProvider
      */
     public function isApplicable($entity)
     {
-        $className = $this->doctrineHelper->getEntityClass($entity);
-        $identifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-        /**
-         * @var PaymentTransactionRepository $repository
-         */
-        $repository = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class);
-        $methods = $repository->getPaymentMethods($className, [
-            $identifier,
-        ]);
-        /**
-         * @var PaymentTransaction $transaction
-         */
-        $transaction = $repository->findOneBy([
-            'entityClass' => $className,
-            'entityIdentifier' => $identifier,
-        ]);
+        $transaction = $this->fetchEntityTransaction($entity);
 
-        if (!$transaction) {
-            return false;
-        } else {
+        if ($transaction) {
             $transactionOptions = $transaction->getTransactionOptions();
-            $isBraintreeEntrepids = null;
             if (isset($transactionOptions['isBraintreeEntrepids'])) {
-                $isBraintreeEntrepids = $transactionOptions['isBraintreeEntrepids'];
-                return true;
+                return $transactionOptions['isBraintreeEntrepids'];
             }
         }
 
         return false;
+    }
+
+
+    /**
+     * @param $entity
+     * @return PaymentTransaction
+     */
+    private function fetchEntityTransaction($entity): PaymentTransaction
+    {
+        $className = $this->doctrineHelper->getEntityClass($entity);
+        $identifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
+        /** @var PaymentTransactionRepository $repository */
+        $repository = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class);
+
+        /** @var PaymentTransaction $transaction */
+        $transaction = $repository->findOneBy([
+            'entityClass' => $className,
+            'entityIdentifier' => $identifier,
+        ]);
+        return $transaction;
     }
 }
