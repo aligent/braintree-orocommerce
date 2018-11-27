@@ -1,13 +1,12 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config;
 
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeForm\BraintreeFormInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
 // sacar la BraintreeFormInterface
-class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
-    BraintreeConfigInterface
+class BraintreeConfig extends AbstractParameterBagPaymentConfig
 {
 
     const PAYMENT_ACTION_KEY = 'payment_action';
@@ -56,7 +55,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getAllowedCreditCards()
     {
-        return (array) $this->get(self::ALLOWED_CREDIT_CARD_TYPES_KEY);
+        return (array)$this->get(self::ALLOWED_CREDIT_CARD_TYPES_KEY);
     }
 
     /**
@@ -64,7 +63,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getAllowedEnvironmentTypes()
     {
-        return (string) $this->get(self::ENVIRONMENT_TYPE);
+        return (string)$this->get(self::ENVIRONMENT_TYPE);
     }
 
     /**
@@ -72,7 +71,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getBoxMerchId()
     {
-        return (string) $this->get(self::MERCH_ID_KEY);
+        return (string)$this->get(self::MERCH_ID_KEY);
     }
 
     /**
@@ -80,7 +79,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getBoxMerchAccountId()
     {
-        return (string) $this->get(self::MERCH_ACCOUNT_ID_KEY);
+        return (string)$this->get(self::MERCH_ACCOUNT_ID_KEY);
     }
 
     /**
@@ -88,7 +87,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getBoxPublicKey()
     {
-        return (string) $this->get(self::PUBLIC_KEY_KEY);
+        return (string)$this->get(self::PUBLIC_KEY_KEY);
     }
 
     /**
@@ -96,7 +95,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getBoxPrivateKey()
     {
-        return (string) $this->get(self::PRIVATE_KEY_KEY);
+        return (string)$this->get(self::PRIVATE_KEY_KEY);
     }
 
     /**
@@ -104,7 +103,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function getPurchaseAction()
     {
-        return (string) $this->get(self::PAYMENT_ACTION_KEY);
+        return (string)$this->get(self::PAYMENT_ACTION_KEY);
     }
 
     /**
@@ -112,7 +111,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function isEnableSaveForLater()
     {
-        return (string) $this->get(self::SAVE_FOR_LATER_KEY);
+        return (string)$this->get(self::SAVE_FOR_LATER_KEY);
     }
 
     /**
@@ -120,7 +119,6 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements
      */
     public function isZeroAmountAuthorizationEnabled()
     {
-        return (bool) $this->get(self::ZERO_AMOUNT_AUTHORIZATION_KEY);
+        return (bool)$this->get(self::ZERO_AMOUNT_AUTHORIZATION_KEY);
     }
-
 }

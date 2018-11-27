@@ -11,11 +11,7 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\Factory\BraintreePaymentMethodFactory'
         public: false
         arguments:
-            - '@oro_entity.doctrine_helper'
-            - '@property_accessor' 
-            - '@session'
-            - '@translator' 
-            - '@entrepids_braintree.method.purchase.purchase_data'                  
+            - '@entrepids_braintree.method.operation.factory'
 
     entrepids_braintree.factory.method_view.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\View\Factory\BraintreePaymentMethodViewFactory'

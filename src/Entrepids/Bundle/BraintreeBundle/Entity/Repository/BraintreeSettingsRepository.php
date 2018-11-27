@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;

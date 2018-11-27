@@ -9,12 +9,12 @@ class BasicEnvironmentDataProvider implements EnvironmentDataProvider
      * @internal
      */
     const SANDBOX = 'sandbox';
-    
+
     /**
      * @internal
      */
     const PRODUCTION = 'production';
-    
+
     /**
      * @return string[]
      */

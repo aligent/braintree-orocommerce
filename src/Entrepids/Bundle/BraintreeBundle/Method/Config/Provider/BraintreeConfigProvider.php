@@ -4,7 +4,7 @@ namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeSettings;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -21,7 +21,7 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     protected $configFactory;
 
     /**
-     * @var BraintreeConfigInterface[]
+     * @var BraintreeConfig[]
      */
     protected $configs;
 
@@ -29,15 +29,15 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
      * @var LoggerInterface
      */
     protected $logger;
-    
+
     /**
      * @var string
      */
     protected $type;
 
     /**
-     * @param ManagerRegistry                  $doctrine
-     * @param LoggerInterface                  $logger
+     * @param ManagerRegistry $doctrine
+     * @param LoggerInterface $logger
      * @param BraintreeConfigFactoryInterface $configFactory
      */
     public function __construct(
@@ -99,7 +99,7 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     {
         return $this->type;
     }
-    
+
     /**
      * @return BraintreeSettings[]
      */

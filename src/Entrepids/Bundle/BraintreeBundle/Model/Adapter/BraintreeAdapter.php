@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Model\Adapter;
 
 use Braintree\ClientToken;
@@ -6,7 +7,8 @@ use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\Customer;
 use Braintree\Transaction;
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
+use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider;
 
 /**
  * Class BraintreeAdapter
@@ -24,7 +26,7 @@ class BraintreeAdapter
      *
      * @param Config $config
      */
-    public function __construct(BraintreeConfigInterface $config)
+    public function __construct(BraintreeConfig $config)
     {
         $this->config = $config;
     }
@@ -36,11 +38,14 @@ class BraintreeAdapter
      */
     public function initCredentials()
     {
+        // TODO: JOH 22/11/19 I'm reasonably sure the only possible values of getAllowedEnvironmentTypes
+        // _are_ the two constants, so this could probably be a straight assignment.
+        //  getAllowedEnvironmentTypes is pretty poorly named since it returnes the selected environment.
         $environmentSelected = $this->config->getAllowedEnvironmentTypes();
-        if (strcmp($environmentSelected, 'Production') == 0 || strcmp($environmentSelected, 'production') == 0) {
-            $this->environment('production');
+        if ($environmentSelected == BasicEnvironmentDataProvider::PRODUCTION) {
+            $this->environment(BasicEnvironmentDataProvider::PRODUCTION);
         } else {
-            $this->environment('sandbox');
+            $this->environment(BasicEnvironmentDataProvider::SANDBOX);
         }
         $this->merchantId($this->config->getBoxMerchId());
         $this->publicKey($this->config->getBoxPublicKey());
@@ -102,7 +107,7 @@ class BraintreeAdapter
     {
         return Customer::find($customerId);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -112,7 +117,7 @@ class BraintreeAdapter
     {
         return Configuration::merchantId($value);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -122,7 +127,7 @@ class BraintreeAdapter
     {
         return Configuration::publicKey($value);
     }
-    
+
     /**
      *
      * @param string|null $value
@@ -132,7 +137,7 @@ class BraintreeAdapter
     {
         return Configuration::privateKey($value);
     }
-    
+
     /**
      *
      * @param string|null $value

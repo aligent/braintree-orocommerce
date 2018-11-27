@@ -1,13 +1,18 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Form\Type;
 
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
+use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseData\PurchaseData;
+use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -35,7 +40,7 @@ class CreditCardType extends AbstractType
     protected $tokenStorage;
 
     protected $paymentsTransactions;
-    
+
     /**
      *
      * @var unknown
@@ -82,57 +87,52 @@ class CreditCardType extends AbstractType
     {
         $builder->add(
             'payment_method_nonce',
-            'hidden',
+            HiddenType::class,
             [
-            'mapped' => true,
-            'attr' => [
-                'data-gateway' => true]
+                'mapped' => true,
+                'attr' => [
+                    'data-gateway' => true,
+                ],
             ]
         );
-        
-        $creditsCards = [];
-        $creditsCards = $this->getCreditCardsSavedForCustomer();
-        $creditsCardsCount = count($creditsCards);
-        if ($creditsCardsCount > 1) {
-            $builder = $this->setCreditsCard($builder, $creditsCards);
+
+        $creditCards = $this->getCreditCardsSavedForCustomer();
+        $creditCardsCount = count($creditCards);
+        if ($creditCardsCount > 1) {
+            $builder = $this->setCreditCards($builder, $creditCards);
         } else {
             $builder = $this->setNewCreditCard($builder);
         }
-        
+
         if ($options['zeroAmountAuthorizationEnabled']) {
-            $builder->add('save_for_later', 'checkbox', [
+            $builder->add('save_for_later', CheckboxType::class, [
                 'required' => false,
                 'label' => 'entrepids.braintree.settings.save_for_later.label',
                 'mapped' => false,
                 'data' => false,
                 'attr' => [
-                    'data-save-for-later' => true
-                ]
+                    'data-save-for-later' => true,
+                ],
             ]);
         }
-        
+
+        // TODO: Shouldn't this fail hard instead of just writing invalid data into the hidden field?
+        $braintreeClientToken = '';
         if ($options['braintreeConfig'] !== null) {
-            $config = $options['braintreeConfig'];
-            $this->adapter = new BraintreeAdapter($config);
+            $this->adapter = new BraintreeAdapter($options['braintreeConfig']);
             $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
-            
-            $builder->add('braintree_client_token', 'hidden', [
-                'mapped' => true,
-                'data' => $braintreeClientToken
-            ]);
-        } else {
-            $builder->add('braintree_client_token', 'hidden', [
-                'mapped' => true,
-                'data' => 'basura'
-            ]);
         }
-        
-        $builder->add('credit_card_value', 'hidden', [
+        $builder->add('braintree_client_token', HiddenType::class, [
+            'mapped' => true,
+            'data' => $braintreeClientToken,
+        ]);
+
+        $builder->add('credit_card_value', HiddenType::class, [
             'mapped' => true,
             'attr' => [
-                'data-gateway' => true
-            ]
+                'data-gateway' => true,
+            ],
         ]);
     }
 
@@ -186,19 +186,19 @@ class CreditCardType extends AbstractType
     protected function getLoggedCustomerUser()
     {
         $token = $this->tokenStorage->getToken();
-        if (! $token) {
+        if (!$token) {
             return null;
         }
-        
+
         $user = $token->getUser();
-        
+
         if ($user instanceof CustomerUser) {
             return $user;
         }
-        
+
         return null;
     }
-    
+
     /**
      * The method get the customer token to determine if they have any saved card
      */
@@ -206,10 +206,9 @@ class CreditCardType extends AbstractType
     {
         $customerUser = $this->getLoggedCustomerUser();
         $customerTokens = $this->doctrineHelper->getEntityRepository(BraintreeCustomerToken::class)->findBy([
-            'customer' => $customerUser
-            
+            'customer' => $customerUser,
         ]);
-        
+
         $this->customerTokens = $customerTokens;
     }
 
@@ -220,70 +219,53 @@ class CreditCardType extends AbstractType
      */
     private function getCreditCardsSavedForCustomer()
     {
-        $creditsCards = [];
-        
-        $countCreditCards = 0;
-        
-        foreach ($this->customerTokens as $customerToken) {
-            $paymentID = $customerToken->getTransaction();
-            $em = $this->doctrineHelper->getEntityManager(PaymentTransaction::class);
+        $creditCards = [];
 
-            // ORO REVIEW:
-            // Why we cannot store information about card in BraintreeCustomerToken?
-            // I believe that it was created for it.
-            // Application can have a lot of transaction, and it can be performance bottleneck.
-            $paymentTransaction = $this->doctrineHelper->getEntityRepository(PaymentTransaction::class)->findOneBy([
-                'sourcePaymentTransaction' => $paymentID
-            ]);
-            
-            $response = $paymentTransaction->getResponse();
-            $valueCreditCard = $this->translator->trans('entrepids.braintree.braintreeflow.existing_card', [
-                '{{brand}}' => $response['cardType'],
-                '{{last4}}' => $response['last4'],
-                '{{month}}' => $response['expirationMonth'],
-                '{{year}}' => $response['expirationYear']
-            ]);
-            $creditsCards[$paymentID] = $valueCreditCard;
-            $countCreditCards ++;
+        $countCreditCards = 0;
+
+        /** @var BraintreeCustomerToken $customerToken */
+        foreach ($this->customerTokens as $customerToken) {
+            $creditCards[$customerToken->getDisplayText()] = $customerToken->getId();
+            $countCreditCards++;
             if ($countCreditCards == 1) {
-                $this->selectedCard = $paymentID;
+                $this->selectedCard = $customerToken->getId();
             }
         }
-        
-        $creditsCards['newCreditCard'] = 'entrepids.braintree.braintreeflow.use_different_card';
-        return $creditsCards;
+
+        $useDifferentCard = $this->translator->trans('entrepids.braintree.braintreeflow.use_different_card');
+        $creditCards[$useDifferentCard] = BraintreeMethodProvider::NEWCREDITCARD;
+
+        return $creditCards;
     }
 
     /**
      *
      * @param FormBuilderInterface $builder
      */
-    private function setCreditsCard(FormBuilderInterface $builder, $creditsCards)
+    private function setCreditCards(FormBuilderInterface $builder, $creditCards)
     {
         $builder->add(
             'credit_cards_saved',
             ChoiceType::class,
             [
-            'required' => true,
-            'choices' => $creditsCards,
-            'choices_as_values' => false,
-            'choice_value' => function ($choice) {
-                return $choice;
-            },
-            'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
-            'attr' => [
-                'data-credit-cards-saved' => true]
+                'required' => true,
+                'choices' => $creditCards,
+                'label' => 'entrepids.braintree.braintreeflow.use_authorized_card',
+                'attr' => [
+                    'data-credit-cards-saved' => true,
+                ],
             ]
         );
-        
-        $builder->add('credit_card_first_value', 'hidden', [
+
+        $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
             'data' => $this->selectedCard,
             'attr' => [
-                'data-credit_card_first_value' => $this->selectedCard
-            ]
+                'data-credit_card_first_value' => $this->selectedCard,
+            ],
         ]);
-        
+
+
         return $builder;
     }
 
@@ -293,14 +275,14 @@ class CreditCardType extends AbstractType
      */
     private function setNewCreditCard(FormBuilderInterface $builder)
     {
-        $builder->add('credit_card_first_value', 'hidden', [
+        $builder->add('credit_card_first_value', HiddenType::class, [
             'mapped' => true,
-            'data' => 'newCreditCard',
+            'data' => BraintreeMethodProvider::NEWCREDITCARD,
             'attr' => [
-                'data-credit_card_first_value' => 'newCreditCard'
-            ]
+                'data-credit_card_first_value' => BraintreeMethodProvider::NEWCREDITCARD,
+            ],
         ]);
-        
+
         return $builder;
     }
 }

@@ -28,3 +28,40 @@ services:
         tags:
             - { name: oro_payment.payment_method_view_provider }
 
+    entrepids_braintree.method.operation.factory:
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\Factory
+
+    entrepids_braintree.method.operation:
+        abstract: true
+        arguments: []
+
+    entrepids_braintree.method.operation.capture:
+        parent: entrepids_braintree.method.operation
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\CaptureOperation
+        tags:
+            - { name: 'braintree.operation', operation: 'capture' }
+
+    entrepids_braintree.method.operation.charge:
+        parent: entrepids_braintree.method.operation
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\ChargeOperation
+        tags:
+            - { name: 'braintree.operation', operation: 'charge' }
+
+    entrepids_braintree.method.operation.purchase:
+        parent: entrepids_braintree.method.operation
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\PurchaseOperation
+        arguments:
+            - '@session'
+            - '@translator'
+            - '@property_accessor'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: 'braintree.operation', operation: 'purchase' }
+
+    entrepids_braintree.method.operation.validate:
+        parent: entrepids_braintree.method.operation
+        class: Entrepids\Bundle\BraintreeBundle\Method\Operation\ValidateOperation
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: 'braintree.operation', operation: 'validate' }

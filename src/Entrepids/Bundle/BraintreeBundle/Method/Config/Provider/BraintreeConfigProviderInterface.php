@@ -2,18 +2,18 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Provider;
 
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 
 interface BraintreeConfigProviderInterface
 {
     /**
-     * @return BraintreeConfigInterface[]
+     * @return BraintreeConfig[]
      */
     public function getPaymentConfigs();
 
     /**
      * @param string $identifier
-     * @return BraintreeConfigInterface|null
+     * @return BraintreeConfig|null
      */
     public function getPaymentConfig($identifier);
 

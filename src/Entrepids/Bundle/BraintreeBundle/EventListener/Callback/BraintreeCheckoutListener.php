@@ -1,7 +1,7 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\EventListener\Callback;
 
-use Entrepids\Bundle\BraintreeBundle\Method\EntrepidsBraintreeMethod;
 use Oro\Bundle\PaymentBundle\Event\AbstractCallbackEvent;
 use Oro\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -35,15 +35,15 @@ class BraintreeCheckoutListener
     public function onError(AbstractCallbackEvent $event)
     {
         $paymentTransaction = $event->getPaymentTransaction();
-        
-        if (! $paymentTransaction) {
+
+        if (!$paymentTransaction) {
             return;
         }
 
-        // ORO REVIEW:
-        // Without checking that the payment method is braintree, this code can broke other payment methods.
-        // Please, see \Oro\Bundle\PayPalBundle\EventListener\Callback\PayflowExpressCheckoutListener::onError
+        if (false === $this->paymentMethodProvider->hasPaymentMethod($paymentTransaction->getPaymentMethod())) {
+            return;
+        }
+
         $paymentTransaction->setSuccessful(false)->setActive(false);
     }
-
 }

@@ -8,7 +8,7 @@ interface CardTypesDataProviderInterface
      * @return string[]
      */
     public function getCardTypes();
-    
+
     /**
      * @return string[]
      */

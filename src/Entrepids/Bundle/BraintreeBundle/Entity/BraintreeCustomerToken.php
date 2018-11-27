@@ -16,26 +16,23 @@ class BraintreeCustomerToken
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
     private $customer;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $token;
-    
+
     /**
-     * ORO_REVIEW:
-     * Question about this field is unanswered. We discussed in in jira.
-     * Please, see \Entrepids\Bundle\BraintreeBundle\Form\Type\CreditCardType::getCreditCardsSavedForCustomer comments
-     *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(name="display_text", type="string", length=255)
      */
-    private $transaction;
-    
+    private $displayText;
+
+
     /**
      * Get id
      *
@@ -45,7 +42,7 @@ class BraintreeCustomerToken
     {
         return $this->id;
     }
-    
+
     /**
      * @param int $id
      *
@@ -54,10 +51,10 @@ class BraintreeCustomerToken
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
-    
+
     /**
      * Set Customer
      *
@@ -66,10 +63,10 @@ class BraintreeCustomerToken
     public function setCustomer($customer)
     {
         $this->customer = $customer;
-        
+
         return $this;
     }
-    
+
     /**
      * @return integer
      */
@@ -77,7 +74,7 @@ class BraintreeCustomerToken
     {
         return $this->customer;
     }
-    
+
     /**
      * Set token
      *
@@ -86,10 +83,10 @@ class BraintreeCustomerToken
     public function setToken($token)
     {
         $this->token = $token;
-        
+
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -97,24 +94,26 @@ class BraintreeCustomerToken
     {
         return $this->token;
     }
-    
+
     /**
-     * Set Transaction
+     * Set Display string
      *
-     * @param integer $transaction
+     * @param string $displayText
      */
-    public function setTransaction($transaction)
+    public function setDisplayText($displayText)
     {
-        $this->transaction = $transaction;
-    
+        $this->displayText = $displayText;
+
         return $this;
     }
-    
+
     /**
-     * @return integer
+     * Get display string for card
+     *
+     * @return string
      */
-    public function getTransaction()
+    public function getDisplayText()
     {
-        return $this->transaction;
+        return $this->displayText;
     }
 }

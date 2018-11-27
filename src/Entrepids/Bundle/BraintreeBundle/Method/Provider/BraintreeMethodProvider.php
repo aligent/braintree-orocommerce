@@ -2,15 +2,19 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Provider;
 
-use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\Provider\BraintreeConfigProviderInterface;
-use Entrepids\Bundle\BraintreeBundle\Method\Factory\BraintreePaymentMethodFactoryInterface;
+use Entrepids\Bundle\BraintreeBundle\Method\Factory\BraintreePaymentMethodFactory;
 use Oro\Bundle\PaymentBundle\Method\Provider\AbstractPaymentMethodProvider;
 
 class BraintreeMethodProvider extends AbstractPaymentMethodProvider
 {
     /**
-     * @var BraintreePaymentMethodFactoryInterface
+     * @internal
+     */
+    public const NEWCREDITCARD = 'newCreditCard';
+    /**
+     * @var BraintreePaymentMethodFactory
      */
     protected $factory;
 
@@ -21,11 +25,11 @@ class BraintreeMethodProvider extends AbstractPaymentMethodProvider
 
     /**
      * @param BraintreeConfigProviderInterface $configProvider
-     * @param BraintreePaymentMethodFactoryInterface $factory
+     * @param BraintreePaymentMethodFactory $factory
      */
     public function __construct(
         BraintreeConfigProviderInterface $configProvider,
-        BraintreePaymentMethodFactoryInterface $factory
+        BraintreePaymentMethodFactory $factory
     ) {
         parent::__construct();
 
@@ -45,9 +49,9 @@ class BraintreeMethodProvider extends AbstractPaymentMethodProvider
     }
 
     /**
-     * @param BraintreeConfigInterface $config
+     * @param BraintreeConfig $config
      */
-    protected function addBraintreeMethod(BraintreeConfigInterface $config)
+    protected function addBraintreeMethod(BraintreeConfig $config)
     {
         $this->addMethod(
             $config->getPaymentMethodIdentifier(),

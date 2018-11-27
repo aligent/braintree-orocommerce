@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Method\Config\Factory;
 
 use Doctrine\Common\Collections\Collection;
@@ -15,7 +16,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
      * @var SymmetricCrypterInterface
      */
     private $encoder;
-    
+
     /**
      *
      * @var LocalizationHelper
@@ -51,7 +52,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
     {
         $params = [];
         $channel = $settings->getChannel();
-       
+
         $params[BraintreeConfig::FIELD_LABEL] = $this->getLocalizedValue($settings->getBraintreeLabel());
         $params[BraintreeConfig::FIELD_SHORT_LABEL] = $this->getLocalizedValue($settings->getBraintreeShortLabel());
         $params[BraintreeConfig::FIELD_ADMIN_LABEL] = $channel->getName();
@@ -80,8 +81,8 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
     {
         return (string)$this->encoder->decryptData($value);
     }
-    
-    
+
+
     /**
      *
      * @param Collection $values
@@ -90,6 +91,6 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
      */
     private function getLocalizedValue(Collection $values)
     {
-        return (string) $this->localizationHelper->getLocalizedValue($values);
+        return (string)$this->localizationHelper->getLocalizedValue($values);
     }
 }

@@ -6,8 +6,8 @@ define(function (require) {
     var $ = require('jquery');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
-    var client = require('entrepidsbraintree/js/braintree/braintree-client');
-    var hostedFields = require('entrepidsbraintree/js/braintree/braintree-hosted-fields');
+    var client = require('braintree/js/braintree/braintree-client');
+    var hostedFields = require('braintree/js/braintree/braintree-hosted-fields');
     var __ = require('orotranslation/js/translator');
 
     CreditCardComponent = BaseComponent.extend({
@@ -49,17 +49,17 @@ define(function (require) {
         disposable: true,
 
         hostedFieldsInstance: null,
-        
+
         tokenizationPayload: null,
-        
+
         tokenizationError: null,
-        
+
         isTokenized: false,
-        
+
         isFormValid: false,
-        
+
         valueCreditCard: "newCreditCard",
-        
+
         isCreditCardSaved: false,
         /**
          * @inheritDoc
@@ -82,83 +82,83 @@ define(function (require) {
             mediator.on('checkout:payment:before-restore-filled-form', this.beforeRestoreFilledForm, this);
             mediator.on('checkout:payment:remove-filled-form', this.removeFilledForm, this);
             mediator.on('checkout-content:initialized', this.refreshPaymentMethod, this);
-            
+
             var component = this;
-            
+
             this.setCreditCardsSavedValue(this.$el);
-            
+
             client.create({
                 authorization: component.$el.find(component.options.selectors.braintree_client_token).val()
-                }, function (err, clientInstance) {
+            }, function (err, clientInstance) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                hostedFields.create({
+                    client: clientInstance,
+                    // ORO REVIEW:
+                    // Placeholders look really strange, it seems that form is filled.
+                    // Waiting
+                    fields: {
+                        number: {
+                            selector: '#card-number',
+                            placeholder: '1111 1111 1111 1111'
+                        },
+                        cvv: {
+                            selector: '#cvv',
+                            placeholder: '123'
+                        },
+                        expirationDate: {
+                            selector: '#expiration-date',
+                            placeholder: '10 / ' + ((new Date).getFullYear() + 2)
+                        }
+                    }
+                }, function (err, hostedFieldsInst) {
+                    component.hostedFieldsInstance = hostedFieldsInst;
                     if (err) {
                         console.log(err);
                         return;
                     }
-                    
-                    hostedFields.create({
-                        client: clientInstance,
-                    // ORO REVIEW:
-                    // Placeholders look really strange, it seems that form is filled.
-                        // Waiting
-                        fields: {
-                            number: {
-                                selector: '#card-number',
-                                placeholder: '1111 1111 1111 1111'
-                            },
-                            cvv: {
-                                selector: '#cvv',
-                                placeholder: '123'
-                            },
-                            expirationDate: {
-                                selector: '#expiration-date',
-                                placeholder: '10 / ' + ((new Date).getFullYear() + 2)
-                            }
-                        }
-                      }, function (err, hostedFieldsInst) {
-                        component.hostedFieldsInstance = hostedFieldsInst;
-                        if (err) {
-                            console.log(err);
-                            return;
-                        }
 
-                        component.hostedFieldsInstance.on('validityChange', function (event) {
-  
-                            var field = event.fields[event.emittedBy];
+                    component.hostedFieldsInstance.on('validityChange', function (event) {
 
-                            var fieldsBraintree = [];
-                            fieldsBraintree["number"] = "#number";
-                            fieldsBraintree["expirationDate"] = "#expirationDate";
-                            fieldsBraintree["cvv"] = "#cvvH";
+                        var field = event.fields[event.emittedBy];
 
-                            var fieldEmitted = event.emittedBy;
-                   
-                            $(fieldsBraintree[fieldEmitted]).text('');
-                  
-                            if (field.isValid) {
-                                $(field.container).removeClass('error');
-                                if (event.emittedBy === 'expirationDate') {
-                                    if (!event.fields.expirationDate.isValid ) {
-                                        return;
-                                    }
+                        var fieldsBraintree = [];
+                        fieldsBraintree["number"] = "#number";
+                        fieldsBraintree["expirationDate"] = "#expirationDate";
+                        fieldsBraintree["cvv"] = "#cvvH";
+
+                        var fieldEmitted = event.emittedBy;
+
+                        $(fieldsBraintree[fieldEmitted]).text('');
+
+                        if (field.isValid) {
+                            $(field.container).removeClass('error');
+                            if (event.emittedBy === 'expirationDate') {
+                                if (!event.fields.expirationDate.isValid) {
+                                    return;
                                 }
-                            } else if (field.isPotentiallyValid) {
-                                         $(field.container).removeClass('error');
-                            } else {
-                                         $(field.container).addClass('error');
                             }
-                   
-                            var formValid = Object.keys(event.fields).every(function (key) {
-                                 return event.fields[key].isValid;
-                            });
-                            component.isFormValid = formValid;
+                        } else if (field.isPotentiallyValid) {
+                            $(field.container).removeClass('error');
+                        } else {
+                            $(field.container).addClass('error');
+                        }
+
+                        var formValid = Object.keys(event.fields).every(function (key) {
+                            return event.fields[key].isValid;
                         });
-                      });
+                        component.isFormValid = formValid;
+                    });
                 });
+            });
         },
 
         setCreditCardsSavedValue: function (form) {
             var $el = form;
-          
+
             var $value = this.$form.find(this.options.selectors.credit_card_first_value);
             var valueTransaction = $value.prop('value');
             var saveFLater = this.$form.find(this.options.selectors.saveForLater);
@@ -177,8 +177,8 @@ define(function (require) {
             }
 
         },
-        
-        
+
+
         refreshPaymentMethod: function () {
             mediator.trigger('checkout:payment:method:refresh');
         },
@@ -201,9 +201,9 @@ define(function (require) {
                     eventData.responseData
                 );
 
-         
-                    mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
-                    return;
+
+                mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
+                return;
             }
         },
 
@@ -231,7 +231,7 @@ define(function (require) {
         validate: function () {
             return this.isFormValid;
         },
-        
+
         /**
          * @param {Boolean} state
          */
@@ -239,7 +239,7 @@ define(function (require) {
             this.paymentValidationRequiredComponentState = state;
             mediator.trigger('checkout:payment:validate:change', state);
         },
-        
+
 
         /**
          * @returns {jQuery}
@@ -284,7 +284,7 @@ define(function (require) {
             var $el = $(e.target);
             mediator.trigger('checkout:payment:save-for-later:change', $el.prop('checked'));
         },
-        
+
         /**
          * @param {Object} e
          */
@@ -314,7 +314,7 @@ define(function (require) {
             }
 
         },
-        
+
         /**
          * @param {Object} eventData
          */
@@ -323,7 +323,7 @@ define(function (require) {
             if (this.isTokenized) {
                 this.isTokenized = false;
                 var component = this;
-          
+
                 var payment_method_nonce = this.$el.find(this.options.selectors.payment_method_nonce);
                 if (!this.isCreditCardSaved) {
                     payment_method_nonce.val(this.tokenizationPayload.nonce);
@@ -334,11 +334,11 @@ define(function (require) {
                 eventData.stopped = false;
             } else {
                 eventData.stopped = true;
-          
+
                 var component = this;
                 this.tokenizationPayload = null;
                 this.tokenizationError = null;
-             
+
                 var deferred = $.Deferred();
                 var tokenizationCallback = function (error, payload) {
                     if (error && !component.isCreditCardSaved) {
@@ -348,15 +348,15 @@ define(function (require) {
                     }
                 };
 
-                    var getPaymentNonce = function () {
-                        component.hostedFieldsInstance.tokenize(tokenizationCallback);
-                        return deferred.promise();
-                    };
+                var getPaymentNonce = function () {
+                    component.hostedFieldsInstance.tokenize(tokenizationCallback);
+                    return deferred.promise();
+                };
 
                 getPaymentNonce().then(
                     function (payload) {
                         component.tokenizationPayload = payload.payload;
-                  
+
                         component.isTokenized = true;
                         if (!component.isCreditCardSaved) {
                             var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
@@ -384,17 +384,17 @@ define(function (require) {
                         $('#number').text('');
                         $('#expirationDate').text('');
                         $('#cvvH').text('');
-                  
+
                         var allfieldsEmptyMessage = __('entrepids.braintree.braintreeflow.error.all_empty_fields');
 
                         if (error.error.code == "HOSTED_FIELDS_FIELDS_EMPTY") {
-                             $('#number').text(allfieldsEmptyMessage);
-                             $('#expirationDate').text(allfieldsEmptyMessage);
-                             $('#cvvH').text(allfieldsEmptyMessage);
+                            $('#number').text(allfieldsEmptyMessage);
+                            $('#expirationDate').text(allfieldsEmptyMessage);
+                            $('#cvvH').text(allfieldsEmptyMessage);
                         } else {
                             if (error.error.code == "HOSTED_FIELDS_FIELDS_INVALID") {
                                 var fields = component.hostedFieldsInstance.getState().fields;
-                    
+
                                 var eLen = error.error.details.invalidFieldKeys.length;
                                 var i, fieldId, fieldOrigId;
 
@@ -405,7 +405,7 @@ define(function (require) {
                                 for (i = 0; i < eLen; i++) {
                                     fieldOrigId = error.error.details.invalidFieldKeys[i];
                                     fieldId = fieldsBraintree[fieldOrigId];
-                                    var isEmptyField = eval('fields.'+fieldOrigId+'.isEmpty');
+                                    var isEmptyField = eval('fields.' + fieldOrigId + '.isEmpty');
                                     if (isEmptyField == true) {
                                         $(fieldId).text(allfieldsEmptyMessage);
                                     } else {

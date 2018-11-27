@@ -1,4 +1,5 @@
 <?php
+
 namespace Entrepids\Bundle\BraintreeBundle\Integration;
 
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
