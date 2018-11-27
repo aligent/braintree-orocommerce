@@ -144,7 +144,7 @@ class CreditCardType extends AbstractType
     {
         $resolver->setDefaults([
             'label' => 'entrepids.braintree.methods.credit_card.label',
-            'csrf_protection' => false,
+            'csrf_protection' => true,
             'zeroAmountAuthorizationEnabled' => false,
             'braintreeConfig' => null,
         ]);
