@@ -28,13 +28,16 @@ abstract class AbstractBraintreeOperation implements OperationInterface
     protected $config;
 
 
+    public function setAdapter(BraintreeAdapter $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
     public function setConfig(BraintreeConfig $config)
     {
         $this->config = $config;
-
-        $this->adapter = new BraintreeAdapter($this->config);
+        $this->adapter->setConfig($this->config);
         $this->adapter->initCredentials();
-
         return $this;
     }
 

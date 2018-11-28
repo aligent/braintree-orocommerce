@@ -10,6 +10,7 @@ use Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Provider\ExtractOptionsProvider;
 use Oro\Bundle\PaymentBundle\Provider\SurchargeProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
@@ -21,10 +22,14 @@ class BraintreePaymentMethodFactory
     /** @var Factory */
     protected $opFactory;
 
+    /** @var LoggerInterface */
+    protected $logger;
 
-    public function __construct(Factory $opFactory)
+
+    public function __construct(Factory $opFactory, LoggerInterface $logger)
     {
         $this->opFactory = $opFactory;
+        $this->logger = $logger;
     }
 
 
@@ -35,6 +40,9 @@ class BraintreePaymentMethodFactory
      */
     public function create(BraintreeConfig $config)
     {
-        return new EntrepidsBraintreeMethod($this->opFactory, $config);
+        $method = new EntrepidsBraintreeMethod($this->opFactory, $config);
+        $method->setLogger($this->logger);
+
+        return $method;
     }
 }

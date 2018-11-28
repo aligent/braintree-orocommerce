@@ -11,10 +11,12 @@ use Entrepids\Bundle\BraintreeBundle\Method\Operation\Purchase\PurchaseOperation
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class EntrepidsBraintreeMethod implements
     PaymentMethodInterface
 {
+    use LoggerAwareTrait;
 
     const TYPE = 'entrepids_braintree';
 
@@ -51,6 +53,7 @@ class EntrepidsBraintreeMethod implements
             $operation->setConfig($this->config)
                 ->operationProcess($paymentTransaction);
         } catch (\Exception $e) {
+
             $paymentTransaction->setAction($action)
                 ->setActive(false)
                 ->setSuccessful(false);

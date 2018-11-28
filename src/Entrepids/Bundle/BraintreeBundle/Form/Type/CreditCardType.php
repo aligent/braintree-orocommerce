@@ -72,11 +72,13 @@ class CreditCardType extends AbstractType
     public function __construct(
         DoctrineHelper $doctrineHelper,
         TokenStorageInterface $tokenStorage,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        BraintreeAdapter $adapter
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
+        $this->adapter = $adapter;
         $this->getTransactionCustomerToken();
     }
 
@@ -119,7 +121,7 @@ class CreditCardType extends AbstractType
         // TODO: Shouldn't this fail hard instead of just writing invalid data into the hidden field?
         $braintreeClientToken = '';
         if ($options['braintreeConfig'] !== null) {
-            $this->adapter = new BraintreeAdapter($options['braintreeConfig']);
+            $this->adapter->setConfig($options['braintreeConfig']);
             $this->adapter->initCredentials();
             $braintreeClientToken = $this->adapter->generate();
         }

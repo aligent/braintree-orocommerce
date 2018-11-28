@@ -110,7 +110,9 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
                 ->getRepository('EntrepidsBraintreeBundle:BraintreeSettings')
                 ->getEnabledSettingsByType($this->getType());
         } catch (\UnexpectedValueException $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Exception unexpected value getting integration settings ' .
+                '(' . $e->getCode() . '): "' . $e->getMessage() .
+                '" at line ' . $e->getLine() . ' of ' . $e->getFile());
 
             return [];
         }

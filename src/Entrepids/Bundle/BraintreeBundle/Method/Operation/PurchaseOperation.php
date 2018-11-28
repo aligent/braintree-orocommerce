@@ -9,6 +9,7 @@ use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class PurchaseOperation extends AbstractBraintreeOperation
 {
+    use LoggerAwareTrait;
+
     const CHANNEL_CODE = 'OroCommerce';
 
     /** @var String */
@@ -255,6 +258,8 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $em->persist($tokenObj);
             $em->flush();
         } catch (NoSuchPropertyException $e) {
+            $this->logger->warning('Exception no such property ('.$e->getCode().'): "'.$e->getMessage() .
+                '" at line ' . $e->getLine() . ' of ' . $e->getFile());
         }
     }
 

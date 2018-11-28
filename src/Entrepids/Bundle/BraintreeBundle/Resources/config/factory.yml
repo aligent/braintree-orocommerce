@@ -12,6 +12,7 @@ services:
         public: false
         arguments:
             - '@entrepids_braintree.method.operation.factory'
+            - '@logger'
 
     entrepids_braintree.factory.method_view.braintree:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\View\Factory\BraintreePaymentMethodViewFactory'
