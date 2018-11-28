@@ -53,6 +53,9 @@ class EntrepidsBraintreeMethod implements
             $operation->setConfig($this->config)
                 ->operationProcess($paymentTransaction);
         } catch (\Exception $e) {
+            $this->logger->critical('Exception executing Braintree Payment action (' .
+                $e->getCode() . '): "' . $e->getMessage() . '" at line ' . $e->getLine() . ' of ' .
+                $e->getFile());
 
             $paymentTransaction->setAction($action)
                 ->setActive(false)

@@ -64,8 +64,9 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (\Exception $e) {
-            $this->logger->critical('Exception in generate method of BraintreeAdapter ('.$e->getCode().'): "'.$e->getMessage() .
-                '" at line ' . $e->getLine() . ' of ' . $e->getFile());
+            $this->logger->critical('Exception in generate method of BraintreeAdapter (' .
+                $e->getCode() . '): "' . $e->getMessage() . '" at line ' . $e->getLine() . ' of ' .
+                $e->getFile());
             return null;
         }
     }
