@@ -97,9 +97,6 @@ define(function (require) {
 
                 hostedFields.create({
                     client: clientInstance,
-                    // ORO REVIEW:
-                    // Placeholders look really strange, it seems that form is filled.
-                    // Waiting
                     fields: {
                         number: {
                             selector: '#card-number',
