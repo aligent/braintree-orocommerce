@@ -2,18 +2,28 @@
 
 namespace Entrepids\Bundle\BraintreeBundle\Method\Operation;
 
+use Braintree\Customer;
 use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * Class PurchaseOperation
+ *
+ * @package Entrepids\Bundle\BraintreeBundle\Method\Operation
+ * @SuppressWarnings(ExcessiveClassComplexity)
+ */
 class PurchaseOperation extends AbstractBraintreeOperation
 {
+    use LoggerAwareTrait;
+
     const CHANNEL_CODE = 'OroCommerce';
 
     /** @var String */
@@ -99,8 +109,9 @@ class PurchaseOperation extends AbstractBraintreeOperation
 
         try {
             // Try to find the customer, if they aren't found then pass their entire
-            // details for vaulting.
-            $customer = $this->adapter->findCustomer($this->customerData['id']);
+            // details for vaulting.  Discard the return value, just want to know if
+            // it throws an exception or not.
+            $this->adapter->findCustomer($this->customerData['id']);
             $data = array_merge($data, [
                 'customerId' => $this->customerData['id'],
             ]);
@@ -231,7 +242,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
         $tokenObj = new BraintreeCustomerToken();
 
         try {
-            $entityID = $this->paymentTransaction->getEntityIdentifier();
             $entity = $this->doctrineHelper->getEntityReference(
                 $this->paymentTransaction->getEntityClass(),
                 $this->paymentTransaction->getEntityIdentifier()
@@ -248,6 +258,8 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $em->persist($tokenObj);
             $em->flush();
         } catch (NoSuchPropertyException $e) {
+            $this->logger->warning('Exception no such property ('.$e->getCode().'): "'.$e->getMessage() .
+                '" at line ' . $e->getLine() . ' of ' . $e->getFile());
         }
     }
 
@@ -320,7 +332,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $paymentTransaction->getEntityIdentifier()
         );
 
-        $orderID = $entity->getId();
         $this->identifier = $entity->getIdentifier();
     }
 
@@ -338,7 +349,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $erroProcessed = true;
         }
 
-        $errorMessage = "";
         if (!$erroProcessed && !is_null($response->message)) {
             $errorString = $response->message;
         }
@@ -365,7 +375,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
      */
     protected function getCustomerDataPayment(PaymentTransaction $sourcepaymenttransaction)
     {
-        $entityID = $sourcepaymenttransaction->getEntityIdentifier();
         $entity = $this->doctrineHelper->getEntityReference(
             $sourcepaymenttransaction->getEntityClass(),
             $sourcepaymenttransaction->getEntityIdentifier()
@@ -393,7 +402,6 @@ class PurchaseOperation extends AbstractBraintreeOperation
      */
     protected function getOrderAddressPayment(PaymentTransaction $sourcepaymenttransaction, $typeAddress)
     {
-        $entityID = $sourcepaymenttransaction->getEntityIdentifier();
         $entity = $this->doctrineHelper->getEntityReference(
             $sourcepaymenttransaction->getEntityClass(),
             $sourcepaymenttransaction->getEntityIdentifier()

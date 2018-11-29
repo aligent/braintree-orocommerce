@@ -9,12 +9,14 @@ use Braintree\Customer;
 use Braintree\Transaction;
 use Entrepids\Bundle\BraintreeBundle\Method\Config\BraintreeConfig;
 use Entrepids\Bundle\BraintreeBundle\Settings\DataProvider\BasicEnvironmentDataProvider;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * Class BraintreeAdapter
  */
 class BraintreeAdapter
 {
+    use LoggerAwareTrait;
 
     /**
      *
@@ -26,7 +28,7 @@ class BraintreeAdapter
      *
      * @param Config $config
      */
-    public function __construct(BraintreeConfig $config)
+    public function setConfig(BraintreeConfig $config)
     {
         $this->config = $config;
     }
@@ -62,6 +64,9 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (\Exception $e) {
+            $this->logger->critical('Exception in generate method of BraintreeAdapter (' .
+                $e->getCode() . '): "' . $e->getMessage() . '" at line ' . $e->getLine() . ' of ' .
+                $e->getFile());
             return null;
         }
     }

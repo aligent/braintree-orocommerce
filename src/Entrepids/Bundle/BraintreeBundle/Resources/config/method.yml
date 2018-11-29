@@ -28,12 +28,20 @@ services:
         tags:
             - { name: oro_payment.payment_method_view_provider }
 
+    entrepids_braintree.adapter:
+        class: Entrepids\Bundle\BraintreeBundle\Model\Adapter\BraintreeAdapter
+        calls:
+            - ['setLogger', ['@logger']]
+
+
     entrepids_braintree.method.operation.factory:
         class: Entrepids\Bundle\BraintreeBundle\Method\Operation\Factory
 
     entrepids_braintree.method.operation:
         abstract: true
         arguments: []
+        calls:
+          - ['setAdapter', ['@entrepids_braintree.adapter']]
 
     entrepids_braintree.method.operation.capture:
         parent: entrepids_braintree.method.operation
@@ -55,6 +63,8 @@ services:
             - '@translator'
             - '@property_accessor'
             - '@oro_entity.doctrine_helper'
+        calls:
+            - ['setLogger', ['@logger']]
         tags:
             - { name: 'braintree.operation', operation: 'purchase' }
 

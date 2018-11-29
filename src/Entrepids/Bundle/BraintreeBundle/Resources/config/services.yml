@@ -29,11 +29,6 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Provider\PaymentInfoProvider'
         arguments:
             - '@oro_api.doctrine_helper'
-            - '@security.token_storage'
-            - '@event_dispatcher'
-            - '%oro_payment.entity.payment_transaction.class%'
             - '@translator'
-        calls:
-            - ['setLogger', ['@logger']]
         tags:
             - { name: layout.data_provider, alias: braintree_payment_order_data }      
