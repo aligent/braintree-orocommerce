@@ -13,7 +13,7 @@ services:
         class: Entrepids\Bundle\BraintreeBundle\Form\Type\BraintreeSettingsType
         arguments:
             - '@translator.default'
-            - '@oro_security.encoder.mcrypt'
+            - '@oro_security.encoder.default'
             - '@entrepids_braintree.settings.card_type.provider'
             - '@entrepids_braintree.settings.payment_action.provider'
             - '@entrepids_braintree.settings.environment.provider'

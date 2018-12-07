@@ -3,7 +3,7 @@ services:
         class: 'Entrepids\Bundle\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory'
         public: false
         arguments:
-            - '@oro_security.encoder.mcrypt'        
+            - '@oro_security.encoder.default'
             - '@oro_locale.helper.localization'
             - '@entrepids_braintree.generator.braintree_config_identifier'
 
