@@ -316,6 +316,9 @@ define(function (require) {
          * @param {Object} eventData
          */
         beforeTransit: function (eventData) {
+            if (eventData.data.paymentMethod !== this.options.paymentMethod) {
+                return;
+            }
 
             if (this.isTokenized) {
                 this.isTokenized = false;
