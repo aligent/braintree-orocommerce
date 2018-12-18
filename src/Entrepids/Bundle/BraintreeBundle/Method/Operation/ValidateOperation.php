@@ -30,16 +30,30 @@ class ValidateOperation extends AbstractBraintreeOperation
 
         $paymentTransaction = $this->paymentTransaction;
         $paymentTransaction->setAmount(self::ZERO_AMOUNT)->setCurrency('USD');
-
         $transactionOptions = $paymentTransaction->getTransactionOptions();
 
-        $transactionOptions = array_merge($transactionOptions, [
-            'credit_card_value' => $request->get('credit_card_value', BraintreeMethodProvider::NEWCREDITCARD),
-            'nonce' => $request->get('payment_method_nonce', null),
-        ]);
+        // Fetch the nonce and credit_card_value from the request and merge with the transaction options
+        $requestData = $request->get(
+            'oro_workflow_transition',
+            [
+                static::NONCE_KEY => null,
+                static::CREDIT_CARD_VALUE_KEY => BraintreeMethodProvider::NEWCREDITCARD
+            ]
+        );
 
+        $extraData = array_filter(
+            $requestData,
+            function ($key) {
+                return $key === static::CREDIT_CARD_VALUE_KEY
+                    || $key === static::NONCE_KEY;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+
+
+        $transactionOptions = array_merge($transactionOptions, $extraData);
         $paymentTransaction->setTransactionOptions($transactionOptions);
-
         $paymentTransaction->setSuccessful(true)
             ->setAction(PaymentMethodInterface::VALIDATE)
             ->setActive(true);

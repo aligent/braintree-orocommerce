@@ -197,7 +197,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
         $sourcepaymenttransaction = $this->paymentTransaction->getSourcePaymentTransaction();
 
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
-        $this->nonce = $transactionOptions['nonce'];
+        $this->nonce = $transactionOptions[static::NONCE_KEY];
 
         $purchaseAction = $this->config->getPurchaseAction();
 
@@ -317,8 +317,8 @@ class PurchaseOperation extends AbstractBraintreeOperation
 
         $transactionOptions = $sourcepaymenttransaction->getTransactionOptions();
 
-        if (array_key_exists('credit_card_value', $transactionOptions)) {
-            $creditCardValue = $transactionOptions['credit_card_value'];
+        if (array_key_exists(static::CREDIT_CARD_VALUE_KEY, $transactionOptions)) {
+            $creditCardValue = $transactionOptions[static::CREDIT_CARD_VALUE_KEY];
         } else {
             $creditCardValue = BraintreeMethodProvider::NEWCREDITCARD;
         }
