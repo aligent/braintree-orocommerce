@@ -32,7 +32,7 @@
                     </div>
                 {% endif %}
 
-                <form id="braintree-custom-cc-form" method="post" autocomplete="off" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
+                <div id="braintree-custom-cc-form" method="post" autocomplete="off" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
                     <div class="{{ class_prefix }}__form__row">
                         <fieldset class="{{ class_prefix }}__form__row">
                             <div class="{{ class_prefix }}__form__col form__col form__col_x12">
@@ -60,7 +60,7 @@
                             </div>
                         </fieldset>
                     </div>
-                </form>
+                </div>
                 {% if form.save_for_later is defined %}
                     <div class="{{ class_prefix }}__form__row" id="{{ form.save_for_later.vars.name }}_field_row" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
                         {{ form_row(form.save_for_later, {class_prefix: class_prefix}) }}
