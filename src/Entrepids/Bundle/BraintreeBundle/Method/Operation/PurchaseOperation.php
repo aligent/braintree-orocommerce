@@ -7,6 +7,7 @@ use Braintree\Exception\NotFound;
 use Entrepids\Bundle\BraintreeBundle\Entity\BraintreeCustomerToken;
 use Entrepids\Bundle\BraintreeBundle\Method\Provider\BraintreeMethodProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\OrderBundle\Entity\OrderAddress;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -332,7 +333,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
             $paymentTransaction->getEntityIdentifier()
         );
 
-        $this->identifier = $entity->getIdentifier();
+        $this->identifier = $paymentTransaction->getEntityIdentifier();
     }
 
     /**
@@ -386,7 +387,7 @@ class PurchaseOperation extends AbstractBraintreeOperation
             'id' => $customerUser->getId() ?: '',
             'firstName' => $customerUser->getFirstName() ?: '',
             'lastName' => $customerUser->getLastName() ?: '',
-            'company' => $customerUser->getOrganization()->getName() ?: '',
+            'company' => $customerUser->getCustomer()->getName() ?: '',
             'email' => $customerUser->getEmail() ?: '',
             'phone' => '',
             'fax' => '',
@@ -408,7 +409,11 @@ class PurchaseOperation extends AbstractBraintreeOperation
         );
         $propertyAccessor = $this->getPropertyAccessor();
 
-        $orderAddress = $propertyAccessor->getValue($entity, $typeAddress);
+        if ($propertyAccessor->isReadable($entity, $typeAddress)) {
+            $orderAddress = $propertyAccessor->getValue($entity, $typeAddress);
+        } else {
+            $orderAddress = new OrderAddress();
+        }
 
         return [
             'firstName' => $orderAddress->getFirstName() ?: '',
@@ -417,9 +422,9 @@ class PurchaseOperation extends AbstractBraintreeOperation
             'streetAddress' => $orderAddress->getStreet() ?: '',
             'extendedAddress' => $orderAddress->getStreet2() ?: '',
             'locality' => $orderAddress->getCity() ?: '',
-            'region' => $orderAddress->getRegion()->getCode() ?: '',
+            'region' => $orderAddress->getRegion() ? $orderAddress->getRegion()->getCode() : '',
             'postalCode' => $orderAddress->getPostalCode() ?: '',
-            'countryName' => $orderAddress->getCountry()->getName() ?: '',
+            'countryName' => $orderAddress->getCountry() ? $orderAddress->getCountry()->getName(): '',
         ];
     }
 
