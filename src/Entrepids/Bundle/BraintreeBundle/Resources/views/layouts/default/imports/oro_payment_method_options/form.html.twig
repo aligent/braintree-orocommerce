@@ -32,12 +32,12 @@
                     </div>
                 {% endif %}
 
-                <form id="braintree-custom-cc-form" method="post" autocomplete="off" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
+                <div id="braintree-custom-cc-form" method="post" autocomplete="off" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
                     <div class="{{ class_prefix }}__form__row">
                         <fieldset class="{{ class_prefix }}__form__row">
                             <div class="{{ class_prefix }}__form__col form__col form__col_x12">
                                 <label for="card-number" class="label label--full required">{{ 'entrepids.braintree.credit_card.card_number.label'|trans }}</label>
-                                <div id="card-number" class="input input-braintree-cc"></div>
+                                <div id="card-number" class="input input-braintree-cc form-control"></div>
                                 <span id="number" class="helper-text"></span>
                             </div>
                         </fieldset>
@@ -46,7 +46,7 @@
                         <fieldset class="{{ class_prefix }}__form__row">
                             <div class="{{ class_prefix }}__form__col form__col form__col_x12">
                                 <label for="expiration-date" class="label label--full required">{{ 'entrepids.braintree.credit_card.expiration_date.label'|trans }}</label>
-                                <div id="expiration-date" class="input input-braintree-expdate"></div>
+                                <div id="expiration-date" class="input input-braintree-expdate form-control"></div>
                                 <span id="expirationDate" class="helper-text"></span>
                             </div>
                         </fieldset>
@@ -55,12 +55,12 @@
                         <fieldset class="{{ class_prefix }}__form__row">
                             <div class="{{ class_prefix }}__form__col form__col form__col_x12">
                                 <label for="cvv" class="label label--full required">{{ 'entrepids.braintree.credit_card.cvv2.label'|trans }}</label>
-                                <div id="cvv" class="input input-braintree-cvv"></div>{{ block('_entrepids_braintree_credit_card_payment_credit_card_cvv_widget') }}
+                                <div id="cvv" class="input input-braintree-cvv form-control"></div>{{ block('_entrepids_braintree_credit_card_payment_credit_card_cvv_widget') }}
                                 <span id="cvvH" class="helper-text"></span>
                             </div>
                         </fieldset>
                     </div>
-                </form>
+                </div>
                 {% if form.save_for_later is defined %}
                     <div class="{{ class_prefix }}__form__row" id="{{ form.save_for_later.vars.name }}_field_row" style="display: {{ form.credit_cards_saved is defined ? 'none' : 'block' }}">
                         {{ form_row(form.save_for_later, {class_prefix: class_prefix}) }}

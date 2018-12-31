@@ -1,3 +1,5 @@
+// Todo: Refactor this js it looks like a lot of it is copy/paste from the core paypal bundle
+// so a lot of it isn't entirely relevant
 define(function (require) {
     'use strict';
 
@@ -188,18 +190,22 @@ define(function (require) {
                 eventData.stopped = true;
                 var resolvedEventData = _.extend(
                     {
-                        'SECURETOKEN': false,
-                        'SECURETOKENID': false,
+                        'successUrl': '',
                         'returnUrl': '',
                         'errorUrl': '',
                         'formAction': '',
-                        'paymentMethodSupportsValidation': true
+                        'paymentMethodSupportsValidation': true,
+                        'purchaseSuccessful': true
                     },
                     eventData.responseData
                 );
 
+                if (resolvedEventData.purchaseSuccessful) {
+                    mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
+                } else {
+                    mediator.execute('redirectTo', {url: resolvedEventData.errorUrl}, {redirect: true});
+                }
 
-                mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
                 return;
             }
         },
@@ -316,6 +322,9 @@ define(function (require) {
          * @param {Object} eventData
          */
         beforeTransit: function (eventData) {
+            if (eventData.data.paymentMethod !== this.options.paymentMethod) {
+                return;
+            }
 
             if (this.isTokenized) {
                 this.isTokenized = false;
@@ -355,18 +364,21 @@ define(function (require) {
                         component.tokenizationPayload = payload.payload;
 
                         component.isTokenized = true;
-                        if (!component.isCreditCardSaved) {
-                            var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-                            payment_method_nonce.val(component.tokenizationPayload.nonce);
-                            $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
-                        } else {
-                            var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-                            payment_method_nonce.val("noValue");
-                            $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
-                        }
-                        document.querySelector('input[name="credit_card_value"]').value = component.valueCreditCard;
                         var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
+                        var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+
+                        // Update names of attributes so they are actually submitted
+                        credit_card_value.attr('name', 'oro_workflow_transition[' +  credit_card_value.attr('name') + ']');
+                        payment_method_nonce.attr('name', 'oro_workflow_transition[' + payment_method_nonce.attr('name') + ']');
                         credit_card_value.val(component.valueCreditCard);
+
+                        if (!component.isCreditCardSaved) {
+                            payment_method_nonce.val(component.tokenizationPayload.nonce);
+                        } else {
+                            payment_method_nonce.val("noValue");
+                        }
+
+                        $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
                         $("[name='oro_workflow_transition']").append(credit_card_value[0]);
                         $("[name='oro_workflow_transition']").submit();
                     },
@@ -413,8 +425,6 @@ define(function (require) {
                         }
                     }
                 );
-            }
-            if (eventData.data.paymentMethod === this.options.paymentMethod) {
             }
         },
 

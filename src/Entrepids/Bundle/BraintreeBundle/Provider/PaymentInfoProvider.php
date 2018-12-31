@@ -75,7 +75,7 @@ class PaymentInfoProvider
      * @param $entity
      * @return PaymentTransaction
      */
-    private function fetchEntityTransaction($entity): PaymentTransaction
+    private function fetchEntityTransaction($entity)
     {
         $className = $this->doctrineHelper->getEntityClass($entity);
         $identifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);

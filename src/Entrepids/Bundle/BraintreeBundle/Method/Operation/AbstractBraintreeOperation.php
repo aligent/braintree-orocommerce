@@ -8,6 +8,8 @@ use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 abstract class AbstractBraintreeOperation implements OperationInterface
 {
+    const CREDIT_CARD_VALUE_KEY = 'credit_card_value';
+    const NONCE_KEY = 'payment_method_nonce';
 
     /**
      *
