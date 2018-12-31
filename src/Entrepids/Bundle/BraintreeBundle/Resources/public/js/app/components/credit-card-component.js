@@ -1,4 +1,5 @@
-// Todo: Refactor this js
+// Todo: Refactor this js it looks like a lot of it is copy/paste from the core paypal bundle
+// so a lot of it isn't entirely relevant
 define(function (require) {
     'use strict';
 
@@ -189,18 +190,22 @@ define(function (require) {
                 eventData.stopped = true;
                 var resolvedEventData = _.extend(
                     {
-                        'SECURETOKEN': false,
-                        'SECURETOKENID': false,
+                        'successUrl': '',
                         'returnUrl': '',
                         'errorUrl': '',
                         'formAction': '',
-                        'paymentMethodSupportsValidation': true
+                        'paymentMethodSupportsValidation': true,
+                        'purchaseSuccessful': false
                     },
                     eventData.responseData
                 );
 
+                if (resolvedEventData.purchaseSuccessful) {
+                    mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
+                } else {
+                    mediator.execute('redirectTo', {url: resolvedEventData.errorUrl}, {redirect: true});
+                }
 
-                mediator.execute('redirectTo', {url: resolvedEventData.returnUrl}, {redirect: true});
                 return;
             }
         },
