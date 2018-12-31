@@ -195,7 +195,7 @@ define(function (require) {
                         'errorUrl': '',
                         'formAction': '',
                         'paymentMethodSupportsValidation': true,
-                        'purchaseSuccessful': false
+                        'purchaseSuccessful': true
                     },
                     eventData.responseData
                 );
