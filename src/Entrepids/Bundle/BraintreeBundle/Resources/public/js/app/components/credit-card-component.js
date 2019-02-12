@@ -63,6 +63,7 @@ define(function (require) {
         valueCreditCard: "newCreditCard",
 
         isCreditCardSaved: false,
+
         /**
          * @inheritDoc
          */
@@ -121,17 +122,14 @@ define(function (require) {
                     }
 
                     component.hostedFieldsInstance.on('validityChange', function (event) {
-
-                        var field = event.fields[event.emittedBy];
+                        component.fields = event.fields;
+                        var field = component.fields[event.emittedBy];
 
                         var fieldsBraintree = [];
                         fieldsBraintree["number"] = "#number";
                         fieldsBraintree["expirationDate"] = "#expirationDate";
                         fieldsBraintree["cvv"] = "#cvvH";
-
-                        var fieldEmitted = event.emittedBy;
-
-                        $(fieldsBraintree[fieldEmitted]).text('');
+                        $(fieldsBraintree[field]).text('');
 
                         if (field.isValid) {
                             $(field.container).removeClass('error');
@@ -232,7 +230,25 @@ define(function (require) {
          * @param {String} elementSelector
          */
         validate: function () {
-            return this.isFormValid;
+            var state = this.hostedFieldsInstance.getState();
+
+            var fields = Object.keys(state.fields);
+
+            fields.forEach(function (key) {
+                var isValid = state.fields[key].isValid;
+
+                if (!isValid) {
+                    $(state.fields[key].container).addClass('error');
+                } else {
+                    $(state.fields[key].container).removeClass('error');
+                }
+            })
+
+            var formValid = fields.every(function (key) {
+                return state.fields[key].isValid;
+            });
+
+            return formValid;
         },
 
         /**
@@ -323,6 +339,14 @@ define(function (require) {
          */
         beforeTransit: function (eventData) {
             if (eventData.data.paymentMethod !== this.options.paymentMethod) {
+                return;
+            }
+
+            // Validate the payment method form
+            // If not valid block further processing
+            var isValid = this.validate();
+            if (!isValid) {
+                eventData.stopped = !isValid;
                 return;
             }
 
