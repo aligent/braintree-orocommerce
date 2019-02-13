@@ -372,9 +372,9 @@ define(function (require) {
                 var deferred = $.Deferred();
                 var tokenizationCallback = function (error, payload) {
                     if (error && !component.isCreditCardSaved) {
-                        deferred.reject({error});
+                        deferred.reject({error: error});
                     } else {
-                        deferred.resolve({payload});
+                        deferred.resolve({payload: payload});
                     }
                 };
 
