@@ -230,10 +230,16 @@ define(function (require) {
          * @param {String} elementSelector
          */
         validate: function () {
-            var state = this.hostedFieldsInstance.getState();
+            // If we are sending a saved credit card
+            // then don't try and validate the form
+            if (this.isCreditCardSaved) {
+                return true;
+            }
 
+            var state = this.hostedFieldsInstance.getState();
             var fields = Object.keys(state.fields);
 
+            // Add errors to the appropriate fields
             fields.forEach(function (key) {
                 var isValid = state.fields[key].isValid;
 
@@ -242,8 +248,9 @@ define(function (require) {
                 } else {
                     $(state.fields[key].container).removeClass('error');
                 }
-            })
+            });
 
+            // Check if Braintree sees the fields as valid
             var formValid = fields.every(function (key) {
                 return state.fields[key].isValid;
             });
