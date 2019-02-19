@@ -397,10 +397,11 @@ define(function (require) {
                         component.isTokenized = true;
                         var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
                         var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
+                        var form = $(component.$el).closest("form")
 
                         // Update names of attributes so they are actually submitted
-                        credit_card_value.attr('name', 'oro_workflow_transition[' +  credit_card_value.attr('name') + ']');
-                        payment_method_nonce.attr('name', 'oro_workflow_transition[' + payment_method_nonce.attr('name') + ']');
+                        credit_card_value.attr('name',  form.attr('name') + '[' +  credit_card_value.attr('name') + ']');
+                        payment_method_nonce.attr('name', form.attr('name') + '[' + payment_method_nonce.attr('name') + ']');
                         credit_card_value.val(component.valueCreditCard);
 
                         if (!component.isCreditCardSaved) {
@@ -409,9 +410,9 @@ define(function (require) {
                             payment_method_nonce.val("noValue");
                         }
 
-                        $("[name='oro_workflow_transition']").append(payment_method_nonce[0]);
-                        $("[name='oro_workflow_transition']").append(credit_card_value[0]);
-                        $("[name='oro_workflow_transition']").submit();
+                        form.append(payment_method_nonce[0]);
+                        form.append(credit_card_value[0]);
+                        form.submit();
                     },
                     function (error) {
                         component.tokenizationError = error.error;
