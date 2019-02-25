@@ -31,28 +31,26 @@ class ValidateOperation extends AbstractBraintreeOperation
         $paymentTransaction = $this->paymentTransaction;
         $paymentTransaction->setAmount(self::ZERO_AMOUNT)->setCurrency('USD');
         $transactionOptions = $paymentTransaction->getTransactionOptions();
-
+        $requestData = [
+            static::CREDIT_CARD_VALUE_KEY => BraintreeMethodProvider::NEWCREDITCARD,
+            static::NONCE_KEY => null
+        ];
         // Fetch the nonce and credit_card_value from the request and merge with the transaction options
-        $requestData = $request->get(
-            'oro_workflow_transition',
-            [
-                static::NONCE_KEY => null,
-                static::CREDIT_CARD_VALUE_KEY => BraintreeMethodProvider::NEWCREDITCARD
-            ]
+        // By recursively iterating over the request data to extract the needed values
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveArrayIterator($request->request->all()),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $extraData = array_filter(
-            $requestData,
-            function ($key) {
-                return $key === static::CREDIT_CARD_VALUE_KEY
-                    || $key === static::NONCE_KEY;
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        foreach ($iterator as $key => $value) {
+            if ($key === static::NONCE_KEY) {
+                $requestData[static::NONCE_KEY] = $value;
+            } elseif ($key === static::CREDIT_CARD_VALUE_KEY) {
+                $requestData[static::CREDIT_CARD_VALUE_KEY] = $value;
+            }
+        }
 
-
-
-        $transactionOptions = array_merge($transactionOptions, $extraData);
+        $transactionOptions = array_merge($transactionOptions, $requestData);
         $paymentTransaction->setTransactionOptions($transactionOptions);
         $paymentTransaction->setSuccessful(true)
             ->setAction(PaymentMethodInterface::VALIDATE)
