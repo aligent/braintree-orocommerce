@@ -1,4 +1,0 @@
-styles:
-    inputs:
-        - 'bundles/entrepidsbraintree/css/styles.css'
-    output: 'css/layout/default/styles.css'

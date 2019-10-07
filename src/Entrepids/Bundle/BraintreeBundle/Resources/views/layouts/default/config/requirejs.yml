@@ -1,5 +1,0 @@
-config:
-    paths:
-        'braintree/js/app/components/credit-card-component': 'bundles/entrepidsbraintree/js/app/components/credit-card-component.js'
-        'braintree/js/braintree/braintree-client': 'https://js.braintreegateway.com/web/3.39.0/js/client.min'
-        'braintree/js/braintree/braintree-hosted-fields': 'https://js.braintreegateway.com/web/3.39.0/js/hosted-fields.min'

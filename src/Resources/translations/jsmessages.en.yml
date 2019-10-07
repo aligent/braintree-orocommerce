@@ -1,0 +1,3 @@
+aligent:
+  braintree:
+    payment_nonce_error: 'An Error occurred while processing your payment. Please select another payment method.'

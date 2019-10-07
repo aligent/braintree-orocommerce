@@ -1,0 +1,5 @@
+config:
+    paths:
+        'aligentbraintree/js/app/components/braintree-method-component': 'bundles/aligentbraintree/js/app/components/braintree-method-component.js'
+        'aligentbraintree/js/app/components/order-review-component': 'bundles/aligentbraintree/js/app/components/order-review-component.js'
+        'aligentbraintree/js/braintree/braintree-drop-in-ui': 'https://js.braintreegateway.com/web/dropin/1.16.0/js/dropin.min'

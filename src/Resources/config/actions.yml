@@ -1,0 +1,15 @@
+services:
+  # Abstract Action
+  aligent_braintree.action.abstract:
+    class: Aligent\BraintreeBundle\Method\Action\AbstractBraintreeAction
+    arguments:
+      - ''
+    calls:
+      - [setLogger, ['@logger']]
+
+  # Purchase Action
+  aligent_braintree.action.purchase:
+    class: Aligent\BraintreeBundle\Method\Action\PurchaseAction
+    parent: aligent_braintree.action.abstract
+    tags:
+      - { name: braintree.action, action: purchase }

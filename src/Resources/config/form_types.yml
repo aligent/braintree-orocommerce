@@ -1,0 +1,26 @@
+services:
+  aligent_braintree.form.type.settings:
+    class: 'Aligent\BraintreeBundle\Form\Type\BraintreeIntegrationSettingsType'
+    arguments:
+       - '@translator'
+    tags:
+      - { name: form.type }
+
+  aligent_braintree.form.type.credit_card_settings:
+    class: 'Aligent\BraintreeBundle\Form\Type\CreditCardSettingsType'
+    tags:
+      - { name: form.type }
+
+  aligent_braintree.form.type.paypal_settings:
+    class: 'Aligent\BraintreeBundle\Form\Type\PayPalSettingsType'
+    arguments:
+      - '@translator'
+    tags:
+      - { name: form.type }
+
+  aligent_braintree.form.type.paypal_credit_settings:
+    class: 'Aligent\BraintreeBundle\Form\Type\PayPalCreditSettingsType'
+    arguments:
+      - '@translator'
+    tags:
+      - { name: form.type }

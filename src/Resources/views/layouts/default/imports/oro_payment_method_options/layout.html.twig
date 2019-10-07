@@ -1,0 +1,9 @@
+{% block _payment_methods_aligent_braintree_widget %}
+    {% set paymentMethodComponentOptions = view.options|default({})|merge({paymentMethod: name}) %}
+    <div
+        data-page-component-module="aligentbraintree/js/app/components/braintree-method-component"
+        data-page-component-options="{{ paymentMethodComponentOptions|json_encode }}"
+    >
+    </div>
+    <input type="text" id="nonce-input" hidden>
+{% endblock %}

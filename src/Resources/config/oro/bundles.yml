@@ -1,0 +1,2 @@
+bundles:
+  - { name: Aligent\BraintreeBundle\AligentBraintreeBundle, priority: 400 }
