@@ -100,6 +100,11 @@ define(function (require) {
 
                 hostedFields.create({
                     client: clientInstance,
+                    styles: {
+                        'input': {
+                            'font-size': '16px'
+                        }
+                    },
                     fields: {
                         number: {
                             selector: '#card-number',
