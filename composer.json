@@ -1,6 +1,6 @@
 {
     "name": "entrepids/braintree",
-    "version": "0.1.2",
+    "version": "0.1.333",
     "type": "symfony-bundle",
     "description": "A Braintree module.",
     "authors": [
