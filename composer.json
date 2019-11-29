@@ -15,6 +15,6 @@
     "require": {
         "braintree/braintree_php": "3.36.*",
         "php": ">=7.1",
-        "oro/commerce": "3.*",
+        "oro/commerce": "3.*"
     }
 }
