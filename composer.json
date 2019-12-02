@@ -10,7 +10,7 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Aligent\\BraintreeBundle\\": "./src/" },
+        "psr-4": { "Aligent\\BraintreeBundle\\": "./src/" }
     },
     "require": {
         "braintree/braintree_php": "3.36.*",
