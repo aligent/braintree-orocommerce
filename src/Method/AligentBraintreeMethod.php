@@ -49,6 +49,7 @@ class AligentBraintreeMethod implements PaymentMethodInterface
     {
         $this->config = $config;
         $this->actionProvider = $actionProvider;
+        $this->actionProvider->setConfig($this->config);
         $this->logger = $logger;
     }
 
@@ -66,7 +67,7 @@ class AligentBraintreeMethod implements PaymentMethodInterface
         try {
             $paymentTransaction->setAction($action);
             $actionInstance = $this->actionProvider->getAction($action);
-            return $actionInstance->execute($paymentTransaction, $this->config);
+            return $actionInstance->execute($paymentTransaction);
         } catch (\Exception $e) {
             $this->logger->critical(
                 "Exception excuting Braintree Payment action ({$action})",

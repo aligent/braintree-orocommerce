@@ -1,0 +1,19 @@
+{% block payment_method_settings_widget %}
+    {% for child in form.children %}
+        {#
+            TODO: Move inline styles out to scss
+        #}
+        <div class="border"
+            style="margin-top: 10px; padding: 10px 15px;">
+            <div class="form-row">
+                <div class="control-label">
+                    <label>{{ child.vars.label|trans }}</label>
+                </div>
+            </div>
+            <div class="form-row">
+                {{ form_errors(child) }}
+                {{ form_widget(child) }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

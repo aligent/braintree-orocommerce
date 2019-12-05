@@ -10,9 +10,11 @@ namespace Aligent\BraintreeBundle\Method\View;
 
 
 use Aligent\BraintreeBundle\Braintree\Gateway;
+use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ConfigurationBuilderInterface;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Aligent\BraintreeBundle\Provider\PaymentMethodSettingsProvider;
+use Aligent\BraintreeBundle\Provider\ChainConfigurationBuilder;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -32,25 +34,33 @@ class BraintreeView implements PaymentMethodViewInterface
     protected $tokenStorage;
 
     /**
-     * @var PaymentMethodSettingsProvider
+     * @var ConfigurationBuilderInterface
      */
-    protected $settingsProvider;
+    protected $configurationBuilder;
+
+    /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
 
     /**
      * BraintreeView constructor.
      * @param BraintreeConfigInterface $config
      * @param TokenStorageInterface $tokenStorage
-     * @param PaymentMethodSettingsProvider $settingsProvider
+     * @param ConfigurationBuilderInterface $configurationBuilder
+     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(
         BraintreeConfigInterface $config,
         TokenStorageInterface $tokenStorage,
-        PaymentMethodSettingsProvider $settingsProvider
+        ConfigurationBuilderInterface $configurationBuilder,
+        DoctrineHelper $doctrineHelper
     )
     {
         $this->config = $config;
         $this->tokenStorage = $tokenStorage;
-        $this->settingsProvider = $settingsProvider;
+        $this->configurationBuilder = $configurationBuilder;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -61,7 +71,8 @@ class BraintreeView implements PaymentMethodViewInterface
     {
         return [
             'authToken' => $this->getAuthToken(),
-            'paymentMethodSettings' => $this->getPaymentMethodSettings($context)
+            'paymentMethodSettings' => $this->getPaymentMethodSettings($context),
+            'vaultMode' => $this->config->isVaultMode()
         ];
     }
 
@@ -106,12 +117,13 @@ class BraintreeView implements PaymentMethodViewInterface
     }
 
     /**
-     * Create an authentication token for the logged in user
+     * Create an authentication token for the logged in user (if vault mode is enabled)
+     * or a generic token (if vault mode is disabled)
      * @return string
      */
     protected function getAuthToken()
     {
-        $gateway = Gateway::getInstance($this->config);
+        $gateway = new Gateway($this->config, $this->doctrineHelper);
 
         $token = $this->tokenStorage->getToken();
 
@@ -119,11 +131,7 @@ class BraintreeView implements PaymentMethodViewInterface
             $user = $token->getUser();
 
             if ($user instanceof CustomerUser) {
-                return $gateway->getAuthToken(
-                    [
-                        'customerId' => $user->getId()
-                    ]
-                );
+                return $gateway->getCustomerAuthToken($user);
             }
         }
 
@@ -136,20 +144,7 @@ class BraintreeView implements PaymentMethodViewInterface
      */
     protected function getPaymentMethodSettings(PaymentContextInterface $context)
     {
-        $settings = [];
         $paymentMethodSettings = $this->config->getPaymentMethodSettings();
-
-        foreach ($paymentMethodSettings as $paymentMethod => $paymentMethodsettings) {
-            if ($paymentMethodsettings['enabled']) {
-                unset($paymentMethodsettings['enabled']);
-                $settings[$paymentMethod] = $this->settingsProvider->build(
-                    $paymentMethod,
-                    $context,
-                    $paymentMethodsettings
-                );
-            }
-        }
-
-        return $settings;
+        return $this->configurationBuilder->build($context, $paymentMethodSettings);
     }
 }

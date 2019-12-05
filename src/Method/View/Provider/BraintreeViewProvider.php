@@ -9,11 +9,12 @@
 namespace Aligent\BraintreeBundle\Method\View\Provider;
 
 
+use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProviderInterface;
 use Aligent\BraintreeBundle\Method\View\Factory\BraintreeViewFactoryInterface;
-use Aligent\BraintreeBundle\Provider\PaymentMethodSettingsProvider;
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Method\View\AbstractPaymentMethodViewProvider;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -29,25 +30,31 @@ class BraintreeViewProvider extends AbstractPaymentMethodViewProvider
     /** @var TokenStorageInterface */
     protected $tokenStorage;
 
-    /** @var PaymentMethodSettingsProvider */
-    protected $settingsProvider;
+    /** @var ChainConfigurationBuilder */
+    protected $configurationBuilder;
+
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
 
     /**
      * @param BraintreeConfigProviderInterface $configProvider
      * @param BraintreeViewFactoryInterface $factory
      * @param TokenStorageInterface $tokenStorage
-     * @param PaymentMethodSettingsProvider $settingsProvider
+     * @param ChainConfigurationBuilder $settingsProvider
+     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(
         BraintreeConfigProviderInterface $configProvider,
         BraintreeViewFactoryInterface $factory,
         TokenStorageInterface $tokenStorage,
-        PaymentMethodSettingsProvider $settingsProvider
+        ChainConfigurationBuilder $settingsProvider,
+        DoctrineHelper $doctrineHelper
     ) {
         $this->factory = $factory;
         $this->configProvider = $configProvider;
         $this->tokenStorage = $tokenStorage;
-        $this->settingsProvider = $settingsProvider;
+        $this->configurationBuilder = $settingsProvider;
+        $this->doctrineHelper = $doctrineHelper;
 
         parent::__construct();
     }
@@ -72,7 +79,7 @@ class BraintreeViewProvider extends AbstractPaymentMethodViewProvider
     {
         $this->addView(
             $config->getPaymentMethodIdentifier(),
-            $this->factory->create($config, $this->tokenStorage, $this->settingsProvider)
+            $this->factory->create($config, $this->tokenStorage, $this->configurationBuilder, $this->doctrineHelper)
         );
     }
 }
