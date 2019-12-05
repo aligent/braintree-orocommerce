@@ -2,13 +2,13 @@ parameters:
   aligent_braintree.integration.type: 'aligent_braintree'
 
 services:
-  aligent_braintree.integration.channel:
+  Aligent\BraintreeBundle\Integration\BraintreeChannelType:
     class: 'Aligent\BraintreeBundle\Integration\BraintreeChannelType'
     public: true
     tags:
       - { name: oro_integration.channel, type: '%aligent_braintree.integration.type%' }
 
-  aligent_braintree.integration.transport:
+  Aligent\BraintreeBundle\Integration\BraintreeTransport:
     class: 'Aligent\BraintreeBundle\Integration\BraintreeTransport'
     public: false
     tags:

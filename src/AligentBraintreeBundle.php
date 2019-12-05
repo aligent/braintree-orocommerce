@@ -10,7 +10,7 @@ namespace Aligent\BraintreeBundle;
 
 
 use Aligent\BraintreeBundle\DependencyInjection\Compiler\ActionPass;
-use Aligent\BraintreeBundle\DependencyInjection\Compiler\PaymentMethodSettingsPass;
+use Aligent\BraintreeBundle\DependencyInjection\Compiler\PaymentMethodConfigurationPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -23,6 +23,6 @@ class AligentBraintreeBundle extends Bundle
     {
         $container
             ->addCompilerPass(new ActionPass())
-            ->addCompilerPass(new PaymentMethodSettingsPass());
+            ->addCompilerPass(new PaymentMethodConfigurationPass());
     }
 }
