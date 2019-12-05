@@ -27,12 +27,15 @@ class AligentBraintreeExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
         $loader->load('form_types.yml');
         $loader->load('method.yml');
         $loader->load('integration.yml');
         $loader->load('actions.yml');
+        $loader->load('event_listeners.yml');
     }
 
     public function getAlias()

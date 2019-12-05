@@ -11,14 +11,14 @@ namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 
-interface SettingsBuilderInterface
+interface ConfigurationBuilderInterface
 {
 
     /**
      * Build the settings object to pass to Dropin
      * @param PaymentContextInterface $context
-     * @param array $settings
+     * @param array $configuration
      * @return mixed
      */
-    public function build(PaymentContextInterface $context, array $settings);
+    public function build(PaymentContextInterface $context, array $configuration);
 }

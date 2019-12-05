@@ -1,10 +1,10 @@
 <?php
 /**
- * Compiler pass to manager Action classes
+ * Compiler pass to add config builders to the main chain config builder
  *
  * @category  Braintree
  * @package
- * @author    Jim O'Halloran <jim@aligent.com.au>
+ * @author    Adam Hall <adam.hall@aligent.com.au>
  * @copyright 2018 Aligent Consulting
  * @license   Proprietary
  * @link      http://www.aligent.com.au/
@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PaymentMethodSettingsPass implements CompilerPassInterface
+class PaymentMethodConfigurationPass implements CompilerPassInterface
 {
-    const BRAINTREE_PAYMENT_METHOD_SETTINGS_PROVIDER_SERVICE_ID = 'aligent_braintree.provider.payment_method_settings';
+    const BRAINTREE_PAYMENT_METHOD_SETTINGS_PROVIDER_SERVICE_ID = 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder';
     const ALIGENT_BRAINTREE_PAYMENT_METHOD_SETTINGS_TAG = 'braintree.payment_method_settings';
 
     /**

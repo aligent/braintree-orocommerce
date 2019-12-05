@@ -9,11 +9,14 @@
 namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
 
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 
-class PayPalSettingsBuilder implements SettingsBuilderInterface
+class PayPalCreditConfigurationBuilder implements ConfigurationBuilderInterface, FeatureToggleableInterface
 {
+    use FeatureCheckerHolderTrait;
 
     /**
      * @var TotalProcessorProvider
@@ -29,14 +32,18 @@ class PayPalSettingsBuilder implements SettingsBuilderInterface
         $this->totalsProvider = $totalsProvider;
     }
 
-        /**
+    /**
      * @inheritdoc
      */
-    public function build(PaymentContextInterface $context, array $settings)
+    public function build(PaymentContextInterface $context, array $configuration)
     {
+        if (!$this->isFeaturesEnabled()) {
+            return;
+        }
+
         // Strip Null values
         $viewSettings = array_filter(
-            $settings,
+            $configuration,
             function ($value) {
                 return $value !== NULL;
             }
@@ -45,7 +52,7 @@ class PayPalSettingsBuilder implements SettingsBuilderInterface
         // Checkout flow requires an amount and total
         if ($viewSettings['flow'] === 'checkout') {
             $total = $this->totalsProvider->getTotal($context->getSourceEntity());
-            $viewSettings['amount'] = $total->getAmount();
+            $viewSettings['amount'] = $total->getValue();
             $viewSettings['currency'] = $total->getCurrency();
         }
 

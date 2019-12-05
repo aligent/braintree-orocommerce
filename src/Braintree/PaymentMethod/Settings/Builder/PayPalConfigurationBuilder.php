@@ -12,7 +12,7 @@ namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 
-class PayPalCreditSettingsBuilder implements SettingsBuilderInterface
+class PayPalConfigurationBuilder implements ConfigurationBuilderInterface
 {
 
     /**
@@ -29,14 +29,14 @@ class PayPalCreditSettingsBuilder implements SettingsBuilderInterface
         $this->totalsProvider = $totalsProvider;
     }
 
-    /**
+        /**
      * @inheritdoc
      */
-    public function build(PaymentContextInterface $context, array $settings)
+    public function build(PaymentContextInterface $context, array $configuration)
     {
         // Strip Null values
         $viewSettings = array_filter(
-            $settings,
+            $configuration,
             function ($value) {
                 return $value !== NULL;
             }
@@ -45,7 +45,7 @@ class PayPalCreditSettingsBuilder implements SettingsBuilderInterface
         // Checkout flow requires an amount and total
         if ($viewSettings['flow'] === 'checkout') {
             $total = $this->totalsProvider->getTotal($context->getSourceEntity());
-            $viewSettings['amount'] = $total->getValue();
+            $viewSettings['amount'] = $total->getAmount();
             $viewSettings['currency'] = $total->getCurrency();
         }
 

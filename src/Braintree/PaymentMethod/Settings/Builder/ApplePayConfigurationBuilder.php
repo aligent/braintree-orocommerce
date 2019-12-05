@@ -9,11 +9,14 @@
 namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
 
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 
-class ApplePaySettingsBuilder implements SettingsBuilderInterface
+class ApplePayConfigurationBuilder implements ConfigurationBuilderInterface, FeatureToggleableInterface
 {
+    use FeatureCheckerHolderTrait;
     /**
      * @var TotalProcessorProvider
      */
@@ -31,14 +34,18 @@ class ApplePaySettingsBuilder implements SettingsBuilderInterface
     /**
      * Build the settings object to pass to Dropin
      * @param PaymentContextInterface $context
-     * @param array $settings
+     * @param array $configuration
      * @return mixed
      */
-    public function build(PaymentContextInterface $context, array $settings)
+    public function build(PaymentContextInterface $context, array $configuration)
     {
+        if (!$this->isFeaturesEnabled()) {
+            return;
+        }
+
         // Strip Null values
         $viewSettings = array_filter(
-            $settings,
+            $configuration,
             function ($value) {
                 return $value !== NULL;
             }

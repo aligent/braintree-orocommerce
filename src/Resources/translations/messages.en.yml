@@ -1,5 +1,8 @@
 aligent:
   braintree:
+    experimental_payment_methods:
+      label: 'Experimental Payment Methods'
+      description: 'Enables/Disables Experimental Payment methods'
     channel_type:
       label: "Braintree"
     settings:

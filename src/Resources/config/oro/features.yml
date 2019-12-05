@@ -1,0 +1,5 @@
+features:
+  experimental_payment_methods:
+    label: aligent.braintree.experimental_payment_methods.label
+    description: aligent.braintree.experimental_payment_methods.description
+    toggle: aligent_braintree.experimental_payment_methods
