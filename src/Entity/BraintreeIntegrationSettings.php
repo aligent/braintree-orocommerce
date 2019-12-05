@@ -116,7 +116,11 @@ class BraintreeIntegrationSettings extends Transport
     {
         $this->labels = new ArrayCollection();
         $this->shortLabels = new ArrayCollection();
-        $this->paymentMethodSettings = [];
+        $this->paymentMethodSettings = [
+            'card' => [
+                'enabled' => true
+            ]
+        ];
     }
 
     /**
