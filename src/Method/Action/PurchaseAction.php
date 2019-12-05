@@ -8,7 +8,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Action;
 
-
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\Result\Error;
@@ -16,60 +15,51 @@ use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class PurchaseAction extends AbstractBraintreeAction
 {
-
     const ACTION = 'purchase';
 
     /**
      * @param PaymentTransaction $paymentTransaction
-     * @param BraintreeConfigInterface $config
      * @return mixed
      */
-    public function execute(PaymentTransaction $paymentTransaction, BraintreeConfigInterface $config)
+    public function execute(PaymentTransaction $paymentTransaction)
     {
+        $data = $this->buildRequestData($paymentTransaction);
+        $paymentTransaction->setRequest($data);
+
         try {
-            $options = $this->optionResolver
-                ->resolveOptions(
-                    $paymentTransaction,
-                    $config
-                );
-            $gateway = Gateway::getInstance($config);
-            $response = $gateway->sale($options);
-        } catch (\Exception $e) {
-            $this->logger->critical(
-                $e->getMessage(),
-                [
-                    'exception' => $e,
-                    'payment_transaction' => $paymentTransaction->getId(),
-                    'payment_method' => $config->getPaymentMethodIdentifier()
-                ]
-            );
-
-            $paymentTransaction
-                ->setSuccessful(false)
-                ->setActive(false);
-
+            $response = $this->braintreeGateway->sale($data);
+        } catch (\Exception $exception) {
+            $this->handleException($paymentTransaction, $exception);
+            $this->setPaymentTransactionStateFailed($paymentTransaction);
             return [
                 'successful' => false
             ];
         }
 
         if ($response instanceof Error) {
-            $this->logger->error(
-                '',
-                [
-                    'payment_transaction' => $paymentTransaction->getId(),
-                    'payment_method' => $config->getPaymentMethodIdentifier(),
-                    'response' => $response
-                ]
-            );
+            $this->handleError($paymentTransaction, $response);
+            $this->setPaymentTransactionStateFailed($paymentTransaction);
+
+            return [
+                'successful' => false
+            ];
         }
 
         $paymentTransaction
+            ->setResponse((array) $response)
             ->setSuccessful($response->success)
             ->setActive(false);
 
         return [
             'successful' => $response->success
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return static::ACTION;
     }
 }

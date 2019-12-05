@@ -1,0 +1,5 @@
+services:
+  Aligent\BraintreeBundle\EventListener\PurchaseActionEventListener:
+    class: Aligent\BraintreeBundle\EventListener\PurchaseActionEventListener
+    tags:
+      - { name: kernel.event_listener, event: aligent_braintree.payment_action.purchase, method: onPurchase }

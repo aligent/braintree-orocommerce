@@ -10,6 +10,7 @@ namespace Aligent\BraintreeBundle\Method\Action\Provider;
 
 
 use Aligent\BraintreeBundle\Method\Action\BraintreeActionInterface;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 class BraintreeActionProvider implements BraintreeActionProviderInterface
 {
@@ -18,6 +19,11 @@ class BraintreeActionProvider implements BraintreeActionProviderInterface
      * @var BraintreeActionInterface[]
      */
     protected $actions = [];
+
+    /**
+     * @var BraintreeConfigInterface
+     */
+    protected $config;
 
 
     /**
@@ -30,7 +36,14 @@ class BraintreeActionProvider implements BraintreeActionProviderInterface
             throw new \InvalidArgumentException("{$action} is not supported.");
         }
 
-        return $this->actions[$action];
+        if (!$this->config) {
+            throw new \InvalidArgumentException("Unable to initialize {$action}, as a configuration has not been set. ");
+        }
+
+        $action = $this->actions[$action];
+        $action->initialize($this->getConfig());
+
+        return $action;
     }
 
     /**
@@ -56,5 +69,22 @@ class BraintreeActionProvider implements BraintreeActionProviderInterface
     public function hasAction($action)
     {
         return array_key_exists($action, $this->actions);
+    }
+
+    /**
+     * @param BraintreeConfigInterface $braintreeConfig
+     * @return mixed
+     */
+    public function setConfig(BraintreeConfigInterface $braintreeConfig)
+    {
+        $this->config = $braintreeConfig;
+    }
+
+    /**
+     * @return BraintreeConfigInterface
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

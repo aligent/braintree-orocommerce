@@ -10,6 +10,7 @@ namespace Aligent\BraintreeBundle\Method\Action\Provider;
 
 
 use Aligent\BraintreeBundle\Method\Action\BraintreeActionInterface;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 interface BraintreeActionProviderInterface
 {
@@ -18,6 +19,17 @@ interface BraintreeActionProviderInterface
      * @return BraintreeActionInterface
      */
     public function getAction($action);
+
+    /**
+     * @param BraintreeConfigInterface $braintreeConfig
+     * @return mixed
+     */
+    public function setConfig(BraintreeConfigInterface $braintreeConfig);
+
+    /**
+     * @return BraintreeConfigInterface
+     */
+    public function getConfig();
 
     /**
      * @param $action

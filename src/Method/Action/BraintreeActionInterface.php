@@ -16,8 +16,18 @@ interface BraintreeActionInterface
 {
     /**
      * @param PaymentTransaction $paymentTransaction
-     * @param BraintreeConfigInterface $config
-     * @return mixed
+     * @return array
      */
-    public function execute(PaymentTransaction $paymentTransaction, BraintreeConfigInterface $config);
+    public function execute(PaymentTransaction $paymentTransaction);
+
+    /**
+     * @param BraintreeConfigInterface $braintreeConfig
+     * @return void
+     */
+    public function initialize(BraintreeConfigInterface $braintreeConfig);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }
