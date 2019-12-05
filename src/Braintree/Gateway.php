@@ -12,7 +12,11 @@ namespace Aligent\BraintreeBundle\Braintree;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\ClientToken;
 use Braintree\Configuration;
+use Braintree\Customer;
+use Braintree\Exception\NotFound;
 use Braintree\Transaction;
+use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class Gateway
 {
@@ -25,49 +29,113 @@ class Gateway
     public $config;
 
     /**
-     * @var Gateway
+     * @var \Braintree\Gateway
      */
-    private static $instance;
+    protected $braintreeGateway;
+
+    /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
 
     /**
      * Gateway constructor.
      * @param BraintreeConfigInterface $config
+     * @param DoctrineHelper $doctrineHelper
      */
-    public function __construct(BraintreeConfigInterface $config)
+    public function __construct(BraintreeConfigInterface $config, DoctrineHelper $doctrineHelper)
     {
         $this->config = $config;
-        Configuration::merchantId($config->getMerchantId());
-        Configuration::publicKey($config->getPublicKey());
-        Configuration::privateKey($config->getPrivateKey());
-        Configuration::environment($config->getEnvironment());
+        $this->doctrineHelper = $doctrineHelper;
+        $this->braintreeGateway = new \Braintree\Gateway(
+            [
+                'environment' => $config->getEnvironment(),
+                'publicKey'   => $config->getPublicKey(),
+                'privateKey'  => $config->getPrivateKey(),
+                'merchantId'  => $config->getMerchantId()
+            ]
+        );
     }
 
     /**
-     * @param BraintreeConfigInterface $config
-     * @return Gateway
+     * Generate Braintree Authentication Token for a customer user
+     * @param CustomerUser $customerUser
+     * @return string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public static function getInstance(BraintreeConfigInterface $config)
+    public function getCustomerAuthToken(CustomerUser $customerUser)
     {
-        return self::$instance = new self($config);
+       $braintreeId = $customerUser->getBraintreeId();
+
+       // if the customer doesn't already exist with braintree create it
+       if (!$braintreeId) {
+           $result = $this->createBraintreeCustomer($customerUser);
+
+           // If we failed to create fallback to a generic auth token with no vaulting
+           if (!$result->success) {
+               return  $this->getAuthToken();
+           }
+
+           $braintreeId = $customerUser->getBraintreeId();
+       }
+
+       // ensure we can find the customer with that ID otherwise fallback to generic token
+        try {
+           $this->braintreeGateway->customer()->find($braintreeId);
+        } catch (NotFound $exception) {
+            return  $this->getAuthToken();
+        }
+
+        return $this->braintreeGateway->clientToken()->generate(
+            [
+                'customerId' => $braintreeId
+            ]
+        );
     }
 
     /**
-     * Generate Braintree Authentication Token
-     * @param array $params
+     * Generate a generic auth token for braintree
      * @return string
      */
-    public function getAuthToken($params = [])
+    public function getAuthToken()
     {
-        return ClientToken::generate($params);
+        return $this->braintreeGateway->clientToken()->generate();
     }
 
     /**
      * Charge the payment nonce
-     * @param array $attribs
+     * @param array $params
      * @return \Braintree\Result\Error|\Braintree\Result\Successful
      */
-    public function sale(array $attribs)
+    public function sale(array $params)
     {
-        return Transaction::sale($attribs);
+        return $this->braintreeGateway->transaction()->sale($params);
+    }
+
+    /**
+     * @param CustomerUser $customerUser
+     * @return \Braintree\Result\Error|\Braintree\Result\Successful
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createBraintreeCustomer(CustomerUser $customerUser)
+    {
+        $result = $this->braintreeGateway->customer()->create(
+            [
+                'firstName' => $customerUser->getFirstName(),
+                'lastName'  => $customerUser->getLastName(),
+                'company'    => $customerUser->getCustomer()->getName(),
+                'email'      => $customerUser->getEmail()
+            ]
+        );
+
+        if ($result->success) {
+            $em = $this->doctrineHelper->getEntityManager(CustomerUser::class);
+            $customerUser->setBraintreeId($result->customer->id);
+            $em->flush($customerUser);
+        }
+
+        return $result;
     }
 }

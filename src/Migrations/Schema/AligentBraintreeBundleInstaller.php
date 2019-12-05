@@ -3,6 +3,11 @@
 namespace Aligent\BraintreeBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -29,6 +34,7 @@ class AligentBraintreeBundleInstaller implements Installation
         $this->createAligentBraintreeLblTable($schema);
         $this->createAligentBraintreeShLblTable($schema);
         $this->updateOroIntegrationTransportTable($schema);
+        $this->extendCustomerUser($schema);
 
         /** Foreign keys generation **/
         $this->addAligentBraintreeLblForeignKeys($schema);
@@ -147,6 +153,35 @@ class AligentBraintreeBundleInstaller implements Installation
             ['localized_value_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     * @throws \Doctrine\DBAL\Schema\SchemaException
+     */
+    protected function extendCustomerUser(Schema $schema)
+    {
+        $table = $schema->getTable('oro_customer_user');
+
+        $table->addColumn(
+            'braintree_id',
+            Type::STRING,
+            [
+                'notnull' => false,
+                'oro_options' => [
+                    'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
+                    'form' => [
+                        'is_enabled' => false
+                    ],
+                    'view' => [
+                        'is_displayable' => false
+                    ],
+                    'dataaudit' => ['auditable' => true],
+
+                ]
+            ]
         );
     }
 }

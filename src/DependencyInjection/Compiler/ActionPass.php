@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ActionPass implements CompilerPassInterface
 {
-    const BRAINTREE_ACTION_PROVIDER_SERVICE_ID = 'aligent_braintree.action_provider.braintree';
+    const BRAINTREE_ACTION_PROVIDER_SERVICE_ID = 'Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider';
     const ALIGENT_BRAINTREE_ACTION_TAG = 'braintree.action';
 
     /**
