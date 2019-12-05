@@ -23,18 +23,14 @@ class CreditCardSettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
+            'enabled',
+            CheckboxType::class
+        )->add(
             'cardholderName',
             CheckboxType::class,
             [
                 'label'    => 'aligent.braintree.settings.credit_card.require_name.label',
                 'required' => false,
-            ]
-        )
-        ->add(
-            'enabled',
-            HiddenType::class,
-            [
-                'data' => true
             ]
         );
     }
