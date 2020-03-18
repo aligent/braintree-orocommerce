@@ -402,7 +402,12 @@ define(function (require) {
                         component.isTokenized = true;
                         var credit_card_value = component.$el.find(component.options.selectors.credit_card_value);
                         var payment_method_nonce = component.$el.find(component.options.selectors.payment_method_nonce);
-                        var form = $(component.$el).closest("form")
+                        var form = $('form[name="oro_workflow_transition"]');
+
+                        // if we're not in a workflow find the closest form and use that
+                        if (form.length < 1) {
+                            form = $(component.$el).closest("form");
+                        }
 
                         // Update names of attributes so they are actually submitted
                         credit_card_value.attr('name',  form.attr('name') + '[' +  credit_card_value.attr('name') + ']');
