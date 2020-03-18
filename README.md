@@ -3,7 +3,7 @@ Braintree Payment Gateway Bundle
 
 Facts
 -----
-- version: 3.1.0
+- version: 4444.1.0
 - composer name: aligent/braintree-orocommerce
 
 Description
