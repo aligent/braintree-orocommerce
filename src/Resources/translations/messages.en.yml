@@ -1,0 +1,100 @@
+aligent:
+  braintree:
+    experimental_payment_methods:
+      label: 'Experimental Payment Methods'
+      description: 'Enables/Disables Experimental Payment methods'
+    channel_type:
+      label: "Braintree"
+    settings:
+      transport:
+        label: 'Braintree Transport'
+      labels:
+        label: "Label"
+      short_labels:
+        label: "Short Label"
+      environment:
+        label: "Environment"
+      production:
+        label: "Production"
+      sandbox:
+        label: "Sandbox"
+      merchant_id:
+        label: "Merchant ID"
+      merchant_account_id:
+        label: "Merchant Account ID"
+      public_key:
+        label: "Public Key"
+      private_key:
+        label: "Private Key"
+      vault_mode:
+        label: "Vault Mode"
+      payment_method_settings:
+        label: "Payment Method Settings"
+      credit_card:
+        label: "Credit Card"
+        require_name:
+          label: "Require Cardholders Name"
+      paypal:
+        label: "PayPal"
+        enabled: "Enabled"
+        flow:
+          label: "Checkout Flow"
+          checkout:
+            label: "Checkout"
+          vault:
+            label: "Vault"
+        display_name:
+          label: "Display Name"
+          tooltip: "Company name displayed in the PayPal lightbox, if left empty this will fallback to the braintree Company Name."
+        locale:
+          label: "Locale"
+          da_DK: "Danish - DENMARK"
+          de_DE: "German - GERMANY"
+          en_AU: "English - AUSTRALIA"
+          en_GB: "English - UNITED KINGDOM"
+          en_US: "English - UNITED STATES OF AMERICA"
+          es_ES: "Spanish - SPAIN"
+          fr_CA: "French - CANADA"
+          fr_FR: "French - FRANCE"
+          id_ID: "Indonesian - INDONESIA"
+          it_IT: "Italian - ITALY"
+          ja_JP: "Japanese - JAPAN"
+          ko_KR: "Korean - KOREA, REPUBLIC OF"
+          nl_NL: "Dutch - NETHERLANDS"
+          no_NO: "Norwegian - NORWAY"
+          pl_PL: "Polish - POLAND"
+          pt_BR: "Portuguese - BRAZIL"
+          pt_PT: "Portuguese - PORTUGAL"
+          ru_RU: "Russian - RUSSIAN FEDERATION"
+          sv_SE: "Swedish - SWEDEN"
+          th_TH: "Thai - THAILAND"
+          zh_CN: "Chinese - CHINA"
+          zh_HK: "Chinese - HONG KONG"
+          zh_TW: "Chinese - TAIWAN"
+        landing_page:
+          label: "Landing Page"
+          tooltip: "Type of for the paypal lightbox to display."
+          login: "Login"
+          billing: "Billing"
+      paypal_credit:
+        label: "PayPal Credit"
+        enabled: "Enabled"
+        flow:
+          label: "Flow"
+          checkout:
+            label: "Checkout"
+          vault:
+            label: "Vault"
+      venmo:
+        label: "Venmo"
+        enabled: "Enabled"
+      apple_pay:
+        enabled: "Enabled"
+        label: "Apple Pay"
+        display_name:
+          label: "Display Name"
+      google_pay:
+        enabled: "Enabled"
+        label: "Google Pay"
+        merchant_id:
+          label: "Merchant ID"

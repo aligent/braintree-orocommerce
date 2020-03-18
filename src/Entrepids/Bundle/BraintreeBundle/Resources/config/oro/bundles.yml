@@ -1,2 +1,0 @@
-bundles:
-    - { name: Entrepids\Bundle\BraintreeBundle\EntrepidsBraintreeBundle, priority: 400 }

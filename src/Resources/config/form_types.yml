@@ -1,0 +1,33 @@
+services:
+  Aligent\BraintreeBundle\Form\Type\BraintreeIntegrationSettingsType:
+    class: 'Aligent\BraintreeBundle\Form\Type\BraintreeIntegrationSettingsType'
+    arguments:
+       - '@translator'
+    tags:
+      - { name: form.type }
+
+  Aligent\BraintreeBundle\Form\Type\PaymentMethodSettingsType:
+    class: 'Aligent\BraintreeBundle\Form\Type\PaymentMethodSettingsType'
+    arguments:
+      - '@oro_featuretoggle.checker.feature_checker'
+    tags:
+      - { name: form.type }
+
+  Aligent\BraintreeBundle\Form\Type\CreditCardSettingsType:
+    class: 'Aligent\BraintreeBundle\Form\Type\CreditCardSettingsType'
+    tags:
+      - { name: form.type }
+
+  Aligent\BraintreeBundle\Form\Type\PayPalSettingsType:
+    class: 'Aligent\BraintreeBundle\Form\Type\PayPalSettingsType'
+    arguments:
+      - '@translator'
+    tags:
+      - { name: form.type }
+
+  Aligent\BraintreeBundle\Form\Type\PayPalCreditSettingsType:
+    class: 'Aligent\BraintreeBundle\Form\Type\PayPalCreditSettingsType'
+    arguments:
+      - '@translator'
+    tags:
+      - { name: form.type }

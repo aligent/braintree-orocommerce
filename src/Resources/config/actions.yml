@@ -1,0 +1,16 @@
+services:
+  # Abstract Action
+  Aligent\BraintreeBundle\Method\Action\AbstractBraintreeAction:
+    class: Aligent\BraintreeBundle\Method\Action\AbstractBraintreeAction
+    arguments:
+      - '@event_dispatcher'
+      - '@oro_entity.doctrine_helper'
+    calls:
+      - [setLogger, ['@logger']]
+
+  # Purchase Action
+  Aligent\BraintreeBundle\Method\Action\PurchaseAction:
+    class: Aligent\BraintreeBundle\Method\Action\PurchaseAction
+    parent: Aligent\BraintreeBundle\Method\Action\AbstractBraintreeAction
+    tags:
+      - { name: braintree.action, action: purchase }

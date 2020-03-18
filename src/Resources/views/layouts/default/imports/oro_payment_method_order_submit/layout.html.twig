@@ -1,0 +1,11 @@
+{% block _order_review_payment_methods_aligent_braintree_widget -%}
+    {% if options.payment_method is defined %}
+        {% set paymentMethodComponentOptions = view.options|default({})|merge({paymentMethod: options.payment_method}) %}
+        <div
+                data-page-component-module="aligentbraintree/js/app/components/order-review-component"
+                data-page-component-options="{{ paymentMethodComponentOptions|json_encode }}"
+                hidden
+        >
+        </div>
+    {% endif %}
+{%- endblock %}

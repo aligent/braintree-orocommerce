@@ -1,0 +1,106 @@
+services:
+  # Config Identifier Generator
+  aligent_braintree.generator.braintree_config_identifier:
+    parent: oro_integration.generator.prefixed_identifier_generator
+    public: true
+    arguments:
+      - '%aligent_braintree.integration.type%'
+
+  # Config Factory
+  Aligent\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory:
+    class: 'Aligent\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory'
+    public: false
+    arguments:
+      - '@oro_locale.helper.localization'
+      - '@aligent_braintree.generator.braintree_config_identifier'
+      - '@oro_security.encoder.default'
+
+  # Config Provider
+  Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProvider:
+    class: 'Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProvider'
+    arguments:
+      - '@doctrine'
+      - '@logger'
+      - '@Aligent\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactory'
+
+  # View Factory
+  Aligent\BraintreeBundle\Method\View\Factory\BraintreeViewFactory:
+    class: 'Aligent\BraintreeBundle\Method\View\Factory\BraintreeViewFactory'
+    public: false
+
+  # View Provider
+  Aligent\BraintreeBundle\Method\View\Provider\BraintreeViewProvider:
+    class: 'Aligent\BraintreeBundle\Method\View\Provider\BraintreeViewProvider'
+    public: false
+    arguments:
+      - '@Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProvider'
+      - '@Aligent\BraintreeBundle\Method\View\Factory\BraintreeViewFactory'
+      - '@oro_security.token_accessor'
+      - '@Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder'
+      - '@oro_entity.doctrine_helper'
+    tags:
+      - { name: oro_payment.payment_method_view_provider }
+
+  # Action Provider
+  Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider:
+    class: 'Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider'
+
+  # Method Factory
+  Aligent\BraintreeBundle\Method\Factory\BraintreeMethodFactory:
+    class: 'Aligent\BraintreeBundle\Method\Factory\BraintreeMethodFactory'
+    public: false
+    arguments:
+      - '@Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider'
+      - '@logger'
+
+  # Method Provider
+  Aligent\BraintreeBundle\Method\Provider\BraintreeMethodProvider:
+    class: 'Aligent\BraintreeBundle\Method\Provider\BraintreeMethodProvider'
+    public: false
+    arguments:
+      - '@Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProvider'
+      - '@Aligent\BraintreeBundle\Method\Factory\BraintreeMethodFactory'
+    tags:
+      - { name: oro_payment.payment_method_provider }
+
+  # Payment Method Settings Provider
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder'
+
+  # Payment Method Settings Builders
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ApplePayConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ApplePayConfigurationBuilder'
+    arguments:
+      ['@oro_pricing.subtotal_processor.total_processor_provider']
+    tags:
+      - { name: braintree.payment_method_settings, payment_method: applePay }
+      - { name: oro_featuretogle.feature, feature: experimental_payment_methods }
+
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\GooglePayConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\GooglePayConfigurationBuilder'
+    arguments:
+      ['@oro_pricing.subtotal_processor.total_processor_provider']
+    tags:
+      - { name: braintree.payment_method_settings, payment_method: googlePay }
+      - { name: oro_featuretogle.feature, feature: experimental_payment_methods }
+
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\PayPalCreditConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\PayPalCreditConfigurationBuilder'
+    arguments:
+      ['@oro_pricing.subtotal_processor.total_processor_provider']
+    tags:
+      - { name: braintree.payment_method_settings, payment_method: paypalCredit }
+      - { name: oro_featuretogle.feature, feature: experimental_payment_methods }
+
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\PayPalConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\PayPalConfigurationBuilder'
+    arguments:
+      ['@oro_pricing.subtotal_processor.total_processor_provider']
+    tags:
+      - { name: braintree.payment_method_settings, payment_method: paypal }
+
+  Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\VenmoConfigurationBuilder:
+    class: 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\VenmoConfigurationBuilder'
+    tags:
+      - { name: braintree.payment_method_settings, payment_method: venmo }
+      - { name: oro_featuretogle.feature, feature: experimental_payment_methods }
