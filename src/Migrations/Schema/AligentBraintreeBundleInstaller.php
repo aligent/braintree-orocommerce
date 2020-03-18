@@ -1,4 +1,12 @@
 <?php
+/**
+ * @category  Aligent
+ * @package   BraintreeBundle
+ * @author    Adam Hall <adam.hall@aligent.com.au>
+ * @copyright 2020 Aligent Consulting.
+ * @license
+ * @link      http://www.aligent.com.au/
+ */
 
 namespace Aligent\BraintreeBundle\Migrations\Schema;
 

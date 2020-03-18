@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: adamhall
- * Date: 3/2/19
- * Time: 11:47 PM
+ * @category  Aligent
+ * @package   BraintreeBundle
+ * @author    Adam Hall <adam.hall@aligent.com.au>
+ * @copyright 2020 Aligent Consulting.
+ * @license
+ * @link      http://www.aligent.com.au/
  */
 
 namespace Aligent\BraintreeBundle\Braintree;

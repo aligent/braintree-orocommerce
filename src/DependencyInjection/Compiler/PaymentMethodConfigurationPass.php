@@ -5,8 +5,8 @@
  * @category  Braintree
  * @package
  * @author    Adam Hall <adam.hall@aligent.com.au>
- * @copyright 2018 Aligent Consulting
- * @license   Proprietary
+ * @copyright 2020 Aligent Consulting
+ * @license   MIT
  * @link      http://www.aligent.com.au/
  **/
 

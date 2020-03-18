@@ -1,11 +1,9 @@
 <?php
 /**
- *
- *
  * @category  Aligent
- * @package
+ * @package   BraintreeBundle
  * @author    Adam Hall <adam.hall@aligent.com.au>
- * @copyright 2019 Aligent Consulting.
+ * @copyright 2020 Aligent Consulting.
  * @license
  * @link      http://www.aligent.com.au/
  */

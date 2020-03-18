@@ -1,14 +1,13 @@
 <?php
 /**
- * Compiler pass to manager Action classes
- *
- * @category  Braintree
- * @package
- * @author    Jim O'Halloran <jim@aligent.com.au>
- * @copyright 2018 Aligent Consulting
- * @license   Proprietary
+ * Compiler pass to add Action classes to action manager
+ * @category  Aligent
+ * @package   BraintreeBundle
+ * @author    Adam Hall <adam.hall@aligent.com.au>
+ * @copyright 2020 Aligent Consulting.
+ * @license
  * @link      http://www.aligent.com.au/
- **/
+ */
 
 namespace Aligent\BraintreeBundle\DependencyInjection\Compiler;
 
