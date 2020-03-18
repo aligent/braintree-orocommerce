@@ -53,7 +53,8 @@ Currently this bundle only supports the 'Purchase' action, 'Validate' and 'Captu
 
 Extension Points
 -----------
-####Events
+#### Events
+
 BraintreePaymentActionEvent (aligent_braintree.payment_action.{action}):
  
 This event is fired when a payment action executes but before the payload is sent to the payment gateway. It is used internally
@@ -62,7 +63,8 @@ to build up the payment payload and can be extended with other listeners to add 
 Currently supported events:
 - aligent_braintree.payment_action.purchase
 
-####Actions
+#### Actions
+
 Custom payment actions can be added by implementing the BraintreeActionInterface and then tagging the service with:
 
 `{ name: braintree.action, action: action_name }`
