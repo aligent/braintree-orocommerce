@@ -1,0 +1,8 @@
+aliases:
+  aligentbraintree/js/app/components/braintree-method-component$: aligentbraintree/js/app/components/braintree-method-component
+  aligentbraintree/js/app/components/order-review-component$: aligentbraintree/js/app/components/order-review-component
+
+dynamic-imports:
+  aligentbraintree:
+    - aligentbraintree/js/app/components/braintree-method-component
+    - aligentbraintree/js/app/components/order-review-component
