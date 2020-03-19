@@ -80,7 +80,6 @@ class BraintreeIntegrationSettingsType extends AbstractType
                         Gateway::SANDBOX,
                         Gateway::PRODUCTION
                     ],
-                    'choices_as_values' => true,
                     'choice_label' => function ($environment) {
                         return $this->translator->trans(
                             sprintf(

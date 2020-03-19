@@ -3,7 +3,7 @@ Braintree Payment Gateway Bundle
 
 Facts
 -----
-- version: 3.1.0
+- version: 4.1.0
 - composer name: aligent/braintree-orocommerce
 
 Description
@@ -24,6 +24,14 @@ Installation Instructions
 1. Run Migrations
         
         php bin/console oro:migration:load --force --env=prod
+        
+1. Install Assets
+        
+        php bin/console assets:install --env=prod
+        
+1. Build Assets
+        
+        php bin/console oro:assets:build --env=prod
         
 Set up Instructions
 -----------

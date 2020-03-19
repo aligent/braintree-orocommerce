@@ -1,0 +1,10 @@
+aliases:
+  aligentbraintree/js/app/components/braintree-method-component$: aligentbraintree/js/app/components/braintree-method-component
+  aligentbraintree/js/app/components/order-review-component$: aligentbraintree/js/app/components/order-review-component
+  braintree-web-drop-in$: npmassets/braintree-web-drop-in
+
+dynamic-imports:
+  aligentbraintree:
+    - aligentbraintree/js/app/components/braintree-method-component
+    - aligentbraintree/js/app/components/order-review-component
+    - braintree-web-drop-in
