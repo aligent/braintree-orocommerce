@@ -141,7 +141,11 @@ define(function (require) {
         },
 
         dispose: function () {
-            mediator.off('checkout:payment:before-form-serialization');
+            if (this.disposed) {
+                return;
+            }
+
+            mediator.off('checkout:payment:before-transit', this.beforeTransit, this);
 
             if (this.instance) {
                 this.instance.teardown(function (data) {
@@ -150,6 +154,8 @@ define(function (require) {
                     }
                 });
             }
+
+            BraintreeComponent.__super__.dispose.call(this);
         }
     });
 
