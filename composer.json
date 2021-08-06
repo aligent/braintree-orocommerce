@@ -1,7 +1,6 @@
 {
     "name": "aligent/braintree-orocommerce",
     "license": "MIT",
-    "version": "3.1.0",
     "type": "symfony-bundle",
     "description": "A Braintree Payments module for OroCommerce.",
     "authors": [
