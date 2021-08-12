@@ -23,17 +23,6 @@ interface BraintreeActionProviderInterface
     public function getAction($action);
 
     /**
-     * @param BraintreeConfigInterface $braintreeConfig
-     * @return mixed
-     */
-    public function setConfig(BraintreeConfigInterface $braintreeConfig);
-
-    /**
-     * @return BraintreeConfigInterface
-     */
-    public function getConfig();
-
-    /**
      * @param $action
      * @param BraintreeActionInterface $braintreeAction
      * @return $this
