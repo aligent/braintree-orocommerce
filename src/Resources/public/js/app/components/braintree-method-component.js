@@ -6,7 +6,7 @@ define(function (require) {
     var __ = require('orotranslation/js/translator');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
-    var dropin = require('aligentbraintree/js/braintree/braintree-drop-in-ui');
+    var dropin = require('braintree-web-drop-in');
 
     BraintreeComponent = BaseComponent.extend({
         /**
@@ -33,10 +33,10 @@ define(function (require) {
         nonceInput: null,
 
         initialize: function (options) {
-            this.options = _.extend({}, this.options, options);
+            this.options = $.extend({}, this.options, options);
             this.$el = this.options._sourceElement;
             this.nonceInput = $(this.options.selectors.nonceInputSelector);
-            var component = this;
+            const component = this;
 
             mediator.on('checkout:payment:before-transit', this.beforeTransit, this);
 
@@ -46,7 +46,7 @@ define(function (require) {
                 vaultManager: this.options.vaultMode
             };
 
-            dropinOptions = _.extend(dropinOptions, this.options.paymentMethodSettings);
+            dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
 
             dropin.create(
                 dropinOptions,

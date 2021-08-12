@@ -14,7 +14,7 @@ define(function (require) {
         },
 
         initialize: function (options) {
-            this.options = _.extend({}, this.options, options);
+            this.options = $.extend({}, this.options, options);
             this.$el = this.options._sourceElement;
 
             mediator.on('checkout:place-order:response', this.placeOrderResponse, this);

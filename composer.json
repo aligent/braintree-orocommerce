@@ -14,7 +14,12 @@
     },
     "require": {
         "braintree/braintree_php": "3.36.*",
-        "php": ">=7.1",
-        "oro/commerce": "3.*"
+        "php": ">=7.2",
+        "oro/commerce": "4.1.*"
+    },
+    "extra": {
+        "npm": {
+            "braintree-web-drop-in": "1.22.1"
+        }
     }
 }
