@@ -74,7 +74,8 @@ class BraintreeView implements PaymentMethodViewInterface
         return [
             'authToken' => $this->getAuthToken(),
             'paymentMethodSettings' => $this->getPaymentMethodSettings($context),
-            'vaultMode' => $this->config->isVaultMode()
+            'vaultMode' => $this->config->isVaultMode(),
+            'fraudProtectionAdvanced' => $this->config->isFraudProtectionAdvanced(),
         ];
     }
 

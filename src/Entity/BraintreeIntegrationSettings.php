@@ -112,6 +112,12 @@ class BraintreeIntegrationSettings extends Transport
     protected $settings;
 
     /**
+     * Column name shortened to braintree_fraud_advanced due to max db name length 30
+     * @var boolean @ORM\Column(name="braintree_fraud_advanced", type="boolean", options={"default"=false})
+     */
+    protected $fraudProtectionAdvanced = false;
+
+    /**
      * BraintreeIntegrationSettings constructor.
      */
     public function __construct()
@@ -334,6 +340,24 @@ class BraintreeIntegrationSettings extends Transport
     }
 
     /**
+     * @return bool
+     */
+    public function isFraudProtectionAdvanced()
+    {
+        return $this->fraudProtectionAdvanced;
+    }
+
+    /**
+     * @param bool $fraudProtectionAdvanced
+     */
+    public function setFraudProtectionAdvanced(bool $fraudProtectionAdvanced)
+    {
+        $this->fraudProtectionAdvanced = $fraudProtectionAdvanced;
+    }
+
+
+
+    /**
      * @return ParameterBag
      */
     public function getSettingsBag()
@@ -346,7 +370,8 @@ class BraintreeIntegrationSettings extends Transport
                     BraintreeConfig::ENVIRONMENT_KEY => $this->getEnvironment(),
                     BraintreeConfig::MERCHANT_ACCOUNT_ID_KEY => $this->getMerchantAccountId(),
                     BraintreeConfig::MERCHANT_ID_KEY => $this->getMerchantId(),
-                    BraintreeConfig::VAULT_KEY => $this->isVaultModeActive()
+                    BraintreeConfig::VAULT_KEY => $this->isVaultModeActive(),
+                    BraintreeConfig::FRAUD_PROTECTION_ADVANCED_KEY => $this->isFraudProtectionAdvanced()
                 ]
             );
         }
