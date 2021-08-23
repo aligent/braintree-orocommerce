@@ -66,6 +66,7 @@ class BraintreeView implements PaymentMethodViewInterface
     }
 
     /**
+     * These keys are used in the javascript file 'braintree-method-component.js to retrieve data from backend
      * @param PaymentContextInterface $context
      * @return array
      */
@@ -75,7 +76,7 @@ class BraintreeView implements PaymentMethodViewInterface
             'authToken' => $this->getAuthToken(),
             'paymentMethodSettings' => $this->getPaymentMethodSettings($context),
             'vaultMode' => $this->config->isVaultMode(),
-            'fraudProtectionAdvanced' => $this->config->isFraudProtectionAdvanced(),
+            'fraudProtectionAdvanced' => $this->config->isFraudProtectionAdvancedEnabled(),
         ];
     }
 

@@ -127,5 +127,5 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
     /**
      * @return bool
      */
-    public function isFraudProtectionAdvanced();
+    public function isFraudProtectionAdvancedEnabled();
 }
