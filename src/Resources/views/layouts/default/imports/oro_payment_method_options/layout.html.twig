@@ -1,5 +1,7 @@
 {% block _payment_methods_aligent_braintree_widget %}
     {% set paymentMethodComponentOptions = view.options|default({})|merge({paymentMethod: name}) %}
+    <script src="https://js.braintreegateway.com/web/3.80.0/js/data-collector.min.js"></script>
+
     <div
         data-page-component-module="aligentbraintree/js/app/components/braintree-method-component"
         data-page-component-options="{{ paymentMethodComponentOptions|json_encode }}"
