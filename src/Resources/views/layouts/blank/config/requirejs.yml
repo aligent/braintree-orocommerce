@@ -3,3 +3,4 @@ config:
         'aligentbraintree/js/app/components/braintree-method-component': 'bundles/aligentbraintree/js/app/components/braintree-method-component.js'
         'aligentbraintree/js/app/components/order-review-component': 'bundles/aligentbraintree/js/app/components/order-review-component.js'
         'aligentbraintree/js/braintree/braintree-drop-in-ui': 'https://js.braintreegateway.com/web/dropin/1.31.2/js/dropin.min.js'
+        'aligentbraintree/js/braintree/braintree-data-collector': 'https://js.braintreegateway.com/web/3.80.0/js/data-collector.min.js'

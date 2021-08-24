@@ -6,6 +6,10 @@ define(function (require) {
     var __ = require('orotranslation/js/translator');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
+
+    //WORKAROUND: Preferred way to require braintree data collector here, but didn't work. As workaround added to:
+    //src/Resources/views/layouts/default/imports/oro_payment_method_options/layout.html.twig
+    //require('aligentbraintree/js/braintree/braintree-data-collector'); //data collector needed for drop in ui with advanced fraud
     var dropin = require('aligentbraintree/js/braintree/braintree-drop-in-ui');
 
     BraintreeComponent = BaseComponent.extend({
