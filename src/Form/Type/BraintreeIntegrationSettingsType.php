@@ -135,6 +135,13 @@ class BraintreeIntegrationSettingsType extends AbstractType
                 ]
             )
             ->add(
+                'fraudProtectionAdvanced',
+                CheckboxType::class,
+                [
+                    'label' => 'aligent.braintree.settings.fraud_protection_advanced.label'
+                ]
+            )
+            ->add(
                 'paymentMethodSettings',
                 PaymentMethodSettingsType::class,
                 [

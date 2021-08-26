@@ -160,4 +160,12 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
         $this->set(self::PAYMENT_METHODS_CONFIG_KEY, $settings);
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isFraudProtectionAdvancedEnabled()
+    {
+        return (boolean) $this->get(self::FRAUD_PROTECTION_ADVANCED_KEY);
+    }
 }

@@ -13,8 +13,8 @@
         "psr-4": { "Aligent\\BraintreeBundle\\": "./src/" }
     },
     "require": {
-        "braintree/braintree_php": "3.36.*",
-        "php": ">=7.1",
+        "braintree/braintree_php": "6.4.*",
+        "php": ">=7.3",
         "oro/commerce": "3.*"
     }
 }
