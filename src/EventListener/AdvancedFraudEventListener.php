@@ -11,6 +11,7 @@
 namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
+use InvalidArgumentException;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class AdvancedFraudEventListener
