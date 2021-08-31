@@ -11,6 +11,7 @@
 namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
+use InvalidArgumentException;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class AdvancedFraudEventListener
@@ -52,10 +53,6 @@ class AdvancedFraudEventListener
             throw new InvalidArgumentException(
                 "Error decoding Payment Transaction additional data Error: " . json_last_error_msg()
             );
-        }
-
-        if (!isset($additionalData['deviceData'])) {
-            throw new InvalidArgumentException('Payment Transaction additionalData does not contain a deviceData');
         }
 
         return $additionalData['deviceData'];
