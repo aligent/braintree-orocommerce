@@ -55,10 +55,6 @@ class AdvancedFraudEventListener
             );
         }
 
-        if (!isset($additionalData['deviceData'])) {
-            throw new InvalidArgumentException('Payment Transaction additionalData does not contain a deviceData');
-        }
-
         return $additionalData['deviceData'];
     }
 

@@ -7,10 +7,13 @@ define(function (require) {
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
 
-    //WORKAROUND: Preferred way to require braintree data collector here, but didn't work. As workaround added to:
-    //src/Resources/views/layouts/default/imports/oro_payment_method_options/layout.html.twig
-    //require('aligentbraintree/js/braintree/braintree-data-collector'); //data collector needed for drop in ui with advanced fraud
-    var dropin = require('aligentbraintree/js/braintree/braintree-drop-in-ui');
+    var braintree = {};
+    braintree.dropin = require('aligentbraintree/js/braintree/braintree-drop-in-ui');
+    braintree.dataCollector = require('aligentbraintree/js/braintree/braintree-data-collector');
+
+    // Needed as the dropin script uses window internally
+    // Version 4.1 and up of this library will use the proper NPM dependencies so this will be removed.
+    window.braintree = braintree;
 
     BraintreeComponent = BaseComponent.extend({
         /**
@@ -62,7 +65,7 @@ define(function (require) {
 
             dropinOptions = _.extend(dropinOptions, this.options.paymentMethodSettings);
 
-            dropin.create(
+            braintree.dropin.create(
                 dropinOptions,
                 function (createErr, instance) {
                     if (createErr) {
