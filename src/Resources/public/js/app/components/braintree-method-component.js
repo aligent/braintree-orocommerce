@@ -3,6 +3,7 @@ define(function (require) {
 
     var BraintreeComponent;
     var $ = require('jquery');
+    const _ = require('underscore');
     var __ = require('orotranslation/js/translator');
     var mediator = require('oroui/js/mediator');
     var BaseComponent = require('oroui/js/app/components/base/component');
@@ -17,10 +18,14 @@ define(function (require) {
             authToken: null,
             vaultMode: false,
             selectors: {
-                nonceInputSelector: '#nonce-input'
+                nonceInputSelector: '#nonce-input',
+                dropInContainerSelector: '#dropin-container',
+                checkoutContent: '[data-role="checkout-content"]',
             },
             paymentMethodSettings: {}
         },
+
+        initialized: false,
 
         /**
          * @property {Object}
@@ -34,20 +39,48 @@ define(function (require) {
 
         initialize: function (options) {
             this.options = $.extend({}, this.options, options);
+
+            debugger;
+
+            const existingElement = this.getContent().find(`[data-name="${this.options.paymentMethod}"]`);
+
+            if (existingElement.length != 0) {
+                const parent = this.options._sourceElement.parent();
+                existingElement.appendTo(parent);
+                this.options._sourceElement.remove();
+                existingElement.trigger('braintree:update', this.options);
+                this.dispose();
+                return;
+            }
+
             this.$el = this.options._sourceElement;
-            this.nonceInput = $(this.options.selectors.nonceInputSelector);
-            const component = this;
+            this.nonceInput = this.$el.find(this.options.selectors.nonceInputSelector);
 
             mediator.on('checkout:payment:before-transit', this.beforeTransit, this);
+            mediator.on('checkout-content:initialized', this.checkoutContentInit, this);
+            mediator.on('checkout:after-change', this.afterChange, this);
+            this.$el.on('braintree:update', _.bind(this.update, this));
 
-            var dropinOptions = {
-                authorization:  this.options.authToken,
-                selector: this.$el[0],
-                vaultManager: this.options.vaultMode
-            };
+            if (this.initialized) {
+                console.log('Already initialized we should update dropin options here instead.')
+            } else {
+                var dropinOptions = {
+                    authorization:  this.options.authToken,
+                    selector: this.$el.find(this.options.selectors.dropInContainerSelector)[0],
+                    vaultManager: this.options.vaultMode
+                };
 
-            dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
+                dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
+                this.initializeDropIn(dropinOptions);
+            }
+        },
 
+        /**
+         * Initialize the drop UI component
+         * @param dropinOptions
+         */
+        initializeDropIn: function (dropinOptions) {
+            const component = this;
             dropin.create(
                 dropinOptions,
                 function (createErr, instance) {
@@ -72,6 +105,12 @@ define(function (require) {
             );
         },
 
+        update: function (dropinOptions) {
+            console.log(dropinOptions);
+            this.$el.removeClass('hidden');
+            debugger;
+        },
+
         /**
          * Before the checkout submits, add the nonce to the additional data set
          * @param event
@@ -83,6 +122,7 @@ define(function (require) {
 
                 // if we already have the nonce set as additional data and continue
                 if (this.nonceInput.val()) {
+                    debugger;
                     mediator.trigger('checkout:payment:additional-data:set', JSON.stringify({nonce: this.nonceInput.val()}));
                     event.resume();
                 } else {
@@ -90,6 +130,7 @@ define(function (require) {
                     var self = this;
                     this.instance.requestPaymentMethod(
                         function (err, payload) {
+                            debugger;
                             if (err) {
                                 console.error(err);
                                 self.instance.clearSelectedPaymentMethod();
@@ -140,12 +181,30 @@ define(function (require) {
             this.nonceInput.val(payload.nonce);
         },
 
+        afterChange: function(event) {
+            // Do not execute for our own braintree field changes
+            if ($(event.target).is("[id^=braintree__]")) {
+                return;
+            }
+
+            // Hide this element
+            this.$el.addClass('hidden');
+
+            // Add the payment id so we can find it later
+            this.$el.attr('data-name', this.options.paymentMethod);
+
+            // Move iframe outside of block being updated
+            this.$el.appendTo(this.getContent());
+        },
+
         dispose: function () {
+            debugger;
             if (this.disposed) {
                 return;
             }
 
             mediator.off('checkout:payment:before-transit', this.beforeTransit, this);
+            mediator.off('checkout:before-change', this.afterChange, this);
 
             if (this.instance) {
                 this.instance.teardown(function (data) {
@@ -156,7 +215,14 @@ define(function (require) {
             }
 
             BraintreeComponent.__super__.dispose.call(this);
-        }
+        },
+
+        /**
+         * @returns {jQuery|HTMLElement}
+         */
+        getContent: function() {
+            return $(this.options.selectors.checkoutContent);
+        },
     });
 
     return BraintreeComponent;
