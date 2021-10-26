@@ -1,0 +1,5 @@
+styles:
+  inputs:
+    - 'bundles/aligentbraintree/scss/styles.scss'
+
+  output: 'css/styles.css'

@@ -21,6 +21,7 @@ define(function (require) {
                 nonceInputSelector: '#nonce-input',
                 dropInContainerSelector: '#dropin-container',
                 checkoutContent: '[data-role="checkout-content"]',
+                radio: '[data-choice]',
             },
             paymentMethodSettings: {}
         },
@@ -39,47 +40,43 @@ define(function (require) {
 
         initialize: function (options) {
             this.options = $.extend({}, this.options, options);
+            this.$el = this.options._sourceElement;
+            this.nonceInput = this.$el.find(this.options.selectors.nonceInputSelector);
 
-            debugger;
-
+            // Check if the component already exists outside of our block
             const existingElement = this.getContent().find(`[data-name="${this.options.paymentMethod}"]`);
-
             if (existingElement.length != 0) {
-                const parent = this.options._sourceElement.parent();
-                existingElement.appendTo(parent);
-                this.options._sourceElement.remove();
-                existingElement.trigger('braintree:update', this.options);
+                mediator.trigger('braintree:update', options);
+                this.$el.remove();
                 this.dispose();
                 return;
             }
 
-            this.$el = this.options._sourceElement;
-            this.nonceInput = this.$el.find(this.options.selectors.nonceInputSelector);
-
             mediator.on('checkout:payment:before-transit', this.beforeTransit, this);
-            mediator.on('checkout-content:initialized', this.checkoutContentInit, this);
-            mediator.on('checkout:after-change', this.afterChange, this);
-            this.$el.on('braintree:update', _.bind(this.update, this));
-
-            if (this.initialized) {
-                console.log('Already initialized we should update dropin options here instead.')
-            } else {
-                var dropinOptions = {
-                    authorization:  this.options.authToken,
-                    selector: this.$el.find(this.options.selectors.dropInContainerSelector)[0],
-                    vaultManager: this.options.vaultMode
-                };
-
-                dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
-                this.initializeDropIn(dropinOptions);
-            }
+            mediator.on('checkout-content:initialized', this.onCheckoutInitialized, this);
+            mediator.on('checkout:payment:method:changed', this.onPaymentMethodChanged, this);
+            mediator.on('braintree:update', this.update, this);
         },
 
-        /**
-         * Initialize the drop UI component
-         * @param dropinOptions
-         */
-        initializeDropIn: function (dropinOptions) {
+        onCheckoutInitialized: function () {
+            // Move our container outside of the payment block so it is not refreshed
+            this.$el.appendTo(this.getContent());
+            // Add data name so it can uniquely be identified when a new component tries to initialize
+            this.$el.attr('data-name', this.options.paymentMethod);
+            debugger;
+
+            //Hide the element if it is not selected on init
+            if (this.getSelectedPaymentMethod() !== this.options.paymentMethod) {
+                this.$el.addClass('hidden');
+            }
+
+            var dropinOptions = {
+                authorization: this.options.authToken,
+                selector: this.$el.find(this.options.selectors.dropInContainerSelector)[0],
+                vaultManager: this.options.vaultMode
+            };
+
+            dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
             const component = this;
             dropin.create(
                 dropinOptions,
@@ -105,10 +102,26 @@ define(function (require) {
             );
         },
 
-        update: function (dropinOptions) {
-            console.log(dropinOptions);
-            this.$el.removeClass('hidden');
-            debugger;
+        /**
+         * Hide when another payment method is selected
+         * @param event
+         */
+        onPaymentMethodChanged: function (event) {
+            if (event.paymentMethod === this.options.paymentMethod) {
+                this.$el.removeClass('hidden');
+            } else {
+                this.$el.addClass('hidden');
+            }
+        },
+
+        update: function (newOptions) {
+            // @TODO: Add Update logic here
+            // var dropinOptions = {
+            //     authorization: newOptions.authToken,
+            //     vaultManager: newOptions.vaultMode
+            // };
+            //
+            // dropinOptions = $.extend(dropinOptions, newOptions.paymentMethodSettings);
         },
 
         /**
@@ -134,7 +147,7 @@ define(function (require) {
                             if (err) {
                                 console.error(err);
                                 self.instance.clearSelectedPaymentMethod();
-                                mediator.execute('showFlashMessage', 'error',  __('aligent.braintree.payment_nonce_error'));
+                                mediator.execute('showFlashMessage', 'error', __('aligent.braintree.payment_nonce_error'));
                                 return;
                             }
 
@@ -142,16 +155,20 @@ define(function (require) {
                             event.resume();
                         }
                     );
-
                 }
+
+                return;
             }
+
+            // Our payment method was not used so dispose of it here
+            this.dispose();
         },
 
         /**
          * Request the nonce and store it
          * @param event
          */
-        onPaymentMethodRequestable: function(event) {
+        onPaymentMethodRequestable: function (event) {
             if (event.paymentMethodIsSelected) {
                 this.instance.requestPaymentMethod(this.storeNonce.bind(this));
             }
@@ -161,7 +178,7 @@ define(function (require) {
          * Clear out the nonce input when the payment method is unavailable
          * @param event
          */
-        onNoPaymentMethodRequestable: function(event) {
+        onNoPaymentMethodRequestable: function (event) {
             this.nonceInput.val('');
         },
 
@@ -170,7 +187,7 @@ define(function (require) {
          * @param err
          * @param payload
          */
-        storeNonce: function(err, payload) {
+        storeNonce: function (err, payload) {
             if (err) {
                 console.error(err);
                 this.instance.clearSelectedPaymentMethod();
@@ -181,22 +198,6 @@ define(function (require) {
             this.nonceInput.val(payload.nonce);
         },
 
-        afterChange: function(event) {
-            // Do not execute for our own braintree field changes
-            if ($(event.target).is("[id^=braintree__]")) {
-                return;
-            }
-
-            // Hide this element
-            this.$el.addClass('hidden');
-
-            // Add the payment id so we can find it later
-            this.$el.attr('data-name', this.options.paymentMethod);
-
-            // Move iframe outside of block being updated
-            this.$el.appendTo(this.getContent());
-        },
-
         dispose: function () {
             debugger;
             if (this.disposed) {
@@ -204,7 +205,6 @@ define(function (require) {
             }
 
             mediator.off('checkout:payment:before-transit', this.beforeTransit, this);
-            mediator.off('checkout:before-change', this.afterChange, this);
 
             if (this.instance) {
                 this.instance.teardown(function (data) {
@@ -218,11 +218,21 @@ define(function (require) {
         },
 
         /**
+         * Returns the checkout content element
          * @returns {jQuery|HTMLElement}
          */
-        getContent: function() {
+        getContent: function () {
             return $(this.options.selectors.checkoutContent);
         },
+
+        /**
+         * Get the currently selected payment method
+         * @returns {*}
+         */
+        getSelectedPaymentMethod: function() {
+            const $checkedRadio = this.getContent().find(this.options.selectors.radio).filter(':checked');
+            return $checkedRadio.val();
+        }
     });
 
     return BraintreeComponent;
