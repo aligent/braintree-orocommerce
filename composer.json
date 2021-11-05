@@ -14,8 +14,8 @@
     },
     "require": {
         "braintree/braintree_php": "3.36.*",
-        "php": ">=7.2",
-        "oro/commerce": "4.1.*"
+        "php": "~7.4.14 || ~8.0.0",
+        "oro/commerce": "4.2.*"
     },
     "extra": {
         "npm": {
