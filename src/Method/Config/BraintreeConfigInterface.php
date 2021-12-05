@@ -28,6 +28,7 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
     const SHORT_LABELS_KEY = 'short_labels';
     const LABEL_KEY = 'label';
     const SHORT_LABEL_KEY = 'short_label';
+    const FRAUD_PROTECTION_ADVANCED_KEY = 'fraud_protection_advanced';
 
     const PAYPAL_FLOW_VAULT = 'vault';
     const PAYPAL_FLOW_CHECKOUT = 'checkout';
@@ -122,4 +123,9 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      * @param array $settings
      */
     public function setPaymentMethodSettings(array $settings);
+
+    /**
+     * @return bool
+     */
+    public function isFraudProtectionAdvancedEnabled();
 }

@@ -37,6 +37,9 @@ class PurchaseActionEventListener
             $data['customerId'] = $braintreeId;
         }
 
+        //Add oro order Id to braintree data
+        $data['orderId'] = (string) $paymentTransaction->getEntityIdentifier();
+
         $actionEvent->setData($data);
     }
 }

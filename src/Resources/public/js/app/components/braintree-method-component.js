@@ -17,7 +17,8 @@ define(function (require) {
             authToken: null,
             vaultMode: false,
             selectors: {
-                nonceInputSelector: '#nonce-input'
+                nonceInputSelector: '#nonce-input',
+                deviceDataInputSelector: '#device-data-input'
             },
             paymentMethodSettings: {}
         },
@@ -32,18 +33,27 @@ define(function (require) {
          */
         nonceInput: null,
 
+        /**
+         * @property {Object}
+         */
+        deviceDataInput: null,
+
         initialize: function (options) {
             this.options = $.extend({}, this.options, options);
             this.$el = this.options._sourceElement;
             this.nonceInput = $(this.options.selectors.nonceInputSelector);
-            const component = this;
+            this.deviceDataInput = $(this.options.selectors.deviceDataInputSelector);
+            var component = this;
 
             mediator.on('checkout:payment:before-transit', this.beforeTransit, this);
 
+            //Options keys from the backend can be seen in \Aligent\BraintreeBundle\Method\View\BraintreeView.php
+            //options are passed through from twig widget: _payment_methods_aligent_braintree_widget
             var dropinOptions = {
                 authorization:  this.options.authToken,
                 selector: this.$el[0],
-                vaultManager: this.options.vaultMode
+                vaultManager: this.options.vaultMode,
+                dataCollector: this.options.fraudProtectionAdvanced
             };
 
             dropinOptions = $.extend(dropinOptions, this.options.paymentMethodSettings);
@@ -66,7 +76,7 @@ define(function (require) {
                     // if we have a saved payment method we can request a nonce for
                     // fetch and save it now to the hidden input field
                     if (component.instance.isPaymentMethodRequestable()) {
-                        component.instance.requestPaymentMethod(component.storeNonce.bind(component));
+                        component.instance.requestPaymentMethod(component.storeAdditionalData.bind(component));
                     }
                 }
             );
@@ -83,7 +93,13 @@ define(function (require) {
 
                 // if we already have the nonce set as additional data and continue
                 if (this.nonceInput.val()) {
-                    mediator.trigger('checkout:payment:additional-data:set', JSON.stringify({nonce: this.nonceInput.val()}));
+                    var additionalData = {nonce: this.nonceInput.val()};
+
+                    if (this.deviceDataInput.val()) {
+                        additionalData.deviceData = this.deviceDataInput.val();
+                    }
+
+                    mediator.trigger('checkout:payment:additional-data:set', JSON.stringify(additionalData));
                     event.resume();
                 } else {
                     // Else request the nonce, set the additional data and then continue the event
@@ -97,7 +113,13 @@ define(function (require) {
                                 return;
                             }
 
-                            mediator.trigger('checkout:payment:additional-data:set', JSON.stringify({nonce: payload.nonce}));
+                            var additionalData = {nonce: payload.nonce};
+
+                            if (payload.deviceData) {
+                                additionalData.deviceData = payload.deviceData;
+                            }
+
+                            mediator.trigger('checkout:payment:additional-data:set', JSON.stringify(additionalData));
                             event.resume();
                         }
                     );
@@ -112,7 +134,7 @@ define(function (require) {
          */
         onPaymentMethodRequestable: function(event) {
             if (event.paymentMethodIsSelected) {
-                this.instance.requestPaymentMethod(this.storeNonce.bind(this));
+                this.instance.requestPaymentMethod(this.storeAdditionalData.bind(this));
             }
         },
 
@@ -129,7 +151,7 @@ define(function (require) {
          * @param err
          * @param payload
          */
-        storeNonce: function(err, payload) {
+        storeAdditionalData: function(err, payload) {
             if (err) {
                 console.error(err);
                 this.instance.clearSelectedPaymentMethod();
@@ -138,6 +160,10 @@ define(function (require) {
             }
 
             this.nonceInput.val(payload.nonce);
+
+            if (payload.deviceData) {
+                this.deviceDataInput.val(payload.deviceData);
+            }
         },
 
         dispose: function () {
