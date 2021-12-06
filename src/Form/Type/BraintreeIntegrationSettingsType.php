@@ -130,14 +130,16 @@ class BraintreeIntegrationSettingsType extends AbstractType
                 'vaultMode',
                 CheckboxType::class,
                 [
-                    'label' => 'aligent.braintree.settings.vault_mode.label'
+                    'label' => 'aligent.braintree.settings.vault_mode.label',
+                    'required' => false
                 ]
             )
             ->add(
                 'fraudProtectionAdvanced',
                 CheckboxType::class,
                 [
-                    'label' => 'aligent.braintree.settings.fraud_protection_advanced.label'
+                    'label' => 'aligent.braintree.settings.fraud_protection_advanced.label',
+                    'required' => false,
                 ]
             )
             ->add(
