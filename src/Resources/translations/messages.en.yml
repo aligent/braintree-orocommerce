@@ -28,6 +28,8 @@ aligent:
         label: "Private Key"
       vault_mode:
         label: "Vault Mode"
+      fraud_protection_advanced:
+        label: "Enable Fraud Protection Advanced"
       payment_method_settings:
         label: "Payment Method Settings"
       credit_card:
