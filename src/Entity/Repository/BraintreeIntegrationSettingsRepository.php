@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Entity\Repository;
 
-
 use Aligent\BraintreeBundle\Entity\BraintreeIntegrationSettings;
 use Doctrine\ORM\EntityRepository;
 

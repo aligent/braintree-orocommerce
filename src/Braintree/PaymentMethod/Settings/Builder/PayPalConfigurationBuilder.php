@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
-
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 
@@ -40,7 +39,7 @@ class PayPalConfigurationBuilder implements ConfigurationBuilderInterface
         $viewSettings = array_filter(
             $configuration,
             function ($value) {
-                return $value !== NULL;
+                return $value !== null;
             }
         );
 

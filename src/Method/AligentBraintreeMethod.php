@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
@@ -47,8 +46,7 @@ class AligentBraintreeMethod implements PaymentMethodInterface
         BraintreeConfigInterface $config,
         BraintreeActionProviderInterface $actionProvider,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->config = $config;
         $this->actionProvider = $actionProvider;
         $this->logger = $logger;

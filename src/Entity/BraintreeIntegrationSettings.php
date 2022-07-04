@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Entity;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

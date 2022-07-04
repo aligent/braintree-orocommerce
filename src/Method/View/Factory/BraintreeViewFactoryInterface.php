@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\View\Factory;
 
-
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;

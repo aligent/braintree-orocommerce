@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Factory;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 

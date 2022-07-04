@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Form\Type;
 
-
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

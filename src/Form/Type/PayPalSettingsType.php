@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Form\Type;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -56,8 +55,8 @@ class PayPalSettingsType extends AbstractType
                 ]
             )
             ->add(
-            'flow',
-            ChoiceType::class,
+                'flow',
+                ChoiceType::class,
                 [
                     'label'    =>  'aligent.braintree.settings.paypal.flow.label',
                     'required' => false,

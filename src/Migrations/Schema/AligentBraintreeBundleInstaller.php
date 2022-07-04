@@ -97,7 +97,7 @@ class AligentBraintreeBundleInstaller implements Installation
             $table->addColumn('braintree_merch_id', 'string', ['notnull' => false, 'length' => 255]);
         }
 
-        if (!$table->hasColumn('braintree_merch_account_id')){
+        if (!$table->hasColumn('braintree_merch_account_id')) {
             $table->addColumn('braintree_merch_account_id', 'string', ['notnull' => false, 'length' => 255]);
         }
 

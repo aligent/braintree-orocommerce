@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Integration;
 
-
 use Aligent\BraintreeBundle\Entity\BraintreeIntegrationSettings;
 use Aligent\BraintreeBundle\Form\Type\BraintreeIntegrationSettingsType;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;

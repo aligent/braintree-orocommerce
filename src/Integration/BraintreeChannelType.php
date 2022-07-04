@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Integration;
 
-
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 
