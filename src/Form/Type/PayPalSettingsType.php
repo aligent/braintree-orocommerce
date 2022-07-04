@@ -10,7 +10,7 @@
 
 namespace Aligent\BraintreeBundle\Form\Type;
 
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -61,10 +61,12 @@ class PayPalSettingsType extends AbstractType
                     'label'    =>  'aligent.braintree.settings.paypal.flow.label',
                     'required' => false,
                     'choices'  => [
-                        $this->translator->trans('aligent.braintree.settings.paypal.flow.checkout.label') => BraintreeConfig::PAYPAL_FLOW_CHECKOUT,
-                        $this->translator->trans('aligent.braintree.settings.paypal.flow.vault.label')    => BraintreeConfig::PAYPAL_FLOW_VAULT
+                        $this->translator->trans('aligent.braintree.settings.paypal.flow.checkout.label')
+                            => BraintreeConfigInterface::PAYPAL_FLOW_CHECKOUT,
+                        $this->translator->trans('aligent.braintree.settings.paypal.flow.vault.label')
+                            => BraintreeConfigInterface::PAYPAL_FLOW_VAULT
                     ],
-                    'empty_data' => BraintreeConfig::PAYPAL_FLOW_VAULT
+                    'empty_data' => BraintreeConfigInterface::PAYPAL_FLOW_VAULT
                 ]
             )
             ->add(
@@ -93,10 +95,12 @@ class PayPalSettingsType extends AbstractType
                     'tooltip'  =>  $this->translator->trans('aligent.braintree.settings.paypal.landing_page.tooltip'),
                     'required' => false,
                     'choices'  => [
-                        $this->translator->trans('aligent.braintree.settings.paypal.landing_page.login')   => BraintreeConfig::PAYPAL_LOGIN_PAGE,
-                        $this->translator->trans('aligent.braintree.settings.paypal.landing_page.billing') => BraintreeConfig::PAYPAL_BILLING_PAGE
+                        $this->translator->trans('aligent.braintree.settings.paypal.landing_page.login')
+                            => BraintreeConfigInterface::PAYPAL_LOGIN_PAGE,
+                        $this->translator->trans('aligent.braintree.settings.paypal.landing_page.billing')
+                            => BraintreeConfigInterface::PAYPAL_BILLING_PAGE
                     ],
-                    'empty_data' => BraintreeConfig::PAYPAL_LOGIN_PAGE
+                    'empty_data' => BraintreeConfigInterface::PAYPAL_LOGIN_PAGE
                 ]
             );
     }

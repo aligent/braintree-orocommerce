@@ -11,13 +11,13 @@
 
 namespace Aligent\BraintreeBundle\DependencyInjection\Compiler;
 
+use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class ActionPass implements CompilerPassInterface
 {
-    const BRAINTREE_ACTION_PROVIDER_SERVICE_ID = 'Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProvider';
     const ALIGENT_BRAINTREE_ACTION_TAG = 'braintree.action';
 
     /**
@@ -26,11 +26,11 @@ class ActionPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         // always first check if the primary service is defined
-        if (!$container->has(self::BRAINTREE_ACTION_PROVIDER_SERVICE_ID)) {
+        if (!$container->has(BraintreeActionProvider::class)) {
             return;
         }
 
-        $definition = $container->findDefinition(self::BRAINTREE_ACTION_PROVIDER_SERVICE_ID);
+        $definition = $container->findDefinition(BraintreeActionProvider::class);
 
         // find all service IDs with the braintree.action tag
         $taggedServices = $container->findTaggedServiceIds(self::ALIGENT_BRAINTREE_ACTION_TAG);

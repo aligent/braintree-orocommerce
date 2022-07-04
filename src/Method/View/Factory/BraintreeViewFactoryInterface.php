@@ -25,5 +25,10 @@ interface BraintreeViewFactoryInterface
      * @param DoctrineHelper $doctrineHelper
      * @return PaymentMethodViewInterface
      */
-    public function create(BraintreeConfigInterface $config, TokenStorageInterface $tokenStorage, ChainConfigurationBuilder $configurationBuilder, DoctrineHelper $doctrineHelper);
+    public function create(
+        BraintreeConfigInterface $config,
+        TokenStorageInterface $tokenStorage,
+        ChainConfigurationBuilder $configurationBuilder,
+        DoctrineHelper $doctrineHelper
+    );
 }

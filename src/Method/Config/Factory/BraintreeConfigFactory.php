@@ -16,6 +16,7 @@ use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterface;
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
+use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 
 class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
@@ -63,13 +64,15 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
             array_merge(
                 $params->all(),
                 [
-                    BraintreeConfig::PUBLIC_KEY_KEY => $this->encoder->decryptData($settings->getPublicKey()),
-                    BraintreeConfig::PRIVATE_KEY_KEY => $this->encoder->decryptData($settings->getPrivateKey()),
-                    BraintreeConfig::LABEL_KEY => $this->getLocalizedValue($settings->getLabels()),
-                    BraintreeConfig::SHORT_LABEL_KEY => $this->getLocalizedValue($settings->getShortLabels()),
-                    BraintreeConfig::FIELD_ADMIN_LABEL => $channel->getName(),
-                    BraintreeConfig::FIELD_PAYMENT_METHOD_IDENTIFIER => $this->identifierGenerator->generateIdentifier($channel),
-                    BraintreeConfig::PAYMENT_METHODS_CONFIG_KEY => $settings->getPaymentMethodSettings()
+                    BraintreeConfigInterface::PUBLIC_KEY_KEY => $this->encoder->decryptData($settings->getPublicKey()),
+                    BraintreeConfigInterface::PRIVATE_KEY_KEY
+                        => $this->encoder->decryptData($settings->getPrivateKey()),
+                    BraintreeConfigInterface::LABEL_KEY => $this->getLocalizedValue($settings->getLabels()),
+                    BraintreeConfigInterface::SHORT_LABEL_KEY => $this->getLocalizedValue($settings->getShortLabels()),
+                    AbstractParameterBagPaymentConfig::FIELD_ADMIN_LABEL => $channel->getName(),
+                    AbstractParameterBagPaymentConfig::FIELD_PAYMENT_METHOD_IDENTIFIER
+                        => $this->identifierGenerator->generateIdentifier($channel),
+                    BraintreeConfigInterface::PAYMENT_METHODS_CONFIG_KEY => $settings->getPaymentMethodSettings()
                 ]
             )
         );

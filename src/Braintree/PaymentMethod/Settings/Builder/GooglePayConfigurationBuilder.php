@@ -64,7 +64,8 @@ class GooglePayConfigurationBuilder implements ConfigurationBuilderInterface, Fe
                     'currencyCode' => $total->getCurrency()
                 ],
                 'cardRequirements' => [
-                    'billingAddressRequired' => true // TODO: Make this configurable and allow additional card requirements
+                    // TODO: Make this configurable and allow additional card requirements
+                    'billingAddressRequired' => true
                 ]
             ]
         );
