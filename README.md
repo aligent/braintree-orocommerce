@@ -1,10 +1,9 @@
 Braintree Payment Gateway Bundle
 ===============================================
 
-Facts
+Info
 -----
-- version: 4.2.0
-- composer name: aligent/braintree-orocommerce
+- composer name: `aligent/braintree-orocommerce`
 
 Description
 -----------
@@ -57,7 +56,7 @@ Coming Soon:
 
 Supported Payment Actions
 -----------
-Currently this bundle only supports the 'Purchase' action, 'Validate' and 'Capture' are coming soon.
+Currently, this bundle only supports the 'Purchase' action, 'Validate' and 'Capture' are coming soon.
 
 Extension Points
 -----------
