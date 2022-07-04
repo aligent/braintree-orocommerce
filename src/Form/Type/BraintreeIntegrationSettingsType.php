@@ -166,6 +166,6 @@ class BraintreeIntegrationSettingsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        static::BLOCK_PREFIX;
+        return static::BLOCK_PREFIX;
     }
 }
