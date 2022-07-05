@@ -8,5 +8,5 @@
 composer.lock
 vendor/
 
-# Binarys
+# Binaries
 bin/
