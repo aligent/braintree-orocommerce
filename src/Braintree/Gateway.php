@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Braintree;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\ClientToken;
 use Braintree\Configuration;
@@ -68,23 +67,23 @@ class Gateway
      */
     public function getCustomerAuthToken(CustomerUser $customerUser)
     {
-       $braintreeId = $customerUser->getBraintreeId();
+        $braintreeId = $customerUser->getBraintreeId();
 
        // if the customer doesn't already exist with braintree create it
-       if (!$braintreeId) {
-           $result = $this->createBraintreeCustomer($customerUser);
+        if (!$braintreeId) {
+            $result = $this->createBraintreeCustomer($customerUser);
 
-           // If we failed to create fallback to a generic auth token with no vaulting
-           if (!$result->success) {
-               return  $this->getAuthToken();
-           }
+            // If we failed to create fallback to a generic auth token with no vaulting
+            if (!$result->success) {
+                return  $this->getAuthToken();
+            }
 
-           $braintreeId = $customerUser->getBraintreeId();
-       }
+            $braintreeId = $customerUser->getBraintreeId();
+        }
 
        // ensure we can find the customer with that ID otherwise fallback to generic token
         try {
-           $this->braintreeGateway->customer()->find($braintreeId);
+            $this->braintreeGateway->customer()->find($braintreeId);
         } catch (NotFound $exception) {
             return  $this->getAuthToken();
         }

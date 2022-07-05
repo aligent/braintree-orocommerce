@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
-
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;

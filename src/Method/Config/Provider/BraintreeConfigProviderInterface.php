@@ -9,7 +9,6 @@
  */
 namespace Aligent\BraintreeBundle\Method\Config\Provider;
 
-
 interface BraintreeConfigProviderInterface
 {
     /**

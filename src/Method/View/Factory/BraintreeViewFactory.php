@@ -10,14 +10,12 @@
 
 namespace Aligent\BraintreeBundle\Method\View\Factory;
 
-
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\View\BraintreeView;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 
 class BraintreeViewFactory implements BraintreeViewFactoryInterface
 {
@@ -29,8 +27,12 @@ class BraintreeViewFactory implements BraintreeViewFactoryInterface
      * @param DoctrineHelper $doctrineHelper
      * @return PaymentMethodViewInterface
      */
-    public function create(BraintreeConfigInterface $config, TokenStorageInterface $tokenStorage, ChainConfigurationBuilder $configurationBuilder, DoctrineHelper $doctrineHelper)
-    {
+    public function create(
+        BraintreeConfigInterface $config,
+        TokenStorageInterface $tokenStorage,
+        ChainConfigurationBuilder $configurationBuilder,
+        DoctrineHelper $doctrineHelper
+    ) {
         return new BraintreeView($config, $tokenStorage, $configurationBuilder, $doctrineHelper);
     }
 }

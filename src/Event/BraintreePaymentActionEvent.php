@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Event;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Symfony\Component\EventDispatcher\Event;

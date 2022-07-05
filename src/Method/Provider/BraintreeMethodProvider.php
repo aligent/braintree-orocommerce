@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Provider;
 
-
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProviderInterface;
 use Aligent\BraintreeBundle\Method\Factory\BraintreeMethodFactoryInterface;

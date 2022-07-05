@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\View;
 
-
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ConfigurationBuilderInterface;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
@@ -57,8 +56,7 @@ class BraintreeView implements PaymentMethodViewInterface
         TokenStorageInterface $tokenStorage,
         ConfigurationBuilderInterface $configurationBuilder,
         DoctrineHelper $doctrineHelper
-    )
-    {
+    ) {
         $this->config = $config;
         $this->tokenStorage = $tokenStorage;
         $this->configurationBuilder = $configurationBuilder;

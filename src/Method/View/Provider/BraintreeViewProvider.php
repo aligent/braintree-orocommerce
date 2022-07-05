@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\View\Provider;
 
-
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Config\Provider\BraintreeConfigProviderInterface;
