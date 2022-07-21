@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder;
 
-
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 
 interface ConfigurationBuilderInterface

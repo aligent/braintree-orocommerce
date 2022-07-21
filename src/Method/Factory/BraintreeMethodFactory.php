@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Factory;
 
-
 use Aligent\BraintreeBundle\Method\AligentBraintreeMethod;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
@@ -38,8 +37,7 @@ class BraintreeMethodFactory implements BraintreeMethodFactoryInterface
     public function __construct(
         BraintreeActionProviderInterface $provider,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->provider = $provider;
         $this->logger = $logger;
     }

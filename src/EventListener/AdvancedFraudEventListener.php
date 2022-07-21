@@ -57,5 +57,4 @@ class AdvancedFraudEventListener
 
         return $additionalData['deviceData'];
     }
-
 }

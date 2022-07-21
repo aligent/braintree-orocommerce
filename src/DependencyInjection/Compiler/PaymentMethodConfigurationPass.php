@@ -12,13 +12,13 @@
 
 namespace Aligent\BraintreeBundle\DependencyInjection\Compiler;
 
+use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class PaymentMethodConfigurationPass implements CompilerPassInterface
 {
-    const BRAINTREE_PAYMENT_METHOD_SETTINGS_PROVIDER_SERVICE_ID = 'Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder';
     const ALIGENT_BRAINTREE_PAYMENT_METHOD_SETTINGS_TAG = 'braintree.payment_method_settings';
 
     /**
@@ -27,11 +27,11 @@ class PaymentMethodConfigurationPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         // always first check if the primary service is defined
-        if (!$container->has(self::BRAINTREE_PAYMENT_METHOD_SETTINGS_PROVIDER_SERVICE_ID)) {
+        if (!$container->has(ChainConfigurationBuilder::class)) {
             return;
         }
 
-        $definition = $container->findDefinition(self::BRAINTREE_PAYMENT_METHOD_SETTINGS_PROVIDER_SERVICE_ID);
+        $definition = $container->findDefinition(ChainConfigurationBuilder::class);
 
         // find all service IDs with the braintree.payment_method_settings tag
         $taggedServices = $container->findTaggedServiceIds(self::ALIGENT_BRAINTREE_PAYMENT_METHOD_SETTINGS_TAG);

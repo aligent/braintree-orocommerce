@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Config\Provider;
 
-
 use Aligent\BraintreeBundle\Entity\BraintreeIntegrationSettings;
 use Aligent\BraintreeBundle\Entity\Repository\BraintreeIntegrationSettingsRepository;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;

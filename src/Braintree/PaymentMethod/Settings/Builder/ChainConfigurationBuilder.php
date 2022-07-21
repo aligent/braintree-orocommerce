@@ -40,7 +40,8 @@ class ChainConfigurationBuilder implements ConfigurationBuilderInterface
 
                 $config[$paymentMethod] = $paymentMethodConfig;
             } elseif (!$paymentMethodConfig['enabled'] && $paymentMethod === 'card') {
-                // handle the card special case, as card is the default it must be explicitly set to false so it doesnt display
+                // handle the card special case, as card is the default it must be explicitly
+                // set to false, so it doesn't display
                 $config[$paymentMethod] = false;
             }
         }

@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle;
 
-
 use Aligent\BraintreeBundle\DependencyInjection\Compiler\ActionPass;
 use Aligent\BraintreeBundle\DependencyInjection\Compiler\PaymentMethodConfigurationPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

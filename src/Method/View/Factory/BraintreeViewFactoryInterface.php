@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\View\Factory;
 
-
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ChainConfigurationBuilder;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -26,5 +25,10 @@ interface BraintreeViewFactoryInterface
      * @param DoctrineHelper $doctrineHelper
      * @return PaymentMethodViewInterface
      */
-    public function create(BraintreeConfigInterface $config, TokenStorageInterface $tokenStorage, ChainConfigurationBuilder $configurationBuilder, DoctrineHelper $doctrineHelper);
+    public function create(
+        BraintreeConfigInterface $config,
+        TokenStorageInterface $tokenStorage,
+        ChainConfigurationBuilder $configurationBuilder,
+        DoctrineHelper $doctrineHelper
+    );
 }

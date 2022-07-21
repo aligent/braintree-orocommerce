@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Form\Type;
 
-
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Aligent\BraintreeBundle\Entity\BraintreeIntegrationSettings;
 use Oro\Bundle\FormBundle\Form\Type\OroEncodedPlaceholderPasswordType;
@@ -169,6 +168,6 @@ class BraintreeIntegrationSettingsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        static::BLOCK_PREFIX;
+        return static::BLOCK_PREFIX;
     }
 }

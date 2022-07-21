@@ -10,7 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Config;
 
-
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
@@ -71,7 +70,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
      */
     public function setPrivateKey($value)
     {
-       $this->set(self::PRIVATE_KEY_KEY, $value);
+        $this->set(self::PRIVATE_KEY_KEY, $value);
     }
 
     /**

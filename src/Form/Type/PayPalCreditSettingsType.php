@@ -10,8 +10,7 @@
 
 namespace Aligent\BraintreeBundle\Form\Type;
 
-
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -60,10 +59,12 @@ class PayPalCreditSettingsType extends AbstractType
                     'label'    =>  'aligent.braintree.settings.paypal_credit.flow.label',
                     'required' => false,
                     'choices'  => [
-                        $this->translator->trans('aligent.braintree.settings.paypal_credit.flow.checkout.label') => BraintreeConfig::PAYPAL_FLOW_CHECKOUT,
-                        $this->translator->trans('aligent.braintree.settings.paypal_credit.flow.vault.label')    => BraintreeConfig::PAYPAL_FLOW_VAULT
+                        $this->translator->trans('aligent.braintree.settings.paypal_credit.flow.checkout.label')
+                            => BraintreeConfigInterface::PAYPAL_FLOW_CHECKOUT,
+                        $this->translator->trans('aligent.braintree.settings.paypal_credit.flow.vault.label')
+                            => BraintreeConfigInterface::PAYPAL_FLOW_VAULT
                     ],
-                    'empty_data' => BraintreeConfig::PAYPAL_FLOW_VAULT
+                    'empty_data' => BraintreeConfigInterface::PAYPAL_FLOW_VAULT
                 ]
             );
     }
