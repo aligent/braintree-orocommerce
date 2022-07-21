@@ -23,11 +23,10 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root(AligentBraintreeExtension::ALIAS);
+        $treeBuilder = new TreeBuilder(AligentBraintreeExtension::ALIAS);
 
         SettingsBuilder::append(
-            $rootNode,
+            $treeBuilder->getRootNode(),
             [
                 'experimental_payment_methods' => ['type' => 'boolean', 'value' => false]
             ]
