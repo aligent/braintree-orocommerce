@@ -11,35 +11,37 @@
 namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
+use Aligent\BraintreeBundle\Method\Action\PurchaseAction;
 use InvalidArgumentException;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class AdvancedFraudEventListener
 {
-
     /**
-     * Add deviceData to payload as required for abraintree advanced fraud detection
+     * Add deviceData to payload as required for a braintree advanced fraud detection
      * https://developer.paypal.com/braintree/docs/guides/premium-fraud-management-tools/server-side
-     * @param BraintreePaymentActionEvent $actionEvent
      */
-    public function onPurchase(BraintreePaymentActionEvent $actionEvent)
+    public function onPurchase(BraintreePaymentActionEvent $event): void
     {
-        if ($actionEvent->getConfig()->isFraudProtectionAdvancedEnabled()) {
-            $data = $actionEvent->getData();
+        if ($event->getAction() !== PurchaseAction::ACTION) {
+            // Ignore other action types
+            return;
+        }
 
-            $paymentTransaction = $actionEvent->getPaymentTransaction();
+        if ($event->getConfig()->isFraudProtectionAdvancedEnabled()) {
+            $data = $event->getData();
+
+            $paymentTransaction = $event->getPaymentTransaction();
             $data['deviceData'] = $this->getDeviceData($paymentTransaction);
 
-            $actionEvent->setData($data);
+            $event->setData($data);
         }
     }
 
     /**
      * Extracts the device data out of the additional data array
-     * @param PaymentTransaction $paymentTransaction
-     * @return string
      */
-    protected function getDeviceData(PaymentTransaction $paymentTransaction)
+    protected function getDeviceData(PaymentTransaction $paymentTransaction): string
     {
         $transactionOptions = $paymentTransaction->getTransactionOptions();
 

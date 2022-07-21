@@ -62,13 +62,15 @@ Extension Points
 -----------
 #### Events
 
-BraintreePaymentActionEvent (aligent_braintree.payment_action.{action}):
+BraintreePaymentActionEvent (aligent_braintree.payment_action):
  
 This event is fired when a payment action executes but before the payload is sent to the payment gateway. It is used internally
 to build up the payment payload and can be extended with other listeners to add data to be sent to the payment gateway. 
 
-Currently supported events:
-- aligent_braintree.payment_action.purchase
+Use the `$this->getAction()` method to restrict Event Listener to a specific Braintree Action
+
+Currently supported actions:
+- Purchase (`\Aligent\BraintreeBundle\Method\Action\PurchaseAction::ACTION`)
 
 #### Actions
 
