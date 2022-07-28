@@ -14,12 +14,11 @@ use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 
 interface ConfigurationBuilderInterface
 {
-
     /**
-     * Build the settings object to pass to Dropin
+     * Build the settings object to pass to Drop-in
      * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
+     * @param array<string,mixed> $configuration
+     * @return array<string,mixed>
      */
-    public function build(PaymentContextInterface $context, array $configuration);
+    public function build(PaymentContextInterface $context, array $configuration): array;
 }

@@ -11,11 +11,10 @@
 namespace Aligent\BraintreeBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -25,18 +24,15 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  */
 class AligentBraintreeBundleInstaller implements Installation
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getMigrationVersion()
+    public function getMigrationVersion(): string
     {
         return 'v1_0';
     }
 
     /**
-     * {@inheritdoc}
+     * @throws SchemaException
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         /** Tables generation **/
         $this->createAligentBraintreeLblTable($schema);
@@ -49,12 +45,7 @@ class AligentBraintreeBundleInstaller implements Installation
         $this->addAligentBraintreeShLblForeignKeys($schema);
     }
 
-    /**
-     * Create aligent_braintree_lbl table
-     *
-     * @param Schema $schema
-     */
-    protected function createAligentBraintreeLblTable(Schema $schema)
+    protected function createAligentBraintreeLblTable(Schema $schema): void
     {
         $table = $schema->createTable('aligent_braintree_lbl');
         $table->addColumn('transport_id', 'integer', []);
@@ -64,12 +55,7 @@ class AligentBraintreeBundleInstaller implements Installation
         $table->addIndex(['transport_id'], 'IDX_84655B459909C13F', []);
     }
 
-    /**
-     * Create aligent_braintree_sh_lbl table
-     *
-     * @param Schema $schema
-     */
-    protected function createAligentBraintreeShLblTable(Schema $schema)
+    protected function createAligentBraintreeShLblTable(Schema $schema): void
     {
         $table = $schema->createTable('aligent_braintree_sh_lbl');
         $table->addColumn('transport_id', 'integer', []);
@@ -80,12 +66,9 @@ class AligentBraintreeBundleInstaller implements Installation
     }
 
     /**
-     * Create oro_integration_transport table
-     *
-     * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function updateOroIntegrationTransportTable(Schema $schema)
+    protected function updateOroIntegrationTransportTable(Schema $schema): void
     {
         $table = $schema->getTable('oro_integration_transport');
 
@@ -119,12 +102,9 @@ class AligentBraintreeBundleInstaller implements Installation
     }
 
     /**
-     * Add aligent_braintree_lbl foreign keys.
-     *
-     * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function addAligentBraintreeLblForeignKeys(Schema $schema)
+    protected function addAligentBraintreeLblForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable('aligent_braintree_lbl');
         $table->addForeignKeyConstraint(
@@ -142,12 +122,9 @@ class AligentBraintreeBundleInstaller implements Installation
     }
 
     /**
-     * Add aligent_braintree_sh_lbl foreign keys.
-     *
-     * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function addAligentBraintreeShLblForeignKeys(Schema $schema)
+    protected function addAligentBraintreeShLblForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable('aligent_braintree_sh_lbl');
         $table->addForeignKeyConstraint(
@@ -165,29 +142,27 @@ class AligentBraintreeBundleInstaller implements Installation
     }
 
     /**
-     * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
-    protected function extendCustomerUser(Schema $schema)
+    protected function extendCustomerUser(Schema $schema): void
     {
         $table = $schema->getTable('oro_customer_user');
 
         $table->addColumn(
             'braintree_id',
-            Type::STRING,
+            Types::STRING,
             [
                 'notnull' => false,
                 'oro_options' => [
                     'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'form' => [
-                        'is_enabled' => false
+                        'is_enabled' => false,
                     ],
                     'view' => [
-                        'is_displayable' => false
+                        'is_displayable' => false,
                     ],
                     'dataaudit' => ['auditable' => true],
-
                 ]
             ]
         );

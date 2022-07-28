@@ -17,24 +17,12 @@ use Oro\Bundle\PaymentBundle\Method\Provider\AbstractPaymentMethodProvider;
 
 class BraintreeMethodProvider extends AbstractPaymentMethodProvider
 {
-    /**
-     * @var BraintreeMethodFactoryInterface
-     */
-    protected $factory;
+    protected BraintreeMethodFactoryInterface $factory;
+    protected BraintreeConfigProviderInterface $configProvider;
 
-    /**
-     * @var BraintreeConfigProviderInterface
-     */
-    protected $configProvider;
-
-
-    /**
-     * @param BraintreeConfigProviderInterface $configProvider
-     * @param BraintreeMethodFactoryInterface $factory
-     */
     public function __construct(
         BraintreeConfigProviderInterface $configProvider,
-        BraintreeMethodFactoryInterface $factory
+        BraintreeMethodFactoryInterface $factory,
     ) {
         parent::__construct();
 
@@ -45,10 +33,9 @@ class BraintreeMethodProvider extends AbstractPaymentMethodProvider
     /**
      * Save methods to $methods property
      */
-    protected function collectMethods()
+    protected function collectMethods(): void
     {
-        $configs = $this->configProvider->getPaymentConfigs();
-        foreach ($configs as $config) {
+        foreach ($this->configProvider->getPaymentConfigs() as $config) {
             $this->addBraintreeMethod($config);
         }
     }
@@ -56,7 +43,7 @@ class BraintreeMethodProvider extends AbstractPaymentMethodProvider
     /**
      * @param BraintreeConfigInterface $config
      */
-    protected function addBraintreeMethod(BraintreeConfigInterface $config)
+    protected function addBraintreeMethod(BraintreeConfigInterface $config): void
     {
         $this->addMethod(
             $config->getPaymentMethodIdentifier(),

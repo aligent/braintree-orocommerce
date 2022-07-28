@@ -12,27 +12,28 @@ namespace Aligent\BraintreeBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class CreditCardSettingsType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param FormBuilderInterface<mixed> $builder
+     * @param array<string,mixed> $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add(
-            'enabled',
-            CheckboxType::class
-        )->add(
-            'cardholderName',
-            CheckboxType::class,
-            [
-                'label'    => 'aligent.braintree.settings.credit_card.require_name.label',
-                'required' => false,
-            ]
-        );
+        $builder
+            ->add(
+                'enabled',
+                CheckboxType::class
+            )
+            ->add(
+                'cardholderName',
+                CheckboxType::class,
+                [
+                    'label'    => 'aligent.braintree.settings.credit_card.require_name.label',
+                    'required' => false,
+                ]
+            );
     }
 }

@@ -1,10 +1,8 @@
 services:
-  Aligent\BraintreeBundle\EventListener\PurchaseActionEventListener:
-    class: Aligent\BraintreeBundle\EventListener\PurchaseActionEventListener
-    tags:
-      - { name: kernel.event_listener, event: aligent_braintree.payment_action.purchase, method: onPurchase }
+    Aligent\BraintreeBundle\EventListener\PurchaseActionEventListener:
+        tags:
+            - { name: kernel.event_listener, event: aligent_braintree.payment_action, method: onPurchase }
 
-  Aligent\BraintreeBundle\EventListener\AdvancedFraudEventListener:
-    class: Aligent\BraintreeBundle\EventListener\AdvancedFraudEventListener
-    tags:
-      - { name: kernel.event_listener, event: aligent_braintree.payment_action.purchase, method: onPurchase }
+    Aligent\BraintreeBundle\EventListener\AdvancedFraudEventListener:
+        tags:
+            - { name: kernel.event_listener, event: aligent_braintree.payment_action, method: onPurchase }

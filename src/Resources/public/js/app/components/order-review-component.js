@@ -20,7 +20,7 @@ define(function (require) {
             mediator.on('checkout:place-order:response', this.placeOrderResponse, this);
         },
 
-        placeOrderResponse: function(eventData) {
+        placeOrderResponse: function (eventData) {
             if (eventData.responseData.paymentMethod === this.options.paymentMethod) {
                 eventData.stopped = true;
                 if (eventData.responseData.successful) {

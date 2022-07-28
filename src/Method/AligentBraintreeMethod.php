@@ -10,8 +10,8 @@
 
 namespace Aligent\BraintreeBundle\Method;
 
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
@@ -19,33 +19,14 @@ use Psr\Log\LoggerInterface;
 
 class AligentBraintreeMethod implements PaymentMethodInterface
 {
-    /**
-     * @var BraintreeConfigInterface
-     */
-    protected $config;
+    protected BraintreeConfigInterface $config;
+    protected BraintreeActionProviderInterface $actionProvider;
+    protected LoggerInterface $logger;
 
-    /**
-     * @var BraintreeActionProviderInterface
-     */
-    protected $actionProvider;
-
-    /**
-     * The logger instance.
-     *
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * AligentBraintreeMethod constructor.
-     * @param BraintreeConfigInterface $config
-     * @param BraintreeActionProviderInterface $actionProvider
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         BraintreeConfigInterface $config,
         BraintreeActionProviderInterface $actionProvider,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         $this->config = $config;
         $this->actionProvider = $actionProvider;
@@ -55,9 +36,9 @@ class AligentBraintreeMethod implements PaymentMethodInterface
     /**
      * @param string $action
      * @param PaymentTransaction $paymentTransaction
-     * @return array
+     * @return array<string,mixed>
      */
-    public function execute($action, PaymentTransaction $paymentTransaction)
+    public function execute($action, PaymentTransaction $paymentTransaction): array
     {
         if (!$this->supports($action)) {
             throw new \InvalidArgumentException(sprintf('Unsupported action "%s"', $action));
@@ -70,7 +51,7 @@ class AligentBraintreeMethod implements PaymentMethodInterface
             return $actionInstance->execute($paymentTransaction);
         } catch (\Exception $e) {
             $this->logger->critical(
-                "Exception excuting Braintree Payment action ({$action})",
+                "Exception executing Braintree Payment action ({$action})",
                 [
                     'payment_transaction_id' => $paymentTransaction->getId(),
                     'payment_method' => $paymentTransaction->getPaymentMethod(),
@@ -89,19 +70,12 @@ class AligentBraintreeMethod implements PaymentMethodInterface
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->config->getPaymentMethodIdentifier();
     }
 
-    /**
-     * @param PaymentContextInterface $context
-     * @return bool
-     */
-    public function isApplicable(PaymentContextInterface $context)
+    public function isApplicable(PaymentContextInterface $context): bool
     {
         return true;
     }
@@ -110,7 +84,7 @@ class AligentBraintreeMethod implements PaymentMethodInterface
      * @param string $actionName
      * @return bool
      */
-    public function supports($actionName)
+    public function supports($actionName): bool
     {
         return $this->actionProvider->hasAction($actionName);
     }

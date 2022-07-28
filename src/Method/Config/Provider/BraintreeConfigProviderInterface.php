@@ -9,22 +9,16 @@
  */
 namespace Aligent\BraintreeBundle\Method\Config\Provider;
 
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
+
 interface BraintreeConfigProviderInterface
 {
     /**
-     * @return BraintreeConfigInterface[]
+     * @return array<string,BraintreeConfigInterface>
      */
-    public function getPaymentConfigs();
+    public function getPaymentConfigs(): array;
 
-    /**
-     * @param string $identifier
-     * @return BraintreeConfigInterface|null
-     */
-    public function getPaymentConfig($identifier);
+    public function getPaymentConfig(string $identifier): ?BraintreeConfigInterface;
 
-    /**
-     * @param string $identifier
-     * @return bool
-     */
-    public function hasPaymentConfig($identifier);
+    public function hasPaymentConfig(string $identifier): bool;
 }

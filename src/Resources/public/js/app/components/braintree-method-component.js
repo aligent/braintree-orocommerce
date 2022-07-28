@@ -123,7 +123,6 @@ define(function (require) {
                             event.resume();
                         }
                     );
-
                 }
             }
         },
@@ -132,7 +131,7 @@ define(function (require) {
          * Request the nonce and store it
          * @param event
          */
-        onPaymentMethodRequestable: function(event) {
+        onPaymentMethodRequestable: function (event) {
             if (event.paymentMethodIsSelected) {
                 this.instance.requestPaymentMethod(this.storeAdditionalData.bind(this));
             }
@@ -142,7 +141,7 @@ define(function (require) {
          * Clear out the nonce input when the payment method is unavailable
          * @param event
          */
-        onNoPaymentMethodRequestable: function(event) {
+        onNoPaymentMethodRequestable: function (event) {
             this.nonceInput.val('');
         },
 
@@ -151,7 +150,7 @@ define(function (require) {
          * @param err
          * @param payload
          */
-        storeAdditionalData: function(err, payload) {
+        storeAdditionalData: function (err, payload) {
             if (err) {
                 console.error(err);
                 this.instance.clearSelectedPaymentMethod();

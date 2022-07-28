@@ -20,13 +20,11 @@ class AligentBraintreeExtension extends Extension
     const ALIAS = 'aligent_braintree';
 
     /**
-     * Loads a specific configuration.
-     *
-     * @param array $configs
+     * @param array<int,mixed> $configs
      * @param ContainerBuilder $container
      * @throws \Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -40,7 +38,7 @@ class AligentBraintreeExtension extends Extension
         $loader->load('event_listeners.yml');
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return self::ALIAS;
     }
