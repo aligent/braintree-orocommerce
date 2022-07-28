@@ -19,30 +19,20 @@ class GooglePayConfigurationBuilder implements ConfigurationBuilderInterface, Fe
 {
     use FeatureCheckerHolderTrait;
 
-    /**
-     * @var TotalProcessorProvider
-     */
-    protected $totalsProvider;
+    protected TotalProcessorProvider $totalsProvider;
 
-    /**
-     * PayPalCreditSettingsBuilder constructor.
-     * @param TotalProcessorProvider $totalsProvider
-     */
     public function __construct(TotalProcessorProvider $totalsProvider)
     {
         $this->totalsProvider = $totalsProvider;
     }
 
     /**
-     * Build the settings object to pass to Dropin
-     * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
+     * {@inheritDoc}
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): array
     {
         if (!$this->isFeaturesEnabled()) {
-            return;
+            return [];
         }
 
         // Strip Null values

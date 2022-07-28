@@ -14,19 +14,13 @@ use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 
 class ChainConfigurationBuilder implements ConfigurationBuilderInterface
 {
+    /** @var ConfigurationBuilderInterface[] */
+    protected array $builders = [];
 
     /**
-     * @var ConfigurationBuilderInterface[] $builders
+     * {@inheritDoc}
      */
-    protected $builders = [];
-
-    /**
-     * Build the settings object to pass to the Drop-in UI
-     * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
-     */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): array
     {
         $config = [];
         foreach ($configuration as $paymentMethod => $paymentMethodConfig) {
@@ -39,7 +33,7 @@ class ChainConfigurationBuilder implements ConfigurationBuilderInterface
                 }
 
                 $config[$paymentMethod] = $paymentMethodConfig;
-            } elseif (!$paymentMethodConfig['enabled'] && $paymentMethod === 'card') {
+            } elseif ($paymentMethod === 'card') {
                 // handle the card special case, as card is the default it must be explicitly
                 // set to false, so it doesn't display
                 $config[$paymentMethod] = false;
@@ -49,20 +43,12 @@ class ChainConfigurationBuilder implements ConfigurationBuilderInterface
         return $config;
     }
 
-    /**
-     * @param $method
-     * @return bool
-     */
-    public function hasBuilder($method)
+    public function hasBuilder(string $method): bool
     {
         return isset($this->builders[$method]);
     }
 
-    /**
-     * @param $method
-     * @return ConfigurationBuilderInterface
-     */
-    public function getBuilder($method)
+    public function getBuilder(string $method): ConfigurationBuilderInterface
     {
         if (!$this->hasBuilder($method)) {
             throw new \InvalidArgumentException("Builder for {$method} does not exist.");
@@ -71,12 +57,7 @@ class ChainConfigurationBuilder implements ConfigurationBuilderInterface
         return $this->builders[$method];
     }
 
-    /**
-     * @param $method
-     * @param ConfigurationBuilderInterface $builder
-     * @return $this
-     */
-    public function addBuilder($method, ConfigurationBuilderInterface $builder)
+    public function addBuilder(string $method, ConfigurationBuilderInterface $builder): self
     {
         if ($this->hasBuilder($method)) {
             throw new \InvalidArgumentException("Builder for {$method} already exists");

@@ -11,26 +11,12 @@
 namespace Aligent\BraintreeBundle\Method\Action\Provider;
 
 use Aligent\BraintreeBundle\Method\Action\BraintreeActionInterface;
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 interface BraintreeActionProviderInterface
 {
-    /**
-     * @param string $action
-     * @return BraintreeActionInterface
-     */
-    public function getAction($action);
+    public function getAction(string $action): BraintreeActionInterface;
 
-    /**
-     * @param $action
-     * @param BraintreeActionInterface $braintreeAction
-     * @return $this
-     */
-    public function addAction($action, BraintreeActionInterface $braintreeAction);
+    public function addAction(string $action, BraintreeActionInterface $braintreeAction): static;
 
-    /**
-     * @param $action
-     * @return bool
-     */
-    public function hasAction($action);
+    public function hasAction(string $action): bool;
 }

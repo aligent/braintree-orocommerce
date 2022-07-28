@@ -17,40 +17,22 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class BraintreeTransport implements TransportInterface
 {
-
-    /**
-     * @param Transport $transportEntity
-     */
-    public function init(Transport $transportEntity)
+    public function init(Transport $transportEntity): void
     {
+        // Nothing to do here
     }
 
-    /**
-     * Returns label for UI
-     *
-     * @return string
-     */
-    public function getLabel()
+    public function getLabel(): string
     {
         return 'aligent.braintree.settings.transport.label';
     }
 
-    /**
-     * Returns form type name needed to setup transport
-     *
-     * @return string
-     */
-    public function getSettingsFormType()
+    public function getSettingsFormType(): string
     {
         return BraintreeIntegrationSettingsType::class;
     }
 
-    /**
-     * Returns entity name needed to store transport settings
-     *
-     * @return string
-     */
-    public function getSettingsEntityFQCN()
+    public function getSettingsEntityFQCN(): string
     {
         return BraintreeIntegrationSettings::class;
     }

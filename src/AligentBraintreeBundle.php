@@ -17,10 +17,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AligentBraintreeBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container
             ->addCompilerPass(new ActionPass())

@@ -10,8 +10,8 @@
 
 namespace Aligent\BraintreeBundle\Method\Action;
 
-use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Braintree\Gateway;
+use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\Result\Error;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;

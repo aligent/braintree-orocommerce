@@ -80,7 +80,7 @@ Custom payment actions can be added by implementing the BraintreeActionInterface
 
 Support
 -------
-If you have any issues with this bundle, please feel free to open [GitHub issue](https://github.com/aligent/braintree-orocommerce/issues) with version and steps to reproduce.
+If you have any issues with this bundle, please feel free to open a [GitHub issue](https://github.com/aligent/braintree-orocommerce/issues) with version and detailed steps to reproduce.
 
 Contribution
 ------------

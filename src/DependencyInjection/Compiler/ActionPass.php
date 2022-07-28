@@ -20,10 +20,7 @@ class ActionPass implements CompilerPassInterface
 {
     const ALIGENT_BRAINTREE_ACTION_TAG = 'braintree.action';
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // always first check if the primary service is defined
         if (!$container->has(BraintreeActionProvider::class)) {

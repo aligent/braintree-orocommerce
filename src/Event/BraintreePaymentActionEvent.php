@@ -33,7 +33,7 @@ class BraintreePaymentActionEvent
         string $action,
         array $data,
         PaymentTransaction $paymentTransaction,
-        BraintreeConfigInterface $config
+        BraintreeConfigInterface $config,
     ) {
         $this->action = $action;
         $this->data = $data;

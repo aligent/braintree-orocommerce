@@ -12,7 +12,6 @@ namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Method\Action\PurchaseAction;
-use InvalidArgumentException;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class AdvancedFraudEventListener
@@ -46,13 +45,13 @@ class AdvancedFraudEventListener
         $transactionOptions = $paymentTransaction->getTransactionOptions();
 
         if (!isset($transactionOptions['additionalData'])) {
-            throw new InvalidArgumentException('Payment Transaction does not contain additionalData');
+            throw new \InvalidArgumentException('Payment Transaction does not contain additionalData');
         }
 
         $additionalData = json_decode($transactionOptions['additionalData'], true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "Error decoding Payment Transaction additional data Error: " . json_last_error_msg()
             );
         }

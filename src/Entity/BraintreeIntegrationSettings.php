@@ -10,140 +10,129 @@
 
 namespace Aligent\BraintreeBundle\Entity;
 
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Class BraintreeIntegrationSettings
  * @package Aligent\BraintreeBundle\Entity
  * @ORM\Entity(repositoryClass="Aligent\BraintreeBundle\Entity\Repository\BraintreeIntegrationSettingsRepository")
  */
 class BraintreeIntegrationSettings extends Transport
 {
     /**
-     *
-     * @var Collection|LocalizedFallbackValue[] @ORM\ManyToMany(
+     * @ORM\ManyToMany(
      *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
      *      cascade={"ALL"},
      *      orphanRemoval=true
-     *      )
+     * )
      * @ORM\JoinTable(
      *      name="aligent_braintree_lbl",
      *      joinColumns={
-     *      @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
+     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
      *      },
      *      inverseJoinColumns={
-     *      @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
+     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
      *      }
-     *      )
+     * )
+     * @var Collection<int,LocalizedFallbackValue>
      */
-    protected $labels;
+    protected Collection $labels;
 
     /**
-     *
-     * @var Collection|LocalizedFallbackValue[] @ORM\ManyToMany(
+     * @ORM\ManyToMany(
      *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
      *      cascade={"ALL"},
      *      orphanRemoval=true
-     *      )
+     * )
      * @ORM\JoinTable(
      *      name="aligent_braintree_sh_lbl",
      *      joinColumns={
-     *      @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
+     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
      *      },
      *      inverseJoinColumns={
-     *      @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
+     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
      *      }
-     *      )
+     * )
+     * @var Collection<int,LocalizedFallbackValue>
      */
-    protected $shortLabels;
+    protected Collection $shortLabels;
 
     /**
-     *
-     * @var string @ORM\Column(name="braintree_environment_type", type="string", length=255, nullable=false)
+     * @var string
+     * @ORM\Column(name="braintree_environment_type", type="string", length=255, nullable=false)
      */
-    protected $environment;
+    protected string $environment;
 
     /**
-     *
-     * @var string @ORM\Column(name="braintree_merch_id", type="string", length=255, nullable=false)
+     * @var string
+     * @ORM\Column(name="braintree_merch_id", type="string", length=255, nullable=false)
      */
-    protected $merchantId;
+    protected string $merchantId;
 
     /**
-     *
-     * @var string @ORM\Column(name="braintree_merch_account_id", type="string", length=255, nullable=false)
+     * @var string
+     * @ORM\Column(name="braintree_merch_account_id", type="string", length=255, nullable=false)
      */
-    protected $merchantAccountId;
+    protected string $merchantAccountId;
 
     /**
-     *
-     * @var string @ORM\Column(name="braintree_merch_public_key", type="string", length=255, nullable=false)
+     * @var string
+     * @ORM\Column(name="braintree_merch_public_key", type="string", length=255, nullable=false)
      */
-    protected $publicKey;
+    protected string $publicKey;
 
     /**
-     *
-     * @var string @ORM\Column(name="braintree_merch_private_key", type="string", length=255, nullable=false)
+     * @var string
+     * @ORM\Column(name="braintree_merch_private_key", type="string", length=255, nullable=false)
      */
-    protected $privateKey;
+    protected string $privateKey;
 
     /**
-     *
-     * @var boolean @ORM\Column(name="braintree_vault", type="boolean", options={"default"=false})
+     * @var boolean
+     * @ORM\Column(name="braintree_vault", type="boolean", options={"default"=false})
      */
-    protected $vault = false;
+    protected bool $vault = false;
 
     /**
-     *
-     * @var array @ORM\Column(name="braintree_settings", type="array")
+     * @var array<string,mixed>
+     * @ORM\Column(name="braintree_settings", type="array")
      */
-    protected $paymentMethodSettings;
-
-    /**
-     * @var ParameterBag
-     */
-    protected $settings;
+    protected array $paymentMethodSettings;
 
     /**
      * Column name shortened to braintree_fraud_advanced due to max db name length 30
-     * @var boolean @ORM\Column(name="braintree_fraud_advanced", type="boolean", options={"default"=false})
+     * @var boolean
+     * @ORM\Column(name="braintree_fraud_advanced", type="boolean", options={"default"=false})
      */
-    protected $fraudProtectionAdvanced = false;
+    protected bool $fraudProtectionAdvanced = false;
 
-    /**
-     * BraintreeIntegrationSettings constructor.
-     */
+    protected ?ParameterBag $settings = null;
+
     public function __construct()
     {
         $this->labels = new ArrayCollection();
         $this->shortLabels = new ArrayCollection();
         $this->paymentMethodSettings = [
             'card' => [
-                'enabled' => true
+                'enabled' => true,
             ]
         ];
     }
 
     /**
-     * @return Collection|LocalizedFallbackValue[]
+     * @return Collection<int, LocalizedFallbackValue>
      */
-    public function getLabels()
+    public function getLabels(): Collection
     {
         return $this->labels;
     }
 
-    /**
-     * @param LocalizedFallbackValue $label
-     *
-     * @return $this
-     */
-    public function addLabel(LocalizedFallbackValue $label)
+    public function addLabel(LocalizedFallbackValue $label): static
     {
         if (!$this->labels->contains($label)) {
             $this->labels->add($label);
@@ -152,12 +141,7 @@ class BraintreeIntegrationSettings extends Transport
         return $this;
     }
 
-    /**
-     * @param LocalizedFallbackValue $label
-     *
-     * @return $this
-     */
-    public function removeLabel(LocalizedFallbackValue $label)
+    public function removeLabel(LocalizedFallbackValue $label): static
     {
         if ($this->labels->contains($label)) {
             $this->labels->removeElement($label);
@@ -167,19 +151,14 @@ class BraintreeIntegrationSettings extends Transport
     }
 
     /**
-     * @return Collection|LocalizedFallbackValue[]
+     * @return Collection<int,LocalizedFallbackValue>
      */
-    public function getShortLabels()
+    public function getShortLabels(): Collection
     {
         return $this->shortLabels;
     }
 
-    /**
-     * @param LocalizedFallbackValue $label
-     *
-     * @return $this
-     */
-    public function addShortLabel(LocalizedFallbackValue $label)
+    public function addShortLabel(LocalizedFallbackValue $label): static
     {
         if (!$this->shortLabels->contains($label)) {
             $this->shortLabels->add($label);
@@ -188,12 +167,7 @@ class BraintreeIntegrationSettings extends Transport
         return $this;
     }
 
-    /**
-     * @param LocalizedFallbackValue $label
-     *
-     * @return $this
-     */
-    public function removeShortLabel(LocalizedFallbackValue $label)
+    public function removeShortLabel(LocalizedFallbackValue $label): static
     {
         if ($this->shortLabels->contains($label)) {
             $this->shortLabels->removeElement($label);
@@ -202,175 +176,130 @@ class BraintreeIntegrationSettings extends Transport
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->environment;
     }
 
-    /**
-     * @param string $environment
-     */
-    public function setEnvironment($environment)
+    public function setEnvironment(string $environment): static
     {
         $this->environment = $environment;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return $this->merchantId;
     }
 
-    /**
-     * @param string $merchantId
-     */
-    public function setMerchantId($merchantId)
+    public function setMerchantId(string $merchantId): static
     {
         $this->merchantId = $merchantId;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId(): string
     {
         return $this->merchantAccountId;
     }
 
-    /**
-     * @param string $merchantAccountId
-     */
-    public function setMerchantAccountId($merchantAccountId)
+    public function setMerchantAccountId(string $merchantAccountId): static
     {
         $this->merchantAccountId = $merchantAccountId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return $this->publicKey;
     }
 
-    /**
-     * @param string $publicKey
-     */
-    public function setPublicKey($publicKey)
+    public function setPublicKey(string $publicKey): static
     {
         $this->publicKey = $publicKey;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return $this->privateKey;
     }
 
-    /**
-     * @param string $privateKey
-     */
-    public function setPrivateKey($privateKey)
+    public function setPrivateKey(string $privateKey): static
     {
         $this->privateKey = $privateKey;
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVaultModeActive()
+    public function isVaultModeActive(): bool
     {
         return $this->vault;
     }
 
-    /**
-     * @return void
-     */
-    public function enableVaultMode()
+    public function enableVaultMode(): void
     {
         $this->vault = true;
     }
 
-    /**
-     * @return void
-     */
-    public function disableVaultMode()
+    public function disableVaultMode(): void
     {
         $this->vault = false;
     }
 
-    /**
-     * @param bool $vault
-     */
-    public function setVaultMode($vault)
+    public function setVaultMode(bool $vault): static
     {
         $this->vault = $vault;
+        return $this;
     }
 
-    /**
-     * @@return bool
-     */
-    public function getVaultMode()
+    public function getVaultMode(): bool
     {
         return $this->vault;
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
-    public function getPaymentMethodSettings()
+    public function getPaymentMethodSettings(): array
     {
         return $this->paymentMethodSettings;
     }
 
     /**
-     * @param array $paymentMethodSettings
+     * @param array<string,mixed> $paymentMethodSettings
      */
-    public function setPaymentMethodSettings(array $paymentMethodSettings)
+    public function setPaymentMethodSettings(array $paymentMethodSettings): static
     {
         $this->paymentMethodSettings = $paymentMethodSettings;
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFraudProtectionAdvanced()
+    public function isFraudProtectionAdvanced(): bool
     {
         return $this->fraudProtectionAdvanced;
     }
 
-    /**
-     * @param bool $fraudProtectionAdvanced
-     */
-    public function setFraudProtectionAdvanced(bool $fraudProtectionAdvanced)
+    public function setFraudProtectionAdvanced(bool $fraudProtectionAdvanced): static
     {
         $this->fraudProtectionAdvanced = $fraudProtectionAdvanced;
+        return $this;
     }
 
-
-
-    /**
-     * @return ParameterBag
-     */
-    public function getSettingsBag()
+    public function getSettingsBag(): ParameterBag
     {
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
                 [
-                    BraintreeConfig::LABELS_KEY => $this->getLabels(),
-                    BraintreeConfig::SHORT_LABELS_KEY => $this->getShortLabels(),
-                    BraintreeConfig::ENVIRONMENT_KEY => $this->getEnvironment(),
-                    BraintreeConfig::MERCHANT_ACCOUNT_ID_KEY => $this->getMerchantAccountId(),
-                    BraintreeConfig::MERCHANT_ID_KEY => $this->getMerchantId(),
-                    BraintreeConfig::VAULT_KEY => $this->isVaultModeActive(),
-                    BraintreeConfig::FRAUD_PROTECTION_ADVANCED_KEY => $this->isFraudProtectionAdvanced()
+                    BraintreeConfigInterface::LABELS_KEY => $this->getLabels(),
+                    BraintreeConfigInterface::SHORT_LABELS_KEY => $this->getShortLabels(),
+                    BraintreeConfigInterface::ENVIRONMENT_KEY => $this->getEnvironment(),
+                    BraintreeConfigInterface::MERCHANT_ACCOUNT_ID_KEY => $this->getMerchantAccountId(),
+                    BraintreeConfigInterface::MERCHANT_ID_KEY => $this->getMerchantId(),
+                    BraintreeConfigInterface::VAULT_KEY => $this->isVaultModeActive(),
+                    BraintreeConfigInterface::FRAUD_PROTECTION_ADVANCED_KEY => $this->isFraudProtectionAdvanced()
                 ]
             );
         }

@@ -16,35 +16,27 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PayPalSettingsType extends AbstractType
 {
+    protected TranslatorInterface $translator;
 
     /**
-     * @var TranslatorInterface
+     * @var array<string,string>
      */
-    protected $translator;
+    protected array $locales = [];
 
-    /**
-     * @var array
-     */
-    protected $locales;
-
-    /**
-     * PayPalSettingsType constructor.
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param FormBuilderInterface<mixed> $builder
+     * @param array<string,mixed> $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -106,12 +98,13 @@ class PayPalSettingsType extends AbstractType
     }
 
     /**
-     * Fetch array of locale choices paypal supports
+     * Fetch array of locale choices PayPal supports
+     * @return array<string,string>
      */
-    protected function getLocaleChoices()
+    protected function getLocaleChoices(): array
     {
         if (!$this->locales) {
-            $this->locales =  [
+            $this->locales = [
                 $this->translator->trans('aligent.braintree.settings.paypal.locale.da_DK') => 'da_DK',
                 $this->translator->trans('aligent.braintree.settings.paypal.locale.de_DE') => 'de_DE',
                 $this->translator->trans('aligent.braintree.settings.paypal.locale.en_AU') => 'en_AU',
