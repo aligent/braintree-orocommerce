@@ -24,7 +24,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "braintree/braintree_php": "6.9.*",
+        "braintree/braintree_php": "6.10.*",
         "php": "~7.4.14 || ~8.0.0",
         "oro/commerce": "4.2.*"
     },
