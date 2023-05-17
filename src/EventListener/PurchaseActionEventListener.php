@@ -12,6 +12,7 @@ namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Method\Action\PurchaseAction;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class PurchaseActionEventListener
 {
@@ -46,6 +47,24 @@ class PurchaseActionEventListener
 
         //Add oro order Id to braintree data
         $data['orderId'] = (string) $paymentTransaction->getEntityIdentifier();
+
+        $billing = $customerUser->getAddressByTypeName(AddressType::TYPE_BILLING);
+        $address = $billing->getStreet();
+        if ($billing->getStreet2()) {
+            $address .= ', ' . $billing->getStreet2();
+        }
+        $data['billing'] = [
+            'firstName' => $billing->getFirstName(),
+            'lastName' => $billing->getLastName(),
+            'streetAddress' => $address,
+            'region' => $billing->getRegion(),
+            'locality' => $billing->getCity(),
+            'postalCode' => $billing->getPostalCode(),
+            'countryCodeAlpha2' => $billing->getCountryIso2(),
+        ];
+        if ($billing->getOrganization()) {
+            $data['billing']['company'] = $billing->getOrganization();
+        }
 
         $event->setData($data);
     }
