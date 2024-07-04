@@ -20,14 +20,11 @@ class VenmoConfigurationBuilder implements ConfigurationBuilderInterface, Featur
 
     /**
      * Build the settings object to pass to Dropin
-     * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): mixed
     {
         if (!$this->isFeaturesEnabled()) {
-            return;
+            return null;
         }
 
         // Never allow new browser tab as it isn't supported by our checkout flow yet.

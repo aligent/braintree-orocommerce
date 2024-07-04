@@ -19,5 +19,5 @@ interface BraintreeConfigFactoryInterface
      * @param BraintreeIntegrationSettings $settings
      * @return BraintreeConfigInterface
      */
-    public function create(BraintreeIntegrationSettings $settings);
+    public function create(BraintreeIntegrationSettings $settings): BraintreeConfigInterface;
 }

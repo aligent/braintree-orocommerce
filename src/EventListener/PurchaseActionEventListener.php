@@ -14,10 +14,7 @@ use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 
 class PurchaseActionEventListener
 {
-    /**
-     * @param BraintreePaymentActionEvent $actionEvent
-     */
-    public function onPurchase(BraintreePaymentActionEvent $actionEvent)
+    public function onPurchase(BraintreePaymentActionEvent $actionEvent): void
     {
         $data = $actionEvent->getData();
 

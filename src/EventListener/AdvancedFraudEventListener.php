@@ -16,13 +16,11 @@ use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 class AdvancedFraudEventListener
 {
-
     /**
      * Add deviceData to payload as required for abraintree advanced fraud detection
      * https://developer.paypal.com/braintree/docs/guides/premium-fraud-management-tools/server-side
-     * @param BraintreePaymentActionEvent $actionEvent
      */
-    public function onPurchase(BraintreePaymentActionEvent $actionEvent)
+    public function onPurchase(BraintreePaymentActionEvent $actionEvent): void
     {
         if ($actionEvent->getConfig()->isFraudProtectionAdvancedEnabled()) {
             $data = $actionEvent->getData();
@@ -36,10 +34,8 @@ class AdvancedFraudEventListener
 
     /**
      * Extracts the device data out of the additional data array
-     * @param PaymentTransaction $paymentTransaction
-     * @return string
      */
-    protected function getDeviceData(PaymentTransaction $paymentTransaction)
+    protected function getDeviceData(PaymentTransaction $paymentTransaction): string
     {
         $transactionOptions = $paymentTransaction->getTransactionOptions();
 

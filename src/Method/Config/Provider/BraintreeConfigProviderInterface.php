@@ -7,6 +7,7 @@
  * @license
  * @link      http://www.aligent.com.au/
  */
+
 namespace Aligent\BraintreeBundle\Method\Config\Provider;
 
 interface BraintreeConfigProviderInterface

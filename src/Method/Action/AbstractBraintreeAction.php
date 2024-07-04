@@ -10,46 +10,34 @@
 
 namespace Aligent\BraintreeBundle\Method\Action;
 
-use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Braintree\Gateway;
+use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\Result\Error;
+use InvalidArgumentException;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use \InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractBraintreeAction implements BraintreeActionInterface, LoggerAwareInterface
 {
-
     use LoggerAwareTrait;
 
-    /**
-     * @var Gateway
-     */
-    protected $braintreeGateway;
+    protected Gateway $braintreeGateway;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
+    protected DoctrineHelper $doctrineHelper;
 
     /**
      * @var BraintreeConfigInterface
      */
-    protected $config;
+    protected BraintreeConfigInterface $config;
 
     /**
      * AbstractBraintreeAction constructor.
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, DoctrineHelper $doctrineHelper)
     {
@@ -57,20 +45,13 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
         $this->doctrineHelper = $doctrineHelper;
     }
 
-    /**
-     * @param BraintreeConfigInterface $braintreeConfig
-     * @return void
-     */
-    public function initialize(BraintreeConfigInterface $braintreeConfig)
+    public function initialize(BraintreeConfigInterface $braintreeConfig): void
     {
         $this->config = $braintreeConfig;
         $this->braintreeGateway = new Gateway($braintreeConfig, $this->doctrineHelper);
     }
 
-    /**
-     * @param PaymentTransaction $paymentTransaction
-     */
-    protected function setPaymentTransactionStateFailed(PaymentTransaction $paymentTransaction)
+    protected function setPaymentTransactionStateFailed(PaymentTransaction $paymentTransaction): void
     {
         $paymentTransaction
             ->setSuccessful(false)
@@ -79,11 +60,8 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
 
     /**
      * Logs error
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @param Error $error
      */
-    protected function handleError(PaymentTransaction $paymentTransaction, Error $error)
+    protected function handleError(PaymentTransaction $paymentTransaction, Error $error): void
     {
         $errorContext = $this->getErrorLogContext($paymentTransaction);
         $errorContext['error'] = $error->jsonSerialize();
@@ -99,11 +77,8 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
 
     /**
      * Logs error
-     *
-     * @param PaymentTransaction $paymentTransaction
-     * @param \Throwable         $exceptionOrError
      */
-    protected function handleException(PaymentTransaction $paymentTransaction, \Throwable $exceptionOrError)
+    protected function handleException(PaymentTransaction $paymentTransaction, \Throwable $exceptionOrError): void
     {
         $errorMessage = sprintf(
             'Payment %s failed. Reason: %s',
@@ -117,11 +92,7 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
         $this->logError($errorMessage, $errorContext);
     }
 
-    /**
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    protected function getErrorLogContext(PaymentTransaction $paymentTransaction)
+    protected function getErrorLogContext(PaymentTransaction $paymentTransaction): array
     {
         $result = [
             'payment_transaction_id' => $paymentTransaction->getId(),
@@ -131,21 +102,15 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
         return $result;
     }
 
-    /**
-     * @param string $message
-     * @param array  $errorContext
-     */
-    protected function logError($message, array $errorContext)
+    protected function logError(string $message, array $errorContext): void
     {
         $this->logger->error($message, $errorContext);
     }
 
     /**
      * Extracts the payment nonce out of the additional data array
-     * @param PaymentTransaction $paymentTransaction
-     * @return string
      */
-    protected function getNonce(PaymentTransaction $paymentTransaction)
+    protected function getNonce(PaymentTransaction $paymentTransaction): string
     {
         $transactionOptions = $paymentTransaction->getTransactionOptions();
 
@@ -170,28 +135,26 @@ abstract class AbstractBraintreeAction implements BraintreeActionInterface, Logg
 
     /**
      * Builds up the request data array by firing off 2 events, one generic and one named after the action type
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
      */
-    protected function buildRequestData(PaymentTransaction $paymentTransaction)
+    protected function buildRequestData(PaymentTransaction $paymentTransaction): array
     {
         $data = [
             'amount' => $paymentTransaction->getAmount(),
             'paymentMethodNonce' => $this->getNonce($paymentTransaction)
         ];
-        
+
         $event = new BraintreePaymentActionEvent($data, $paymentTransaction, $this->config);
 
         // Generic Event
-        $this->eventDispatcher->dispatch(BraintreePaymentActionEvent::NAME, $event);
+        $this->eventDispatcher->dispatch($event, BraintreePaymentActionEvent::NAME);
 
         // Action named event
         $this->eventDispatcher->dispatch(
+            $event,
             sprintf(
                 BraintreePaymentActionEvent::ACTION_EVENT_NAME,
                 $this->getName()
-            ),
-            $event
+            )
         );
 
         return $event->getData();

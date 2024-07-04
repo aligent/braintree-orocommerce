@@ -13,17 +13,14 @@ namespace Aligent\BraintreeBundle\Method\View;
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ConfigurationBuilderInterface;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Aligent\BraintreeBundle\Provider\ChainConfigurationBuilder;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Method\View\PaymentMethodViewInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 class BraintreeView implements PaymentMethodViewInterface
 {
-
     /**
      * @var BraintreeConfigInterface
      */

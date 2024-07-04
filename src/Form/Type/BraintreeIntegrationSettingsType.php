@@ -20,34 +20,23 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class BraintreeIntegrationSettingsType extends AbstractType
 {
-
     const BLOCK_PREFIX = 'aligent_braintree_settings_type';
 
-    /**
-     *
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected \Symfony\Contracts\Translation\TranslatorInterface $translator;
 
     /**
      * BraintreeIntegrationSettingsType constructor.
-     * @param TranslatorInterface $translator
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(\Symfony\Contracts\Translation\TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -149,10 +138,7 @@ class BraintreeIntegrationSettingsType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -164,7 +150,7 @@ class BraintreeIntegrationSettingsType extends AbstractType
     /**
      * @inheritdoc
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return static::BLOCK_PREFIX;
     }

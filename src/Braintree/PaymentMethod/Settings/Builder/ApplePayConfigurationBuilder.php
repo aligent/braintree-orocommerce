@@ -18,14 +18,11 @@ use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 class ApplePayConfigurationBuilder implements ConfigurationBuilderInterface, FeatureToggleableInterface
 {
     use FeatureCheckerHolderTrait;
-    /**
-     * @var TotalProcessorProvider
-     */
-    protected $totalsProvider;
+
+    protected TotalProcessorProvider $totalsProvider;
 
     /**
      * PayPalCreditSettingsBuilder constructor.
-     * @param TotalProcessorProvider $totalsProvider
      */
     public function __construct(TotalProcessorProvider $totalsProvider)
     {
@@ -34,14 +31,11 @@ class ApplePayConfigurationBuilder implements ConfigurationBuilderInterface, Fea
 
     /**
      * Build the settings object to pass to Dropin
-     * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): mixed
     {
         if (!$this->isFeaturesEnabled()) {
-            return;
+            return null;
         }
 
         // Strip Null values

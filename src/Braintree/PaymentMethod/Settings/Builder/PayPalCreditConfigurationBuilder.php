@@ -19,14 +19,10 @@ class PayPalCreditConfigurationBuilder implements ConfigurationBuilderInterface,
 {
     use FeatureCheckerHolderTrait;
 
-    /**
-     * @var TotalProcessorProvider
-     */
-    protected $totalsProvider;
+    protected TotalProcessorProvider $totalsProvider;
 
     /**
      * PayPalCreditSettingsBuilder constructor.
-     * @param TotalProcessorProvider $totalsProvider
      */
     public function __construct(TotalProcessorProvider $totalsProvider)
     {
@@ -36,10 +32,10 @@ class PayPalCreditConfigurationBuilder implements ConfigurationBuilderInterface,
     /**
      * @inheritdoc
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): mixed
     {
         if (!$this->isFeaturesEnabled()) {
-            return;
+            return null;
         }
 
         // Strip Null values
@@ -53,7 +49,7 @@ class PayPalCreditConfigurationBuilder implements ConfigurationBuilderInterface,
         // Checkout flow requires an amount and total
         if ($viewSettings['flow'] === 'checkout') {
             $total = $this->totalsProvider->getTotal($context->getSourceEntity());
-            $viewSettings['amount'] = $total->getValue();
+            $viewSettings['amount'] = $total->getAmount();
             $viewSettings['currency'] = $total->getCurrency();
         }
 

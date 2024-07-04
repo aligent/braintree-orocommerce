@@ -18,7 +18,7 @@ class BraintreeIntegrationSettingsRepository extends EntityRepository
     /**
      * @return BraintreeIntegrationSettings[]
      */
-    public function getEnabledSettings()
+    public function getEnabledSettings(): array
     {
         return $this->createQueryBuilder('settings')
             ->innerJoin('settings.channel', 'channel')

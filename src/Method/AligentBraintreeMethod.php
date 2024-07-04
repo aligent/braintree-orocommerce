@@ -10,8 +10,8 @@
 
 namespace Aligent\BraintreeBundle\Method;
 
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;

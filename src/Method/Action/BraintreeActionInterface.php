@@ -15,20 +15,9 @@ use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
 interface BraintreeActionInterface
 {
-    /**
-     * @param PaymentTransaction $paymentTransaction
-     * @return array
-     */
-    public function execute(PaymentTransaction $paymentTransaction);
+    public function execute(PaymentTransaction $paymentTransaction): array;
 
-    /**
-     * @param BraintreeConfigInterface $braintreeConfig
-     * @return void
-     */
-    public function initialize(BraintreeConfigInterface $braintreeConfig);
+    public function initialize(BraintreeConfigInterface $braintreeConfig): void;
 
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 }

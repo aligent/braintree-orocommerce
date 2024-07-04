@@ -12,33 +12,21 @@ namespace Aligent\BraintreeBundle\Event;
 
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class BraintreePaymentActionEvent extends Event
 {
     const NAME = 'aligent_braintree.payment_action';
     const ACTION_EVENT_NAME = 'aligent_braintree.payment_action.%s';
 
-    /**
-     * @var array
-     */
-    protected $data;
+    protected array $data;
 
-    /**
-     * @var PaymentTransaction
-     */
-    protected $paymentTransaction;
+    protected PaymentTransaction $paymentTransaction;
 
-    /**
-     * @var BraintreeConfigInterface
-     */
-    protected $config;
+    protected BraintreeConfigInterface $config;
 
     /**
      * BraintreePaymentActionEvent constructor.
-     * @param array $data
-     * @param PaymentTransaction $paymentTransaction
-     * @param BraintreeConfigInterface $config
      */
     public function __construct(array $data, PaymentTransaction $paymentTransaction, BraintreeConfigInterface $config)
     {
@@ -47,34 +35,22 @@ class BraintreePaymentActionEvent extends Event
         $this->config = $config;
     }
 
-    /**
-     * @return array
-     */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @param array $data
-     */
-    public function setData($data)
+    public function setData(array $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * @return BraintreeConfigInterface
-     */
-    public function getConfig()
+    public function getConfig(): BraintreeConfigInterface
     {
         return $this->config;
     }
 
-    /**
-     * @return PaymentTransaction
-     */
-    public function getPaymentTransaction()
+    public function getPaymentTransaction(): PaymentTransaction
     {
         return $this->paymentTransaction;
     }
