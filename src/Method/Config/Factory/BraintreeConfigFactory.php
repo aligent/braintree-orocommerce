@@ -55,7 +55,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
      * @param BraintreeIntegrationSettings $settings
      * @return BraintreeConfigInterface
      */
-    public function create(BraintreeIntegrationSettings $settings)
+    public function create(BraintreeIntegrationSettings $settings): BraintreeConfigInterface
     {
         $params = $settings->getSettingsBag();
         $channel = $settings->getChannel();
@@ -83,7 +83,7 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
      *
      * @return string
      */
-    private function getLocalizedValue(Collection $values)
+    private function getLocalizedValue(Collection $values): string
     {
         return (string) $this->localizationHelper->getLocalizedValue($values);
     }
