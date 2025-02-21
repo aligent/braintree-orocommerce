@@ -14,19 +14,15 @@ use Oro\Bundle\PaymentBundle\Context\PaymentContextInterface;
 
 class ChainConfigurationBuilder implements ConfigurationBuilderInterface
 {
-
     /**
      * @var ConfigurationBuilderInterface[] $builders
      */
-    protected $builders = [];
+    protected array $builders = [];
 
     /**
      * Build the settings object to pass to the Drop-in UI
-     * @param PaymentContextInterface $context
-     * @param array $configuration
-     * @return mixed
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): mixed
     {
         $config = [];
         foreach ($configuration as $paymentMethod => $paymentMethodConfig) {
@@ -51,18 +47,16 @@ class ChainConfigurationBuilder implements ConfigurationBuilderInterface
 
     /**
      * @param $method
-     * @return bool
      */
-    public function hasBuilder($method)
+    public function hasBuilder($method): bool
     {
         return isset($this->builders[$method]);
     }
 
     /**
      * @param $method
-     * @return ConfigurationBuilderInterface
      */
-    public function getBuilder($method)
+    public function getBuilder($method): ConfigurationBuilderInterface
     {
         if (!$this->hasBuilder($method)) {
             throw new \InvalidArgumentException("Builder for {$method} does not exist.");

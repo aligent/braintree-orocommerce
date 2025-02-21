@@ -21,10 +21,7 @@ class PaymentMethodConfigurationPass implements CompilerPassInterface
 {
     const ALIGENT_BRAINTREE_PAYMENT_METHOD_SETTINGS_TAG = 'braintree.payment_method_settings';
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // always first check if the primary service is defined
         if (!$container->has(ChainConfigurationBuilder::class)) {

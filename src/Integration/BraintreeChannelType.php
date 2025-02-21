@@ -15,13 +15,10 @@ use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 
 class BraintreeChannelType implements ChannelInterface, IconAwareIntegrationInterface
 {
-
     /**
      * Returns label for UI
-     *
-     * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return 'aligent.braintree.channel_type.label';
     }
@@ -29,10 +26,8 @@ class BraintreeChannelType implements ChannelInterface, IconAwareIntegrationInte
     /**
      * Returns icon path for UI, should return value like 'bundles/acmedemo/img/logo.png'
      * Relative path to assets helper
-     *
-     * @return string
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         return 'bundles/aligentbraintree/img/braintree-logo.png';
     }

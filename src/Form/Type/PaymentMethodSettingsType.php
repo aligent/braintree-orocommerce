@@ -16,25 +16,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PaymentMethodSettingsType extends AbstractType
 {
-    /**
-     * @var FeatureChecker
-     */
-    protected $featureChecker;
+    protected FeatureChecker $featureChecker;
 
     /**
      * PaymentMethodSettingsType constructor.
-     * @param FeatureChecker $featureChecker
      */
     public function __construct(FeatureChecker $featureChecker)
     {
         $this->featureChecker = $featureChecker;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'card',

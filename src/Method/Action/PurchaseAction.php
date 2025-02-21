@@ -10,8 +10,6 @@
 
 namespace Aligent\BraintreeBundle\Method\Action;
 
-use Aligent\BraintreeBundle\Braintree\Gateway;
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Braintree\Result\Error;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
 
@@ -19,11 +17,7 @@ class PurchaseAction extends AbstractBraintreeAction
 {
     const ACTION = 'purchase';
 
-    /**
-     * @param PaymentTransaction $paymentTransaction
-     * @return mixed
-     */
-    public function execute(PaymentTransaction $paymentTransaction)
+    public function execute(PaymentTransaction $paymentTransaction): array
     {
         $data = $this->buildRequestData($paymentTransaction);
         $paymentTransaction->setRequest($data);
@@ -57,10 +51,7 @@ class PurchaseAction extends AbstractBraintreeAction
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return static::ACTION;
     }

@@ -10,15 +10,14 @@
 
 namespace Aligent\BraintreeBundle\Method\Factory;
 
+use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
 use Aligent\BraintreeBundle\Method\AligentBraintreeMethod;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Aligent\BraintreeBundle\Method\Action\Provider\BraintreeActionProviderInterface;
 use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Psr\Log\LoggerInterface;
 
 class BraintreeMethodFactory implements BraintreeMethodFactoryInterface
 {
-
     /**
      * @var BraintreeActionProviderInterface
      */
@@ -46,7 +45,7 @@ class BraintreeMethodFactory implements BraintreeMethodFactoryInterface
      * @param BraintreeConfigInterface $config
      * @return PaymentMethodInterface
      */
-    public function create(BraintreeConfigInterface $config)
+    public function create(BraintreeConfigInterface $config): PaymentMethodInterface
     {
         return new AligentBraintreeMethod($config, $this->provider, $this->logger);
     }

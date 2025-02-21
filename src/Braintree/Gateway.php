@@ -11,11 +11,10 @@
 namespace Aligent\BraintreeBundle\Braintree;
 
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
-use Braintree\ClientToken;
-use Braintree\Configuration;
 use Braintree\Customer;
 use Braintree\Exception\NotFound;
-use Braintree\Transaction;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUser;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
@@ -24,25 +23,14 @@ class Gateway
     const PRODUCTION = 'production';
     const SANDBOX = 'sandbox';
 
-    /**
-     * @var BraintreeConfigInterface
-     */
-    public $config;
+    public BraintreeConfigInterface $config;
 
-    /**
-     * @var \Braintree\Gateway
-     */
-    protected $braintreeGateway;
+    protected \Braintree\Gateway $braintreeGateway;
 
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
+    protected DoctrineHelper $doctrineHelper;
 
     /**
      * Gateway constructor.
-     * @param BraintreeConfigInterface $config
-     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(BraintreeConfigInterface $config, DoctrineHelper $doctrineHelper)
     {
@@ -60,16 +48,15 @@ class Gateway
 
     /**
      * Generate Braintree Authentication Token for a customer user
-     * @param CustomerUser $customerUser
-     * @return string
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function getCustomerAuthToken(CustomerUser $customerUser)
+    public function getCustomerAuthToken(CustomerUser $customerUser): string
     {
         $braintreeId = $customerUser->getBraintreeId();
 
-       // if the customer doesn't already exist with braintree create it
+        // if the customer doesn't already exist with braintree create it
         if (!$braintreeId) {
             $result = $this->createBraintreeCustomer($customerUser);
 
@@ -81,7 +68,7 @@ class Gateway
             $braintreeId = $customerUser->getBraintreeId();
         }
 
-       // ensure we can find the customer with that ID otherwise fallback to generic token
+        // ensure we can find the customer with that ID otherwise fallback to generic token
         try {
             $this->braintreeGateway->customer()->find($braintreeId);
         } catch (NotFound $exception) {
@@ -97,30 +84,25 @@ class Gateway
 
     /**
      * Generate a generic auth token for braintree
-     * @return string
      */
-    public function getAuthToken()
+    public function getAuthToken(): string
     {
         return $this->braintreeGateway->clientToken()->generate();
     }
 
     /**
      * Charge the payment nonce
-     * @param array $params
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
      */
-    public function sale(array $params)
+    public function sale(array $params): Error|Successful
     {
         return $this->braintreeGateway->transaction()->sale($params);
     }
 
     /**
-     * @param CustomerUser $customerUser
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createBraintreeCustomer(CustomerUser $customerUser)
+    public function createBraintreeCustomer(CustomerUser $customerUser): Error|Successful
     {
         $result = $this->braintreeGateway->customer()->create(
             [

@@ -11,11 +11,9 @@
 namespace Aligent\BraintreeBundle\Method\Action\Provider;
 
 use Aligent\BraintreeBundle\Method\Action\BraintreeActionInterface;
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 class BraintreeActionProvider implements BraintreeActionProviderInterface
 {
-
     /**
      * @var BraintreeActionInterface[]
      */

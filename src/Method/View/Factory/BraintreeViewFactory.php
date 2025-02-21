@@ -19,7 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class BraintreeViewFactory implements BraintreeViewFactoryInterface
 {
-
     /**
      * @param BraintreeConfigInterface $config
      * @param TokenStorageInterface $tokenStorage

@@ -15,25 +15,20 @@ use Oro\Bundle\PricingBundle\SubtotalProcessor\TotalProcessorProvider;
 
 class PayPalConfigurationBuilder implements ConfigurationBuilderInterface
 {
-
-    /**
-     * @var TotalProcessorProvider
-     */
-    protected $totalsProvider;
+    protected TotalProcessorProvider $totalsProvider;
 
     /**
      * PayPalCreditSettingsBuilder constructor.
-     * @param TotalProcessorProvider $totalsProvider
      */
     public function __construct(TotalProcessorProvider $totalsProvider)
     {
         $this->totalsProvider = $totalsProvider;
     }
 
-        /**
+    /**
      * @inheritdoc
      */
-    public function build(PaymentContextInterface $context, array $configuration)
+    public function build(PaymentContextInterface $context, array $configuration): mixed
     {
         // Strip Null values
         $viewSettings = array_filter(

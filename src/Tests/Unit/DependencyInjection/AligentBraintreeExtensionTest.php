@@ -7,6 +7,7 @@
  * @license
  * @link      http://www.aligent.com.au/
  */
+
 namespace Aligent\BraintreeBundle\Tests\Unit\DependencyInjection;
 
 use Aligent\BraintreeBundle\Braintree\PaymentMethod\Settings\Builder\ApplePayConfigurationBuilder;

@@ -60,7 +60,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     /**
      * @param $value string
      */
-    public function setPublicKey($value)
+    public function setPublicKey(string $value)
     {
         $this->set(self::PUBLIC_KEY_KEY, $value);
     }
@@ -68,7 +68,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
     /**
      * @param $value string
      */
-    public function setPrivateKey($value)
+    public function setPrivateKey(string $value)
     {
         $this->set(self::PRIVATE_KEY_KEY, $value);
     }
@@ -78,7 +78,7 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
      */
     public function isVaultMode()
     {
-        return (boolean) $this->get(self::VAULT_KEY);
+        return (bool) $this->get(self::VAULT_KEY);
     }
 
     /**
@@ -165,6 +165,6 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
      */
     public function isFraudProtectionAdvancedEnabled()
     {
-        return (boolean) $this->get(self::FRAUD_PROTECTION_ADVANCED_KEY);
+        return (bool) $this->get(self::FRAUD_PROTECTION_ADVANCED_KEY);
     }
 }
