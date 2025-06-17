@@ -87,7 +87,9 @@ class Gateway
      */
     public function getAuthToken(): string
     {
-        return $this->braintreeGateway->clientToken()->generate();
+        return $this->braintreeGateway->clientToken()->generate([
+            'merchantAccountId' => $this->config->getMerchantAccountId()
+        ]);
     }
 
     /**
