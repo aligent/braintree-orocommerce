@@ -75,11 +75,16 @@ class Gateway
             return  $this->getAuthToken();
         }
 
-        return $this->braintreeGateway->clientToken()->generate(
-            [
-                'customerId' => $braintreeId
-            ]
-        );
+        $tokenParams = ['customerId' => $braintreeId];
+
+        /** @var ?string $merchantAccountId */
+        $merchantAccountId = $this->config->getMerchantAccountId();
+        if ($merchantAccountId) {
+            $tokenParams['merchantAccountId'] = $merchantAccountId;
+        }
+
+        /** @phpstan-ignore-next-line BrainTree ClientTokenGateway is incorrectly type-hinted, it accepts an array */
+        return $this->braintreeGateway->clientToken()->generate($tokenParams);
     }
 
     /**
@@ -87,9 +92,18 @@ class Gateway
      */
     public function getAuthToken(): string
     {
-        return $this->braintreeGateway->clientToken()->generate([
-            'merchantAccountId' => $this->config->getMerchantAccountId()
-        ]);
+        $clientToken = $this->braintreeGateway->clientToken();
+        /** @var ?string $merchantAccountId */
+        $merchantAccountId = $this->config->getMerchantAccountId();
+        if ($merchantAccountId) {
+            return $clientToken->generate(
+                [
+                    'merchantAccountId' => $merchantAccountId
+                ]
+            );
+        } else {
+            return $clientToken->generate();
+        }
     }
 
     /**
