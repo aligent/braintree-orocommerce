@@ -73,7 +73,6 @@ class Gateway
             return $this->getAuthToken();
         }
 
-        /** @phpstan-ignore-next-line BrainTree ClientTokenGateway is incorrectly type-hinted, it accepts an array */
         return $this->braintreeGateway->clientToken()->generate([
             'customerId' => $braintreeId,
         ]);
@@ -119,7 +118,6 @@ class Gateway
 
         if ($result->success) {
             $em = $this->doctrineHelper->getEntityManager(CustomerUser::class);
-            /* @phpstan-ignore-next-line The Braintree Result classes unfortunately use magic methods */
             $customerUser->setBraintreeId($result->customer->id);
 
             try {
