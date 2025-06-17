@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "~1.10.0",
+        "phpstan/phpstan": "~1.12.0",
         "phpmd/phpmd": "^2.15",
         "friendsofphp/php-cs-fixer": "~2.18.2 || ~3.57.0",
         "nelmio/alice": "~3.8.0 || ~3.12.1",
