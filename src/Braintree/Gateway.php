@@ -135,7 +135,6 @@ class Gateway
 
         if ($result->success) {
             $em = $this->doctrineHelper->getEntityManager(CustomerUser::class);
-            /* @phpstan-ignore-next-line The Braintree Result classes unfortunately use magic methods */
             $customerUser->setBraintreeId($result->customer->id);
 
             try {
