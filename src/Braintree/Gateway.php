@@ -81,7 +81,6 @@ class Gateway
             $tokenParams['merchantAccountId'] = $merchantAccountId;
         }
 
-        /** @phpstan-ignore-next-line BrainTree ClientTokenGateway is incorrectly type-hinted, it accepts an array */
         return $this->braintreeGateway->clientToken()->generate($tokenParams);
     }
 
