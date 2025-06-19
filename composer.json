@@ -19,12 +19,17 @@
         "psr-4": { "Aligent\\BraintreeBundle\\": "./src/" }
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "symfony/runtime": true,
+            "symfony/flex": true,
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "braintree/braintree_php": "6.8.*",
+        "braintree/braintree_php": "6.26.*",
         "php": "~8.1.0",
         "oro/commerce": "5.0.*"
     },

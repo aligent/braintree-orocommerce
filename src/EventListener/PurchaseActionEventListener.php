@@ -36,7 +36,6 @@ class PurchaseActionEventListener
         $customerUser = $paymentTransaction->getFrontendOwner();
 
         // If this is a vaulted customer set their customer ID on the transaction
-        /** @phpstan-ignore-next-line The FrontendOwner of a PaymentTransaction is actually nullable */
         if ($customerUser
             && method_exists($customerUser, 'getBraintreeId')
             && $braintreeId = $customerUser->getBraintreeId()
