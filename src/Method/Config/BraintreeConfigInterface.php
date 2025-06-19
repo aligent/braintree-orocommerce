@@ -63,12 +63,12 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
     /**
      * @param $value string
      */
-    public function setPublicKey($value);
+    public function setPublicKey(string $value);
 
     /**
      * @param $value string
      */
-    public function setPrivateKey($value);
+    public function setPrivateKey(string $value);
 
     /**
      * @return bool
