@@ -11,15 +11,18 @@
 namespace Aligent\BraintreeBundle\EventListener;
 
 use Aligent\BraintreeBundle\Event\BraintreePaymentActionEvent;
+use Aligent\BraintreeBundle\Method\Action\PurchaseAction;
 
 class PurchaseActionEventListener
 {
-    /**
-     * @param BraintreePaymentActionEvent $actionEvent
-     */
-    public function onPurchase(BraintreePaymentActionEvent $actionEvent)
+    public function onPurchase(BraintreePaymentActionEvent $event): void
     {
-        $data = $actionEvent->getData();
+        if ($event->getAction() !== PurchaseAction::ACTION) {
+            // Ignore other action types
+            return;
+        }
+
+        $data = $event->getData();
 
         // Purchase transactions we want to submit for settlement immediately
         $data['options'] = [
@@ -27,19 +30,22 @@ class PurchaseActionEventListener
         ];
 
         // merchantAccountId is what determines the currency, if not set it will use the accounts default
-        $data['merchantAccountId'] = $actionEvent->getConfig()->getMerchantAccountId();
+        $data['merchantAccountId'] = $event->getConfig()->getMerchantAccountId();
 
-        $paymentTransaction = $actionEvent->getPaymentTransaction();
+        $paymentTransaction = $event->getPaymentTransaction();
         $customerUser = $paymentTransaction->getFrontendOwner();
 
         // If this is a vaulted customer set their customer ID on the transaction
-        if ($customerUser && $braintreeId = $customerUser->getBraintreeId()) {
+        if ($customerUser
+            && method_exists($customerUser, 'getBraintreeId')
+            && $braintreeId = $customerUser->getBraintreeId()
+        ) {
             $data['customerId'] = $braintreeId;
         }
 
         //Add oro order Id to braintree data
         $data['orderId'] = (string) $paymentTransaction->getEntityIdentifier();
 
-        $actionEvent->setData($data);
+        $event->setData($data);
     }
 }

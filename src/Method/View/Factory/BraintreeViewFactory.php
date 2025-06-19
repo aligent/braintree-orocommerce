@@ -19,20 +19,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class BraintreeViewFactory implements BraintreeViewFactoryInterface
 {
-
-    /**
-     * @param BraintreeConfigInterface $config
-     * @param TokenStorageInterface $tokenStorage
-     * @param ChainConfigurationBuilder $configurationBuilder
-     * @param DoctrineHelper $doctrineHelper
-     * @return PaymentMethodViewInterface
-     */
     public function create(
         BraintreeConfigInterface $config,
         TokenStorageInterface $tokenStorage,
         ChainConfigurationBuilder $configurationBuilder,
         DoctrineHelper $doctrineHelper
-    ) {
+    ): PaymentMethodViewInterface {
         return new BraintreeView($config, $tokenStorage, $configurationBuilder, $doctrineHelper);
     }
 }

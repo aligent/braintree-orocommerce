@@ -15,9 +15,5 @@ use Oro\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 
 interface BraintreeMethodFactoryInterface
 {
-    /**
-     * @param BraintreeConfigInterface $config
-     * @return PaymentMethodInterface
-     */
-    public function create(BraintreeConfigInterface $config);
+    public function create(BraintreeConfigInterface $config): PaymentMethodInterface;
 }

@@ -6,6 +6,6 @@
         data-page-component-options="{{ paymentMethodComponentOptions|json_encode }}"
     >
     </div>
-    <input type="text" id="nonce-input" hidden>
-    <input type="text" id="device-data-input" hidden>
+    <input type="hidden" id="nonce-input" aria-hidden="true">
+    <input type="hidden" id="device-data-input" aria-hidden="true">
 {% endblock %}

@@ -12,42 +12,26 @@ namespace Aligent\BraintreeBundle\Method\Config\Provider;
 
 use Aligent\BraintreeBundle\Entity\BraintreeIntegrationSettings;
 use Aligent\BraintreeBundle\Entity\Repository\BraintreeIntegrationSettingsRepository;
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
+use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Aligent\BraintreeBundle\Method\Config\Factory\BraintreeConfigFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class BraintreeConfigProvider implements BraintreeConfigProviderInterface
 {
-    /**
-     * @var ManagerRegistry
-     */
-    protected $doctrine;
-
-    /**
-     * @var BraintreeConfigFactoryInterface
-     */
-    protected $configFactory;
+    protected ManagerRegistry $doctrine;
+    protected LoggerInterface $logger;
+    protected BraintreeConfigFactoryInterface $configFactory;
 
     /**
      * @var BraintreeConfigInterface[]
      */
-    protected $configs;
+    protected array $configs = [];
 
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     * @param LoggerInterface $logger
-     * @param BraintreeConfigFactoryInterface $configFactory
-     */
     public function __construct(
         ManagerRegistry $doctrine,
         LoggerInterface $logger,
-        BraintreeConfigFactoryInterface $configFactory
+        BraintreeConfigFactoryInterface $configFactory,
     ) {
         $this->doctrine = $doctrine;
         $this->logger = $logger;
@@ -57,25 +41,21 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getPaymentConfigs()
+    public function getPaymentConfigs(): array
     {
-        $configs = [];
+        if (empty($this->configs)) {
+            $settings = $this->getEnabledIntegrationSettings();
 
-        $settings = $this->getEnabledIntegrationSettings();
-
-        foreach ($settings as $setting) {
-            $config = $this->configFactory->create($setting);
-
-            $configs[$config->getPaymentMethodIdentifier()] = $config;
+            foreach ($settings as $setting) {
+                $config = $this->configFactory->create($setting);
+                $this->configs[$config->getPaymentMethodIdentifier()] = $config;
+            }
         }
 
-        return $configs;
+        return $this->configs;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getPaymentConfig($identifier)
+    public function getPaymentConfig(string $identifier): ?BraintreeConfigInterface
     {
         $paymentConfigs = $this->getPaymentConfigs();
 
@@ -86,10 +66,7 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
         return $paymentConfigs[$identifier];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasPaymentConfig($identifier)
+    public function hasPaymentConfig(string $identifier): bool
     {
         return null !== $this->getPaymentConfig($identifier);
     }
@@ -97,7 +74,7 @@ class BraintreeConfigProvider implements BraintreeConfigProviderInterface
     /**
      * @return BraintreeIntegrationSettings[]
      */
-    protected function getEnabledIntegrationSettings()
+    protected function getEnabledIntegrationSettings(): array
     {
         try {
             /** @var BraintreeIntegrationSettingsRepository $repository */

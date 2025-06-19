@@ -11,15 +11,16 @@
 namespace Aligent\BraintreeBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\SchemaException;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AddEnablePremiumFraudProtectionField implements Migration
 {
     /**
-     * @inheritDoc
+     * @throws SchemaException
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function up(Schema $schema, QueryBag $queries): void
     {
         $table = $schema->getTable('oro_integration_transport');
         if (!$table->hasColumn('braintree_fraud_advanced')) {

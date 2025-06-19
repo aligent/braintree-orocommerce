@@ -15,47 +15,28 @@ use Aligent\BraintreeBundle\Method\Config\BraintreeConfig;
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterface;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\LocaleBundle\Helper\LocalizationHelper;
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 use Oro\Bundle\SecurityBundle\Encoder\SymmetricCrypterInterface;
 
 class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
 {
-    /**
-     * @var LocalizationHelper
-     */
-    protected $localizationHelper;
+    protected LocalizationHelper $localizationHelper;
+    protected IntegrationIdentifierGeneratorInterface $identifierGenerator;
+    protected SymmetricCrypterInterface $encoder;
 
-    /**
-     * @var IntegrationIdentifierGeneratorInterface
-     */
-    protected $identifierGenerator;
-
-    /**
-     * @var SymmetricCrypterInterface
-     */
-    protected $encoder;
-
-    /**
-     * @param LocalizationHelper $localizationHelper
-     * @param IntegrationIdentifierGeneratorInterface $identifierGenerator
-     * @param SymmetricCrypterInterface $encoder
-     */
     public function __construct(
         LocalizationHelper $localizationHelper,
         IntegrationIdentifierGeneratorInterface $identifierGenerator,
-        SymmetricCrypterInterface $encoder
+        SymmetricCrypterInterface $encoder,
     ) {
         $this->localizationHelper = $localizationHelper;
         $this->identifierGenerator = $identifierGenerator;
         $this->encoder = $encoder;
     }
 
-    /**
-     * @param BraintreeIntegrationSettings $settings
-     * @return BraintreeConfigInterface
-     */
-    public function create(BraintreeIntegrationSettings $settings)
+    public function create(BraintreeIntegrationSettings $settings): BraintreeConfigInterface
     {
         $params = $settings->getSettingsBag();
         $channel = $settings->getChannel();
@@ -79,11 +60,10 @@ class BraintreeConfigFactory implements BraintreeConfigFactoryInterface
     }
 
     /**
-     * @param Collection $values
-     *
+     * @param Collection<int,LocalizedFallbackValue> $values
      * @return string
      */
-    private function getLocalizedValue(Collection $values)
+    private function getLocalizedValue(Collection $values): string
     {
         return (string) $this->localizationHelper->getLocalizedValue($values);
     }

@@ -12,158 +12,110 @@ namespace Aligent\BraintreeBundle\Method\Config;
 
 use Aligent\BraintreeBundle\Braintree\Gateway;
 use Doctrine\Common\Collections\ArrayCollection;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaymentConfig;
 
 class BraintreeConfig extends AbstractParameterBagPaymentConfig implements BraintreeConfigInterface
 {
-    /**
-     * @return string
-     */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return (string) $this->get(self::ENVIRONMENT_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return (string) $this->get(self::MERCHANT_ID_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId(): string
     {
         return (string) $this->get(self::MERCHANT_ACCOUNT_ID_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return (string) $this->get(self::PUBLIC_KEY_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return (string) $this->get(self::PRIVATE_KEY_KEY);
     }
 
-    /**
-     * @param $value string
-     */
-    public function setPublicKey($value)
+    public function setPublicKey(string $value): static
     {
         $this->set(self::PUBLIC_KEY_KEY, $value);
+        return $this;
     }
 
-    /**
-     * @param $value string
-     */
-    public function setPrivateKey($value)
+    public function setPrivateKey(string $value): static
     {
         $this->set(self::PRIVATE_KEY_KEY, $value);
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVaultMode()
+    public function isVaultMode(): bool
     {
         return (boolean) $this->get(self::VAULT_KEY);
     }
 
-    /**
-     * Are we in sandbox mode
-     * @return bool
-     */
-    public function isSandboxMode()
+    public function isSandboxMode(): bool
     {
         return $this->getEnvironment() === Gateway::SANDBOX;
     }
 
     /**
-     * @return ArrayCollection
+     * {@inheritDoc}
      */
-    public function getLabels()
+    public function getLabels(): ArrayCollection
     {
         return $this->get(self::LABELS_KEY);
     }
 
     /**
-     * @return ArrayCollection
+     * {@inheritDoc}
      */
-    public function getShortLabels()
+    public function getShortLabels(): ArrayCollection
     {
         return $this->get(self::SHORT_LABELS_KEY);
     }
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getLabel()
+    public function getLabel(): string
     {
-        return $this->get(self::LABEL_KEY);
+        return (string)$this->get(self::LABEL_KEY);
     }
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getShortLabel()
+    public function getShortLabel(): string
     {
-        return $this->get(self::SHORT_LABEL_KEY);
+        return (string)$this->get(self::SHORT_LABEL_KEY);
     }
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setLabel($value)
+    public function setLabel(string $value): static
+    {
+        $this->set(self::LABEL_KEY, $value);
+        return $this;
+    }
+
+    public function setShortLabel(string $value): static
     {
         $this->set(self::LABEL_KEY, $value);
         return $this;
     }
 
     /**
-     * @param string $value
-     * @return $this
+     * {@inheritDoc}
      */
-    public function setShortLabel($value)
-    {
-        $this->set(self::LABEL_KEY, $value);
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPaymentMethodSettings()
+    public function getPaymentMethodSettings(): array
     {
         return $this->get(self::PAYMENT_METHODS_CONFIG_KEY);
     }
 
-    /**
-     * @param array $settings
-     * @return BraintreeConfig
-     */
-    public function setPaymentMethodSettings(array $settings)
+    public function setPaymentMethodSettings(array $settings): static
     {
         $this->set(self::PAYMENT_METHODS_CONFIG_KEY, $settings);
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFraudProtectionAdvancedEnabled()
+    public function isFraudProtectionAdvancedEnabled(): bool
     {
         return (boolean) $this->get(self::FRAUD_PROTECTION_ADVANCED_KEY);
     }

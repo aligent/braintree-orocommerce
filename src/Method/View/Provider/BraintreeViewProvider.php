@@ -22,34 +22,18 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class BraintreeViewProvider extends AbstractPaymentMethodViewProvider
 {
-    /** @var BraintreeViewFactoryInterface */
-    protected $factory;
+    protected BraintreeViewFactoryInterface $factory;
+    protected BraintreeConfigProviderInterface $configProvider;
+    protected TokenStorageInterface $tokenStorage;
+    protected ChainConfigurationBuilder $configurationBuilder;
+    protected DoctrineHelper $doctrineHelper;
 
-    /** @var BraintreeConfigProviderInterface */
-    protected $configProvider;
-
-    /** @var TokenStorageInterface */
-    protected $tokenStorage;
-
-    /** @var ChainConfigurationBuilder */
-    protected $configurationBuilder;
-
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
-
-    /**
-     * @param BraintreeConfigProviderInterface $configProvider
-     * @param BraintreeViewFactoryInterface $factory
-     * @param TokenStorageInterface $tokenStorage
-     * @param ChainConfigurationBuilder $settingsProvider
-     * @param DoctrineHelper $doctrineHelper
-     */
     public function __construct(
         BraintreeConfigProviderInterface $configProvider,
         BraintreeViewFactoryInterface $factory,
         TokenStorageInterface $tokenStorage,
         ChainConfigurationBuilder $settingsProvider,
-        DoctrineHelper $doctrineHelper
+        DoctrineHelper $doctrineHelper,
     ) {
         $this->factory = $factory;
         $this->configProvider = $configProvider;
@@ -61,9 +45,9 @@ class BraintreeViewProvider extends AbstractPaymentMethodViewProvider
     }
 
     /**
-     * @return ArrayCollection|PaymentMethodViewInterface[]
+     * @return ArrayCollection<int,PaymentMethodViewInterface>
      */
-    protected function buildViews()
+    protected function buildViews(): ArrayCollection
     {
         $configs = $this->configProvider->getPaymentConfigs();
         foreach ($configs as $config) {
@@ -73,10 +57,7 @@ class BraintreeViewProvider extends AbstractPaymentMethodViewProvider
         return $this->views;
     }
 
-    /**
-     * @param BraintreeConfigInterface $config
-     */
-    protected function addBraintreeView($config)
+    protected function addBraintreeView(BraintreeConfigInterface $config): void
     {
         $this->addView(
             $config->getPaymentMethodIdentifier(),

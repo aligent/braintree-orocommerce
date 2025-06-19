@@ -12,69 +12,68 @@ namespace Aligent\BraintreeBundle\Event;
 
 use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 use Oro\Bundle\PaymentBundle\Entity\PaymentTransaction;
-use Symfony\Component\EventDispatcher\Event;
 
-class BraintreePaymentActionEvent extends Event
+class BraintreePaymentActionEvent
 {
     const NAME = 'aligent_braintree.payment_action';
-    const ACTION_EVENT_NAME = 'aligent_braintree.payment_action.%s';
+
+    protected string $action;
+    /** @var array<string,mixed> */
+    protected array $data;
+    protected PaymentTransaction $paymentTransaction;
+    protected BraintreeConfigInterface $config;
 
     /**
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * @var PaymentTransaction
-     */
-    protected $paymentTransaction;
-
-    /**
-     * @var BraintreeConfigInterface
-     */
-    protected $config;
-
-    /**
-     * BraintreePaymentActionEvent constructor.
-     * @param array $data
+     * @param string $action
+     * @param array<string,mixed> $data
      * @param PaymentTransaction $paymentTransaction
      * @param BraintreeConfigInterface $config
      */
-    public function __construct(array $data, PaymentTransaction $paymentTransaction, BraintreeConfigInterface $config)
-    {
+    public function __construct(
+        string $action,
+        array $data,
+        PaymentTransaction $paymentTransaction,
+        BraintreeConfigInterface $config,
+    ) {
+        $this->action = $action;
         $this->data = $data;
         $this->paymentTransaction = $paymentTransaction;
         $this->config = $config;
     }
 
+    public function getAction(): string
+    {
+        return $this->action;
+    }
+
+    public function setAction(string $action): void
+    {
+        $this->action = $action;
+    }
+
     /**
-     * @return array
+     * @return array<string,mixed>
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
 
     /**
-     * @param array $data
+     * @param array<string,mixed> $data
+     * @return void
      */
-    public function setData($data)
+    public function setData(array $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * @return BraintreeConfigInterface
-     */
-    public function getConfig()
+    public function getConfig(): BraintreeConfigInterface
     {
         return $this->config;
     }
 
-    /**
-     * @return PaymentTransaction
-     */
-    public function getPaymentTransaction()
+    public function getPaymentTransaction(): PaymentTransaction
     {
         return $this->paymentTransaction;
     }

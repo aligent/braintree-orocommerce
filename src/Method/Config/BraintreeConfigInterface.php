@@ -34,97 +34,54 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
     const PAYPAL_BILLING_PAGE = 'billing';
     const PAYPAL_LOGIN_PAGE = 'login';
 
+    public function getEnvironment(): string;
+
+    public function getMerchantId(): string;
+
+    public function getMerchantAccountId(): string;
+
+    public function getPublicKey(): string;
+
+    public function setPublicKey(string $value): static;
+
+    public function getPrivateKey(): string;
+
+    public function setPrivateKey(string $value): static;
+
+    public function isVaultMode(): bool;
 
     /**
-     * @return string
+     * Are we in sandbox mode?
      */
-    public function getEnvironment();
+    public function isSandboxMode(): bool;
+
+    public function isFraudProtectionAdvancedEnabled(): bool;
 
     /**
-     * @return string
+     * @return ArrayCollection<int,LocalizedFallbackValue>
      */
-    public function getMerchantId();
+    public function getLabels(): ArrayCollection;
 
     /**
-     * @return string
+     * @return ArrayCollection<int,LocalizedFallbackValue>
      */
-    public function getMerchantAccountId();
+    public function getShortLabels(): ArrayCollection;
+
+    public function getShortLabel(): string;
+
+    public function setShortLabel(string $value): static;
+
+    public function getLabel(): string;
+
+    public function setLabel(string $value): static;
 
     /**
-     * @return string
+     * @return array<string,mixed>
      */
-    public function getPublicKey();
+    public function getPaymentMethodSettings(): array;
 
     /**
-     * @return string
+     * @param array<string,mixed> $settings
      */
-    public function getPrivateKey();
-
-    /**
-     * @param $value string
-     */
-    public function setPublicKey($value);
-
-    /**
-     * @param $value string
-     */
-    public function setPrivateKey($value);
-
-    /**
-     * @return bool
-     */
-    public function isVaultMode();
-
-    /**
-     * Are we in sandbox mode
-     * @return bool
-     */
-    public function isSandboxMode();
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getLabels();
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getShortLabels();
-
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getLabel();
-
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getShortLabel();
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setLabel($value);
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setShortLabel($value);
-
-    /**
-     * @return array
-     */
-    public function getPaymentMethodSettings();
-
-    /**
-     * @param array $settings
-     */
-    public function setPaymentMethodSettings(array $settings);
-
-    /**
-     * @return bool
-     */
-    public function isFraudProtectionAdvancedEnabled();
+    public function setPaymentMethodSettings(array $settings): static;
 }

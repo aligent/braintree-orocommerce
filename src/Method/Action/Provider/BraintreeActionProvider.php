@@ -11,37 +11,24 @@
 namespace Aligent\BraintreeBundle\Method\Action\Provider;
 
 use Aligent\BraintreeBundle\Method\Action\BraintreeActionInterface;
-use Aligent\BraintreeBundle\Method\Config\BraintreeConfigInterface;
 
 class BraintreeActionProvider implements BraintreeActionProviderInterface
 {
-
     /**
-     * @var BraintreeActionInterface[]
+     * @var array<string,BraintreeActionInterface>
      */
-    protected $actions = [];
+    protected array $actions = [];
 
-    /**
-     * @param string $action
-     * @return BraintreeActionInterface
-     */
-    public function getAction($action)
+    public function getAction(string $action): BraintreeActionInterface
     {
         if (!array_key_exists($action, $this->actions)) {
             throw new \InvalidArgumentException("{$action} is not supported.");
         }
 
-        $action = $this->actions[$action];
-
-        return $action;
+        return $this->actions[$action];
     }
 
-    /**
-     * @param $action
-     * @param BraintreeActionInterface $braintreeAction
-     * @return $this
-     */
-    public function addAction($action, BraintreeActionInterface $braintreeAction)
+    public function addAction(string $action, BraintreeActionInterface $braintreeAction): static
     {
         if (array_key_exists($action, $this->actions)) {
             throw new \InvalidArgumentException("{$action} already exists.");
@@ -52,11 +39,7 @@ class BraintreeActionProvider implements BraintreeActionProviderInterface
         return $this;
     }
 
-    /**
-     * @param $action
-     * @return bool
-     */
-    public function hasAction($action)
+    public function hasAction(string $action): bool
     {
         return array_key_exists($action, $this->actions);
     }

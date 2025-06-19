@@ -69,7 +69,6 @@ class AligentBraintreeExtensionTest extends ExtensionTestCase
             AdvancedFraudEventListener::class,
             AbstractBraintreeAction::class,
             PurchaseAction::class,
-
         ];
         $this->assertDefinitionsLoaded($expectedDefinitions);
 
