@@ -79,12 +79,12 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
         return $this->get(self::SHORT_LABELS_KEY);
     }
 
-    public function getLabel(): LocalizedFallbackValue
+    public function getLabel(): string
     {
         return $this->get(self::LABEL_KEY);
     }
 
-    public function getShortLabel(): LocalizedFallbackValue
+    public function getShortLabel(): string
     {
         return $this->get(self::SHORT_LABEL_KEY);
     }

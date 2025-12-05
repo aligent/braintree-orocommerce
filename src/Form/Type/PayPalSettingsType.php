@@ -21,7 +21,7 @@ class PayPalSettingsType extends AbstractType
 {
     protected \Symfony\Contracts\Translation\TranslatorInterface $translator;
 
-    protected array $locales;
+    protected ?array $locales = null;
 
     /**
      * PayPalSettingsType constructor.

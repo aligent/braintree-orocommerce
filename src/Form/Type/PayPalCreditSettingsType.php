@@ -20,8 +20,6 @@ class PayPalCreditSettingsType extends AbstractType
 {
     protected \Symfony\Contracts\Translation\TranslatorInterface $translator;
 
-    protected array $locales;
-
     /**
      * PayPalSettingsType constructor.
      */

@@ -63,10 +63,6 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      */
     public function getShortLabels();
 
-    public function getLabel(): LocalizedFallbackValue;
-
-    public function getShortLabel(): LocalizedFallbackValue;
-
     public function setLabel(string $value): self;
 
     public function setShortLabel(string $value): self;
