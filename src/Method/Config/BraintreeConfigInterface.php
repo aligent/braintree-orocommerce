@@ -35,51 +35,23 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
     const PAYPAL_LOGIN_PAGE = 'login';
 
 
-    /**
-     * @return string
-     */
-    public function getEnvironment();
+    public function getEnvironment(): string;
 
-    /**
-     * @return string
-     */
-    public function getMerchantId();
+    public function getMerchantId(): string;
 
-    /**
-     * @return string
-     */
-    public function getMerchantAccountId();
+    public function getMerchantAccountId(): string;
 
-    /**
-     * @return string
-     */
-    public function getPublicKey();
+    public function getPublicKey(): string;
 
-    /**
-     * @return string
-     */
-    public function getPrivateKey();
+    public function getPrivateKey(): string;
 
-    /**
-     * @param $value string
-     */
-    public function setPublicKey(string $value);
+    public function setPublicKey(string $value): void;
 
-    /**
-     * @param $value string
-     */
-    public function setPrivateKey(string $value);
+    public function setPrivateKey(string $value): void;
 
-    /**
-     * @return bool
-     */
-    public function isVaultMode();
+    public function isVaultMode(): bool;
 
-    /**
-     * Are we in sandbox mode
-     * @return bool
-     */
-    public function isSandboxMode();
+    public function isSandboxMode(): bool;
 
     /**
      * @return ArrayCollection
@@ -91,40 +63,20 @@ interface BraintreeConfigInterface extends PaymentConfigInterface
      */
     public function getShortLabels();
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getLabel();
+    public function getLabel(): LocalizedFallbackValue;
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getShortLabel();
+    public function getShortLabel(): LocalizedFallbackValue;
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setLabel($value);
+    public function setLabel(string $value): self;
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setShortLabel($value);
+    public function setShortLabel(string $value): self;
 
-    /**
-     * @return array
-     */
-    public function getPaymentMethodSettings();
+    public function getPaymentMethodSettings(): array;
 
     /**
      * @param array $settings
      */
-    public function setPaymentMethodSettings(array $settings);
+    public function setPaymentMethodSettings(array $settings): self;
 
-    /**
-     * @return bool
-     */
-    public function isFraudProtectionAdvancedEnabled();
+    public function isFraudProtectionAdvancedEnabled(): bool;
 }

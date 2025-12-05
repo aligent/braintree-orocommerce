@@ -17,75 +17,48 @@ use Oro\Bundle\PaymentBundle\Method\Config\ParameterBag\AbstractParameterBagPaym
 
 class BraintreeConfig extends AbstractParameterBagPaymentConfig implements BraintreeConfigInterface
 {
-    /**
-     * @return string
-     */
-    public function getEnvironment()
+
+    public function getEnvironment(): string
     {
         return (string) $this->get(self::ENVIRONMENT_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return (string) $this->get(self::MERCHANT_ID_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId(): string
     {
         return (string) $this->get(self::MERCHANT_ACCOUNT_ID_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return (string) $this->get(self::PUBLIC_KEY_KEY);
     }
 
-    /**
-     * @return string
-     */
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return (string) $this->get(self::PRIVATE_KEY_KEY);
     }
 
-    /**
-     * @param $value string
-     */
-    public function setPublicKey(string $value)
+    public function setPublicKey(string $value): void
     {
         $this->set(self::PUBLIC_KEY_KEY, $value);
     }
 
-    /**
-     * @param $value string
-     */
-    public function setPrivateKey(string $value)
+    public function setPrivateKey(string $value): void
     {
         $this->set(self::PRIVATE_KEY_KEY, $value);
     }
 
-    /**
-     * @return bool
-     */
-    public function isVaultMode()
+    public function isVaultMode(): bool
     {
         return (bool) $this->get(self::VAULT_KEY);
     }
 
-    /**
-     * Are we in sandbox mode
-     * @return bool
-     */
-    public function isSandboxMode()
+    public function isSandboxMode(): bool
     {
         return $this->getEnvironment() === Gateway::SANDBOX;
     }
@@ -106,64 +79,40 @@ class BraintreeConfig extends AbstractParameterBagPaymentConfig implements Brain
         return $this->get(self::SHORT_LABELS_KEY);
     }
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getLabel()
+    public function getLabel(): LocalizedFallbackValue
     {
         return $this->get(self::LABEL_KEY);
     }
 
-    /**
-     * @return LocalizedFallbackValue
-     */
-    public function getShortLabel()
+    public function getShortLabel(): LocalizedFallbackValue
     {
         return $this->get(self::SHORT_LABEL_KEY);
     }
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setLabel($value)
+    public function setLabel($value): self
     {
         $this->set(self::LABEL_KEY, $value);
         return $this;
     }
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setShortLabel($value)
+    public function setShortLabel($value): self
     {
         $this->set(self::LABEL_KEY, $value);
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getPaymentMethodSettings()
+    public function getPaymentMethodSettings(): array
     {
         return $this->get(self::PAYMENT_METHODS_CONFIG_KEY);
     }
 
-    /**
-     * @param array $settings
-     * @return BraintreeConfig
-     */
-    public function setPaymentMethodSettings(array $settings)
+    public function setPaymentMethodSettings(array $settings): self
     {
         $this->set(self::PAYMENT_METHODS_CONFIG_KEY, $settings);
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFraudProtectionAdvancedEnabled()
+    public function isFraudProtectionAdvancedEnabled(): bool
     {
         return (bool) $this->get(self::FRAUD_PROTECTION_ADVANCED_KEY);
     }

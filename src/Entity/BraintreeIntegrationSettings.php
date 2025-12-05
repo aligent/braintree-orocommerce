@@ -97,7 +97,7 @@ class BraintreeIntegrationSettings extends Transport
     #[ORM\Column(name: 'braintree_settings', type: 'array')]
     protected array $paymentMethodSettings;
 
-    protected ParameterBag $settings;
+    protected ?ParameterBag $settings = null;
 
     /**
      * Column name shortened to braintree_fraud_advanced due to max db name length 30
