@@ -41,7 +41,7 @@
         "nelmio/alice": "~3.8.0 || ~3.12.1",
         "theofidry/alice-data-fixtures": "~1.4.0 || ~1.6.0",
         "symfony/phpunit-bridge": "~4.4.24 || ~6.4.0",
-        "squizlabs/php_codesniffer": "^3.10.1"
+        "squizlabs/php_codesniffer": "^4.0.1"
     },
     "extra": {
         "npm": {
