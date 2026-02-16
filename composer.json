@@ -37,7 +37,7 @@
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "~1.10.0",
         "phpmd/phpmd": "^2.15",
-        "friendsofphp/php-cs-fixer": "~2.18.2 || ~3.57.0",
+        "friendsofphp/php-cs-fixer": "^3.94.0",
         "nelmio/alice": "~3.8.0 || ~3.12.1",
         "theofidry/alice-data-fixtures": "~1.4.0 || ~1.6.0",
         "symfony/phpunit-bridge": "~4.4.24 || ~6.4.0",
